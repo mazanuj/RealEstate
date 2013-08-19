@@ -1,0 +1,78 @@
+﻿<Window x:Class="RealEstate.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell"
+        xmlns:views="clr-namespace:RealEstate.Views"
+        Title="Real Estate" Height="500" Width="700"        
+        Style="{StaticResource VS2012WindowStyle}"
+        Icon="../Images/mainicon.png">
+    <Grid>
+        <Canvas>
+            <Grid Canvas.Top="4" Canvas.Right="130" Name="ConsoleWindow" Visibility="{Binding IsConsoleOpen, Converter={StaticResource bool2VisibilityConverter}}"
+                  Style="{StaticResource AnimatedVisibleChanging}">
+                <Border  Background="#EFEFF2"
+                         BorderBrush="{StaticResource VS2012WindowBorderBrush}"
+                         BorderThickness="1">
+                    <views:ConsoleView />
+                </Border>
+            </Grid>
+        </Canvas>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="0 -30 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="150" />
+                </Grid.ColumnDefinitions>
+                <ToggleButton
+            Grid.Column="1"
+            x:Name="IsConsoleOpen"
+            Margin="0 0 20 0"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Right"                  
+            Padding="6"
+            Style="{StaticResource VS2012WindowStyleTitleBarToogleButton}"
+            shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                    <TextBlock  FontWeight="SemiBold">Консоль</TextBlock>
+                </ToggleButton>
+                <Button
+            Grid.Column="2"
+            x:Name="OpenSettings"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Right"
+            Padding="6"
+            Style="{StaticResource VS2012WindowStyleTitleBarButton}"
+            shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                    <TextBlock FontWeight="SemiBold">Настройки</TextBlock>
+                </Button>
+
+            </Grid>
+            <DockPanel Grid.Row="1">
+                <StatusBar
+            DockPanel.Dock="Bottom"
+            Height="24">
+                    <TextBlock Margin="3,0,0,0">Ready</TextBlock>
+                    <StatusBarItem HorizontalAlignment="Right">
+                        <ResizeGrip Opacity="0.75" />
+                    </StatusBarItem>
+                </StatusBar>
+                <TextBox
+            Text="Hello, world!"
+            FontSize="13"
+            BorderThickness="0" 
+            AcceptsReturn="True" 
+            Padding="2"
+            Background="Transparent"
+            ScrollViewer.CanContentScroll="True" 
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+            />
+            </DockPanel>
+        </Grid>
+    </Grid>
+</Window>
