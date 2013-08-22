@@ -28,6 +28,7 @@ namespace RealEstate.Settings
         {
             Debug.WriteLine("Saving...");
             FromClassToConfig(source, false);
+            source.Save(FileName);
             Debug.WriteLine("Saving done");
         }
 

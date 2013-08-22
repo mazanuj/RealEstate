@@ -16,10 +16,12 @@ namespace RealEstate.Log
             TextWriterTraceListener text = new TextWriterTraceListener(fileName, TraceListenerName);
             Debug.AutoFlush = true;
             Debug.Listeners.Add(text);
+            Debug.WriteLine("Start write log to file at " + DateTime.Now);
         }
 
         public static void DisableLogToFile()
         {
+            Debug.WriteLine("Disabling write to file");
             Debug.Listeners.Remove(TraceListenerName);
         }
     }

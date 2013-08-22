@@ -13,6 +13,13 @@ namespace RealEstate.ViewModels
     [Export(typeof(SettingsViewModel))]
     public class SettingsViewModel : ValidatingScreen<SettingsViewModel>
     {
+        protected override void OnActivate()
+        {
+            base.OnActivate();
+            LogFileName = SettingsManager.LogFileName;
+            WriteToLog = SettingsManager.LogToFile;
+        }
+
         private string _LogFileName = "log.txt";
         [Required(ErrorMessage = "Email is required")]
         [RegularExpression(".+\\..+")]

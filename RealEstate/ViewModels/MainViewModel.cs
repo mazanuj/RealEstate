@@ -35,10 +35,8 @@ namespace RealEstate.ViewModels
              Debug.WriteLine("Loading settings from file done");
 
              if (SettingsManager.LogToFile)
-             {
                  Log.LogManager.EnableLogToFile(SettingsManager.LogFileName);
-                 Debug.WriteLine("Start write log to file at " + DateTime.Now);
-             }
+
 
              Debug.WriteLine("Application initialize done");
         }
