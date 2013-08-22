@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media.Animation;
 using System.Windows;
+using System.Diagnostics;
 
 namespace RealEstate.ViewModels
 {
@@ -20,6 +21,12 @@ namespace RealEstate.ViewModels
         {
             _windowManager = windowManager;
             this.ConsoleViewModel = consoleViewModel;
+        }
+
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+            Debug.WriteLine("Application initialize done");
         }
 
         public void OpenSettings()

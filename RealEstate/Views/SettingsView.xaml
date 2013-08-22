@@ -5,12 +5,49 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              Title="Настройки"
-        d:DesignHeight="300" d:DesignWidth="300"
+        d:DesignHeight="400" d:DesignWidth="500"
         Style="{StaticResource VS2012ModalWindowStyle}"
         Icon="../Images/settingsicon.png"
-        MaxHeight="300" MaxWidth="300">
+        MaxHeight="400" MaxWidth="500">
 
     <Grid>
-        <TextBlock>Hello</TextBlock>
+        <TabControl TabStripPlacement="Bottom">
+            <TabItem Header="Общие">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <GroupBox Margin="3 0 3 5" Grid.Row="0" Header="Лог" >
+                        <StackPanel>
+                            <CheckBox Margin="3" Content="Записывать в файл" Name="WriteToLog" />
+                            <DockPanel IsEnabled="{Binding ElementName= WriteToLog, Path=IsChecked}">
+                                <TextBlock Margin="30 3 3 3">Имя файла:</TextBlock>
+                                <TextBox Margin="3" Name="LogFileName" Text="{Binding LogFileName, ValidatesOnDataErrors=True, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged}" />
+                            </DockPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <Button Content="Сохранить" Name="SaveGeneral" Margin="5"
+                            Grid.Row="3" HorizontalAlignment="Right"
+                            Padding="3 1"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="База данных">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <Button Content="Сохранить" Name="SaveDB" Margin="5"
+                            Grid.Row="3" HorizontalAlignment="Right"
+                            Padding="3 1"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

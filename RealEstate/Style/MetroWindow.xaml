@@ -16,7 +16,7 @@
                 <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <DoubleAnimation  Storyboard.TargetProperty="Height" From="0" To="350" Duration="0:0:01" SpeedRatio="6" ></DoubleAnimation>
+                            <DoubleAnimation  Storyboard.TargetProperty="Height" From="0" To="353" Duration="0:0:01" SpeedRatio="6" ></DoubleAnimation>
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.EnterActions>
@@ -457,5 +457,14 @@
             </Style>
         </Style.Resources>
     </Style>
-    
+
+    <Style TargetType="{x:Type TextBox}">
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="true">
+                <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                <Setter Property="Control.Background" Value="#FFFFD2D9" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>

@@ -10,6 +10,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TextBlock > Hello console</TextBlock >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBox Margin="3 3 3 0" Grid.Row="0" AcceptsReturn="True" Name="ConsoleText" IsReadOnly="True" />
+        <Button Background="Transparent" Name="ClearConsole" Margin="3 1" Padding="2" HorizontalAlignment="Right" Grid.Row="1" BorderThickness="0" ToolTip="Очистить консоль">
+            <Image Source="../Images/RecycleIcon.png" Height="24" />
+        </Button>
     </Grid>
 </UserControl>

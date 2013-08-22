@@ -45,6 +45,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -70,6 +71,10 @@
     </ApplicationDefinition>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="Style\VS2012WindowStyle.cs" />
+    <Compile Include="Validation\EmailValidator.cs" />
+    <Compile Include="Validation\IValidationControl.cs" />
+    <Compile Include="Validation\ValidatingScreen.cs" />
+    <Compile Include="Validation\ValidationGroupAttribute.cs" />
     <Compile Include="ViewModels\ConsoleViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
@@ -137,6 +142,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\settingsicon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\RecycleIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
