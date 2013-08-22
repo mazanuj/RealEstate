@@ -43,7 +43,7 @@ namespace RealEstate.ViewModels
 
         public MyTraceListener(ConsoleViewModel model)
         {
-            this.Name = "Trace";
+            this.Name = "AppShell";
             this._model = model;
         }
 

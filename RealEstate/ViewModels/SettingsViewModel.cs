@@ -6,6 +6,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using RealEstate.Settings;
 
 namespace RealEstate.ViewModels
 {
@@ -25,7 +26,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        
+
         private bool _WriteToLog = false;
         public bool WriteToLog
         {
@@ -36,7 +37,23 @@ namespace RealEstate.ViewModels
                 NotifyOfPropertyChange(() => WriteToLog);
             }
         }
-                    
-                    
+
+        public void SaveGeneral()
+        {
+            if (WriteToLog != SettingsManager.LogToFile)
+            {
+                SettingsManager.LogToFile = WriteToLog;
+                if (WriteToLog)
+                    RealEstate.Log.LogManager.EnableLogToFile(LogFileName);
+                else
+                    RealEstate.Log.LogManager.DisableLogToFile();
+            }
+
+            SettingsManager.LogFileName = LogFileName;
+
+            SettingsManager.Save();
+        }
+
+
     }
 }
