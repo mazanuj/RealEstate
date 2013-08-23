@@ -23,5 +23,10 @@ namespace RealEstate.Views
         {
             InitializeComponent();
         }
+
+        private void ConsoleText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ConsoleText.ScrollToEnd();
+        }
     }
 }

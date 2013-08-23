@@ -7,12 +7,20 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using RealEstate.Settings;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace RealEstate.ViewModels
 {
     [Export(typeof(SettingsViewModel))]
     public class SettingsViewModel : ValidatingScreen<SettingsViewModel>
     {
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+            this.DisplayName = "Настройки";
+        }
+
         protected override void OnActivate()
         {
             base.OnActivate();
@@ -45,22 +53,48 @@ namespace RealEstate.ViewModels
             }
         }
 
-        public void SaveGeneral()
+        
+        private string _Status = "";
+        public string Status
         {
-            if (WriteToLog != SettingsManager.LogToFile)
+            get { return _Status; }
+            set
             {
-                SettingsManager.LogToFile = WriteToLog;
-                if (WriteToLog)
-                    RealEstate.Log.LogManager.EnableLogToFile(LogFileName);
-                else
-                    RealEstate.Log.LogManager.DisableLogToFile();
+                _Status = value;
+                NotifyOfPropertyChange(() => Status);
             }
-
-            SettingsManager.LogFileName = LogFileName;
-
-            SettingsManager.Save();
         }
+                    
 
+        public async void SaveGeneral()
+        {
+            Status = "Сохраняю...";
+            try
+            {
+                await Task.Factory.StartNew(() =>
+                {
+                    if (WriteToLog != SettingsManager.LogToFile)
+                    {
+                        SettingsManager.LogToFile = WriteToLog;
+                        if (WriteToLog)
+                            RealEstate.Log.LogManager.EnableLogToFile(LogFileName);
+                        else
+                            RealEstate.Log.LogManager.DisableLogToFile();
+                    }
+
+                    SettingsManager.LogFileName = LogFileName;
+
+                    SettingsManager.Save();
+                });
+                Status = "Сохранено";
+
+            }
+            catch (Exception ex)
+            {
+                Status = "Ошибка";
+                Trace.WriteLine(ex.ToString());
+            }
+        }
 
     }
 }

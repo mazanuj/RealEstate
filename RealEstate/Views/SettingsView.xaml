@@ -49,5 +49,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <TextBlock Name="Status" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5 3 10 3" />
     </Grid>
 </Window>

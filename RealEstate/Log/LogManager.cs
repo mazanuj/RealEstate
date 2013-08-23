@@ -12,17 +12,17 @@ namespace RealEstate.Log
 
         public static void EnableLogToFile(string fileName)
         {
-            Debug.Listeners.Remove(TraceListenerName);
+            Trace.Listeners.Remove(TraceListenerName);
             TextWriterTraceListener text = new TextWriterTraceListener(fileName, TraceListenerName);
-            Debug.AutoFlush = true;
-            Debug.Listeners.Add(text);
-            Debug.WriteLine("Start write log to file at " + DateTime.Now);
+            Trace.AutoFlush = true;
+            Trace.Listeners.Add(text);
+            Trace.WriteLine("Start write log to file at " + DateTime.Now);
         }
 
         public static void DisableLogToFile()
         {
-            Debug.WriteLine("Disabling write to file");
-            Debug.Listeners.Remove(TraceListenerName);
+            Trace.WriteLine("Disabling write to file");
+            Trace.Listeners.Remove(TraceListenerName);
         }
     }
 }

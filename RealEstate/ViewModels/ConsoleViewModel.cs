@@ -14,8 +14,8 @@ namespace RealEstate.ViewModels
         public ConsoleViewModel()
         {
             TraceListener debugListener = new MyTraceListener(this);
-            Debug.Listeners.Add(debugListener);
-            Debug.WriteLine("Start listening log");
+            Trace.Listeners.Add(debugListener);
+            Trace.WriteLine("Start listening log");
         }
 
         public void ClearConsole()

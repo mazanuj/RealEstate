@@ -8,6 +8,7 @@ using System.Windows.Media.Animation;
 using System.Windows;
 using System.Diagnostics;
 using RealEstate.Settings;
+using System.Threading.Tasks;
 
 namespace RealEstate.ViewModels
 {
@@ -26,19 +27,20 @@ namespace RealEstate.ViewModels
 
         protected override void OnInitialize()
         {
-             base.OnInitialize();
+            base.OnInitialize();
+            this.DisplayName = "Real Estate 2.0";
 
-             Debug.WriteLine("Start initialization...");
+            Trace.WriteLine("Start initialization...");
 
-             Debug.WriteLine("Loading settings from file...");
-             SettingsManager.Initialize();
-             Debug.WriteLine("Loading settings from file done");
+            Trace.WriteLine("Loading settings from file...");
+            SettingsManager.Initialize();
+            Trace.WriteLine("Loading settings from file done");
 
-             if (SettingsManager.LogToFile)
-                 Log.LogManager.EnableLogToFile(SettingsManager.LogFileName);
+            if (SettingsManager.LogToFile)
+                Log.LogManager.EnableLogToFile(SettingsManager.LogFileName);
 
 
-             Debug.WriteLine("Application initialize done");
+            Trace.WriteLine("Application initialize done");
         }
 
         public void OpenSettings()

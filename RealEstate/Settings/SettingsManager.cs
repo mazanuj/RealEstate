@@ -26,22 +26,22 @@ namespace RealEstate.Settings
 
         public static void Save()
         {
-            Debug.WriteLine("Saving...");
+            Trace.WriteLine("Saving...");
             FromClassToConfig(source, false);
             source.Save(FileName);
-            Debug.WriteLine("Saving done");
+            Trace.WriteLine("Saving done");
         }
 
         public static void Initialize()
         {
             if (!File.Exists(FileName))
             {
-                Debug.WriteLine("Settings file doesn't exist. Restore to default");
+                Trace.WriteLine("Settings file doesn't exist. Restore to default");
                 RestoreDefault();
             }
             else
             {
-                Debug.WriteLine("Reading from settings file...");
+                Trace.WriteLine("Reading from settings file...");
                 source = new IniConfigSource(FileName);
                 FromFileToClass(source);
             }
@@ -49,13 +49,13 @@ namespace RealEstate.Settings
 
         public static void RestoreDefault()
         {
-            Debug.WriteLine("Restoring...");
+            Trace.WriteLine("Restoring...");
             source = new IniConfigSource();
 
             FromClassToConfig(source, true);
 
             source.Save(FileName);
-            Debug.WriteLine("Restoring done");
+            Trace.WriteLine("Restoring done");
         }
 
         private static void FromClassToConfig(IConfigSource source, bool restore)
@@ -80,17 +80,19 @@ namespace RealEstate.Settings
                                     source.Configs.Add(section);
 
                                 source.Configs[section].Set(prop.Name, !restore ? prop.GetValue(null, null) ?? def : def);
+                                if (restore)
+                                    prop.SetValue(null, def, null);
                             }
                             else
                             {
-                                Debug.WriteLine(String.Format("Property '{0}' doesn't contains section defenition!", prop.Name), "ERROR");
+                                Trace.WriteLine(String.Format("Property '{0}' doesn't contains section defenition!", prop.Name), "ERROR");
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(String.Format("Cannot save property '{0}': {1}", prop.Name, ex.ToString()), "ERROR");
+                    Trace.WriteLine(String.Format("Cannot save property '{0}': {1}", prop.Name, ex.ToString()), "ERROR");
                 }
             }
         }
@@ -119,26 +121,26 @@ namespace RealEstate.Settings
                                         prop.SetValue(null, Convert.ChangeType(value, prop.PropertyType), null);
                                     else
                                     {
-                                        Debug.WriteLine(String.Format("Cannot find property '{0}' in settings file!", prop.Name), "ERROR");
-                                        Debug.WriteLine(String.Format("Restore property '{0}' to default value!", prop.Name));
+                                        Trace.WriteLine(String.Format("Cannot find property '{0}' in settings file!", prop.Name), "ERROR");
+                                        Trace.WriteLine(String.Format("Restore property '{0}' to default value!", prop.Name));
                                         prop.SetValue(null, Convert.ChangeType(def, prop.PropertyType), null);
                                     }
                                 }
                                 else
                                 {
-                                    Debug.WriteLine(String.Format("Section '{0}' doesn't exist in settings file!", section), "ERROR");
+                                    Trace.WriteLine(String.Format("Section '{0}' doesn't exist in settings file!", section), "ERROR");
                                 }
                             }
                             else
                             {
-                                Debug.WriteLine(String.Format("Property '{0}' doesn't contains section defenition!", prop.Name), "ERROR");
+                                Trace.WriteLine(String.Format("Property '{0}' doesn't contains section defenition!", prop.Name), "ERROR");
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(String.Format("Cannot save property '{0}': {1}", prop.Name, ex.ToString()), "ERROR");
+                    Trace.WriteLine(String.Format("Cannot save property '{0}': {1}", prop.Name, ex.ToString()), "ERROR");
                 }
             }
         }
