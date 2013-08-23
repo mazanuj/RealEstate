@@ -26,10 +26,10 @@ namespace RealEstate.Settings
 
         public static void Save()
         {
-            Trace.WriteLine("Saving...");
+            Trace.WriteLine("Saving properties...");
             FromClassToConfig(source, false);
             source.Save(FileName);
-            Trace.WriteLine("Saving done");
+            Trace.WriteLine("Saving properties done");
         }
 
         public static void Initialize()
