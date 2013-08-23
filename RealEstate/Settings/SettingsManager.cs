@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,22 +10,13 @@ using Nini.Config;
 
 namespace RealEstate.Settings
 {
-    public static class SettingsManager
+    [Export(typeof(SettingsManager))]
+    public class SettingsManager
     {
         static IniConfigSource source;
         const string FileName = "settings.ini";
 
-        [Settings]
-        [SectionName("Log")]
-        [DefaultValue(true)]
-        public static bool LogToFile { get; set; }
-
-        [Settings]
-        [SectionName("Log")]
-        [DefaultValue("log.txt")]
-        public static string LogFileName { get; set; }
-
-        public static void Save()
+        public void Save()
         {
             Trace.WriteLine("Saving properties...");
             FromClassToConfig(source, false);
@@ -32,7 +24,7 @@ namespace RealEstate.Settings
             Trace.WriteLine("Saving properties done");
         }
 
-        public static void Initialize()
+        public void Initialize()
         {
             if (!File.Exists(FileName))
             {
@@ -47,7 +39,7 @@ namespace RealEstate.Settings
             }
         }
 
-        public static void RestoreDefault()
+        public void RestoreDefault()
         {
             Trace.WriteLine("Restoring...");
             source = new IniConfigSource();
@@ -58,9 +50,9 @@ namespace RealEstate.Settings
             Trace.WriteLine("Restoring done");
         }
 
-        private static void FromClassToConfig(IConfigSource source, bool restore)
+        private void FromClassToConfig(IConfigSource source, bool restore)
         {
-            PropertyInfo[] props = typeof(SettingsManager).GetProperties();
+            PropertyInfo[] props = typeof(SettingsStore).GetProperties();
             foreach (PropertyInfo prop in props)
             {
                 try
@@ -97,9 +89,9 @@ namespace RealEstate.Settings
             }
         }
 
-        private static void FromFileToClass(IConfigSource source)
+        private void FromFileToClass(IConfigSource source)
         {
-            PropertyInfo[] props = typeof(SettingsManager).GetProperties();
+            PropertyInfo[] props = typeof(SettingsStore).GetProperties();
             foreach (PropertyInfo prop in props)
             {
                 try

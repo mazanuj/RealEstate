@@ -9,12 +9,23 @@ using System.Text;
 using RealEstate.Settings;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using RealEstate.Log;
 
 namespace RealEstate.ViewModels
 {
     [Export(typeof(SettingsViewModel))]
     public class SettingsViewModel : ValidatingScreen<SettingsViewModel>
     {
+        private readonly IEventAggregator _events;
+        private readonly SettingsManager _settingsManager;
+
+        [ImportingConstructor]
+        public SettingsViewModel(IEventAggregator events, SettingsManager settingsManager)
+        {
+            _events = events;
+            _settingsManager = settingsManager;
+        }
+
         protected override void OnInitialize()
         {
             base.OnInitialize();
@@ -24,8 +35,8 @@ namespace RealEstate.ViewModels
         protected override void OnActivate()
         {
             base.OnActivate();
-            LogFileName = SettingsManager.LogFileName;
-            WriteToLog = SettingsManager.LogToFile;
+            LogFileName = SettingsStore.LogFileName;
+            WriteToLog = SettingsStore.LogToFile;
         }
 
         private string _LogFileName = "log.txt";
@@ -73,19 +84,21 @@ namespace RealEstate.ViewModels
             {
                 await Task.Factory.StartNew(() =>
                 {
-                    if (WriteToLog != SettingsManager.LogToFile)
+                    bool changed = false;
+                    if (WriteToLog != SettingsStore.LogToFile || LogFileName != SettingsStore.LogFileName)
                     {
-                        SettingsManager.LogToFile = WriteToLog;
-                        if (WriteToLog)
-                            RealEstate.Log.LogManager.EnableLogToFile(LogFileName);
-                        else
-                            RealEstate.Log.LogManager.DisableLogToFile();
+                        SettingsStore.LogToFile = WriteToLog;
+                        SettingsStore.LogFileName = LogFileName;
+
+                        _events.Publish(new LoggingEvent());
+
+                        changed = true;
                     }
 
-                    SettingsManager.LogFileName = LogFileName;
-
-                    SettingsManager.Save();
+                    if(changed)
+                        _settingsManager.Save();
                 });
+
                 Status = "Сохранено";
 
             }

@@ -1,28 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Caliburn.Micro;
+using RealEstate.Settings;
 
 namespace RealEstate.Log
 {
-    public static class LogManager
+    [Export(typeof(LogManager))]
+    [PartCreationPolicy(CreationPolicy.Shared)]
+    public class LogManager : IHandle<LoggingEvent>
     {
         private const string TraceListenerName = "filewriter";
+        private string _fileName = "log.txt";
 
-        public static void EnableLogToFile(string fileName)
+        private void EnableLogToFile(string fileName)
         {
             Trace.Listeners.Remove(TraceListenerName);
-            TextWriterTraceListener text = new TextWriterTraceListener(fileName, TraceListenerName);
+            _fileName = fileName;
+            TextWriterTraceListener text = new TextWriterTraceListener(_fileName, TraceListenerName);
             Trace.AutoFlush = true;
             Trace.Listeners.Add(text);
-            Trace.WriteLine("Start write log to file at " + DateTime.Now);
+            Trace.WriteLine(String.Format("Start write log to file '{0}' at {1}", _fileName, DateTime.Now));
         }
 
-        public static void DisableLogToFile()
+        private void DisableLogToFile()
         {
             Trace.WriteLine("Disabling write to file");
             Trace.Listeners.Remove(TraceListenerName);
         }
+
+        [ImportingConstructor]
+        public LogManager(IEventAggregator events)
+        {
+            events.Subscribe(this);
+        }
+
+        public void Handle(LoggingEvent message)
+        {
+            if (SettingsStore.LogToFile || _fileName != SettingsStore.LogFileName)
+                EnableLogToFile(SettingsStore.LogFileName);
+            else
+                DisableLogToFile();
+        }
+    }
+
+    public class LoggingEvent
+    {
+
     }
 }

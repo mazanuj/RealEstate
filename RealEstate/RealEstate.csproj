@@ -94,6 +94,7 @@
     </ApplicationDefinition>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="Log\LogManager.cs" />
+    <Compile Include="Settings\SettingsStore.cs" />
     <Compile Include="Settings\SettingsArtibutes.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Style\VS2012WindowStyle.cs" />
