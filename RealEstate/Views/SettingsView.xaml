@@ -10,9 +10,9 @@
         Icon="../Images/settingsicon.png"
         MaxHeight="400" MaxWidth="500">
 
-    <Grid>
-        <TabControl TabStripPlacement="Bottom">
-            <TabItem Header="Общие">
+    <Grid Background="White">
+        <TabControl TabStripPlacement="Bottom" Style="{StaticResource TabPaging}" >
+            <TabItem Header="Общие" Style="{StaticResource TabItemPaging}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -35,7 +35,7 @@
                             Padding="3 1"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="База данных">
+            <TabItem Header="База данных" Style="{StaticResource TabItemPaging}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />

@@ -4,11 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell">
 
-    <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#FFE4E4E6" />
-    <SolidColorBrush x:Key="VS2012WindowBorderBrush" Color="#007ACC" />
-    <SolidColorBrush x:Key="VS2012WindowBorderBrushInactive" Color="#999999" />
-    <SolidColorBrush x:Key="VS2012WindowStatusForeground" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="VS2012WindowStatusForegroundInactive" Color="#FFFFFF" />
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Theme.Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="AnimatedVisibleChanging" TargetType="{x:Type Grid}">
         <Style.Triggers>

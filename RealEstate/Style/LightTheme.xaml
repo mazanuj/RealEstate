@@ -1,0 +1,110 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Theme.Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="{x:Type TabItem}" x:Key="TabItemPaging">
+        <Setter Property="Background" Value="WhiteSmoke" />
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+
+                    <Border x:Name="PART_Border" Background="{TemplateBinding Background}" BorderThickness="1 0 1 0" BorderBrush="LightGray" Margin="0">
+                        <ContentPresenter ContentSource="Header" Margin="5 5" />
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource VS2012WindowBorderBrush}" />
+                            <Setter TargetName="PART_Border" Property="Background" Value="White" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource VS2012WindowBorderBrush}" />
+                            <Setter TargetName="PART_Border" Property="Background" Value="White" />
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}}, Path=TabStripPlacement}" Value="Bottom" />
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter TargetName="PART_Border" Property="BorderThickness" Value="0 1 0 0" />
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}}, Path=TabStripPlacement}" Value="Top" />
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter TargetName="PART_Border" Property="BorderThickness"  Value="0 0 0 1" />
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type TabControl}" x:Key="TabPaging">
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="3"  />
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Grid ClipToBounds="True" SnapsToDevicePixels="True" KeyboardNavigation.TabNavigation="Local">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" Name="RowDefinition0" />
+                            <RowDefinition Height="*" Name="RowDefinition1" />
+                        </Grid.RowDefinitions>
+
+
+                        <TabPanel Grid.Row="0"
+                                  Margin="1 0"
+                                  IsItemsHost="True"
+                                  Name="HeaderPanel" 
+                                  Panel.ZIndex="1" 
+                                  KeyboardNavigation.TabIndex="1"
+                                  Grid.Column="0"
+                                  Background="WhiteSmoke"
+                         />
+
+                        <Border x:Name="ContentPanel" Grid.Row="1" BorderBrush="{StaticResource VS2012WindowBorderBrush}" >
+                            <ContentPresenter Content="{TemplateBinding SelectedContent}" 
+                                            ContentTemplate="{TemplateBinding SelectedContentTemplate}" 
+                                            ContentStringFormat="{TemplateBinding SelectedContentStringFormat}" 
+                                            ContentSource="SelectedContent" 
+                                            Name="PART_SelectedContentHost" 
+                                            Margin="2"
+                                            SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" 
+                        />
+                        </Border>
+
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="UIElement.IsEnabled" Value="False">
+                            <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                        <Trigger Property="TabControl.TabStripPlacement" Value="Bottom">
+                            <Setter TargetName="HeaderPanel" Property="Grid.Row" Value="1" />
+                            <Setter TargetName="ContentPanel" Property="Grid.Row" Value="0" />
+                            <Setter TargetName="RowDefinition0" Property="RowDefinition.Height" Value="*" />
+                            <Setter TargetName="RowDefinition1" Property="RowDefinition.Height" Value="Auto" />
+                            <Setter TargetName="ContentPanel" Property="BorderThickness" Value="0 0 0 1" />
+                        </Trigger>
+                        <Trigger Property="TabControl.TabStripPlacement" Value="Top">
+                            <Setter TargetName="ContentPanel" Property="BorderThickness" Value="0 1 0 0" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+</ResourceDictionary>

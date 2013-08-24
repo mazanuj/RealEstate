@@ -6,7 +6,8 @@
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="bool2VisibilityConverter" />
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Style/MetroWindow.xaml"/>
+                <ResourceDictionary Source="Style/MetroWindowStyle.xaml"/>
+                <ResourceDictionary Source="Style/LightTheme.xaml"/>
                 <ResourceDictionary>
                     <local:AppBootstrapper x:Key="bootstrapper" />
                 </ResourceDictionary>

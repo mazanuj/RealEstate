@@ -7,7 +7,7 @@
         Style="{StaticResource VS2012WindowStyle}"
         Icon="../Images/mainicon.png">
     <Grid>
-        <Canvas HorizontalAlignment="Stretch">
+        <Canvas HorizontalAlignment="Stretch" Background="White">
             <Grid Canvas.ZIndex="3"  Canvas.Top="4" Canvas.Right="130" Name="ConsoleWindow" Visibility="{Binding IsConsoleOpen, Converter={StaticResource bool2VisibilityConverter}}"
                   Style="{StaticResource AnimatedVisibleChanging}">
                 <Border  Background="#EFEFF2"
@@ -53,9 +53,21 @@
 
                 </Grid>
                 <DockPanel Grid.Row="1">
-                    <TabControl DockPanel.Dock="Top" TabStripPlacement="Bottom">
-                        <TabItem Header="first">
-                            <TextBlock>123</TextBlock>
+                    <TabControl DockPanel.Dock="Top" Style="{StaticResource TabPaging}" TabStripPlacement="Top">
+                        <TabItem Header="Прокси сервера" Style="{StaticResource TabItemPaging}">
+                            <Grid Background="White">
+                                <Rectangle Height="300" Width="500" Fill="Transparent" />
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Парсинг" Style="{StaticResource TabItemPaging}">
+                            <Grid Background="White">
+                                <Rectangle Height="300" Width="500" Fill="Transparent" />
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Экспорт" Style="{StaticResource TabItemPaging}">
+                            <Grid Background="White">
+                                <Rectangle Height="300" Width="500" Fill="Transparent" />
+                            </Grid>
                         </TabItem>
                     </TabControl>
                     <StatusBar
