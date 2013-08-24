@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using Caliburn.Micro;
+using RealEstate.ViewModels;
 
 namespace Caliburn.Micro.Validation
 {
@@ -26,7 +27,7 @@ namespace Caliburn.Micro.Validation
 	/// and has been adapted to fit CM a little better.
 	/// The implementation uses Linq but could also have been implemented using standard code.
 	/// </remarks>
-	public abstract class ValidatingScreen<TViewModel> : Screen, IDataErrorInfo where TViewModel : ValidatingScreen<TViewModel>
+    public abstract class ValidatingScreen<TViewModel> : ScreenWithToogleTools, IDataErrorInfo where TViewModel : ValidatingScreen<TViewModel>
 	{
 		/// <summary>
 		/// Grab all the property getter MethodInfo instances which have validations declared and hold them in a static class

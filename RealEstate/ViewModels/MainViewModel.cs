@@ -64,6 +64,30 @@ namespace RealEstate.ViewModels
             _windowManager.ShowDialog(SettingsViewModel, settings: style);
         }
 
+        private bool isToolsOpen = true;
+        public Boolean ToogleTools
+        {
+            get { return isToolsOpen; }
+            set
+            {
+                isToolsOpen = value;
+                NotifyOfPropertyChange(() => ToogleTools);
+                NotifyOfPropertyChange(() => ToogleToolsTooltip);
+                _events.Publish(new ToolsOpenEvent(isToolsOpen));
+            }
+        }
+
+        public string ToogleToolsTooltip
+        {
+            get
+            {
+                if (ToogleTools)
+                    return "Скрыть панель инструментов";
+                else
+                    return "Показать панель инструментов";
+            }
+        }
+
         private bool isConsoleOpen = false;
         public Boolean IsConsoleOpen
         {
@@ -73,6 +97,15 @@ namespace RealEstate.ViewModels
                 isConsoleOpen = value;
                 NotifyOfPropertyChange(() => IsConsoleOpen);
             }
+        }
+    }
+
+    public class ToolsOpenEvent
+    {
+        public bool IsOpen { get; set; }
+        public ToolsOpenEvent(bool isOpen)
+        {
+            IsOpen = isOpen;
         }
     }
 }

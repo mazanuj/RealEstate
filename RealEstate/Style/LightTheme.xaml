@@ -7,7 +7,7 @@
 
     <Style TargetType="{x:Type TabItem}" x:Key="TabItemPaging">
         <Setter Property="Background" Value="WhiteSmoke" />
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
@@ -52,7 +52,7 @@
     <Style TargetType="{x:Type TabControl}" x:Key="TabPaging">
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="3"  />
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabControl}">
@@ -79,7 +79,7 @@
                                             ContentStringFormat="{TemplateBinding SelectedContentStringFormat}" 
                                             ContentSource="SelectedContent" 
                                             Name="PART_SelectedContentHost" 
-                                            Margin="2"
+                                            Margin="0"
                                             SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" 
                         />
                         </Border>
@@ -95,17 +95,17 @@
                             <Setter TargetName="ContentPanel" Property="Grid.Row" Value="0" />
                             <Setter TargetName="RowDefinition0" Property="RowDefinition.Height" Value="*" />
                             <Setter TargetName="RowDefinition1" Property="RowDefinition.Height" Value="Auto" />
-                            <Setter TargetName="ContentPanel" Property="BorderThickness" Value="0 0 0 1" />
+                            <Setter TargetName="ContentPanel" Property="BorderThickness" Value="0 0 0 2" />
                         </Trigger>
                         <Trigger Property="TabControl.TabStripPlacement" Value="Top">
-                            <Setter TargetName="ContentPanel" Property="BorderThickness" Value="0 1 0 0" />
+                            <Setter TargetName="ContentPanel" Property="BorderThickness" Value="0 2 0 0" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style TargetType="{x:Type TextBox}" x:Key="ConsoleStyle">
         <Setter Property="FontFamily" Value="Console" />
     </Style>
@@ -113,5 +113,94 @@
     <Style TargetType="{x:Type Button}" x:Key="ConsoleClearButtonStyle">
         <Setter Property="FontFamily" Value="Console" />
     </Style>
+    
+    
+    <!--Expander region-->
+
+    <Style TargetType="{x:Type ToggleButton}" x:Key="ExpanderToggleStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border x:Name="Border"
+          BorderThickness="1"
+                            CornerRadius="2 2 0 0"
+          Background="#1100AADE"
+          BorderBrush="{StaticResource VS2012WindowBorderBrush}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                          Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0"
+                                   Value="#3300AADE" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                          Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0"
+                                   Value="WhiteSmoke" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                          Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0"
+                                   Value="Gray" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                           Storyboard.TargetName="CollapsedArrow">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                      Value="{x:Static Visibility.Hidden}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                           Storyboard.TargetName="ExpandededArrow">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                      Value="{x:Static Visibility.Visible}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked" />
+                                <VisualState x:Name="Indeterminate" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid>
+                            <Path x:Name="CollapsedArrow"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Data="M 0 0 L 4 4 L 8 0 Z">
+                                <Path.Fill>
+                                    <SolidColorBrush Color="#FF00AADE" />
+                                </Path.Fill>
+                            </Path>
+                            <Path x:Name="ExpandededArrow"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Visibility="Collapsed"
+            Data="M 0 4 L 4 0 L 8 4 Z">
+                                <Path.Fill>
+                                    <SolidColorBrush Color="#FF00AADE" />
+                                </Path.Fill>
+                            </Path>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    
 
 </ResourceDictionary>

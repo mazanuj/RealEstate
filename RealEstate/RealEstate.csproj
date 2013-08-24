@@ -105,6 +105,7 @@
     <Compile Include="ViewModels\ConsoleViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ProxiesViewModel.cs" />
+    <Compile Include="ViewModels\ScreenWithToogleTools.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\ConsoleView.xaml.cs">
       <DependentUpon>ConsoleView.xaml</DependentUpon>

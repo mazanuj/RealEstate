@@ -41,10 +41,9 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    
+
                     <Button Content="Сохранить" Name="SaveDB" Margin="5"
-                            Grid.Row="3" HorizontalAlignment="Right"
-                            Padding="3 1"/>
+                            Grid.Row="3" HorizontalAlignment="Right"/>
                 </Grid>
             </TabItem>
         </TabControl>

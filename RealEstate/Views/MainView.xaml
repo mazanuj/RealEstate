@@ -8,6 +8,7 @@
         Icon="../Images/mainicon.png">
     <Grid>
         <Canvas HorizontalAlignment="Stretch" Background="White">
+            <ToggleButton Width="20" Height="20" Canvas.ZIndex="5" Name="ToogleTools" Style="{StaticResource ExpanderToggleStyle}" Canvas.Top="8" Canvas.Right="15" ToolTip="{Binding ToogleToolsTooltip}"/>
             <Grid Canvas.ZIndex="3"  Canvas.Top="4" Canvas.Right="130" Name="ConsoleWindow" Visibility="{Binding IsConsoleOpen, Converter={StaticResource bool2VisibilityConverter}}"
                   Style="{StaticResource AnimatedVisibleChanging}">
                 <Border  Background="#EFEFF2"
