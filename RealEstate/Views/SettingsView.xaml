@@ -22,8 +22,8 @@
 
                     <GroupBox Margin="3 0 3 5" Grid.Row="0" Header="Лог" >
                         <StackPanel>
-                            <CheckBox Margin="3" Content="Записывать в файл" Name="WriteToLog" />
-                            <DockPanel IsEnabled="{Binding ElementName= WriteToLog, Path=IsChecked}">
+                            <CheckBox Content="Записывать в файл" Name="WriteToLog" />
+                            <DockPanel IsEnabled="{Binding ElementName= WriteToLog, Path=IsChecked}" Margin="0 7 0 0">
                                 <TextBlock Margin="30 3 3 3">Имя файла:</TextBlock>
                                 <TextBox Margin="3" Name="LogFileName" Text="{Binding LogFileName, ValidatesOnDataErrors=True, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged}" />
                             </DockPanel>
@@ -31,8 +31,7 @@
                     </GroupBox>
 
                     <Button Content="Сохранить" Name="SaveGeneral" Margin="5"
-                            Grid.Row="3" HorizontalAlignment="Right"
-                            Padding="3 1"/>
+                            Grid.Row="3" HorizontalAlignment="Right"/>
                 </Grid>
             </TabItem>
             <TabItem Header="База данных" Style="{StaticResource TabItemPaging}">

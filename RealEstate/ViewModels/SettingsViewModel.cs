@@ -40,8 +40,8 @@ namespace RealEstate.ViewModels
         }
 
         private string _LogFileName = "log.txt";
-        [Required(ErrorMessage = "Email is required")]
-        [RegularExpression(".+\\..+")]
+        [Required(ErrorMessage = "Введите имя файла")]
+        [RegularExpression(".+\\..+",ErrorMessage="Неверный формат имени файла")]
         public string LogFileName
         {
             get { return _LogFileName; }

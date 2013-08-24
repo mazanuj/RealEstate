@@ -456,13 +456,4 @@
         </Style.Resources>
     </Style>
 
-    <Style TargetType="{x:Type TextBox}">
-        <Style.Triggers>
-            <Trigger Property="Validation.HasError" Value="true">
-                <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
-                <Setter Property="Control.Background" Value="#FFFFD2D9" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
 </ResourceDictionary>

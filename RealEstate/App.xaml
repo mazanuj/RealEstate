@@ -8,6 +8,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Style/MetroWindowStyle.xaml"/>
                 <ResourceDictionary Source="Style/LightTheme.xaml"/>
+                <ResourceDictionary Source="Style/Styles.Shared.xaml"/>
+                <ResourceDictionary Source="Style/Styles.WPF.xaml"/>
+                <ResourceDictionary Source="Style/Metro.MSControls.Core.Implicit.xaml"/>
                 <ResourceDictionary>
                     <local:AppBootstrapper x:Key="bootstrapper" />
                 </ResourceDictionary>

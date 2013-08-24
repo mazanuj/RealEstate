@@ -105,6 +105,13 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <Style TargetType="{x:Type TextBox}" x:Key="ConsoleStyle">
+        <Setter Property="FontFamily" Value="Console" />
+    </Style>
 
+    <Style TargetType="{x:Type Button}" x:Key="ConsoleClearButtonStyle">
+        <Setter Property="FontFamily" Value="Console" />
+    </Style>
 
 </ResourceDictionary>
