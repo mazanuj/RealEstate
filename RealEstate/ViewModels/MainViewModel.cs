@@ -14,7 +14,7 @@ using RealEstate.Log;
 namespace RealEstate.ViewModels
 {
     [Export(typeof(MainViewModel))]
-    public class MainViewModel : Screen
+    public class MainViewModel : Conductor<IScreen>.Collection.OneActive
     {
         private readonly IWindowManager _windowManager;
         private readonly IEventAggregator _events;
@@ -24,9 +24,9 @@ namespace RealEstate.ViewModels
         public SettingsViewModel SettingsViewModel;
 
         [ImportingConstructor]
-        public MainViewModel(IWindowManager windowManager, IEventAggregator events, 
+        public MainViewModel(IWindowManager windowManager, IEventAggregator events,
             ConsoleViewModel consoleViewModel, Log.LogManager logManager, SettingsManager settingsManager,
-            SettingsViewModel settingsViewModel)
+            SettingsViewModel settingsViewModel, ProxiesViewModel proxiesViewModel)
         {
             _windowManager = windowManager;
             this.ConsoleViewModel = consoleViewModel;
@@ -34,6 +34,10 @@ namespace RealEstate.ViewModels
             _events = events;
             _settingsManager = settingsManager;
             SettingsViewModel = settingsViewModel;
+
+            Items.Add(proxiesViewModel);
+
+            ActivateItem(proxiesViewModel);
         }
 
         protected override void OnInitialize()
@@ -47,7 +51,7 @@ namespace RealEstate.ViewModels
             _settingsManager.Initialize();
             Trace.WriteLine("Loading settings from file done");
 
-            _events.Publish(new LoggingEvent()); 
+            _events.Publish(new LoggingEvent());
 
             Trace.WriteLine("Application initialize done");
         }

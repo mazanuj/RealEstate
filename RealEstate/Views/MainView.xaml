@@ -53,22 +53,12 @@
 
                 </Grid>
                 <DockPanel Grid.Row="1">
-                    <TabControl DockPanel.Dock="Top" Style="{StaticResource TabPaging}" TabStripPlacement="Top">
-                        <TabItem Header="Прокси сервера" Style="{StaticResource TabItemPaging}">
-                            <Grid Background="White">
-                                <Rectangle Height="300" Width="500" Fill="Transparent" />
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Парсинг" Style="{StaticResource TabItemPaging}">
-                            <Grid Background="White">
-                                <Rectangle Height="300" Width="500" Fill="Transparent" />
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Экспорт" Style="{StaticResource TabItemPaging}">
-                            <Grid Background="White">
-                                <Rectangle Height="300" Width="500" Fill="Transparent" />
-                            </Grid>
-                        </TabItem>
+                    <TabControl DockPanel.Dock="Top" Style="{StaticResource TabPaging}" TabStripPlacement="Top" x:Name="Items">
+                        <TabControl.ItemContainerStyle>
+                            <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabItemPaging}">
+                                <Setter Property="IsEnabled" Value="{Binding IsEnabled}"/>
+                            </Style>
+                        </TabControl.ItemContainerStyle>
                     </TabControl>
                     <StatusBar
                     DockPanel.Dock="Bottom" VerticalAlignment="Bottom"
