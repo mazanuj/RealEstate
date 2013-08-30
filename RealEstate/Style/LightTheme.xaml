@@ -201,6 +201,13 @@
         </Setter>
     </Style>
     
+    <Style x:Key="RibbonToolBorder" TargetType="{x:Type Border}" >
+        <Setter Property="BorderThickness" Value="0 0 1 0"/>
+        <Setter Property="BorderBrush" Value="{StaticResource VS2012WindowBorderBrush}" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Padding" Value="4" />
+    </Style>
+    
     
 
 </ResourceDictionary>

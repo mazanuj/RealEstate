@@ -12,10 +12,44 @@
         </Grid.RowDefinitions>
         <Border Height="180" Visibility="{Binding IsToolsOpen, Converter={StaticResource bool2VisibilityConverter}}" BorderBrush="{StaticResource VS2012WindowBorderBrush}" 
                 BorderThickness="1 0 1 2" FlowDirection="LeftToRight">
-            <TextBlock>Ribbon</TextBlock>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="225" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel>
+                        <TextBlock Margin="0 4" FontWeight="Bold">Статистика</TextBlock>
+                        <StackPanel Margin="5 2" Orientation="Horizontal">
+                            <TextBlock Margin="0 0 5 0">Всего:</TextBlock>
+                            <TextBlock Name="TotalCount" />
+                        </StackPanel>
+                        <StackPanel Margin="5 2" Orientation="Horizontal">
+                            <TextBlock Margin="0 0 5 0">Хороших:</TextBlock>
+                            <TextBlock Name="CheckedCount" />
+                        </StackPanel>
+                        <StackPanel Margin="5 2" Orientation="Horizontal">
+                            <TextBlock Margin="0 0 5 0">Отфильтрованых:</TextBlock>
+                            <TextBlock Name="FiltredCount" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel IsEnabled="{Binding IsUpdateAllow}">
+                        <TextBlock Margin="0 4" FontWeight="Bold">Обновление</TextBlock>
+                        <StackPanel Margin="3" Orientation="Horizontal">
+                            <RadioButton Content="Из сети: " GroupName="UpdateType" Name="FromNetUpdate"/>
+                            <ComboBox IsEnabled="{Binding ElementName= FromNetUpdate, Path=IsChecked}" Margin="10 0" Width="120" Name="SourceReaders" DisplayMemberPath="Name" />
+                        </StackPanel>
+                        <RadioButton Margin="3" Content="Из файла " GroupName="UpdateType" Name="FromFileUpdate"/>
+                        <Button Name="Update" Margin="10 10" Content="Обновить" HorizontalAlignment="Right" />
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Border>
         <Grid Grid.Row="1">
-            <TextBlock >Content</TextBlock>
+
         </Grid>
     </Grid>
 </UserControl>

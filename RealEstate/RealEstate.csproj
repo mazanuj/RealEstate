@@ -94,10 +94,13 @@
     </ApplicationDefinition>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="Log\LogManager.cs" />
+    <Compile Include="Proxies\ProxyManager.cs" />
     <Compile Include="Settings\SettingsStore.cs" />
     <Compile Include="Settings\SettingsArtibutes.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Style\VS2012WindowStyle.cs" />
+    <Compile Include="TaskManagers\TaskManager.cs" />
+    <Compile Include="TaskManagers\TaskWithDescription.cs" />
     <Compile Include="Validation\EmailValidator.cs" />
     <Compile Include="Validation\IValidationControl.cs" />
     <Compile Include="Validation\ValidatingScreen.cs" />
@@ -208,6 +211,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\KTF.Proxy\KTF.Proxy\KTF.Proxy.csproj">
+      <Project>{7d89b999-6dd8-43c7-b54c-24b8882cb93d}</Project>
+      <Name>KTF.Proxy</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.10\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.10\tools\Microsoft.Bcl.Build.targets')" />
