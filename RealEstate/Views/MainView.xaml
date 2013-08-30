@@ -22,6 +22,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" Margin="0 -30 0 0">
                     <Grid.ColumnDefinitions>
@@ -53,23 +54,21 @@
                     </Button>
 
                 </Grid>
-                <DockPanel Grid.Row="1">
-                    <TabControl DockPanel.Dock="Top" Style="{StaticResource TabPaging}" TabStripPlacement="Top" x:Name="Items">
-                        <TabControl.ItemContainerStyle>
-                            <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabItemPaging}">
-                                <Setter Property="IsEnabled" Value="{Binding IsEnabled}"/>
-                            </Style>
-                        </TabControl.ItemContainerStyle>
-                    </TabControl>
-                    <StatusBar
-                    DockPanel.Dock="Bottom" VerticalAlignment="Bottom"
+                <TabControl Grid.Row="1" DockPanel.Dock="Top" Style="{StaticResource TabPaging}" TabStripPlacement="Top" x:Name="Items">
+                    <TabControl.ItemContainerStyle>
+                        <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabItemPaging}">
+                            <Setter Property="IsEnabled" Value="{Binding IsEnabled}"/>
+                        </Style>
+                    </TabControl.ItemContainerStyle>
+                </TabControl>
+                <StatusBar Grid.Row="2"
+                    VerticalAlignment="Bottom"
                     Height="24">
-                        <TextBlock Margin="3,0,0,0">Ready</TextBlock>
-                        <StatusBarItem HorizontalAlignment="Right">
-                            <ResizeGrip Opacity="0.75" />
-                        </StatusBarItem>
-                    </StatusBar>
-                </DockPanel>
+                    <TextBlock Name="Status" Margin="3,0,0,0" />
+                    <StatusBarItem HorizontalAlignment="Right">
+                        <ResizeGrip Opacity="0.75" />
+                    </StatusBarItem>
+                </StatusBar>
             </Grid>
         </Canvas>
     </Grid>

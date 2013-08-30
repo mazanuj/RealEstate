@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="600">
+             d:DesignHeight="400" d:DesignWidth="700">
     <Grid Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -22,34 +22,73 @@
                     <StackPanel>
                         <TextBlock Margin="0 4" FontWeight="Bold">Статистика</TextBlock>
                         <StackPanel Margin="5 2" Orientation="Horizontal">
-                            <TextBlock Margin="0 0 5 0">Всего:</TextBlock>
-                            <TextBlock Name="TotalCount" />
+                            <TextBlock Margin="0 0 5 0">Рабочие:</TextBlock>
+                            <TextBlock Text="{Binding CheckedProxies.Count}" />
                         </StackPanel>
                         <StackPanel Margin="5 2" Orientation="Horizontal">
-                            <TextBlock Margin="0 0 5 0">Хороших:</TextBlock>
-                            <TextBlock Name="CheckedCount" />
+                            <TextBlock Margin="0 0 5 0">Неактивные:</TextBlock>
+                            <TextBlock Text="{Binding SuspectedProxies.Count}" />
                         </StackPanel>
                         <StackPanel Margin="5 2" Orientation="Horizontal">
-                            <TextBlock Margin="0 0 5 0">Отфильтрованых:</TextBlock>
-                            <TextBlock Name="FiltredCount" />
+                            <TextBlock Margin="0 0 5 0">Нерабочие:</TextBlock>
+                            <TextBlock Text="{Binding RejectedProxies.Count}" />
                         </StackPanel>
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
-                    <StackPanel IsEnabled="{Binding IsUpdateAllow}">
+                    <StackPanel IsEnabled="{Binding IsNotUpdating}">
                         <TextBlock Margin="0 4" FontWeight="Bold">Обновление</TextBlock>
                         <StackPanel Margin="3" Orientation="Horizontal">
                             <RadioButton Content="Из сети: " GroupName="UpdateType" Name="FromNetUpdate"/>
                             <ComboBox IsEnabled="{Binding ElementName= FromNetUpdate, Path=IsChecked}" Margin="10 0" Width="120" Name="SourceReaders" DisplayMemberPath="Name" />
                         </StackPanel>
                         <RadioButton Margin="3" Content="Из файла " GroupName="UpdateType" Name="FromFileUpdate"/>
-                        <Button Name="Update" Margin="10 10" Content="Обновить" HorizontalAlignment="Right" />
+                        <StackPanel Margin="3" Orientation="Horizontal">
+                            <Button Name="CheckOut" Margin="10 10" Content="Проверить" />
+                            <Button Name="Update" Margin="10 10" Content="Обновить" />                            
+                        </StackPanel>                       
                     </StackPanel>
                 </Border>
             </Grid>
         </Border>
         <Grid Grid.Row="1">
-
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Border Visibility="{Binding IsUpdating, Converter={StaticResource bool2VisibilityConverter}}" Margin="4" Padding="4" CornerRadius="3" Grid.Row="0" BorderThickness="1" BorderBrush="{StaticResource VS2012WindowBorderBrush}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center">Обновление: </TextBlock>
+                        <ProgressBar  Grid.Column="1" Margin="10 0"  Height="16" Name="Progress" />
+                        <TextBlock Grid.Column="2" Width="50"  VerticalAlignment="Center" Text="{Binding Progress, StringFormat={}{0:0.#}%}" ></TextBlock>
+                        <Button Grid.Column="3" Name="CancelUpdate" Content="Отмена" Margin="30 0"/>
+                    </Grid>
+                </Border>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Margin="5" Grid.Column="0" Grid.Row="0">Рабочие прокси: </TextBlock>
+                    <ListBox Name="CheckedProxies" Grid.Column="0" Grid.Row="1" DisplayMemberPath="Address" />
+                    <TextBlock Margin="5" Grid.Column="1" Grid.Row="0">Неактивные прокси:</TextBlock>
+                    <ListBox Name="SuspectedProxies" Grid.Column="1" Grid.Row="1" DisplayMemberPath="Address"/>
+                    <TextBlock Margin="5" Grid.Column="2" Grid.Row="0">Заблокированные прокси:</TextBlock>
+                    <ListBox Name="RejectedProxies" Grid.Column="2" Grid.Row="1" DisplayMemberPath="Address"/>                   
+                </Grid>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

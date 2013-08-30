@@ -13,6 +13,8 @@ using KTF.Proxy.Readers;
 using RealEstate.Proxies;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using KTF.Proxy;
+using System.Net;
 
 namespace RealEstate.ViewModels
 {
@@ -24,7 +26,7 @@ namespace RealEstate.ViewModels
         private readonly ProxyManager _proxyManager;
 
         [ImportingConstructor]
-        public ProxiesViewModel(IEventAggregator events, TaskManager taskManager,ProxyManager proxyManager )
+        public ProxiesViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager)
         {
             _events = events;
             _taskManager = taskManager;
@@ -41,12 +43,23 @@ namespace RealEstate.ViewModels
             IsToolsOpen = true;
             FromNetUpdate = true;
 
-            _proxyManager.readers.ForEach(SourceReaders.Add);
+            _proxyManager.Readers.ForEach(SourceReaders.Add);
             SelectedSourceReader = SourceReaders.First();
+
+            _proxyManager.Restore();
+        }
+
+        protected override void OnDeactivate(bool close)
+        {
+            if (close)
+            {
+                _proxyManager.Save();
+            }
+            base.OnDeactivate(close);
         }
 
 
-        
+
         private bool _IsEnabled = false;
         public bool IsEnabled
         {
@@ -58,7 +71,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        
+
         private bool _FromNetUpdate = false;
         public bool FromNetUpdate
         {
@@ -70,35 +83,35 @@ namespace RealEstate.ViewModels
             }
         }
 
-        
-        private bool _FromFileUpdate = false;
         public bool FromFileUpdate
         {
-            get { return _FromFileUpdate; }
+            get { return !_FromNetUpdate; }
             set
             {
-                _FromFileUpdate = value;
+                _FromNetUpdate = !value;
                 NotifyOfPropertyChange(() => FromFileUpdate);
             }
         }
-
-        
-        private int _TotalCount = 10;
-        public int TotalCount
-        {
-            get { return _TotalCount; }
-            set
-            {
-                _TotalCount = value;
-                NotifyOfPropertyChange(() => TotalCount);
-            }
-        }
-
 
         private BindableCollection<IProxySourceReader> _SourceReaders = new BindableCollection<IProxySourceReader>();
         public BindableCollection<IProxySourceReader> SourceReaders
         {
             get { return _SourceReaders; }
+        }
+
+        public BindableCollection<WebProxy> CheckedProxies
+        {
+            get { return _proxyManager.Proxies; }
+        }
+
+        public BindableCollection<WebProxy> RejectedProxies
+        {
+            get { return _proxyManager.RejectedProxies; }
+        }
+
+        public BindableCollection<WebProxy> SuspectedProxies
+        {
+            get { return _proxyManager.SuspectedProxies; }
         }
 
         
@@ -113,82 +126,244 @@ namespace RealEstate.ViewModels
             }
         }
 
-        
-        private bool _IsUpdateAllow = true;
-        public bool IsUpdateAllow
+
+        private bool _IsUpdating = false;
+        public bool IsUpdating
         {
-            get { return _IsUpdateAllow; }
+            get { return _IsUpdating; }
             set
             {
-                _IsUpdateAllow = value;
-                NotifyOfPropertyChange(() => IsUpdateAllow);
+                _IsUpdating = value;
+                NotifyOfPropertyChange(() => IsUpdating);
+                NotifyOfPropertyChange(() => IsNotUpdating);
             }
         }
-                    
-                    
+
+        public bool IsNotUpdating
+        {
+            get
+            {
+                return !IsUpdating;
+            }
+        }
+
+
         public void Handle(ToolsOpenEvent message)
         {
             IsToolsOpen = message.IsOpen;
         }
 
-        CancellationTokenSource s = new CancellationTokenSource();
+        CancellationTokenSource cs;
 
         public void Update()
         {
-            IsUpdateAllow = false;
+            IsUpdating = true;
+            CanCancelUpdate = true;
+            cs = new CancellationTokenSource();
+            Progress = 0;
+            _proxyManager.Clear();
+            NotifyOfPropertyChange(() => CanCheckOut);
+            
 
             if (FromNetUpdate)
-                _taskManager.AddTask(new TaskWithDescription(() => UpdateFromNet(SelectedSourceReader, s.Token)));
+                _taskManager.AddTask(new TaskWithDescription(() => UpdateFromNet(SelectedSourceReader, cs.Token)));
             else if (FromFileUpdate)
-                 _taskManager.AddTask(new TaskWithDescription(UpdateFromFile));
+                _taskManager.AddTask(new TaskWithDescription(UpdateFromFile));
         }
 
         private void UpdateFromFile()
         {
-            Trace.WriteLine("Selected updating from file");
-            var dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.DefaultExt = ".txt";
-            dlg.Filter = "Text documents (.txt)|*.txt";
-            if (dlg.ShowDialog().Value)
+            try
             {
-                string filename = dlg.FileName;
-                Trace.WriteLine("Selected file: " + filename);
+                Trace.WriteLine("Selected updating from file");
+                var dlg = new Microsoft.Win32.OpenFileDialog();
+                dlg.DefaultExt = ".txt";
+                dlg.Filter = "Text documents (.txt)|*.txt";
+                if (dlg.ShowDialog().Value)
+                {
+                    string filename = dlg.FileName;
 
-                var storage = new KTF.Proxy.Storage.FileStorage() { FilePath = filename };
-                Trace.WriteLine("Loading proxy from file...");
-                var proxies = storage.LoadFromFile();
-                Trace.WriteLine("Proxies loaded. Total count: " + proxies.Count());
+                    Trace.WriteLine("Selected file: " + filename);
 
+                    var storage = new KTF.Proxy.Storage.FileStorage() { FilePath = filename };
 
-                IsUpdateAllow = true;
+                    Trace.WriteLine("Loading proxy from file...");
+                    _events.Publish("Загрузка прокси из файла ...");
 
+                    var proxies = storage.LoadFromFile();
+
+                    CheckedProxies.AddRange(proxies);
+
+                    Trace.WriteLine("Proxies proxies. Total count: " + proxies.Count());
+
+                    _events.Publish("Прокси загружены");
+
+                    IsUpdating = false;
+
+                }
+                else
+                {
+                    Trace.WriteLine("File not selected");
+                    IsUpdating = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Trace.WriteLine("File not selected");
-                IsUpdateAllow = true;
+                Trace.WriteLine(ex.ToString(), "Error:");
+                _events.Publish("Ошибка");
+                IsUpdating = false;
             }
         }
 
-        private void UpdateFromNet(IProxySourceReader reader ,CancellationToken token)
+        private void UpdateFromNet(IProxySourceReader reader, CancellationToken token)
         {
-            if (reader == null)
+            try
             {
-                Trace.Write("Source reader doesn't selected");
-                IsUpdateAllow = true;
-                return;
+                if (reader == null)
+                {
+                    Trace.Write("Source reader doesn't selected");
+                    IsUpdating = false;
+                    return;
+                }
+
+                Trace.WriteLine("Loading proxy from '" + reader.Name + "' ...");
+                _events.Publish("Загрузка прокси из '" + reader.Name + "'...");
+
+                var loaded = reader.GetProxies("", ConnectionType.Any, "", token);
+                var loadedCount = loaded.Count();
+                total = loadedCount;
+                
+                Trace.WriteLine("Proxies proxies. Total count: " + loadedCount);
+
+                CheckProxies(token, loaded);
+
+                _events.Publish("Прокси обновлены");
+                Progress = 100;
+
+            }
+            catch (OperationCanceledException)
+            {
+                Trace.WriteLine("Operation canceled");
+                _events.Publish("Отменено");
+                CanCancelUpdate = true;
+                Progress = 0;
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString(), "Error:");
+                _events.Publish("Ошибка");
+                Progress = 0;
             }
 
-            var result = reader.GetProxies("", ConnectionType.Any, "", token);
-
-            IsUpdateAllow = true;
+            IsUpdating = false;
 
         }
 
-        public void Update2()
+        private void CheckProxies(CancellationToken token, IEnumerable<WebProxy> proxies)
         {
-            s.Cancel();
-            s = new CancellationTokenSource();
+            _events.Publish("Проверка прокси...");
+
+            check = 0;
+            var proxyChecker = new ProxyChecker();
+            proxyChecker.Checked += proxyChecker_Checked;
+            var @checked = proxyChecker.GetTestedProxies(proxies, token);
+            var checkedCount = @checked.Count();
+
+            Trace.WriteLine("Proxies checked. Total count of working proxies: " + checkedCount);
+        }
+
+        void proxyChecker_Checked(object sender, WebProxyEventArgs e)
+        {
+            if (!CanCancelUpdate) return;
+
+            NotifyOfPropertyChange(() => CanCheckOut);
+
+            if (e.IsSuccess)
+                CheckedProxies.Add(e.WebProxy);
+
+            check++;
+            if (check % 3 == 0)
+            {
+                Progress = ((double)check / total)*100;
+                _events.Publish(String.Format("Проверка прокси... {0:0.#}%", Progress));
+            }
+        }
+
+        int total = 0;
+        int check = 0;
+        private double _Progress = 0;
+        public double Progress
+        {
+            get { return _Progress; }
+            set
+            {
+                _Progress = value;
+                NotifyOfPropertyChange(() => Progress);
+            }
+        }
+
+        public void CancelUpdate()
+        {
+            _events.Publish("Отмена...");
+            cs.Cancel();
+            CanCancelUpdate = false;
+        }
+
+        private bool _CanCancelUpdate = true;
+        public bool CanCancelUpdate
+        {
+            get { return _CanCancelUpdate; }
+            set
+            {
+                _CanCancelUpdate = value;
+                NotifyOfPropertyChange(() => CanCancelUpdate);
+            }
+        }
+
+        public void CheckOut()
+        {
+            IsUpdating = true;
+            CanCancelUpdate = true;
+
+            cs = new CancellationTokenSource();
+            _taskManager.AddTask(new TaskWithDescription(() => CheckOutWork(cs.Token)));
+        }
+
+        public void CheckOutWork(CancellationToken token)
+        {
+            try
+            {
+                var proxies = CheckedProxies.ToList();
+
+                _proxyManager.Clear();
+                total = proxies.Count;
+                CheckProxies(token, proxies);
+
+                _events.Publish("Прокси проверены");
+                Progress = 100;
+
+               
+            }
+            catch (OperationCanceledException)
+            {
+                Trace.WriteLine("Operation canceled");
+                _events.Publish("Отменено");
+                CanCancelUpdate = true;
+                Progress = 0;
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString(), "Error:");
+                _events.Publish("Ошибка");
+                Progress = 0;
+            }
+
+            IsUpdating = false;
+        }
+
+        public bool CanCheckOut
+        {
+            get { return CheckedProxies.Count != 0; }
         }
 
         public void UpdateWork(CancellationToken token)
