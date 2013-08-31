@@ -5,7 +5,7 @@
         xmlns:views="clr-namespace:RealEstate.Views"
         Title="Real Estate" Height="600" Width="900"        
         Style="{StaticResource VS2012WindowStyle}"
-        Icon="../Images/mainicon.png">
+        Icon="../Images/mainicon.png" Loaded="Window_Loaded">
     <Grid>
         <Canvas HorizontalAlignment="Stretch" Background="White">
             <ToggleButton Width="20" Height="10" Canvas.ZIndex="5" Name="ToogleTools" Style="{StaticResource ExpanderToggleStyle}" Canvas.Top="18" Canvas.Right="15" ToolTip="{Binding ToogleToolsTooltip}"/>
@@ -54,11 +54,9 @@
                     </Button>
 
                 </Grid>
-                <TabControl Grid.Row="1" DockPanel.Dock="Top" Style="{StaticResource TabPaging}" TabStripPlacement="Top" x:Name="Items">
+                <TabControl Visibility="{Binding IsEnabled, Converter={StaticResource bool2VisibilityConverter}}"  Grid.Row="1" DockPanel.Dock="Top" Style="{StaticResource TabPaging}" TabStripPlacement="Top" x:Name="Items">
                     <TabControl.ItemContainerStyle>
-                        <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabItemPaging}">
-                            <Setter Property="IsEnabled" Value="{Binding IsEnabled}"/>
-                        </Style>
+                        <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabItemPaging}"/>
                     </TabControl.ItemContainerStyle>
                 </TabControl>
                 <StatusBar Grid.Row="2"

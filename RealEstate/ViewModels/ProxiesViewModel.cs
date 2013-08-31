@@ -19,7 +19,7 @@ using System.Net;
 namespace RealEstate.ViewModels
 {
     [Export(typeof(ProxiesViewModel))]
-    public class ProxiesViewModel : ValidatingScreen<ProxiesViewModel>, IHandle<ToolsOpenEvent>
+    public class ProxiesViewModel : ValidatingScreen<ProxiesViewModel>, IHandle<ToolsOpenEvent>, IHandle<CriticalErrorEvent>
     {
         private readonly IEventAggregator _events;
         private readonly TaskManager _taskManager;
@@ -32,15 +32,15 @@ namespace RealEstate.ViewModels
             _taskManager = taskManager;
             _proxyManager = proxyManager;
             events.Subscribe(this);
+            DisplayName = "Прокси";
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            DisplayName = "Прокси";
-            IsEnabled = true;
-            IsToolsOpen = true;
+            if (!RealEstate.Db.RealEstateContext.isOk) return;
+
             FromNetUpdate = true;
 
             _proxyManager.Readers.ForEach(SourceReaders.Add);
@@ -57,20 +57,6 @@ namespace RealEstate.ViewModels
             }
             base.OnDeactivate(close);
         }
-
-
-
-        private bool _IsEnabled = false;
-        public bool IsEnabled
-        {
-            get { return _IsEnabled; }
-            set
-            {
-                _IsEnabled = value;
-                NotifyOfPropertyChange(() => IsEnabled);
-            }
-        }
-
 
         private bool _FromNetUpdate = false;
         public bool FromNetUpdate
@@ -371,6 +357,12 @@ namespace RealEstate.ViewModels
             System.Threading.Thread.Sleep(5000);
             if (token.IsCancellationRequested) return;
             DisplayName += "123";
+        }
+
+        public void Handle(CriticalErrorEvent message)
+        {
+            if(cs != null)
+                cs.Cancel();
         }
     }
 }

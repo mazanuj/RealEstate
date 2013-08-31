@@ -23,5 +23,15 @@ namespace RealEstate.Views
         {
             InitializeComponent();
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Loader.IsFormLoaded = true;
+        }
+    }
+
+    public static class Loader
+    {
+        public static bool IsFormLoaded = false;
     }
 }
