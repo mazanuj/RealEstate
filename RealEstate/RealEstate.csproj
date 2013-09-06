@@ -107,8 +107,9 @@
     </ApplicationDefinition>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="Db\RealEstateContext.cs" />
-    <Compile Include="Entities\Advert.cs" />
     <Compile Include="Log\LogManager.cs" />
+    <Compile Include="ParsingSettings\ParsingSetting.cs" />
+    <Compile Include="Parsing\ImagesManager.cs" />
     <Compile Include="Proxies\ProxyManager.cs" />
     <Compile Include="Settings\SettingsStore.cs" />
     <Compile Include="Settings\SettingsArtibutes.cs" />
@@ -239,6 +240,10 @@
     <ProjectReference Include="..\..\KTF.Proxy\KTF.Proxy\KTF.Proxy.csproj">
       <Project>{7d89b999-6dd8-43c7-b54c-24b8882cb93d}</Project>
       <Name>KTF.Proxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\RealEstate.Parsers\RealEstate.Parsing\RealEstate.Parsing.csproj">
+      <Project>{c3e0916a-3c00-4543-8ab3-ff43084ae124}</Project>
+      <Name>RealEstate.Parsing</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

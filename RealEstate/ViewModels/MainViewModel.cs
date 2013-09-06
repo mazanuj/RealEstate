@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using RealEstate.Log;
 using System.Timers;
 using RealEstate.Db;
-using RealEstate.Entities;
 using System.Data.Entity;
 using System.Net.Sockets;
 using System.Threading;

@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 using MySql.Data.MySqlClient;
-using RealEstate.Entities;
+using RealEstate.Parsing;
 
 namespace RealEstate.Db
 {
