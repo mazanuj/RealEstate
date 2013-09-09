@@ -72,7 +72,24 @@
             </Grid>
         </Border>
         <Grid Grid.Row="1">
-
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ListBox Height="60" Grid.Row="0">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBoxItem Content="11233122342342342342342342342234234234234342342342342343"/>
+                    <ListBoxItem Content="11233122344444443"/>
+                    <ListBoxItem Content="1123323444444444444123"/>
+                    <ListBoxItem Content="112332344444444444123"/>
+                    <ListBoxItem Content="112332344444444444444123"/>
+                </ListBox>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

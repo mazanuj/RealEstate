@@ -7,6 +7,7 @@
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="bool2VisibilityConverter" />
             <converters:EnumBooleanConverter x:Key="enumBooleanConverter" />
+            <converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Style/MetroWindowStyle.xaml"/>
                 <ResourceDictionary Source="Style/LightTheme.xaml"/>

@@ -17,6 +17,7 @@ using System.Net.Sockets;
 using System.Threading;
 using RealEstate.Proxies;
 using RealEstate.City;
+using RealEstate.Exporting;
 
 namespace RealEstate.ViewModels
 {
@@ -28,6 +29,7 @@ namespace RealEstate.ViewModels
         private readonly Log.LogManager _logManager;
         private readonly ProxyManager _proxyManager;
         private readonly CityManager _cityManager;
+        private readonly ExportSiteManager _exportSiteManager;
         private readonly SettingsManager _settingsManager;
         private readonly System.Timers.Timer _statusTimer;
         public ConsoleViewModel ConsoleViewModel;
@@ -37,7 +39,7 @@ namespace RealEstate.ViewModels
 
         [ImportingConstructor]
         public MainViewModel(IWindowManager windowManager, IEventAggregator events,
-            ProxyManager proxyManager, CityManager cityManager,
+            ProxyManager proxyManager, CityManager cityManager, ExportSiteManager exportSiteManager,
             ConsoleViewModel consoleViewModel, Log.LogManager logManager, SettingsManager settingsManager,
             SettingsViewModel settingsViewModel, ProxiesViewModel proxiesViewModel,
             ParsingViewModel parsingViewModel, ParserSettingViewModel parserSettingViewModel)
@@ -47,6 +49,7 @@ namespace RealEstate.ViewModels
             _logManager = logManager;
             _proxyManager = proxyManager;
             _cityManager = cityManager;
+            _exportSiteManager = exportSiteManager;
             _events = events;
             events.Subscribe(this);
             _settingsManager = settingsManager;
@@ -120,6 +123,16 @@ namespace RealEstate.ViewModels
                 criticalError = new CriticalErrorEvent() { Message = "Ошибка инициализации файлов данных. \r\n Смотрите лог для подробностей." };
             }
 
+            try
+            {
+                InitExportSites();
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString());
+                criticalError = new CriticalErrorEvent() { Message = "Ошибка инициализации данных из базы. \r\n Смотрите лог для подробностей." };
+            }
+
             if (criticalError == null)
             {
                 RealEstateContext.isOk = true;
@@ -156,6 +169,13 @@ namespace RealEstate.ViewModels
             Trace.WriteLine("Loading cities...");
 
             _cityManager.Restore();
+        }
+
+        private void InitExportSites()
+        {
+            Trace.WriteLine("Loading sites for export...");
+
+            _exportSiteManager.Restore();
         }
 
         public void OpenSettings()

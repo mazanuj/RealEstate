@@ -10,6 +10,7 @@ using RealEstate.TaskManagers;
 using RealEstate.Parsing;
 using System.Windows;
 using RealEstate.City;
+using RealEstate.Exporting;
 
 namespace RealEstate.ViewModels
 {
@@ -19,13 +20,21 @@ namespace RealEstate.ViewModels
         private readonly IEventAggregator _events;
         private readonly TaskManager _taskManager;
         private readonly CityManager _cityManager;
+        private readonly ExportSiteManager _exportSiteManager;
+        private readonly IWindowManager _windowManager;
+        private readonly AddExportSiteViewModel _addExportSiteViewModel;
 
         [ImportingConstructor]
-        public ParserSettingViewModel(IEventAggregator events, TaskManager taskManager, CityManager cityManager)
+        public ParserSettingViewModel(IWindowManager windowManager, IEventAggregator events, 
+            TaskManager taskManager, ExportSiteManager exportSiteManager, CityManager cityManager,
+            AddExportSiteViewModel addExportSiteViewModel)
         {
             _events = events;
+            _windowManager = windowManager;
             _taskManager = taskManager;
             _cityManager = cityManager;
+            _exportSiteManager = exportSiteManager;
+            _addExportSiteViewModel = addExportSiteViewModel;
 
             events.Subscribe(this);
             DisplayName = "Настройки проекта";
@@ -128,6 +137,33 @@ namespace RealEstate.ViewModels
         private void FilterValuesChanged()
         {
 
+        }
+
+        public BindableCollection<ExportSite> ExportSites
+        {
+            get
+            {
+                return _exportSiteManager.ExportSites;
+            }
+        }
+
+        public void AddExportSite()
+        {
+            var style = new Dictionary<string, object>();
+            style.Add("style", "VS2012ModalWindowStyle");
+
+            _windowManager.ShowDialog(_addExportSiteViewModel, settings: style);        
+        }
+
+        public void DeleteExportSite(ExportSite site)
+        {
+            if (site != null)
+            {
+                if (MessageBox.Show(String.Format("Точно удалить настройки для сайта {0}?", site.DisplayName), "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+
+                } 
+            }
         }
 
     }

@@ -119,6 +119,7 @@
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Db\RealEstateContext.cs" />
     <Compile Include="Exporting\ExportSite.cs" />
+    <Compile Include="Exporting\ExportSiteManager.cs" />
     <Compile Include="Log\LogManager.cs" />
     <Compile Include="Parsing\ParsingSetting.cs" />
     <Compile Include="Parsing\Advert.cs" />
@@ -136,8 +137,10 @@
     <Compile Include="TaskManagers\TaskWithDescription.cs" />
     <Compile Include="Validation\EmailValidator.cs" />
     <Compile Include="Validation\IValidationControl.cs" />
+    <Compile Include="Validation\UrlAttribute.cs" />
     <Compile Include="Validation\ValidatingScreen.cs" />
     <Compile Include="Validation\ValidationGroupAttribute.cs" />
+    <Compile Include="ViewModels\AddExportSiteViewModel.cs" />
     <Compile Include="ViewModels\ConsoleViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ParserSettingViewModel.cs" />
@@ -145,6 +148,9 @@
     <Compile Include="ViewModels\ProxiesViewModel.cs" />
     <Compile Include="ViewModels\ScreenWithToogleTools.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Views\AddExportSiteView.xaml.cs">
+      <DependentUpon>AddExportSiteView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ConsoleView.xaml.cs">
       <DependentUpon>ConsoleView.xaml</DependentUpon>
     </Compile>
@@ -179,6 +185,10 @@
     <Page Include="Style\Theme.Colors.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AddExportSiteView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ConsoleView.xaml">
       <SubType>Designer</SubType>
