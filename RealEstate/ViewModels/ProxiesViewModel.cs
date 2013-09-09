@@ -44,15 +44,14 @@ namespace RealEstate.ViewModels
             FromNetUpdate = true;
 
             _proxyManager.Readers.ForEach(SourceReaders.Add);
-            SelectedSourceReader = SourceReaders.First();
-
-            _proxyManager.Restore();
+            SelectedSourceReader = SourceReaders.First();   
         }
 
         protected override void OnDeactivate(bool close)
         {
             if (close)
             {
+                Trace.WriteLine("Saving proxies..." );
                 _proxyManager.Save();
             }
             base.OnDeactivate(close);

@@ -60,8 +60,6 @@ namespace RealEstate.Proxies
 
         public void Restore()
         {
-            Trace.WriteLine("Loading proxies from file: " + storage.FilePath);
-
             Proxies.Clear();
             var proxies = storage.LoadFromFile();
             if(proxies != null)
@@ -70,8 +68,6 @@ namespace RealEstate.Proxies
 
         public void Save()
         {
-            Trace.WriteLine("Saving proxies to file: " + storage.FilePath);
-
             storage.SaveToFile(Proxies);
         }
     }

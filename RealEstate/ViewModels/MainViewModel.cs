@@ -15,6 +15,8 @@ using RealEstate.Db;
 using System.Data.Entity;
 using System.Net.Sockets;
 using System.Threading;
+using RealEstate.Proxies;
+using RealEstate.City;
 
 namespace RealEstate.ViewModels
 {
@@ -24,26 +26,33 @@ namespace RealEstate.ViewModels
         private readonly IWindowManager _windowManager;
         private readonly IEventAggregator _events;
         private readonly Log.LogManager _logManager;
+        private readonly ProxyManager _proxyManager;
+        private readonly CityManager _cityManager;
         private readonly SettingsManager _settingsManager;
         private readonly System.Timers.Timer _statusTimer;
         public ConsoleViewModel ConsoleViewModel;
         public SettingsViewModel SettingsViewModel;
         public ParsingViewModel ParsingViewModel;
+        public ParserSettingViewModel ParserSettingViewModel;
 
         [ImportingConstructor]
         public MainViewModel(IWindowManager windowManager, IEventAggregator events,
+            ProxyManager proxyManager, CityManager cityManager,
             ConsoleViewModel consoleViewModel, Log.LogManager logManager, SettingsManager settingsManager,
             SettingsViewModel settingsViewModel, ProxiesViewModel proxiesViewModel,
-            ParsingViewModel parsingViewModel)
+            ParsingViewModel parsingViewModel, ParserSettingViewModel parserSettingViewModel)
         {
             _windowManager = windowManager;
             this.ConsoleViewModel = consoleViewModel;
             _logManager = logManager;
+            _proxyManager = proxyManager;
+            _cityManager = cityManager;
             _events = events;
             events.Subscribe(this);
             _settingsManager = settingsManager;
             SettingsViewModel = settingsViewModel;
             ParsingViewModel = parsingViewModel;
+            ParserSettingViewModel = parserSettingViewModel;
 
             _statusTimer = new System.Timers.Timer();
             _statusTimer.Interval = 5000;
@@ -51,8 +60,9 @@ namespace RealEstate.ViewModels
 
             Items.Add(parsingViewModel);
             Items.Add(proxiesViewModel);
+            Items.Add(parserSettingViewModel);
 
-            ActivateItem(parsingViewModel);
+            ActivateItem(parserSettingViewModel);
 
             //init ----------
 
@@ -67,7 +77,7 @@ namespace RealEstate.ViewModels
             _events.Publish(new LoggingEvent());
 
             Trace.WriteLine("Checking database...");
-            CriticalErrorEvent dbError = null;
+            CriticalErrorEvent criticalError = null;
             try
             {
                 using (var context = new RealEstateContext())
@@ -91,20 +101,29 @@ namespace RealEstate.ViewModels
             catch (System.Data.DataException sokex)
             {
                 Trace.WriteLine(sokex.ToString());
-                dbError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n Невозможно подключиться к базе данных. \r\n Проверьте строку подключения" };
+                criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n Невозможно подключиться к базе данных. \r\n Проверьте строку подключения" };
             }
             catch (Exception ex)
             {
                 Trace.WriteLine(ex.ToString());
-                dbError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n Смотрите лог для подробностей." };
+                criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n Смотрите лог для подробностей." };
             }
 
-            if (dbError == null)
+            try
+            {
+                InitProxy();
+                InitCity();
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString());
+                criticalError = new CriticalErrorEvent() { Message = "Ошибка инициализации файлов данных. \r\n Смотрите лог для подробностей." };
+            }
+
+            if (criticalError == null)
             {
                 RealEstateContext.isOk = true;
                 Trace.WriteLine("Database is OK");
-
-
 
                 Trace.WriteLine("Application initialize done");
             }
@@ -115,7 +134,7 @@ namespace RealEstate.ViewModels
                         Thread.Sleep(300);
 
                     Thread.Sleep(500);
-                    _events.Publish(dbError);
+                    _events.Publish(criticalError);
                 });
         }
 
@@ -123,6 +142,20 @@ namespace RealEstate.ViewModels
         {
             base.OnInitialize();
 
+        }
+
+        private void InitProxy()
+        {
+            Trace.WriteLine("Loading proxies...");
+
+            _proxyManager.Restore();
+        }
+
+        private void InitCity()
+        {
+            Trace.WriteLine("Loading cities...");
+
+            _cityManager.Restore();
         }
 
         public void OpenSettings()
@@ -179,7 +212,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private string _Status = "";
+        private string _Status = Ok_Status;
         public string Status
         {
             get { return _Status; }

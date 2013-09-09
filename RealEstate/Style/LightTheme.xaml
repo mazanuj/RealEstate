@@ -208,6 +208,11 @@
         <Setter Property="Padding" Value="4" />
     </Style>
     
+    <Style x:Key="RibbonTitle" TargetType="{x:Type TextBlock}">
+        <Setter Property="Margin" Value="0 4" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+    
     
 
 </ResourceDictionary>

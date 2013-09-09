@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="RealEstate.Views.ParserSettingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="1000">
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border Height="180" Visibility="{Binding IsToolsOpen, Converter={StaticResource bool2VisibilityConverter}}" BorderBrush="{StaticResource VS2012WindowBorderBrush}" 
+                BorderThickness="1 0 1 2" FlowDirection="LeftToRight">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="170" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource RibbonTitle}">Город:</TextBlock>
+                        <ComboBox Margin="5 2" Name="Cities" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource RibbonTitle}">Период:</TextBlock>
+                        <RadioButton GroupName="period" Content="За сегодня" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Today}"/>
+                        <RadioButton GroupName="period" Content="За сегодня и завтра" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Yesterday}"/>
+                        <RadioButton GroupName="period" Content="За неделю" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Week}"/>
+                        <RadioButton GroupName="period" Content="За всё время" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource RibbonTitle}">Выбрать сайт:</TextBlock>
+                        <RadioButton GroupName="site" Content="avito.ru" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Avito}"/>
+                        <RadioButton GroupName="site" Content="irr.ru" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Hands}"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="3" Style="{StaticResource RibbonToolBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="130" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" >
+                            <TextBlock  Style="{StaticResource RibbonTitle}">Вид недвижимости:</TextBlock>
+                            <RadioButton  GroupName="realstatetype" Content="Все" Margin="5 2" IsChecked="{Binding Path=RealEstateType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>
+                            <RadioButton  GroupName="realstatetype" Content="Квартиры" Margin="5 2" IsChecked="{Binding Path=RealEstateType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Apartments}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" >
+                            <TextBlock  Style="{StaticResource RibbonTitle}">Подрубрика:</TextBlock>
+                            <RadioButton  GroupName="usedtype" Content="Все" Margin="5 2" IsChecked="{Binding Path=Usedtype, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>
+                            <RadioButton  GroupName="usedtype" Content="Новостройки" Margin="5 2" IsChecked="{Binding Path=Usedtype, Converter={StaticResource enumBooleanConverter}, ConverterParameter=New}"/>
+                            <RadioButton  GroupName="usedtype" Content="Вторичное" Margin="5 2" IsChecked="{Binding Path=Usedtype, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Used}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" >
+                            <TextBlock  Style="{StaticResource RibbonTitle}">Вид сделки:</TextBlock>
+                            <RadioButton  GroupName="adverttype" Content="Продажа" Margin="5 2" IsChecked="{Binding Path=AdvertType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Sell}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1">
+
+        </Grid>
+    </Grid>
+</UserControl>

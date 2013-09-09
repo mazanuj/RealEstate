@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 using MySql.Data.MySqlClient;
+using RealEstate.Exporting;
 using RealEstate.Parsing;
 
 namespace RealEstate.Db
@@ -25,6 +26,10 @@ namespace RealEstate.Db
         }
 
         public DbSet<Advert> Adverts { get; set; }
+        public DbSet<ParserSetting> ParserSettings { get; set; }
+        public DbSet<ParserSourceUrl> ParserSourceUrls { get; set; }
+        public DbSet<ExportSite> ExportSites { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         public RealEstateContext()
             : base("RealEstateContext")
