@@ -10,6 +10,8 @@ using RealEstate.Settings;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using RealEstate.Log;
+using RealEstate.City;
+using System.Windows;
 
 namespace RealEstate.ViewModels
 {
@@ -18,12 +20,16 @@ namespace RealEstate.ViewModels
     {
         private readonly IEventAggregator _events;
         private readonly SettingsManager _settingsManager;
+        private readonly CityManager _cityManager;
+
+        private const string ERROR_LABEL = "Ошибка";
 
         [ImportingConstructor]
-        public SettingsViewModel(IEventAggregator events, SettingsManager settingsManager)
+        public SettingsViewModel(IEventAggregator events, SettingsManager settingsManager, CityManager cityManager)
         {
             _events = events;
             _settingsManager = settingsManager;
+            _cityManager = cityManager;
         }
 
         protected override void OnInitialize()
@@ -41,7 +47,7 @@ namespace RealEstate.ViewModels
 
         private string _LogFileName = "log.txt";
         [Required(ErrorMessage = "Введите имя файла")]
-        [RegularExpression(".+\\..+",ErrorMessage="Неверный формат имени файла")]
+        [RegularExpression(".+\\..+", ErrorMessage = "Неверный формат имени файла")]
         public string LogFileName
         {
             get { return _LogFileName; }
@@ -64,7 +70,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        
+
         private string _Status = "";
         public string Status
         {
@@ -75,7 +81,74 @@ namespace RealEstate.ViewModels
                 NotifyOfPropertyChange(() => Status);
             }
         }
-                    
+
+        public BindableCollection<string> Cities
+        {
+            get
+            {
+                return _cityManager.Cities;
+            }
+        }
+
+        private string _NewCityName = "";
+        [Required(ErrorMessage = "Введите название города")]
+        public string NewCityName
+        {
+            get { return _NewCityName; }
+            set
+            {
+                _NewCityName = value;
+                NotifyOfPropertyChange(() => NewCityName);
+            }
+        }
+
+        public async void AddCity()
+        {
+            if (!String.IsNullOrEmpty(NewCityName) && Cities.IndexOf(NewCityName) == -1)
+            {
+                Status = "Добавляю...";
+                try
+                {
+                    await Task.Factory.StartNew(() =>
+                        {
+                            _cityManager.Cities.Add(NewCityName);
+                            _cityManager.Save();
+                        });
+
+                    NewCityName = string.Empty;
+                    Status = "Добавлено";
+                }
+                catch (Exception ex)
+                {
+                    Status = ERROR_LABEL;
+                    Trace.WriteLine(ex.ToString());
+                }
+            }
+        }
+
+        public async void RemoveCity(string city)
+        {
+            if (Cities.IndexOf(city) > 0)
+            {
+                Status = "Удаляю...";
+                try
+                {
+                    await Task.Factory.StartNew(() =>
+                    {
+                        _cityManager.Cities.Remove(city);
+                        _cityManager.Save();
+                    });
+
+                    Status = "Удалено";
+                }
+                catch (Exception ex)
+                {
+                    Status = ERROR_LABEL;
+                    Trace.WriteLine(ex.ToString());
+                }
+            }
+        }
+
 
         public async void SaveGeneral()
         {
@@ -95,7 +168,7 @@ namespace RealEstate.ViewModels
                         changed = true;
                     }
 
-                    if(changed)
+                    if (changed)
                         _settingsManager.Save();
                 });
 
@@ -104,7 +177,7 @@ namespace RealEstate.ViewModels
             }
             catch (Exception ex)
             {
-                Status = "Ошибка";
+                Status = ERROR_LABEL;
                 Trace.WriteLine(ex.ToString());
             }
         }
