@@ -11,6 +11,7 @@ using RealEstate.Parsing;
 using System.Windows;
 using RealEstate.City;
 using RealEstate.Exporting;
+using System.Diagnostics;
 
 namespace RealEstate.ViewModels
 {
@@ -46,7 +47,7 @@ namespace RealEstate.ViewModels
 
             if (!RealEstate.Db.RealEstateContext.isOk) return;
 
-            SelectedCitie = _cityManager.Cities.First();
+            SelectedCitie = _cityManager.Cities.FirstOrDefault();
         }
 
         public void Handle(ToolsOpenEvent message)
@@ -149,10 +150,17 @@ namespace RealEstate.ViewModels
 
         public void AddExportSite()
         {
-            var style = new Dictionary<string, object>();
-            style.Add("style", "VS2012ModalWindowStyle");
+            try
+            {
+                var style = new Dictionary<string, object>();
+                style.Add("style", "VS2012ModalWindowStyle");
 
-            _windowManager.ShowDialog(_addExportSiteViewModel, settings: style);        
+                _windowManager.ShowDialog(_addExportSiteViewModel, settings: style);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString(), "Error!");
+            }    
         }
 
         public void DeleteExportSite(ExportSite site)

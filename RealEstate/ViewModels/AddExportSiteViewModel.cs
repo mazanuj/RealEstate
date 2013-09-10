@@ -37,19 +37,19 @@ namespace RealEstate.ViewModels
         {
             base.OnActivate();
 
-            Title = "";
+            TitleCity = "";
             Url = "";
         }
 
         private string _Title = "";
         [Required(ErrorMessage = "Введите название сайта")]
-        public string Title
+        public string TitleCity
         {
             get { return _Title; }
             set
             {
                 _Title = value;
-                NotifyOfPropertyChange(() => Title);
+                NotifyOfPropertyChange(() => TitleCity);
                 NotifyOfPropertyChange(() => CanCreate);
             }
         }

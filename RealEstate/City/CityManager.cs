@@ -25,7 +25,10 @@ namespace RealEstate.City
         public void Save()
         {
             if (!File.Exists(FileName))
-                File.CreateText(FileName);
+            {
+                var str = File.CreateText(FileName);
+                str.Close();
+            }
 
             if (Cities.Count != 0)
             {
