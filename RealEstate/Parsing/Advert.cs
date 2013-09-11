@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RealEstate.Exporting;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealEstate.Parsing
 {
@@ -47,9 +48,32 @@ namespace RealEstate.Parsing
         public short Floor { get; set; } //+
         public short FloorTotal { get; set; } //+
 
-        public RealEstateType RealEstateType { get; set; } //+
-        public Usedtype Usedtype { get; set; } //+
-        public AdvertType AdvertType { get; set; } //+
+        [Column("RealEstateType", TypeName = "int")]
+        public int RealEstateTypeValue { get; set; }
+        [NotMapped]
+        public RealEstateType RealEstateType
+        {
+            get { return (RealEstateType)RealEstateTypeValue; }
+            set { RealEstateTypeValue = (int)value; }
+        }
+
+        [Column("Usedtype", TypeName = "int")]
+        public int UsedtypeValue { get; set; }
+        [NotMapped]
+        public Usedtype Usedtype
+        {
+            get { return (Usedtype)UsedtypeValue; }
+            set { UsedtypeValue = (int)value; }
+        }
+
+        [Column("AdvertType", TypeName = "int")]
+        public int AdvertTypeValue { get; set; }
+        [NotMapped]
+        public AdvertType AdvertType
+        {
+            get { return (AdvertType)AdvertTypeValue; }
+            set { AdvertTypeValue = (int)value; }
+        }
 
         public bool isGold { get; set; }
 

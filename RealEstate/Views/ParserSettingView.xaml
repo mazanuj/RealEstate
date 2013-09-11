@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="1000">
     <Grid Margin="0">
@@ -77,18 +78,66 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <ListBox Height="60" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ListBox Margin="3" Name="ExportSites" Grid.Row="0" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
-                    <ListBoxItem Content="11233122342342342342342342342234234234234342342342342343"/>
-                    <ListBoxItem Content="11233122344444443"/>
-                    <ListBoxItem Content="1123323444444444444123"/>
-                    <ListBoxItem Content="112332344444444444123"/>
-                    <ListBoxItem Content="112332344444444444444123"/>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DisplayName}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                 </ListBox>
+                <Button Name="AddExportSite" Margin="3" Grid.Column="1" Grid.Row="0" Content="Новый сайт"/>
+
+                <Grid Margin="3" Grid.ColumnSpan="2" Grid.Row="1" Visibility="{Binding ExportSiteIsAviable, Converter={StaticResource bool2VisibilityConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20 10">
+                        <TextBlock>Доступность сайта по FTP:</TextBlock>
+                        <Rectangle Fill="Green" Width="18" Height="18" Margin="10 0" />
+                    </StackPanel>
+
+                    <Grid Grid.ColumnSpan="2" Grid.Row="1" Margin="20" Background="WhiteSmoke">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <TextBlock  Margin="20 3 3 3" FontWeight="Bold">Категория (</TextBlock>
+                            <Button Name="AddSource" Margin="3" Style="{StaticResource LinkButton}" Content="Добавить"/>
+                            <TextBlock Margin="3" FontWeight="Bold">или</TextBlock>
+                            <Button Name="AddSourceFromBuffer" Margin="3" Style="{StaticResource LinkButton}" Content="Вставить из буфера обмена"/>
+                            <TextBlock Margin="3" FontWeight="Bold">)</TextBlock>
+                        </StackPanel>
+                        <ItemsControl Grid.Row="1" Name="ParserSourceUrls">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Url}" Margin="2" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button Name="SaveSources" HorizontalAlignment="Right" Margin="5" Grid.Row="2" Content="Сохранить" />
+                    </Grid>
+
+                    <Button Name="DeleteExportSite" Margin="3" Grid.Column="1" Grid.Row="3" Content="Удалить сайт"/>
+                </Grid>
             </Grid>
         </Grid>
     </Grid>

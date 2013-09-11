@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using RealEstate.Exporting;
 using RealEstate.Parsing;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealEstate.Parsing
 {
@@ -13,11 +14,50 @@ namespace RealEstate.Parsing
 
         public string City { get; set; }
 
-        public RealEstateType RealEstateType { get; set; }
-        public Usedtype Usedtype { get; set; }
-        public AdvertType AdvertType { get; set; }
-        public ParsePeriod ParsePeriod { get; set; }
-        public ImportSite ImportSite { get; set; }
+        [Column("RealEstateType", TypeName = "int")]
+        public int RealEstateTypeValue { get; set; }
+        [NotMapped]
+        public RealEstateType RealEstateType
+        {
+            get { return (RealEstateType)RealEstateTypeValue; }
+            set { RealEstateTypeValue = (int)value; }
+        }
+
+        [Column("Usedtype", TypeName = "int")]
+        public int UsedtypeValue { get; set; }
+        [NotMapped]
+        public Usedtype Usedtype
+        {
+            get { return (Usedtype)UsedtypeValue; }
+            set { UsedtypeValue = (int)value; }
+        }
+
+        [Column("AdvertType", TypeName = "int")]
+        public int AdvertTypeValue { get; set; }
+        [NotMapped]
+        public AdvertType AdvertType
+        {
+            get { return (AdvertType)AdvertTypeValue; }
+            set { AdvertTypeValue = (int)value; }
+        }
+
+        [Column("ParsePeriod", TypeName = "int")]
+        public int ParsePeriodValue { get; set; }
+        [NotMapped]
+        public ParsePeriod ParsePeriod
+        {
+            get { return (ParsePeriod)ParsePeriodValue; }
+            set { ParsePeriodValue = (int)value; }
+        }
+
+        [Column("ImportSite", TypeName = "int")]
+        public int ImportSiteValue { get; set; }
+        [NotMapped]
+        public ImportSite ImportSite
+        {
+            get { return (ImportSite)ImportSiteValue; }
+            set { ImportSiteValue = (int)value; }
+        }
 
         public ExportSite ExportSite {get; set;}
         public virtual ICollection<ParserSourceUrl> Urls { get; set; }

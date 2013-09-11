@@ -72,7 +72,11 @@ namespace RealEstate.ViewModels
         {
             if (!HasErrors)
             {
+                var site = new ExportSite();
+                site.DisplayName = TitleCity;
+                site.Url = Url;
 
+                _exportSiteManager.Add(site);
 
                 _events.Publish("Новый сайт для экспорта добавлен");
                 TryClose();

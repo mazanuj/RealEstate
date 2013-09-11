@@ -18,7 +18,9 @@ namespace RealEstate.Exporting
         {
             if (context != null)
             {
-
+                ExportSites.Add(site);
+                context.ExportSites.Add(site);
+                context.SaveChanges();
             }
         }
 
@@ -26,7 +28,9 @@ namespace RealEstate.Exporting
         {
             if (context != null)
             {
-
+                context.ExportSites.Remove(site);
+                ExportSites.Remove(site);
+                context.SaveChanges();
             }
         }
 

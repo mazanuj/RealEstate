@@ -24,11 +24,12 @@ namespace RealEstate.ViewModels
         private readonly ExportSiteManager _exportSiteManager;
         private readonly IWindowManager _windowManager;
         private readonly AddExportSiteViewModel _addExportSiteViewModel;
+        private readonly ParserSettingManager _parserSettingManager;
 
         [ImportingConstructor]
-        public ParserSettingViewModel(IWindowManager windowManager, IEventAggregator events, 
+        public ParserSettingViewModel(IWindowManager windowManager, IEventAggregator events,
             TaskManager taskManager, ExportSiteManager exportSiteManager, CityManager cityManager,
-            AddExportSiteViewModel addExportSiteViewModel)
+            AddExportSiteViewModel addExportSiteViewModel, ParserSettingManager parserSettingManager)
         {
             _events = events;
             _windowManager = windowManager;
@@ -36,6 +37,7 @@ namespace RealEstate.ViewModels
             _cityManager = cityManager;
             _exportSiteManager = exportSiteManager;
             _addExportSiteViewModel = addExportSiteViewModel;
+            _parserSettingManager = parserSettingManager;
 
             events.Subscribe(this);
             DisplayName = "Настройки проекта";
@@ -63,6 +65,7 @@ namespace RealEstate.ViewModels
             {
                 _ParsePeriod = value;
                 NotifyOfPropertyChange(() => ParsePeriod);
+                FilterValuesChanged();
             }
         }
 
@@ -137,8 +140,40 @@ namespace RealEstate.ViewModels
 
         private void FilterValuesChanged()
         {
+            if (SelectedExportSite != null)
+            {
+                try
+                {
+                    SelectedParserSetting = new ParserSetting();
+                    SelectedParserSetting.AdvertType = AdvertType;
+                    SelectedParserSetting.City = SelectedCitie;
+                    SelectedParserSetting.ExportSite = SelectedExportSite;
+                    SelectedParserSetting.ImportSite = ImportSite;
+                    SelectedParserSetting.ParsePeriod = ParsePeriod;
+                    SelectedParserSetting.RealEstateType = RealEstateType;
+                    SelectedParserSetting.Usedtype = Usedtype;
+
+                    if (_parserSettingManager.Exists(SelectedParserSetting))
+                    {
+                        ParserSourceUrls.Clear();
+
+                        //todo add urls
+                    }
+                    else
+                    {
+                        ParserSourceUrls.Clear();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.ToString(), "Error!");
+                    _events.Publish("Ошибка обновления данных");
+                }
+            }
 
         }
+
+        public ParserSetting SelectedParserSetting { get; set; }
 
         public BindableCollection<ExportSite> ExportSites
         {
@@ -146,6 +181,46 @@ namespace RealEstate.ViewModels
             {
                 return _exportSiteManager.ExportSites;
             }
+        }
+
+        private ExportSite _ExportSite = null;
+        public ExportSite SelectedExportSite
+        {
+            get { return _ExportSite; }
+            set
+            {
+                _ExportSite = value;
+                NotifyOfPropertyChange(() => SelectedExportSite);
+                NotifyOfPropertyChange(() => CanDeleteExportSite);
+                NotifyOfPropertyChange(() => ExportSiteIsAviable);
+                FilterValuesChanged();
+            }
+        }
+
+        private BindableCollection<ParserSourceUrl> _ParserSourceUrls = new BindableCollection<ParserSourceUrl>();
+        public BindableCollection<ParserSourceUrl> ParserSourceUrls
+        {
+            get
+            {
+                return _ParserSourceUrls;
+            }
+        }
+
+        public void AddSource()
+        {
+            ParserSourceUrls.Add(new ParserSourceUrl() { ParserSetting = SelectedParserSetting, Url = "" });
+        }
+
+        public void AddSourceFromBuffer()
+        {
+            var str = Clipboard.GetText();
+            if (!String.IsNullOrEmpty(str))
+                ParserSourceUrls.Add(new ParserSourceUrl() { ParserSetting = SelectedParserSetting, Url = str });
+        }
+
+        public void SaveSources()
+        {
+            //todo
         }
 
         public void AddExportSite()
@@ -160,18 +235,39 @@ namespace RealEstate.ViewModels
             catch (Exception ex)
             {
                 Trace.WriteLine(ex.ToString(), "Error!");
-            }    
+                _events.Publish("Ошибка при добавлении");
+            }
         }
 
-        public void DeleteExportSite(ExportSite site)
+        public void DeleteExportSite()
         {
-            if (site != null)
+            if (SelectedExportSite != null)
             {
-                if (MessageBox.Show(String.Format("Точно удалить настройки для сайта {0}?", site.DisplayName), "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                if (MessageBox.Show(String.Format("Точно удалить настройки для сайта {0}?", SelectedExportSite.DisplayName), "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
+                    try
+                    {
+                        _exportSiteManager.Delete(SelectedExportSite);
 
-                } 
+                        _events.Publish("Настройки сайта удалены");
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex.ToString(), "Error!");
+                        _events.Publish("Ошибка удаления");
+                    }
+                }
             }
+        }
+
+        public bool CanDeleteExportSite
+        {
+            get { return SelectedExportSite != null; }
+        }
+
+        public bool ExportSiteIsAviable
+        {
+            get { return SelectedExportSite != null; }
         }
 
     }

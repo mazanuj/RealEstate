@@ -16,8 +16,8 @@
     ***********************************************************************************************************************************************************************    -->
     <!-- *********************************  ScrollBarButton Style  ********************************* -->
     <Style x:Key="ScrollBarButtonStyle" TargetType="{x:Type RepeatButton}">
-        <Setter Property="MinWidth" Value="30" />
-        <Setter Property="MinHeight" Value="30" />
+        <Setter Property="MinWidth" Value="20" />
+        <Setter Property="MinHeight" Value="20" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="Focusable" Value="false" />
@@ -245,8 +245,8 @@
             <Trigger Property="Orientation" Value="Horizontal">
                 <Setter Property="Width" Value="Auto" />
                 <Setter Property="MinWidth" Value="0" />
-                <Setter Property="Height" Value="30" />
-                <Setter Property="MinHeight" Value="30" />
+                <Setter Property="Height" Value="20" />
+                <Setter Property="MinHeight" Value="20" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ScrollBar}">
