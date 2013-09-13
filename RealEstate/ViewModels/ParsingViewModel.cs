@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows;
 using Caliburn.Micro;
 using Caliburn.Micro.Validation;
 using RealEstate.Proxies;

@@ -4,8 +4,38 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+             d:DesignHeight="400" d:DesignWidth="700">
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border Height="180" Visibility="{Binding IsToolsOpen, Converter={StaticResource bool2VisibilityConverter}}" BorderBrush="{StaticResource VS2012WindowBorderBrush}" 
+                BorderThickness="1 0 1 2" FlowDirection="LeftToRight">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="225" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource RibbonTitle}">Город</TextBlock>
+                        <ListBox Margin="5 2" Height="110">
+                            
+                        </ListBox>
+                        <Button Padding="1" Content="Все" HorizontalAlignment="Right" Margin="5 2" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel IsEnabled="{Binding IsNotUpdating}">
+                        <TextBlock Style="{StaticResource RibbonTitle}">Период</TextBlock>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1">
             
+        </Grid>
     </Grid>
 </UserControl>

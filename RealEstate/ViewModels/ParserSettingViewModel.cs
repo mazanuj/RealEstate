@@ -117,7 +117,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        public BindableCollection<string> Cities
+        public BindableCollection<CityManagerSelectable> Cities
         {
             get
             {
@@ -125,8 +125,8 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private string _selectedCity = null;
-        public string SelectedCity
+        private CityManagerSelectable _selectedCity = null;
+        public CityManagerSelectable SelectedCity
         {
             get { return _selectedCity; }
             set
@@ -146,7 +146,7 @@ namespace RealEstate.ViewModels
                 {
                     var set = new ParserSetting();
                     set.AdvertType = AdvertType;
-                    set.City = SelectedCity;
+                    set.City = SelectedCity.City;
                     set.ExportSite = SelectedExportSite;
                     set.ImportSite = ImportSite;
                     set.ParsePeriod = ParsePeriod;

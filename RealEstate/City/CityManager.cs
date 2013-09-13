@@ -12,13 +12,14 @@ namespace RealEstate.City
     public class CityManager
     {
         private const string FileName = "cities.txt";
-        public BindableCollection<string> Cities  = new BindableCollection<string>();
+        public BindableCollection<CityManagerSelectable> Cities = new BindableCollection<CityManagerSelectable>();
 
         public void Restore()
         {
             if (File.Exists(FileName))
             {
-                Cities.AddRange(File.ReadAllLines(FileName));
+                var cities = File.ReadAllLines(FileName);
+                Cities.AddRange(cities.Select(c => new CityManagerSelectable(){City = c, IsSelected = false}));
             }
         }
 
@@ -32,8 +33,14 @@ namespace RealEstate.City
 
             if (Cities.Count != 0)
             {
-                File.WriteAllLines(FileName, Cities.ToArray());
+                File.WriteAllLines(FileName, Cities.Select(c => c.City).ToArray());
             }
         }
+    }
+
+    public class CityManagerSelectable
+    {
+        public string City { get; set; }
+        public bool IsSelected { get; set; }
     }
 }
