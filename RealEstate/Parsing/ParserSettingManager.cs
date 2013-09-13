@@ -56,7 +56,7 @@ namespace RealEstate.Parsing
             }
         }
 
-        public void SaveUrls(IEnumerable<ParserSourceUrl> urls)
+        public void SaveUrls(IEnumerable<ParserSourceUrl> urls, ParserSetting setting)
         {
             //todo add removing
             foreach (var url in urls)
@@ -73,6 +73,13 @@ namespace RealEstate.Parsing
                 {
                     context.ParserSourceUrls.Add(url);
                 }
+            }
+
+            var forDeleting = setting.Urls.Where(url => !urls.Contains(url)).ToList();
+
+            foreach (var url in forDeleting)
+            {
+                context.ParserSourceUrls.Remove(url);
             }
 
             context.SaveChanges();

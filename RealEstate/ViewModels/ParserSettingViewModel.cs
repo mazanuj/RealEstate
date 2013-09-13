@@ -49,7 +49,7 @@ namespace RealEstate.ViewModels
 
             if (!RealEstate.Db.RealEstateContext.isOk) return;
 
-            SelectedCitie = _cityManager.Cities.FirstOrDefault();
+            SelectedCity = _cityManager.Cities.FirstOrDefault();
         }
 
         public void Handle(ToolsOpenEvent message)
@@ -125,14 +125,14 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private string _SelectedCitie = null;
-        public string SelectedCitie
+        private string _selectedCity = null;
+        public string SelectedCity
         {
-            get { return _SelectedCitie; }
+            get { return _selectedCity; }
             set
             {
-                _SelectedCitie = value;
-                NotifyOfPropertyChange(() => SelectedCitie);
+                _selectedCity = value;
+                NotifyOfPropertyChange(() => SelectedCity);
                 FilterValuesChanged();
             }
         }
@@ -146,7 +146,7 @@ namespace RealEstate.ViewModels
                 {
                     var set = new ParserSetting();
                     set.AdvertType = AdvertType;
-                    set.City = SelectedCitie;
+                    set.City = SelectedCity;
                     set.ExportSite = SelectedExportSite;
                     set.ImportSite = ImportSite;
                     set.ParsePeriod = ParsePeriod;
@@ -223,7 +223,9 @@ namespace RealEstate.ViewModels
                 var sources = ParserSourceUrls.Where(s => s.Url != string.Empty);
 
                 _parserSettingManager.SaveParserSetting(SelectedParserSetting);
-                _parserSettingManager.SaveUrls(sources);
+                _parserSettingManager.SaveUrls(sources, SelectedParserSetting);
+
+                _events.Publish("Сохранено");
             }
             catch (Exception ex)
             {
