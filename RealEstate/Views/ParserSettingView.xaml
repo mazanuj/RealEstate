@@ -99,7 +99,6 @@
                 <Grid Margin="3" Grid.ColumnSpan="2" Grid.Row="1" Visibility="{Binding ExportSiteIsAviable, Converter={StaticResource bool2VisibilityConverter}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -116,7 +115,7 @@
                     <Grid Grid.ColumnSpan="2" Grid.Row="1" Margin="20" Background="WhiteSmoke">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Orientation="Horizontal">
@@ -126,17 +125,26 @@
                             <Button Name="AddSourceFromBuffer" Margin="3" Style="{StaticResource LinkButton}" Content="Вставить из буфера обмена"/>
                             <TextBlock Margin="3" FontWeight="Bold">)</TextBlock>
                         </StackPanel>
-                        <ItemsControl Grid.Row="1" Name="ParserSourceUrls">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBox Text="{Binding Url}" Margin="2" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                        <ScrollViewer Padding="3" Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl  Name="ParserSourceUrls">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox Grid.Column="0" Text="{Binding Url}" Margin="2" />
+                                            <Button Background="White" Margin="3" Foreground="Black" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Width="15" Height="15" Content="x" Style="{StaticResource CircleButton}" Padding="0 -4 0 0" ToolTip="Удалить" cal:Message.Attach="RemoveUrl($dataContext)"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
                         <Button Name="SaveSources" HorizontalAlignment="Right" Margin="5" Grid.Row="2" Content="Сохранить" />
                     </Grid>
 
-                    <Button Name="DeleteExportSite" Margin="3" Grid.Column="1" Grid.Row="3" Content="Удалить сайт"/>
+                    <Button Name="DeleteExportSite" Margin="3" Grid.Column="1" Grid.Row="2" Content="Удалить сайт"/>
                 </Grid>
             </Grid>
         </Grid>

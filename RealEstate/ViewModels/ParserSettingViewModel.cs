@@ -144,25 +144,23 @@ namespace RealEstate.ViewModels
             {
                 try
                 {
-                    SelectedParserSetting = new ParserSetting();
-                    SelectedParserSetting.AdvertType = AdvertType;
-                    SelectedParserSetting.City = SelectedCitie;
-                    SelectedParserSetting.ExportSite = SelectedExportSite;
-                    SelectedParserSetting.ImportSite = ImportSite;
-                    SelectedParserSetting.ParsePeriod = ParsePeriod;
-                    SelectedParserSetting.RealEstateType = RealEstateType;
-                    SelectedParserSetting.Usedtype = Usedtype;
+                    var set = new ParserSetting();
+                    set.AdvertType = AdvertType;
+                    set.City = SelectedCitie;
+                    set.ExportSite = SelectedExportSite;
+                    set.ImportSite = ImportSite;
+                    set.ParsePeriod = ParsePeriod;
+                    set.RealEstateType = RealEstateType;
+                    set.Usedtype = Usedtype;
 
-                    if (_parserSettingManager.Exists(SelectedParserSetting))
-                    {
-                        ParserSourceUrls.Clear();
+                    SelectedParserSetting = _parserSettingManager.Exists(set);
 
-                        //todo add urls
-                    }
-                    else
+                    ParserSourceUrls.Clear();
+                    if (SelectedParserSetting.Urls != null)
                     {
-                        ParserSourceUrls.Clear();
+                        ParserSourceUrls.AddRange(SelectedParserSetting.Urls);
                     }
+
                 }
                 catch (Exception ex)
                 {
@@ -220,7 +218,23 @@ namespace RealEstate.ViewModels
 
         public void SaveSources()
         {
-            //todo
+            try
+            {
+                var sources = ParserSourceUrls.Where(s => s.Url != string.Empty);
+
+                _parserSettingManager.SaveParserSetting(SelectedParserSetting);
+                _parserSettingManager.SaveUrls(sources);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString());
+                MessageBox.Show("Ошибка сохранения!\r\nСмотри лог для подробностей", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void RemoveUrl(ParserSourceUrl url)
+        {
+            ParserSourceUrls.Remove(url);
         }
 
         public void AddExportSite()

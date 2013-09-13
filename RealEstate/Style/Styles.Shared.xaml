@@ -26,7 +26,7 @@
 	<SolidColorBrush x:Key="VScrollbarThumbDisabledBackgroundBrush" Color="{StaticResource Color_005}" />
 	<SolidColorBrush x:Key="HScrollbarThumbDisabledBackgroundBrush" Color="{StaticResource Color_005}" />
 	<SolidColorBrush x:Key="ScrollbarDisabledBackgroundBrush" Color="{StaticResource Color_007}" />
-	<SolidColorBrush x:Key="ScrollbarBackgroundBrush" Color="{StaticResource Color_009}" />
+	<SolidColorBrush x:Key="ScrollbarBackgroundBrush" Color="Transparent" />
 
 	<!-- ComboBox Brushes -->
 	<SolidColorBrush x:Key="ComboBoxBackgroundBrush" Color="{StaticResource Color_009}" />

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Caliburn.Micro;
 using RealEstate.Db;
+using RealEstate.Parsing;
 
 namespace RealEstate.Exporting
 {
@@ -13,6 +14,12 @@ namespace RealEstate.Exporting
     {
         private RealEstateContext context = null;
         public BindableCollection<ExportSite> ExportSites = null;
+
+        [ImportingConstructor]
+        public ExportSiteManager(RealEstateContext context)
+        {
+            this.context = context;
+        }
 
         public void Add(ExportSite site)
         {
@@ -36,8 +43,8 @@ namespace RealEstate.Exporting
 
         public void Restore()
         {
-            context = new RealEstateContext();
             ExportSites = new BindableCollection<ExportSite>(context.ExportSites.OrderBy(e => e.ParseSettings.Count));
         }
+
     }
 }

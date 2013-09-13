@@ -57,8 +57,6 @@ namespace RealEstate.Parsing.Parsers
         {
             Trace.WriteLine("Sending request to " + url);
 
-            string HtmlResult = null;
-
             HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             myHttpWebRequest.AllowAutoRedirect = true;
             myHttpWebRequest.Proxy = proxy ?? WebRequest.DefaultWebProxy;

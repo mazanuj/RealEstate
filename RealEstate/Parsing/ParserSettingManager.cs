@@ -11,11 +11,17 @@ namespace RealEstate.Parsing
     [Export(typeof(ParserSettingManager))]
     public class ParserSettingManager
     {
-        private RealEstateContext context = new RealEstateContext();
+        private RealEstateContext context;
 
-        public bool Exists(ParserSetting setting)
+        [ImportingConstructor]
+        public ParserSettingManager(RealEstateContext context)
         {
-            if (setting == null) return false;
+            this.context = context;
+        }
+
+        public ParserSetting Exists(ParserSetting setting)
+        {
+            if (setting == null) return null;
 
             var set = from s in context.ParserSettings
                       where 
@@ -30,12 +36,47 @@ namespace RealEstate.Parsing
 
             if (set != null)
                 if (set.Count() > 0)
-                    return true;
+                {                   
+                    return set.First();
+                }
 
-            return false;
+            return setting;
 
         }
 
+        public void SaveParserSetting(ParserSetting setting)
+        {
+            if (setting.Id == 0)
+            {
+                if (setting.ExportSite.ParseSettings == null)
+                    setting.ExportSite.ParseSettings = new List<ParserSetting>();
 
+                setting.ExportSite.ParseSettings.Add(setting);
+                context.SaveChanges();
+            }
+        }
+
+        public void SaveUrls(IEnumerable<ParserSourceUrl> urls)
+        {
+            //todo add removing
+            foreach (var url in urls)
+            {
+                var oldUrl = (from u in context.ParserSourceUrls
+                              where u.Id == url.Id
+                              select u).FirstOrDefault();
+
+                if (oldUrl != null)
+                {
+                    oldUrl.Url = url.Url;
+                }
+                else
+                {
+                    context.ParserSourceUrls.Add(url);
+                }
+            }
+
+            context.SaveChanges();
+
+        }
     }
 }
