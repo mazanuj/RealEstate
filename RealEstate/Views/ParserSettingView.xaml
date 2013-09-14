@@ -24,7 +24,7 @@
                 <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
                     <StackPanel>
                         <TextBlock Style="{StaticResource RibbonTitle}">Город:</TextBlock>
-                        <ComboBox Margin="5 2" Name="Cities" />
+                        <ComboBox Margin="5 2" Name="Cities" DisplayMemberPath="City"/>
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">

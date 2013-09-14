@@ -9,6 +9,7 @@ using Caliburn.Micro;
 using Caliburn.Micro.Validation;
 using RealEstate.Proxies;
 using RealEstate.TaskManagers;
+using RealEstate.City;
 
 namespace RealEstate.ViewModels
 {
@@ -18,13 +19,15 @@ namespace RealEstate.ViewModels
         private readonly IEventAggregator _events;
         private readonly TaskManager _taskManager;
         private readonly ProxyManager _proxyManager;
+        private readonly CityManager _cityManager;
 
         [ImportingConstructor]
-        public ParsingViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager)
+        public ParsingViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager, CityManager cityManager)
         {
             _events = events;
             _taskManager = taskManager;
             _proxyManager = proxyManager;
+            _cityManager = cityManager;
             events.Subscribe(this);
             DisplayName = "Главная";
         }
@@ -48,6 +51,14 @@ namespace RealEstate.ViewModels
         public void Handle(ToolsOpenEvent message)
         {
             IsToolsOpen = message.IsOpen;
+        }
+
+        public BindableCollection<CityManagerSelectable> Cities
+        {
+            get
+            {
+                return _cityManager.Cities;
+            }
         }
     }
 }

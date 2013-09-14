@@ -104,7 +104,7 @@ namespace RealEstate.ViewModels
 
         public async void AddCity()
         {
-            if (!String.IsNullOrEmpty(NewCityName) && Cities.IndexOf(NewCityName) == -1)
+            if (!String.IsNullOrEmpty(NewCityName) && !Cities.Any(c => c.City == NewCityName) )
             {
                 Status = "Добавляю...";
                 try

@@ -21,10 +21,21 @@
                 <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
                     <StackPanel>
                         <TextBlock Style="{StaticResource RibbonTitle}">Город</TextBlock>
-                        <ListBox Margin="5 2" Height="110">
-                            
+                        <ListBox Margin="5 2" Height="110" Name="Cities">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding City}" Grid.Column="0"/>
+                                        <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="1" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
                         </ListBox>
-                        <Button Padding="1" Content="Все" HorizontalAlignment="Right" Margin="5 2" />
+                        <Button Name="Clear" Padding="3 1" Content="Очистить" HorizontalAlignment="Right" Margin="5 2" />
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">

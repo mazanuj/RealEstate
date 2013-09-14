@@ -51,7 +51,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel>
-                                    <TextBlock Text="{Binding}" DockPanel.Dock="Left"/>
+                                    <TextBlock Text="{Binding City}" DockPanel.Dock="Left"/>
                                     <Button Background="WhiteSmoke" Foreground="Black" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Width="15" Height="15" Content="x" Style="{StaticResource CircleButton}" Padding="0 -4 0 0" ToolTip="Удалить" cal:Message.Attach="RemoveCity($dataContext)"/>
                                 </DockPanel>
                             </DataTemplate>

@@ -65,7 +65,7 @@ namespace RealEstate.ViewModels
             Items.Add(proxiesViewModel);
             Items.Add(parserSettingViewModel);
 
-            ActivateItem(parserSettingViewModel);
+            ActivateItem(parsingViewModel);
 
             //init ----------
 
