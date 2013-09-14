@@ -22,15 +22,18 @@ namespace RealEstate.ViewModels
         private readonly ProxyManager _proxyManager;
         private readonly CityManager _cityManager;
         private readonly ImportManager _importManager;
+        private readonly ParserSettingManager _parserSettingManager;
 
         [ImportingConstructor]
-        public ParsingViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager, CityManager cityManager, ImportManager importManager)
+        public ParsingViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager,
+            CityManager cityManager, ImportManager importManager, ParserSettingManager parserSettingManager)
         {
             _events = events;
             _taskManager = taskManager;
             _proxyManager = proxyManager;
             _cityManager = cityManager;
             _importManager = importManager;
+            _parserSettingManager = parserSettingManager;
             events.Subscribe(this);
             DisplayName = "Главная";
         }
@@ -42,6 +45,7 @@ namespace RealEstate.ViewModels
             if (!RealEstate.Db.RealEstateContext.isOk) return;
 
             ImportSite = Parsing.ImportSite.All; //if change, do on view too
+            Usedtype = Parsing.Usedtype.All;
 
         }
 
@@ -85,9 +89,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-
         public ImportSite ImportSite { get; set; }
-
 
         public void SwitchImportSite(ParsingSite site)
         {
@@ -102,19 +104,29 @@ namespace RealEstate.ViewModels
             {
                 _RealEstateType = value;
                 NotifyOfPropertyChange(() => RealEstateType);
+
+                Usedtype = Parsing.Usedtype.All;
+                NotifyOfPropertyChange(() => UsedTypes);
             }
         }
 
-        private Usedtype _Usedtype = Usedtype.All;
-        public Usedtype Usedtype
+        private BindableCollection<UsedTypeNamed> _usedTypes = new BindableCollection<UsedTypeNamed>();
+        public BindableCollection<UsedTypeNamed> UsedTypes
         {
-            get { return _Usedtype; }
-            set
+            get
             {
-                _Usedtype = value;
-                NotifyOfPropertyChange(() => Usedtype);
+                _usedTypes.Clear();
+                _usedTypes.AddRange(_parserSettingManager.SubTypes(RealEstateType));
+                return _usedTypes;
             }
         }
+
+        public void ChangeSubtype(UsedTypeNamed type)
+        {
+            Usedtype = type.Type;
+        }
+
+        public Usedtype Usedtype { get; set; }
 
         private AdvertType _AdvertType = AdvertType.Sell;
         public AdvertType AdvertType
@@ -126,5 +138,25 @@ namespace RealEstate.ViewModels
                 NotifyOfPropertyChange(() => AdvertType);
             }
         }
+
+        
+        private bool _UseProxy = true;
+        public bool UseProxy
+        {
+            get { return _UseProxy; }
+            set
+            {
+                _UseProxy = value;
+                NotifyOfPropertyChange(() => UseProxy);
+            }
+        }
+
+        public void Start()
+        {
+
+        }
+
+
+                    
     }
 }

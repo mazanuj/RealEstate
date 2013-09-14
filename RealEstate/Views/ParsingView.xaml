@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="1100">
+             d:DesignHeight="400" d:DesignWidth="1300">
     <Grid Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -19,6 +19,7 @@
                     <ColumnDefinition Width="170" />
                     <ColumnDefinition Width="280" />
                     <ColumnDefinition Width="400" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
                     <StackPanel>
@@ -46,7 +47,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        
+
                         <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RibbonTitle}">Выбрать сайт:</TextBlock>
                         <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource RibbonTitle}">Задержка</TextBlock>
                         <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource RibbonTitle}">Глубина</TextBlock>
@@ -85,9 +86,13 @@
 
                         <StackPanel Grid.Column="1" >
                             <TextBlock  Style="{StaticResource RibbonTitle}">Подрубрика:</TextBlock>
-                            <RadioButton  GroupName="usedtype" Content="Все" Margin="5 2" IsChecked="{Binding Path=Usedtype, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>
-                            <RadioButton  GroupName="usedtype" Content="Новостройки" Margin="5 2" IsChecked="{Binding Path=Usedtype, Converter={StaticResource enumBooleanConverter}, ConverterParameter=New}"/>
-                            <RadioButton  GroupName="usedtype" Content="Вторичное" Margin="5 2" IsChecked="{Binding Path=Usedtype, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Used}"/>
+                            <ItemsControl Name="UsedTypes" Margin="5 0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <RadioButton  GroupName="usedtype" Content="{Binding Name}" Margin="0 2" IsChecked="{Binding Path=Type, Mode=OneTime, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}" cal:Message.Attach="ChangeSubtype($dataContext)"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2" >
@@ -96,6 +101,24 @@
                         </StackPanel>
                     </Grid>
                 </Border>
+                <Grid Grid.Column="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Style="{StaticResource RibbonToolBorder}" BorderThickness="0 0 0 1">
+                        <CheckBox Name="UseProxy" Content="С прокси" Margin="2" />
+                    </Border>
+                    <Border Grid.Row="1" Style="{StaticResource RibbonToolBorder}" BorderThickness="0 0 0 1">
+                        <CheckBox Name="AutoExport" Content="Авто экспорт" Margin="2" />
+                    </Border>
+                    <StackPanel Margin="5 0" Grid.Row="2" Width="100" HorizontalAlignment="Left">
+                        <Button Name="Start" Margin="3" Content="Старт" />
+                        <Button Name="Pause" Margin="3" Content="Пауза" />
+                        <Button Name="Stop" Margin="3" Content="Стоп" />
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Border>
         <Grid Grid.Row="1">

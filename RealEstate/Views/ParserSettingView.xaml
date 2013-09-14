@@ -59,9 +59,13 @@
 
                         <StackPanel Grid.Column="1" >
                             <TextBlock  Style="{StaticResource RibbonTitle}">Подрубрика:</TextBlock>
-                            <RadioButton  GroupName="usedtype" Content="Все" Margin="5 2" IsChecked="{Binding Path=Usedtype, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>
-                            <RadioButton  GroupName="usedtype" Content="Новостройки" Margin="5 2" IsChecked="{Binding Path=Usedtype, Converter={StaticResource enumBooleanConverter}, ConverterParameter=New}"/>
-                            <RadioButton  GroupName="usedtype" Content="Вторичное" Margin="5 2" IsChecked="{Binding Path=Usedtype, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Used}"/>
+                            <ItemsControl Name="UsedTypes" Margin="5 0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <RadioButton  GroupName="usedtype" Content="{Binding Name}" Margin="0 2" IsChecked="{Binding Path=Type, Mode=OneTime, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}" cal:Message.Attach="ChangeSubtype($dataContext)"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2" >

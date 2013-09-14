@@ -50,6 +50,7 @@ namespace RealEstate.ViewModels
             if (!RealEstate.Db.RealEstateContext.isOk) return;
 
             SelectedCity = _cityManager.Cities.FirstOrDefault();
+            Usedtype = Parsing.Usedtype.All;
         }
 
         public void Handle(ToolsOpenEvent message)
@@ -77,21 +78,32 @@ namespace RealEstate.ViewModels
             {
                 _RealEstateType = value;
                 NotifyOfPropertyChange(() => RealEstateType);
+
+                Usedtype = Parsing.Usedtype.All;
+                NotifyOfPropertyChange(() => UsedTypes);
+
                 FilterValuesChanged();
             }
         }
 
-        private Usedtype _Usedtype = Usedtype.All;
-        public Usedtype Usedtype
+        private BindableCollection<UsedTypeNamed> _usedTypes = new BindableCollection<UsedTypeNamed>();
+        public BindableCollection<UsedTypeNamed> UsedTypes
         {
-            get { return _Usedtype; }
-            set
+            get
             {
-                _Usedtype = value;
-                NotifyOfPropertyChange(() => Usedtype);
-                FilterValuesChanged();
+                _usedTypes.Clear();
+                _usedTypes.AddRange(_parserSettingManager.SubTypes(RealEstateType));
+                return _usedTypes;
             }
         }
+
+        public void ChangeSubtype(UsedTypeNamed type)
+        {
+            Usedtype = type.Type;
+            FilterValuesChanged();
+        }
+
+        public Usedtype Usedtype { get; set; }
 
         private AdvertType _AdvertType = AdvertType.Sell;
         public AdvertType AdvertType

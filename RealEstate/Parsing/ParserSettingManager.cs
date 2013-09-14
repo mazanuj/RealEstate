@@ -24,7 +24,7 @@ namespace RealEstate.Parsing
             if (setting == null) return null;
 
             var set = from s in context.ParserSettings
-                      where 
+                      where
                         s.AdvertTypeValue == (int)setting.AdvertType &&
                         s.City == setting.City &&
                         s.ExportSite.Id == setting.ExportSite.Id &&
@@ -36,7 +36,7 @@ namespace RealEstate.Parsing
 
             if (set != null)
                 if (set.Count() > 0)
-                {                   
+                {
                     return set.First();
                 }
 
@@ -85,5 +85,28 @@ namespace RealEstate.Parsing
             context.SaveChanges();
 
         }
+
+        public List<UsedTypeNamed> SubTypes(RealEstateType type)
+        {
+            List<UsedTypeNamed> subs = new List<UsedTypeNamed>();
+            subs.Add(new UsedTypeNamed() { Type = Usedtype.All, Name = "Все" });
+            switch (type)
+            {
+                case RealEstateType.Apartments:
+                    subs.Add(new UsedTypeNamed() { Type = Usedtype.New, Name = "Новые" });
+                    subs.Add(new UsedTypeNamed() { Type = Usedtype.Used, Name = "Вторичное" });
+                    break;
+                case RealEstateType.House:
+                    break;
+            }
+
+            return subs;
+        }
+    }
+
+    public class UsedTypeNamed
+    {
+        public Usedtype Type { get; set; }
+        public string Name { get; set; }
     }
 }
