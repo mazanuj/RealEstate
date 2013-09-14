@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="700">
+             d:DesignHeight="400" d:DesignWidth="1100">
     <Grid Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -15,38 +16,90 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="225" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="170" />
+                    <ColumnDefinition Width="280" />
+                    <ColumnDefinition Width="400" />
                 </Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
                     <StackPanel>
                         <TextBlock Style="{StaticResource RibbonTitle}">Город</TextBlock>
-                        <ListBox Margin="5 2" Height="110" Name="Cities">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding City}" Grid.Column="0"/>
-                                        <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="1" />
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                        <Button Name="Clear" Padding="3 1" Content="Очистить" HorizontalAlignment="Right" Margin="5 2" />
+                        <ComboBox Margin="5 2" Name="Cities" DisplayMemberPath="City"/>
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
-                    <StackPanel IsEnabled="{Binding IsNotUpdating}">
-                        <TextBlock Style="{StaticResource RibbonTitle}">Период</TextBlock>
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource RibbonTitle}">Период:</TextBlock>
+                        <RadioButton GroupName="period" Content="За сегодня" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Today}"/>
+                        <RadioButton GroupName="period" Content="За сегодня и завтра" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Yesterday}"/>
+                        <RadioButton GroupName="period" Content="За неделю" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Week}"/>
+                        <RadioButton GroupName="period" Content="За всё время" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>
                     </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource RibbonToolBorder}">
+                    <Grid Grid.IsSharedSizeScope="True" Name="SitesGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120" SharedSizeGroup="_site" />
+                            <ColumnDefinition Width="70" SharedSizeGroup="_delay" />
+                            <ColumnDefinition Width="70" SharedSizeGroup="_deep"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RibbonTitle}">Выбрать сайт:</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource RibbonTitle}">Задержка</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource RibbonTitle}">Глубина</TextBlock>
+
+                        <ItemsControl Grid.Row="1" Grid.ColumnSpan="3" Name="ImportSites" Margin="5 2">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition SharedSizeGroup="_site" />
+                                            <ColumnDefinition SharedSizeGroup="_delay" />
+                                            <ColumnDefinition SharedSizeGroup="_deep" />
+                                        </Grid.ColumnDefinitions>
+                                        <RadioButton Grid.Column="0" GroupName="site" Content="{Binding DisplayName}" Margin="2" cal:Message.Attach="SwitchImportSite($dataContext)" IsChecked="{Binding Path=Site, Mode=OneTime, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}" />
+                                        <TextBox Grid.Column="1" Text="{Binding Delay, Mode=TwoWay, Converter={StaticResource intConverter}}" Margin="10 2" />
+                                        <TextBox Grid.Column="2" Text="{Binding Deep, Mode=TwoWay, Converter={StaticResource intConverter}}" Margin="10 2" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </Border>
+                <Border Grid.Column="3" Style="{StaticResource RibbonToolBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140" />
+                            <ColumnDefinition Width="130" />
+                            <ColumnDefinition Width="100" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" >
+                            <TextBlock  Style="{StaticResource RibbonTitle}">Вид недвижимости:</TextBlock>
+                            <RadioButton  GroupName="realstatetype" Content="Все" Margin="5 2" IsChecked="{Binding Path=RealEstateType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>
+                            <RadioButton  GroupName="realstatetype" Content="Квартиры" Margin="5 2" IsChecked="{Binding Path=RealEstateType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Apartments}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" >
+                            <TextBlock  Style="{StaticResource RibbonTitle}">Подрубрика:</TextBlock>
+                            <RadioButton  GroupName="usedtype" Content="Все" Margin="5 2" IsChecked="{Binding Path=Usedtype, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>
+                            <RadioButton  GroupName="usedtype" Content="Новостройки" Margin="5 2" IsChecked="{Binding Path=Usedtype, Converter={StaticResource enumBooleanConverter}, ConverterParameter=New}"/>
+                            <RadioButton  GroupName="usedtype" Content="Вторичное" Margin="5 2" IsChecked="{Binding Path=Usedtype, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Used}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" >
+                            <TextBlock  Style="{StaticResource RibbonTitle}">Вид сделки:</TextBlock>
+                            <RadioButton  GroupName="adverttype" Content="Продажа" Margin="5 2" IsChecked="{Binding Path=AdvertType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Sell}"/>
+                        </StackPanel>
+                    </Grid>
                 </Border>
             </Grid>
         </Border>
         <Grid Grid.Row="1">
-            
+
         </Grid>
     </Grid>
 </UserControl>

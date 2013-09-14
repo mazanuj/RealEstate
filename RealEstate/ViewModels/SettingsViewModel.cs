@@ -82,7 +82,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        public BindableCollection<CityManagerSelectable> Cities
+        public BindableCollection<CityWrap> Cities
         {
             get
             {
@@ -111,7 +111,7 @@ namespace RealEstate.ViewModels
                 {
                     await Task.Factory.StartNew(() =>
                         {
-                            _cityManager.Cities.Add(new CityManagerSelectable() { City = NewCityName, IsSelected = false });
+                            _cityManager.Cities.Add(new CityWrap() { City = NewCityName });
                             _cityManager.Save();
                         });
 
@@ -126,7 +126,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        public async void RemoveCity(CityManagerSelectable city)
+        public async void RemoveCity(CityWrap city)
         {
             if (Cities.IndexOf(city) > 0)
             {

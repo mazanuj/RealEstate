@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Caliburn.Micro;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 
 namespace RealEstate.City
 {
@@ -12,15 +13,28 @@ namespace RealEstate.City
     public class CityManager
     {
         private const string FileName = "cities.txt";
-        public BindableCollection<CityManagerSelectable> Cities = new BindableCollection<CityManagerSelectable>();
+        public BindableCollection<CityWrap> Cities = new BindableCollection<CityWrap>();
 
         public void Restore()
         {
             if (File.Exists(FileName))
             {
                 var cities = File.ReadAllLines(FileName);
-                Cities.AddRange(cities.Select(c => new CityManagerSelectable(){City = c, IsSelected = false}));
+                Cities.AddRange(cities.Select(c => new CityWrap(){City = c}));
             }
+            else
+            {
+                RestoreDefaults();
+            }
+        }
+
+        private void RestoreDefaults()
+        {
+            Trace.WriteLine("Restore default cities");
+            Cities.Add(new CityWrap() { City = "" });
+            Cities.Add(new CityWrap() { City = "Ярославль" });
+
+            Save();
         }
 
         public void Save()
@@ -38,9 +52,8 @@ namespace RealEstate.City
         }
     }
 
-    public class CityManagerSelectable
+    public class CityWrap
     {
         public string City { get; set; }
-        public bool IsSelected { get; set; }
     }
 }

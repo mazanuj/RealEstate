@@ -18,6 +18,7 @@ using System.Threading;
 using RealEstate.Proxies;
 using RealEstate.City;
 using RealEstate.Exporting;
+using RealEstate.Parsing;
 
 namespace RealEstate.ViewModels
 {
@@ -31,6 +32,7 @@ namespace RealEstate.ViewModels
         private readonly CityManager _cityManager;
         private readonly ExportSiteManager _exportSiteManager;
         private readonly SettingsManager _settingsManager;
+        private readonly ImportManager _importManager;
         private readonly System.Timers.Timer _statusTimer;
         public ConsoleViewModel ConsoleViewModel;
         public SettingsViewModel SettingsViewModel;
@@ -41,6 +43,7 @@ namespace RealEstate.ViewModels
         public MainViewModel(IWindowManager windowManager, IEventAggregator events,
             ProxyManager proxyManager, CityManager cityManager, ExportSiteManager exportSiteManager,
             ConsoleViewModel consoleViewModel, Log.LogManager logManager, SettingsManager settingsManager,
+            ImportManager importManager,
             SettingsViewModel settingsViewModel, ProxiesViewModel proxiesViewModel,
             ParsingViewModel parsingViewModel, ParserSettingViewModel parserSettingViewModel)
         {
@@ -50,6 +53,7 @@ namespace RealEstate.ViewModels
             _proxyManager = proxyManager;
             _cityManager = cityManager;
             _exportSiteManager = exportSiteManager;
+            _importManager = importManager;
             _events = events;
             events.Subscribe(this);
             _settingsManager = settingsManager;
@@ -116,6 +120,7 @@ namespace RealEstate.ViewModels
             {
                 InitProxy();
                 InitCity();
+                InitImportSites();
             }
             catch (Exception ex)
             {
@@ -157,6 +162,24 @@ namespace RealEstate.ViewModels
 
         }
 
+        protected override void OnDeactivate(bool close)
+        {
+            if (close)
+            {
+                try
+                {
+                    _importManager.Save();
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.ToString());
+                    MessageBox.Show("Ошибка сохранения настрок! \r\n См. лог для подробностей", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+            base.OnDeactivate(close);
+        }
+
         private void InitProxy()
         {
             Trace.WriteLine("Loading proxies...");
@@ -169,6 +192,13 @@ namespace RealEstate.ViewModels
             Trace.WriteLine("Loading cities...");
 
             _cityManager.Restore();
+        }
+
+        private void InitImportSites()
+        {
+            Trace.WriteLine("Loading import sites...");
+
+            _importManager.Restore();
         }
 
         private void InitExportSites()
@@ -277,7 +307,7 @@ namespace RealEstate.ViewModels
             Status = "Критическая ошибка...";
             IsEnabled = false;
             _events.Publish(new ToolsOpenEvent(false));
-            MessageBox.Show(message.Message);
+            MessageBox.Show(message.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 

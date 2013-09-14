@@ -121,6 +121,7 @@
     <Compile Include="Exporting\ExportSite.cs" />
     <Compile Include="Exporting\ExportSiteManager.cs" />
     <Compile Include="Log\LogManager.cs" />
+    <Compile Include="Parsing\ImportManager.cs" />
     <Compile Include="Parsing\ParserSettingManager.cs" />
     <Compile Include="Parsing\ParsingSetting.cs" />
     <Compile Include="Parsing\Advert.cs" />

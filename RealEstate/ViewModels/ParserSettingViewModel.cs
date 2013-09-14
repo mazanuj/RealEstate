@@ -117,7 +117,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        public BindableCollection<CityManagerSelectable> Cities
+        public BindableCollection<CityWrap> Cities
         {
             get
             {
@@ -125,8 +125,8 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private CityManagerSelectable _selectedCity = null;
-        public CityManagerSelectable SelectedCity
+        private CityWrap _selectedCity = null;
+        public CityWrap SelectedCity
         {
             get { return _selectedCity; }
             set

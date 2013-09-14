@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell"
         xmlns:views="clr-namespace:RealEstate.Views"
-        Title="Real Estate" Height="600" Width="1000"        
+        Title="Real Estate" Height="600" Width="1100"        
         Style="{StaticResource VS2012WindowStyle}"
         Icon="../Images/mainicon.png" Loaded="Window_Loaded">
     <Grid>

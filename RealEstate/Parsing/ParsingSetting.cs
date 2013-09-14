@@ -81,11 +81,4 @@ namespace RealEstate.Parsing
         Week,
         All
     }
-
-    public enum ImportSite
-    {
-        All,
-        Avito,
-        Hands
-    }
 }
