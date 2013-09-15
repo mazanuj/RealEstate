@@ -138,22 +138,28 @@ namespace RealEstate.ViewModels
             IsToolsOpen = message.IsOpen;
         }
 
-        CancellationTokenSource cs;
+        RealEstateTask realTask = null;
 
         public void Update()
         {
             IsUpdating = true;
             CanCancelUpdate = true;
-            cs = new CancellationTokenSource();
+            realTask = new RealEstateTask();
             Progress = 0;
             _proxyManager.Clear();
             NotifyOfPropertyChange(() => CanCheckOut);
-            
+
 
             if (FromNetUpdate)
-                _taskManager.AddTask(new TaskWithDescription(() => UpdateFromNet(SelectedSourceReader, cs.Token)));
+            {
+                realTask.Task = new Task(() => UpdateFromNet(SelectedSourceReader, realTask.cs.Token));
+                _taskManager.AddTask(realTask);
+            }
             else if (FromFileUpdate)
-                _taskManager.AddTask(new TaskWithDescription(UpdateFromFile));
+            {                
+                realTask.Task = new Task(UpdateFromFile);
+                _taskManager.AddTask(realTask);
+            }
         }
 
         private void UpdateFromFile()
@@ -290,7 +296,7 @@ namespace RealEstate.ViewModels
         public void CancelUpdate()
         {
             _events.Publish("Отмена...");
-            cs.Cancel();
+            realTask.Stop();
             CanCancelUpdate = false;
         }
 
@@ -310,8 +316,9 @@ namespace RealEstate.ViewModels
             IsUpdating = true;
             CanCancelUpdate = true;
 
-            cs = new CancellationTokenSource();
-            _taskManager.AddTask(new TaskWithDescription(() => CheckOutWork(cs.Token)));
+            realTask = new RealEstateTask();
+            realTask.Task = new Task(() => CheckOutWork(realTask.cs.Token));
+            _taskManager.AddTask(realTask);
         }
 
         public void CheckOutWork(CancellationToken token)
@@ -360,8 +367,8 @@ namespace RealEstate.ViewModels
 
         public void Handle(CriticalErrorEvent message)
         {
-            if(cs != null)
-                cs.Cancel();
+            if(realTask != null)
+                realTask.cs.Cancel();
         }
     }
 }

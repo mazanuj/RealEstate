@@ -12,7 +12,7 @@ namespace RealEstate.TaskManagers
     [Export(typeof(TaskManager))]
     public class TaskManager
     {
-        private Queue<TaskWithDescription> _tasks = new Queue<TaskWithDescription>();
+        private Queue<RealEstateTask> _tasks = new Queue<RealEstateTask>();
         private BackgroundWorker worker = new BackgroundWorker();
 
 
@@ -33,15 +33,11 @@ namespace RealEstate.TaskManagers
             if (_tasks.Count == 0) return;
             var task = _tasks.Dequeue();
             if (task == null) return;
-            if (task.IsCanceled)
-            {
-                return;
-            }
 
-            task.RunSynchronously();
+            task.Start();
         }
 
-        public void AddTask(TaskWithDescription task)
+        public void AddTask(RealEstateTask task)
         {
             if (task == null) throw new ArgumentNullException();
 

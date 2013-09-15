@@ -136,7 +136,8 @@
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Style\VS2012WindowStyle.cs" />
     <Compile Include="TaskManagers\TaskManager.cs" />
-    <Compile Include="TaskManagers\TaskWithDescription.cs" />
+    <Compile Include="TaskManagers\RealEstateTask.cs" />
+    <Compile Include="Utils\PauseToken.cs" />
     <Compile Include="Validation\EmailValidator.cs" />
     <Compile Include="Validation\IValidationControl.cs" />
     <Compile Include="Validation\UrlAttribute.cs" />

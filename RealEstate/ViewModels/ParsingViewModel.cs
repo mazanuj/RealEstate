@@ -11,6 +11,8 @@ using RealEstate.Proxies;
 using RealEstate.TaskManagers;
 using RealEstate.City;
 using RealEstate.Parsing;
+using RealEstate.Utils;
+using System.Threading.Tasks;
 
 namespace RealEstate.ViewModels
 {
@@ -46,15 +48,14 @@ namespace RealEstate.ViewModels
 
             ImportSite = Parsing.ImportSite.All; //if change, do on view too
             Usedtype = Parsing.Usedtype.All;
+            SelectedCity = _cityManager.Cities.FirstOrDefault();
 
         }
 
-        CancellationTokenSource cs;
-
         public void Handle(CriticalErrorEvent message)
         {
-            if (cs != null)
-                cs.Cancel();
+            //if (cs != null)
+            //    cs.Cancel();
         }
 
         public void Handle(ToolsOpenEvent message)
@@ -69,6 +70,19 @@ namespace RealEstate.ViewModels
                 return _cityManager.Cities;
             }
         }
+
+
+        private CityWrap _SelectedCity = null;
+        public CityWrap SelectedCity
+        {
+            get { return _SelectedCity; }
+            set
+            {
+                _SelectedCity = value;
+                NotifyOfPropertyChange(() => SelectedCity);
+            }
+        }
+
 
         private ParsePeriod _ParsePeriod = ParsePeriod.Today;
         public ParsePeriod ParsePeriod
@@ -139,7 +153,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        
+
         private bool _UseProxy = true;
         public bool UseProxy
         {
@@ -153,10 +167,19 @@ namespace RealEstate.ViewModels
 
         public void Start()
         {
+            string city = SelectedCity.City;
+            ParsePeriod perod = this.ParsePeriod;
+            ImportSite site = this.ImportSite;
+            RealEstateType realType = this.RealEstateType;
+            Usedtype subType = this.Usedtype;
+            AdvertType advertType = this.AdvertType;
+            bool useProxy = UseProxy;
+
+
 
         }
 
 
-                    
+
     }
 }
