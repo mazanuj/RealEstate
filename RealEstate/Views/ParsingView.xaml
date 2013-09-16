@@ -121,8 +121,40 @@
                 </Grid>
             </Grid>
         </Border>
-        <Grid Grid.Row="1">
-
+        <Grid Grid.Row="1" Margin="100 50">
+            <ScrollViewer>
+                <ItemsControl Name="Tasks">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="4" Padding="2" CornerRadius="3" BorderThickness="1" BorderBrush="{StaticResource VS2012WindowBorderBrush}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding Description}" />
+                                    <TextBlock FontWeight="Bold" Grid.Column="1" Text="Прошло" />
+                                    <TextBlock FontWeight="Bold" Grid.Column="2" Text="Осталось" />
+                                    <TextBlock Grid.Column="3" Text="0/1" />
+                                    <StackPanel Grid.Column="4" Orientation="Horizontal">
+                                        <Button Margin="4 0" Visibility="{Binding IsRunning, Converter={StaticResource negatedBoolToVisibilityConverter}}" Style="{StaticResource LinkButton}" Content="Старт" />
+                                        <Button Margin="4 0" Visibility="{Binding IsRunning, Converter={StaticResource bool2VisibilityConverter}}" Style="{StaticResource LinkButton}" Content="Пауза" />
+                                        <Button Margin="4 0" Style="{StaticResource LinkButton}" Content="Стоп" />
+                                    </StackPanel>
+                                    <TextBlock FontWeight="Bold" Grid.Column="6" Text="Получено объявлений" />
+                                    <TextBlock Grid.Column="7" Text="140/210" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </UserControl>

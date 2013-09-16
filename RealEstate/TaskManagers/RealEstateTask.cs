@@ -16,6 +16,8 @@ namespace RealEstate.TaskManagers
         public PauseTokenSource ps { get; set; }
         public Task Task { get; set; }
 
+        private Timer timer;
+
         public RealEstateTask()
             : this("") { }
 
@@ -23,16 +25,17 @@ namespace RealEstate.TaskManagers
         {
             cs = new CancellationTokenSource();
             ps = new PauseTokenSource();
+            timer = new Timer(OnTimer, null, 0, 1000);
         }
 
-        private bool _IsRunnig = false;
-        public bool IsRunnig
+        private bool _IsRunning = false;
+        public bool IsRunning
         {
-            get { return _IsRunnig; }
+            get { return _IsRunning; }
             set
             {
-                _IsRunnig = value;
-                NotifyOfPropertyChange(() => IsRunnig);
+                _IsRunning = value;
+                NotifyOfPropertyChange(() => IsRunning);
             }
         }
 
@@ -51,7 +54,7 @@ namespace RealEstate.TaskManagers
 
         public void Pause()
         {
-            IsRunnig = false;
+            IsRunning = false;
             ps.Pause();
         }
 
@@ -63,7 +66,7 @@ namespace RealEstate.TaskManagers
 
         public void Start()
         {
-            IsRunnig = true;
+            IsRunning = true;
 
             if (ps.IsPauseRequested)
                 ps.UnPause();
@@ -75,5 +78,7 @@ namespace RealEstate.TaskManagers
 
             Task.RunSynchronously();
         }
+
+        protected virtual void OnTimer() { }
     }
 }

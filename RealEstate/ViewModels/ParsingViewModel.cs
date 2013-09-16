@@ -165,21 +165,140 @@ namespace RealEstate.ViewModels
             }
         }
 
+        public BindableCollection<ParsingTask> _tasks = new BindableCollection<ParsingTask>();
+        public BindableCollection<ParsingTask> Tasks
+        {
+            get
+            {
+                return _tasks;
+            }
+        }
+
         public void Start()
         {
-            string city = SelectedCity.City;
-            ParsePeriod perod = this.ParsePeriod;
-            ImportSite site = this.ImportSite;
-            RealEstateType realType = this.RealEstateType;
-            Usedtype subType = this.Usedtype;
-            AdvertType advertType = this.AdvertType;
-            bool useProxy = UseProxy;
+            if (this.ImportSite == Parsing.ImportSite.All)
+            {
+                foreach (var site in Enum.GetValues(typeof(ImportSite)))
+                {
+                    var s = (ImportSite)site;
+
+                    if (s != Parsing.ImportSite.All)
+                    {
+                        TaskParsingParams param = new TaskParsingParams();
+
+                        param.city = SelectedCity.City;
+                        param.period = this.ParsePeriod;
+                        param.site = s;
+                        param.realType = this.RealEstateType;
+                        param.subType = this.Usedtype;
+                        param.advertType = this.AdvertType;
+                        param.useProxy = UseProxy;
+
+                        ParsingTask realTask = new ParsingTask();
+                        realTask.Description = s.ToString(); //todo add name mapper
+                        realTask.Task = new Task(() => StartInternal(param, realTask.cs.Token, realTask.ps.PauseToken, realTask));
+                        Tasks.Add(realTask);
+                        _taskManager.AddTask(realTask);
+                    }
+                }
+            }
+            else
+            {
+                TaskParsingParams param = new TaskParsingParams();
+
+                param.city = SelectedCity.City;
+                param.period = this.ParsePeriod;
+                param.site = this.ImportSite;
+                param.realType = this.RealEstateType;
+                param.subType = this.Usedtype;
+                param.advertType = this.AdvertType;
+                param.useProxy = UseProxy;
+
+                ParsingTask realTask = new ParsingTask();
+                realTask.Description = param.site.ToString();
+                realTask.Task = new Task(() => StartInternal(param, realTask.cs.Token, realTask.ps.PauseToken, realTask));
+                Tasks.Add(realTask);
+                _taskManager.AddTask(realTask);
+            }
+        }
+
+        private void StartInternal(TaskParsingParams param, CancellationToken ct, PauseToken pt, ParsingTask task)
+        {
+            var settings = _parserSettingManager.FindSettings(param.advertType, param.city,
+                param.site, param.period, param.realType, param.subType);
 
 
 
+            Thread.Sleep(1000);
         }
 
 
 
+    }
+
+    class TaskParsingParams
+    {
+        public string city;
+        public ParsePeriod period;
+        public ImportSite site;
+        public RealEstateType realType;
+        public Usedtype subType;
+        public AdvertType advertType;
+        public bool useProxy;
+    }
+
+    public class ParsingTask : RealEstateTask
+    {
+        
+        private int _TotlaCount = 0;
+        public int TotlaCount
+        {
+            get { return _TotlaCount; }
+            set
+            {
+                _TotlaCount = value;
+                NotifyOfPropertyChange(() => TotlaCount);
+            }
+        }
+
+        
+        private int _ParsedCount = 0;
+        public int ParsedCount
+        {
+            get { return _ParsedCount; }
+            set
+            {
+                _ParsedCount = value;
+                NotifyOfPropertyChange(() => ParsedCount);
+            }
+        }
+
+        
+        private TimeSpan _PassBy = TimeSpan.MinValue;
+        public TimeSpan PassBy
+        {
+            get { return _PassBy; }
+            set
+            {
+                _PassBy = value;
+                NotifyOfPropertyChange(() => PassBy);
+            }
+        }
+
+        
+        private TimeSpan _Remaining = TimeSpan.MinValue;
+        public TimeSpan Remaining
+        {
+            get { return _Remaining; }
+            set
+            {
+                _Remaining = value;
+                NotifyOfPropertyChange(() => Remaining);
+            }
+        }
+                    
+                    
+                    
+                    
     }
 }

@@ -73,7 +73,6 @@ namespace RealEstate.Parsing
 
         public void SaveUrls(IEnumerable<ParserSourceUrl> urls, ParserSetting setting)
         {
-            //todo add removing
             foreach (var url in urls)
             {
                 var oldUrl = (from u in context.ParserSourceUrls
