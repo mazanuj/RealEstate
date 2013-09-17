@@ -129,26 +129,52 @@
                             <Border Margin="4" Padding="2" CornerRadius="3" BorderThickness="1" BorderBrush="{StaticResource VS2012WindowBorderBrush}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30" />
                                         <ColumnDefinition Width="60" />
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="150" />
-                                        <ColumnDefinition Width="60" />
                                         <ColumnDefinition Width="100" />
                                         <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="150" />
-                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="250" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="{Binding Description}" />
-                                    <TextBlock FontWeight="Bold" Grid.Column="1" Text="Прошло" />
-                                    <TextBlock FontWeight="Bold" Grid.Column="2" Text="Осталось" />
-                                    <TextBlock Grid.Column="3" Text="0/1" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Description}" />
+                                    <TextBlock FontWeight="Bold" Grid.Column="2">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="Прошло {0}:{1}:{2}">
+                                                <Binding Path="PassBy.Hours"/>
+                                                <Binding Path="PassBy.Minutes"/>
+                                                <Binding Path="PassBy.Seconds"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBlock FontWeight="Bold" Grid.Column="3">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="Осталось {0}:{1}:{2}">
+                                                <Binding Path="Remaining.Hours"/>
+                                                <Binding Path="Remaining.Minutes"/>
+                                                <Binding Path="Remaining.Seconds"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <StackPanel Grid.Column="4" Orientation="Horizontal">
-                                        <Button Margin="4 0" Visibility="{Binding IsRunning, Converter={StaticResource negatedBoolToVisibilityConverter}}" Style="{StaticResource LinkButton}" Content="Старт" />
-                                        <Button Margin="4 0" Visibility="{Binding IsRunning, Converter={StaticResource bool2VisibilityConverter}}" Style="{StaticResource LinkButton}" Content="Пауза" />
-                                        <Button Margin="4 0" Style="{StaticResource LinkButton}" Content="Стоп" />
+                                        <Button Margin="4 0" Visibility="{Binding IsRunning, Converter={StaticResource negatedBoolToVisibilityConverter}}"
+                                                Style="{StaticResource LinkButton}" Content="Старт" 
+                                                cal:Message.Attach="StartTask($dataContext)"/>
+                                        <Button Margin="4 0" Visibility="{Binding IsRunning, Converter={StaticResource bool2VisibilityConverter}}" 
+                                                Style="{StaticResource LinkButton}" Content="Пауза" 
+                                                cal:Message.Attach="PauseTask($dataContext)"/>
+                                        <Button Margin="4 0" Style="{StaticResource LinkButton}" 
+                                                Content="Стоп" 
+                                                cal:Message.Attach="StopTask($dataContext)"/>
                                     </StackPanel>
-                                    <TextBlock FontWeight="Bold" Grid.Column="6" Text="Получено объявлений" />
-                                    <TextBlock Grid.Column="7" Text="140/210" />
+                                    <TextBlock FontWeight="Bold" Grid.Column="6">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="Получено объявлений {0}/{1}">
+                                                <Binding Path="ParsedCount"/>
+                                                <Binding Path="TotlaCount"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                 </Grid>
                             </Border>
                         </DataTemplate>

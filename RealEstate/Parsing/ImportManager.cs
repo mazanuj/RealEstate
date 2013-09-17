@@ -41,9 +41,9 @@ namespace RealEstate.Parsing
         {
             Trace.WriteLine("Restore import sites settings to default");
             ParsingSites.Clear();
-            ParsingSites.Add(new ParsingSite() { Site = ImportSite.All, DisplayName = "Все", Deep = 500, Delay = 5 });
-            ParsingSites.Add(new ParsingSite() { Site = ImportSite.Avito, DisplayName = "avito.ru", Deep = 200, Delay = 10 });
-            ParsingSites.Add(new ParsingSite() { Site = ImportSite.Hands, DisplayName = "irr.ru", Deep = 1000, Delay = 5 });
+            ParsingSites.Add(new ParsingSite() { Site = ImportSite.All, DisplayName = GetSiteName(ImportSite.All), Deep = 500, Delay = 5 });
+            ParsingSites.Add(new ParsingSite() { Site = ImportSite.Avito, DisplayName = GetSiteName(ImportSite.Avito), Deep = 200, Delay = 10 });
+            ParsingSites.Add(new ParsingSite() { Site = ImportSite.Hands, DisplayName = GetSiteName(ImportSite.Hands), Deep = 1000, Delay = 5 });
 
             Save();
 
@@ -64,6 +64,21 @@ namespace RealEstate.Parsing
             {
                 XmlSerializer ser = new XmlSerializer(typeof(List<ParsingSite>), new XmlRootAttribute("sites"));
                 ser.Serialize(writer, ParsingSites.ToList());
+            }
+        }
+
+        public string GetSiteName(ImportSite site)
+        {
+            switch (site)
+            {
+                case ImportSite.All:
+                    return "Все";
+                case ImportSite.Avito:
+                    return "avito.ru";
+                case ImportSite.Hands:
+                    return "irr.ru";
+                default:
+                    return "";
             }
         }
     }

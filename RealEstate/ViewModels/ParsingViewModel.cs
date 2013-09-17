@@ -195,7 +195,7 @@ namespace RealEstate.ViewModels
                         param.useProxy = UseProxy;
 
                         ParsingTask realTask = new ParsingTask();
-                        realTask.Description = s.ToString(); //todo add name mapper
+                        realTask.Description = _importManager.GetSiteName(s);
                         realTask.Task = new Task(() => StartInternal(param, realTask.cs.Token, realTask.ps.PauseToken, realTask));
                         Tasks.Add(realTask);
                         _taskManager.AddTask(realTask);
@@ -215,7 +215,7 @@ namespace RealEstate.ViewModels
                 param.useProxy = UseProxy;
 
                 ParsingTask realTask = new ParsingTask();
-                realTask.Description = param.site.ToString();
+                realTask.Description = _importManager.GetSiteName(param.site);
                 realTask.Task = new Task(() => StartInternal(param, realTask.cs.Token, realTask.ps.PauseToken, realTask));
                 Tasks.Add(realTask);
                 _taskManager.AddTask(realTask);
@@ -229,10 +229,30 @@ namespace RealEstate.ViewModels
 
 
 
-            Thread.Sleep(1000);
+            Thread.Sleep(4000);
+
+            if (pt.IsPauseRequested)
+                pt.WaitUntillPaused();
+
+            Tasks.Remove(task);
+            task.Stop();
         }
 
+        public void StartTask(ParsingTask task)
+        {
+            task.Start();
+        }
 
+        public void PauseTask(ParsingTask task)
+        {
+            task.Pause();
+        }
+
+        public void StopTask(ParsingTask task)
+        {
+            task.Stop();
+            Tasks.Remove(task);
+        }
 
     }
 
@@ -249,7 +269,8 @@ namespace RealEstate.ViewModels
 
     public class ParsingTask : RealEstateTask
     {
-        
+        private System.Timers.Timer timer;
+
         private int _TotlaCount = 0;
         public int TotlaCount
         {
@@ -261,7 +282,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        
+
         private int _ParsedCount = 0;
         public int ParsedCount
         {
@@ -273,8 +294,8 @@ namespace RealEstate.ViewModels
             }
         }
 
-        
-        private TimeSpan _PassBy = TimeSpan.MinValue;
+
+        private TimeSpan _PassBy = TimeSpan.Zero;
         public TimeSpan PassBy
         {
             get { return _PassBy; }
@@ -285,8 +306,8 @@ namespace RealEstate.ViewModels
             }
         }
 
-        
-        private TimeSpan _Remaining = TimeSpan.MinValue;
+
+        private TimeSpan _Remaining = TimeSpan.Zero;
         public TimeSpan Remaining
         {
             get { return _Remaining; }
@@ -296,9 +317,55 @@ namespace RealEstate.ViewModels
                 NotifyOfPropertyChange(() => Remaining);
             }
         }
-                    
-                    
-                    
-                    
+
+        public ParsingTask()
+            : base()
+        {
+            timer = new System.Timers.Timer();
+            timer.Interval = 1000;
+            timer.Elapsed += timer_Elapsed;
+        }
+
+        void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            PassBy = PassBy.Add(new TimeSpan(0, 0, 1));
+            if (Remaining != TimeSpan.Zero)
+                Remaining = Remaining.Add(-new TimeSpan(0, 0, 1));
+        }
+
+        public override void Pause()
+        {
+            IsRunning = false;
+            timer.Stop();
+            ps.Pause();
+        }
+
+        public override void Stop()
+        {
+            IsCanceled = true;
+            timer.Stop();
+            timer.Dispose();
+            cs.Cancel();
+        }
+
+        public override void Start()
+        {
+            IsRunning = true;
+            timer.Start();
+
+            if (Task.IsCanceled)
+            {
+                return;
+            }
+
+            if (ps.IsPauseRequested)
+                ps.UnPause();
+            else
+            {
+                Task.RunSynchronously();
+            }
+        }
+
+
     }
 }
