@@ -203,14 +203,19 @@ namespace RealEstate.Parsing.Parsers
                     {
                         var floors = parts[2].Replace(" эт.", "").Trim().Split('/');
 
-                        int floor;
-                        Int32.TryParse(floors[0], out floor);
-                        advert.Floor = (short)floor;
+                        if (floors.Length > 0)
+                        {
+                            int floor;
+                            Int32.TryParse(floors[0], out floor);
+                            advert.Floor = (short)floor;
+                        }
 
-
-                        int floorfull;
-                        Int32.TryParse(floors[1], out floorfull);
-                        advert.FloorTotal = (short)floorfull;
+                        if (floors.Length > 1)
+                        {
+                            int floorfull;
+                            Int32.TryParse(floors[1], out floorfull);
+                            advert.FloorTotal = (short)floorfull;
+                        }
                     }
 
                 }
@@ -470,6 +475,7 @@ namespace RealEstate.Parsing.Parsers
 
         public override Advert Parse(AdvertHeader header, WebProxy proxy, CancellationToken ct, PauseToken pt)
         {
+
             Advert advert = new Advert();
 
             advert.DateUpdate = DateTime.Now;
@@ -485,23 +491,30 @@ namespace RealEstate.Parsing.Parsers
             page.LoadHtml(result);
 
             Console.WriteLine("parsed description");
+            try
+            {
+                ParseTitle(page, advert);
 
-            ParseTitle(page, advert);
+                advert.Name = ParseSeller(page);
+                advert.City = ParseCity(page);
+                ParseAddress(page, advert);
 
-            advert.Name = ParseSeller(page);
-            advert.City = ParseCity(page);
-            ParseAddress(page, advert);
+                ParseCategory(page, advert);
 
-            ParseCategory(page, advert);
+                advert.MessageFull = ParseDescription(page);
 
-            advert.MessageFull = ParseDescription(page);
+                advert.Price = ParsePrice(page);
 
-            advert.Price = ParsePrice(page);
+                advert.Images = ParsePhotos(page);
+                ParsePhone(page, advert);
 
-            advert.Images = ParsePhotos(page);
-            ParsePhone(page, advert);
-
-            return advert;
+                return advert;
+            }
+            catch (Exception)
+            {
+                Trace.WriteLine(result);
+                throw;
+            }
         }
 
     }
