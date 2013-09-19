@@ -182,5 +182,47 @@ namespace RealEstate.ViewModels
             }
         }
 
+        
+        private int _MaxAttemptCount = 5;
+        [Range(1, 10)]
+        public int MaxAttemptCount
+        {
+            get { return _MaxAttemptCount; }
+            set
+            {
+                _MaxAttemptCount = value;
+                NotifyOfPropertyChange(() => MaxAttemptCount);
+            }
+        }
+
+        public async void SaveParsing()
+        {
+            Status = "Сохраняю...";
+            try
+            {
+                await Task.Factory.StartNew(() =>
+                {
+                    bool changed = false;
+                    if (MaxAttemptCount != SettingsStore.MaxParsingAttemptCount)
+                    {
+                        SettingsStore.MaxParsingAttemptCount = MaxAttemptCount;
+
+                        changed = true;
+                    }
+
+                    if (changed)
+                        _settingsManager.Save();
+                });
+
+                Status = "Сохранено";
+
+            }
+            catch (Exception ex)
+            {
+                Status = ERROR_LABEL;
+                Trace.WriteLine(ex.ToString());
+            }
+        }
+                    
     }
 }

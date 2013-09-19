@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RealEstate.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,17 +10,12 @@ namespace RealEstate.Parsing.Parsers
     public class HandsParser : ParserBase
     {
 
-        protected override Advert ParseAdvertHtml(HtmlAgilityPack.HtmlNode advertNode)
+        public override List<AdvertHeader> LoadHeaders(string url, DateTime toDate, int maxCount)
         {
             throw new NotImplementedException();
         }
 
-        protected override List<HtmlAgilityPack.HtmlNode> GetAdvertsNode(HtmlAgilityPack.HtmlNode pageNode)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override List<Advert> ParsePage(string url)
+        public override Advert Parse(AdvertHeader header, System.Net.WebProxy proxy, CancellationToken ct, PauseToken pt)
         {
             throw new NotImplementedException();
         }

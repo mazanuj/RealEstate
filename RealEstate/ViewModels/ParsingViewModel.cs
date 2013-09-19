@@ -13,6 +13,10 @@ using RealEstate.City;
 using RealEstate.Parsing;
 using RealEstate.Utils;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using RealEstate.Parsing.Parsers;
+using System.Net;
+using RealEstate.Settings;
 
 namespace RealEstate.ViewModels
 {
@@ -25,10 +29,12 @@ namespace RealEstate.ViewModels
         private readonly CityManager _cityManager;
         private readonly ImportManager _importManager;
         private readonly ParserSettingManager _parserSettingManager;
+        private readonly ParsingManager _parsingManager;
 
         [ImportingConstructor]
         public ParsingViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager,
-            CityManager cityManager, ImportManager importManager, ParserSettingManager parserSettingManager)
+            CityManager cityManager, ImportManager importManager, ParserSettingManager parserSettingManager,
+            ParsingManager parsingManager)
         {
             _events = events;
             _taskManager = taskManager;
@@ -36,6 +42,7 @@ namespace RealEstate.ViewModels
             _cityManager = cityManager;
             _importManager = importManager;
             _parserSettingManager = parserSettingManager;
+            _parsingManager = parsingManager;
             events.Subscribe(this);
             DisplayName = "Главная";
         }
@@ -193,6 +200,8 @@ namespace RealEstate.ViewModels
                         param.subType = this.Usedtype;
                         param.advertType = this.AdvertType;
                         param.useProxy = UseProxy;
+                        param.Delay = ImportSites.First(i => i.Site == s).Delay;
+                        param.MaxCount = ImportSites.First(i => i.Site == s).Deep;
 
                         ParsingTask realTask = new ParsingTask();
                         realTask.Description = _importManager.GetSiteName(s);
@@ -213,6 +222,8 @@ namespace RealEstate.ViewModels
                 param.subType = this.Usedtype;
                 param.advertType = this.AdvertType;
                 param.useProxy = UseProxy;
+                param.Delay = ImportSites.First(i => i.Site == this.ImportSite).Delay;
+                param.MaxCount = ImportSites.First(i => i.Site == this.ImportSite).Deep;
 
                 ParsingTask realTask = new ParsingTask();
                 realTask.Description = _importManager.GetSiteName(param.site);
@@ -224,18 +235,111 @@ namespace RealEstate.ViewModels
 
         private void StartInternal(TaskParsingParams param, CancellationToken ct, PauseToken pt, ParsingTask task)
         {
-            var settings = _parserSettingManager.FindSettings(param.advertType, param.city,
-                param.site, param.period, param.realType, param.subType);
+            try
+            {
+                if (ct.IsCancellationRequested)
+                { _events.Publish("Отменено"); return; }
+                if (pt.IsPauseRequested)
+                    pt.WaitUntillPaused();
 
+                var settings = _parserSettingManager.FindSettings(param.advertType, param.city,
+                    param.site, param.period, param.realType, param.subType);
 
+                var headers = _parsingManager.LoadHeaders(param, settings, ct, pt);
 
-            Thread.Sleep(4000);
+                task.TotlaCount = headers.Count;
 
-            if (pt.IsPauseRequested)
-                pt.WaitUntillPaused();
+                List<Advert> adverts = new List<Advert>();
+                ParserBase parser = ParsersFactory.GetParser(param.site);
 
-            Tasks.Remove(task);
-            task.Stop();
+                int attempt = 0;
+                int maxattempt = SettingsStore.MaxParsingAttemptCount;
+                for (int i = 0; i < headers.Count; i++)
+                {
+                    Advert advert = null;
+                    attempt = 0;
+                    while (attempt++ < maxattempt)
+                    {
+                        if (ct.IsCancellationRequested)
+                        { _events.Publish("Отменено"); return; }
+                        if (pt.IsPauseRequested)
+                            pt.WaitUntillPaused();
+
+                        Thread.Sleep(param.Delay * 1000);
+
+                        WebProxy proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
+                        try
+                        {
+                            advert = parser.Parse(headers[i], proxy, ct, pt);
+                            break;
+                        }
+                        catch (System.Web.HttpException ex)
+                        {
+                            Trace.WriteLine(ex.Message, "Http error");
+                            _proxyManager.RejectProxy(proxy);
+                        }
+                        catch (System.Net.WebException wex)
+                        {
+                            Trace.WriteLine(headers[i].Url);
+                            Trace.WriteLine(wex.Message, "Web error");
+                            _proxyManager.RejectProxy(proxy);
+                        }
+                        catch (System.IO.IOException iex)
+                        {
+                            Trace.WriteLine(headers[i].Url);
+                            Trace.WriteLine(iex.Message, "IO error");
+                            _proxyManager.RejectProxy(proxy);
+                        }
+                        catch (ParsingException pex)
+                        {
+                            Trace.WriteLine(pex.Message + ": " + pex.UnrecognizedData, "Unrecognized data");
+                            break;
+                        }
+                        catch (OperationCanceledException cex)
+                        {
+                            Trace.WriteLine("Canceled");
+                            _events.Publish("Отменено");
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.WriteLine(ex.ToString(), "Error!");
+                            _events.Publish("Ошибка парсинга!");
+                            return;
+                        }
+                    }
+
+                    task.ParsedCount++;
+
+                    if (advert != null)
+                    {
+                        adverts.Add(advert);
+                        Trace.WriteLine(advert.ToString(), "Advert");
+                    }
+                    else
+                    {
+                        Trace.WriteLine("Advert was skipped", "Warning");
+                    }
+                }
+
+                _events.Publish("Завершено");
+
+            }
+            catch (OperationCanceledException)
+            {
+                Trace.WriteLine("Operation '" + task.Description + "' has been canceled");
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString(), "Error!");
+                _events.Publish("Ошибка обработки объявлений");
+            }
+            finally
+            {
+                Thread.Sleep(5000);
+                task.Stop();
+                Tasks.Remove(task);
+                Trace.WriteLine("Task has been closed", "Info");
+            }
         }
 
         public void StartTask(ParsingTask task)
@@ -250,15 +354,21 @@ namespace RealEstate.ViewModels
 
         public void StopTask(ParsingTask task)
         {
-            task.Stop();
-            Tasks.Remove(task);
+            Task.Factory.StartNew(() =>
+            {
+                Thread.Sleep(3000);
+                task.Stop();                
+                Tasks.Remove(task);
+            });
         }
 
     }
 
-    class TaskParsingParams
+    public class TaskParsingParams
     {
         public string city;
+        public int MaxCount;
+        public int Delay;
         public ParsePeriod period;
         public ImportSite site;
         public RealEstateType realType;

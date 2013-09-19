@@ -15,24 +15,42 @@ namespace RealEstate.Proxies
     [Export(typeof(ProxyManager))]
     public class ProxyManager
     {
-        private Object thisLock = new Object();
+        private Object rejectLock = new Object();
 
         public List<IProxySourceReader> Readers = new List<IProxySourceReader>();
         private FileStorage storage = new FileStorage();
+        private int index = 0;
+        private int maxIndex = 0;
 
         public ProxyManager()
         {
             Readers.Add(new FreeproxySourceReader());
             Readers.Add(new CheckerproxySourceReader());
+            Proxies.CollectionChanged += Proxies_CollectionChanged;
+        }
+
+        void Proxies_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            maxIndex = Proxies.Count;
+            index = new Random().Next(maxIndex);
         }
 
         public BindableCollection<WebProxy> Proxies = new BindableCollection<WebProxy>();
         public BindableCollection<WebProxy> SuspectedProxies = new BindableCollection<WebProxy>();
         public BindableCollection<WebProxy> RejectedProxies = new BindableCollection<WebProxy>();
 
+        public WebProxy GetNextProxy()
+        {
+            lock (rejectLock)
+            {
+                if (index >= maxIndex) index = 0;
+                return Proxies[index++];
+            }
+        }
+
         public void RejectProxy(WebProxy proxy)
         {
-            lock (thisLock)
+            lock (rejectLock)
             {
                 if (this.SuspectedProxies.Contains(proxy))
                     RejectProxyFull(proxy);
@@ -43,7 +61,7 @@ namespace RealEstate.Proxies
 
         public void RejectProxyFull(WebProxy proxy)
         {
-            lock (thisLock)
+            lock (rejectLock)
             {
                 this.Proxies.Remove(proxy);
                 this.SuspectedProxies.Remove(proxy);
@@ -56,14 +74,16 @@ namespace RealEstate.Proxies
             Proxies.Clear();
             RejectedProxies.Clear();
             SuspectedProxies.Clear();
+            maxIndex = 0;
         }
 
         public void Restore()
         {
             Proxies.Clear();
             var proxies = storage.LoadFromFile();
-            if(proxies != null)
+            if (proxies != null)
                 Proxies.AddRange(proxies);
+            
         }
 
         public void Save()

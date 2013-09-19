@@ -123,6 +123,9 @@
     <Compile Include="Log\LogManager.cs" />
     <Compile Include="Parsing\ImportManager.cs" />
     <Compile Include="Parsing\ParserSettingManager.cs" />
+    <Compile Include="Parsing\Parsers\ParsersFactory.cs" />
+    <Compile Include="Parsing\Parsers\ParsingException.cs" />
+    <Compile Include="Parsing\ParsingManager.cs" />
     <Compile Include="Parsing\ParsingSetting.cs" />
     <Compile Include="Parsing\Advert.cs" />
     <Compile Include="Parsing\ImagesManager.cs" />

@@ -64,6 +64,23 @@ namespace RealEstate.Parsing
         public ExportSite ExportSite {get; set;}
         public virtual ICollection<ParserSourceUrl> Urls { get; set; }
 
+        public DateTime GetDate()
+        {
+            switch (ParsePeriod)
+            {
+                case ParsePeriod.Today:
+                    return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddDays(0);
+                case ParsePeriod.Yesterday:
+                    return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddDays(-1);
+                case ParsePeriod.Week:
+                    return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddDays(-6);
+                case ParsePeriod.All:
+                    return DateTime.MinValue;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
     }
 
     public class ParserSourceUrl

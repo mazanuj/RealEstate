@@ -73,6 +73,23 @@
                             Grid.Row="3" HorizontalAlignment="Right"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="Парсинг" Style="{StaticResource TabItemPaging}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Margin="3 10 3 5" Grid.Row="0">
+                        <TextBlock Margin="30 3 3 3">Число попыток на объявление: </TextBlock>
+                        <TextBox Margin="3" Text="{Binding MaxAttemptCount, Mode=TwoWay, Converter={StaticResource intConverter}, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" />
+                    </DockPanel>
+
+                    <Button Content="Сохранить" Name="SaveParsing" Margin="5"
+                            Grid.Row="3" HorizontalAlignment="Right"/>
+                </Grid>
+            </TabItem>
         </TabControl>
         <TextBlock Name="Status" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5 3 10 3" />
     </Grid>

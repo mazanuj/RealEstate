@@ -10,27 +10,12 @@ using System.Web;
 using System.Text.RegularExpressions;
 using System.Drawing;
 using System.IO;
+using RealEstate.Utils;
 
 namespace RealEstate.Parsing.Parsers
 {
     public class AvitoParser : ParserBase
     {
-
-        protected override Advert ParseAdvertHtml(HtmlAgilityPack.HtmlNode advertNode)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override List<HtmlAgilityPack.HtmlNode> GetAdvertsNode(HtmlAgilityPack.HtmlNode pageNode)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override List<Advert> ParsePage(string url)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Test()
         {
             //var url = "http://www.avito.ru/moskva/kvartiry/prodam/vtorichka?s=1";
@@ -40,20 +25,20 @@ namespace RealEstate.Parsing.Parsers
 
             var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddDays(0);
 
-            List<AdvertHeader> headers = LoadHeaders(url, toDate);
+            List<AdvertHeader> headers = LoadHeaders(url, toDate, 10);
 
             List<Advert> adverts = new List<Advert>();
 
             foreach (var head in headers.Take(3))
             {
-                adverts.Add(Parse(head));
+                //adverts.Add(Parse(head, null, Can));
             }
 
             adverts.ForEach(s => Console.WriteLine(s.ToString() + "\r\n"));
 
         }
 
-        private List<AdvertHeader> LoadHeaders(string url, DateTime toDate)
+        public override List<AdvertHeader> LoadHeaders(string url, DateTime toDate, int maxCount)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             int oldCount = -1;
@@ -68,20 +53,19 @@ namespace RealEstate.Parsing.Parsers
 
                 try
                 {
-                    result = this.DownloadPage(url + "&p=" + index, UserAgents.GetRandomUserAgent(), null, CancellationToken.None);
+                    var uri = url + (url.Contains('?') ? '&' : '?') + "p=" + index;
+                    Trace.WriteLine("Downloading " + uri);
+                    result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), null, CancellationToken.None);
 
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Can't dowload");
+                    Trace.WriteLine(ex.Message, "Error!");
                     break;
                 }
 
-                Console.WriteLine("Downloaded");
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
-
-                Console.WriteLine("parsed");
 
                 if (page.DocumentNode.SelectSingleNode(@"//h2[contains(@class,'nulus_h2')]") != null)
                     break;
@@ -91,8 +75,6 @@ namespace RealEstate.Parsing.Parsers
                     var link = ParseLinkToFullDescription(tier);
                     var date = ParseDate(tier);
 
-                    //Console.WriteLine(date);
-
                     if (date > toDate)
                         headers.Add(new AdvertHeader()
                         {
@@ -101,7 +83,7 @@ namespace RealEstate.Parsing.Parsers
                         });
                 }
             }
-            while (headers.Count != oldCount && headers.Count < MAXCOUNT);
+            while (headers.Count != oldCount && headers.Count < maxCount);
 
             return headers;
         }
@@ -116,7 +98,7 @@ namespace RealEstate.Parsing.Parsers
                     return Normalize(strong.InnerText);
             }
 
-            throw new Exception("Can't get seller");
+            throw new ParsingException("Can't get seller", "");
         }
 
         private string ParseLinkToFullDescription(HtmlNode tier)
@@ -125,7 +107,7 @@ namespace RealEstate.Parsing.Parsers
             if (link != null && link.Attributes.Contains("href"))
                 return "http://www.avito.ru" + Normalize(link.Attributes["href"].Value);
 
-            throw new Exception("Can't get link to full description");
+            throw new ParsingException("Can't get link to full description", "");
         }
 
         private DateTime ParseDate(HtmlNode tier)
@@ -172,7 +154,7 @@ namespace RealEstate.Parsing.Parsers
                                 case "ноя.": month = 11; break;
                                 case "дек.": month = 12; break;
                                 default:
-                                    throw new Exception("Can't parse date information");
+                                    throw new ParsingException("Can't parse date information", dateString);
                             }
 
                             dt = new DateTime(DateTime.Now.Year, month, Int32.Parse(dateS[0]));
@@ -190,11 +172,11 @@ namespace RealEstate.Parsing.Parsers
                         return dt;
                     }
                     else
-                        throw new Exception("Can't parse date information");
+                        throw new ParsingException("Can't parse date information", timeString);
                 }
             }
 
-            throw new Exception("Can't parse date information");
+            throw new ParsingException("Can't parse date information", "");
         }
 
         private void ParseTitle(HtmlDocument full, Advert advert)
@@ -206,34 +188,41 @@ namespace RealEstate.Parsing.Parsers
                 advert.Title = title;
 
                 var parts = title.Split(',');
-                if (parts.Count() == 3)
+                if (parts.Length > 1)
                 {
                     advert.Rooms = parts[0];
 
-                    float area;
-                    float.TryParse(parts[1].Replace(" м²", "").Trim(), out area);
-                    advert.AreaFull = area;
+                    if (parts.Length > 1)
+                    {
+                        float area;
+                        float.TryParse(parts[1].Replace(" м²", "").Trim(), out area);
+                        advert.AreaFull = area;
+                    }
 
-                    var floors = parts[2].Replace(" эт.", "").Trim().Split('/');
+                    if (parts.Length > 2)
+                    {
+                        var floors = parts[2].Replace(" эт.", "").Trim().Split('/');
 
-                    int floor;
-                    Int32.TryParse(floors[0], out floor);
-                    advert.Floor = (short)floor;
+                        int floor;
+                        Int32.TryParse(floors[0], out floor);
+                        advert.Floor = (short)floor;
 
-                    int floorfull;
-                    Int32.TryParse(floors[1], out floorfull);
-                    advert.FloorTotal = (short)floorfull;
+
+                        int floorfull;
+                        Int32.TryParse(floors[1], out floorfull);
+                        advert.FloorTotal = (short)floorfull;
+                    }
 
                 }
                 else
                 {
                     Console.WriteLine(title);
-                    throw new Exception("unknow header");
+                    throw new ParsingException("unknow header", title);
                 }
 
             }
             else
-                throw new Exception("none header");
+                throw new ParsingException("none header", "");
         }
 
         private string ParseCity(HtmlDocument full)
@@ -243,7 +232,7 @@ namespace RealEstate.Parsing.Parsers
             {
                 var city = cityLabel.ChildNodes.First(s => s.Name == "a");
                 if (city != null)
-                    return Normalize(city.InnerText).TrimEnd(new[]{',',' '});
+                    return Normalize(city.InnerText).TrimEnd(new[] { ',', ' ' });
             }
 
             return null;
@@ -279,13 +268,17 @@ namespace RealEstate.Parsing.Parsers
 
         private Int64 ParsePrice(HtmlDocument full)
         {
-            var block = full.DocumentNode.SelectSingleNode(@".//span[contains(@class,'p_i_price t-item-price')]/strong/span");
+            var block = full.DocumentNode.SelectSingleNode(@".//span[contains(@class,'p_i_price t-item-price')]/strong");
             if (block != null)
             {
-                return Int64.Parse(block.InnerText.Replace("&nbsp;", ""));
+                long price;
+                if (Int64.TryParse(block.InnerText.Replace("&nbsp;", "").Replace(" руб.", ""), out price))
+                    return price;
+                else
+                    throw new ParsingException("Can't parse price", block.InnerText);
             }
 
-            throw new Exception("Can't find price");
+            throw new ParsingException("Can't find price", "");
         }
 
         private static AdvertType MapType(string param)
@@ -475,7 +468,7 @@ namespace RealEstate.Parsing.Parsers
             }
         }
 
-        private Advert Parse(AdvertHeader header)
+        public override Advert Parse(AdvertHeader header, WebProxy proxy, CancellationToken ct, PauseToken pt)
         {
             Advert advert = new Advert();
 
@@ -485,7 +478,7 @@ namespace RealEstate.Parsing.Parsers
             advert.Url = header.Url;
 
             string result;
-            result = this.DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), null, CancellationToken.None);
+            result = this.DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct);
 
             Console.WriteLine("Downloaded description");
             HtmlDocument page = new HtmlDocument();
@@ -502,6 +495,7 @@ namespace RealEstate.Parsing.Parsers
             ParseCategory(page, advert);
 
             advert.MessageFull = ParseDescription(page);
+
             advert.Price = ParsePrice(page);
 
             advert.Images = ParsePhotos(page);
@@ -509,12 +503,6 @@ namespace RealEstate.Parsing.Parsers
 
             return advert;
         }
-
-        private string Normalize(string htmlValue)
-        {
-            return HttpUtility.HtmlDecode(htmlValue).Trim();
-        }
-
 
     }
 }

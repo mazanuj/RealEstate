@@ -31,7 +31,7 @@
                     <StackPanel>
                         <TextBlock Style="{StaticResource RibbonTitle}">Период:</TextBlock>
                         <RadioButton GroupName="period" Content="За сегодня" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Today}"/>
-                        <RadioButton GroupName="period" Content="За сегодня и завтра" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Yesterday}"/>
+                        <RadioButton GroupName="period" Content="За сегодня и вчера" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Yesterday}"/>
                         <RadioButton GroupName="period" Content="За неделю" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Week}"/>
                         <RadioButton GroupName="period" Content="За всё время" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>
                     </StackPanel>

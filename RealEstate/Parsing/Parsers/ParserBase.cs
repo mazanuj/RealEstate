@@ -7,25 +7,23 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using HtmlAgilityPack;
+using System.Web;
+using RealEstate.Utils;
 
 namespace RealEstate.Parsing.Parsers
 {
     public abstract class ParserBase
     {
-        protected abstract Advert ParseAdvertHtml(HtmlNode advertNode);
+        private const int DEFAULTTIMEOUT = 3000;
 
-        protected abstract List<HtmlNode> GetAdvertsNode(HtmlNode pageNode);
+        public abstract List<AdvertHeader> LoadHeaders(string url, DateTime toDate, int maxCount);
 
-        public abstract List<Advert> ParsePage(string url);
-
-        protected const int MAXCOUNT = 3;
+        public abstract Advert Parse(AdvertHeader header, WebProxy proxy, CancellationToken ct, PauseToken pt);
 
         CookieContainer cookie = new CookieContainer();
 
         public string DownloadPage(string url, string userAgent, WebProxy proxy, CancellationToken cs)
         {
-            Trace.WriteLine("Sending request to " + url);
-
             string HtmlResult = null;
 
             HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -33,21 +31,18 @@ namespace RealEstate.Parsing.Parsers
             myHttpWebRequest.Proxy = proxy ?? WebRequest.DefaultWebProxy;
             myHttpWebRequest.CookieContainer = cookie;
             myHttpWebRequest.UserAgent = userAgent;
+            myHttpWebRequest.Timeout = DEFAULTTIMEOUT;
 
-            var asyncResult = myHttpWebRequest.BeginGetResponse(null, null);
-
-            WaitHandle.WaitAny(new[] { asyncResult.AsyncWaitHandle, cs.WaitHandle });
             if (cs.IsCancellationRequested)
             {
                 myHttpWebRequest.Abort();
                 throw new OperationCanceledException();
             }
 
-            var myHttpWebResponse = myHttpWebRequest.EndGetResponse(asyncResult);
+            var myHttpWebResponse = myHttpWebRequest.GetResponse();
             System.IO.StreamReader sr = new System.IO.StreamReader(myHttpWebResponse.GetResponseStream());
             HtmlResult = sr.ReadToEnd();
             sr.Close();
-            Trace.WriteLine("Response is received");
 
             return HtmlResult;
 
@@ -55,18 +50,14 @@ namespace RealEstate.Parsing.Parsers
 
         public byte[] DownloadImage(string url, string userAgent, WebProxy proxy, CancellationToken cs, string referer)
         {
-            Trace.WriteLine("Sending request to " + url);
-
             HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             myHttpWebRequest.AllowAutoRedirect = true;
             myHttpWebRequest.Proxy = proxy ?? WebRequest.DefaultWebProxy;
             myHttpWebRequest.CookieContainer = cookie;
             myHttpWebRequest.UserAgent = userAgent;
             myHttpWebRequest.Referer = referer;
+            myHttpWebRequest.Timeout = DEFAULTTIMEOUT;
 
-            var asyncResult = myHttpWebRequest.BeginGetResponse(null, null);
-
-            WaitHandle.WaitAny(new[] { asyncResult.AsyncWaitHandle, cs.WaitHandle });
             if (cs.IsCancellationRequested)
             {
                 myHttpWebRequest.Abort();
@@ -76,7 +67,7 @@ namespace RealEstate.Parsing.Parsers
             byte[] result;
             byte[] buffer = new byte[4096];
 
-            using (WebResponse response = myHttpWebRequest.EndGetResponse(asyncResult))
+            using (WebResponse response = myHttpWebRequest.GetResponse())
             {
                 using (Stream responseStream = response.GetResponseStream())
                 {
@@ -96,9 +87,12 @@ namespace RealEstate.Parsing.Parsers
                 }
             }
 
-            Trace.WriteLine("Response is received");
-
             return result;
+        }
+
+        protected string Normalize(string htmlValue)
+        {
+            return HttpUtility.HtmlDecode(htmlValue).Trim();
         }
     }
 }

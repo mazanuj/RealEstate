@@ -62,11 +62,11 @@ namespace RealEstate.Converters
             string strVal = value.ToString();
 
             if (string.IsNullOrEmpty(strVal))
-                return 0;
+                return -1;
 
             else
             {
-                int val = 0;
+                int val = -1;
                 Int32.TryParse(strVal, out val);
                 return val;
             }
