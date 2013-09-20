@@ -43,6 +43,11 @@ namespace RealEstate.Parsing
             }
         }
 
+        public static string GetDefaultUserAgent()
+        {
+            return _agents[0];
+        }
+
 
     }
 }

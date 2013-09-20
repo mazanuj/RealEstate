@@ -9,18 +9,35 @@ using System.Threading;
 using HtmlAgilityPack;
 using System.Web;
 using RealEstate.Utils;
+using System.Net.Cache;
 
 namespace RealEstate.Parsing.Parsers
 {
     public abstract class ParserBase
     {
-        private const int DEFAULTTIMEOUT = 3000;
+        protected const int DEFAULTTIMEOUT = 3000;
 
-        public abstract List<AdvertHeader> LoadHeaders(string url, DateTime toDate, int maxCount);
+        public abstract List<AdvertHeader> LoadHeaders(string url, WebProxy proxy, DateTime toDate, int maxCount, int maxAttemptCount);
 
         public abstract Advert Parse(AdvertHeader header, WebProxy proxy, CancellationToken ct, PauseToken pt);
 
-        CookieContainer cookie = new CookieContainer();
+        protected CookieContainer cookie = new CookieContainer();
+
+        protected void InitCookie(string url)
+        {
+            try
+            {
+                HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+                myHttpWebRequest.CookieContainer = cookie;
+                myHttpWebRequest.Timeout = DEFAULTTIMEOUT;
+                myHttpWebRequest.Proxy = new WebProxy("127.0.0.1:8888"); //for fiddler
+                myHttpWebRequest.GetResponse();
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine("Cannot download cookie. " + ex.Message, "Error!");
+            }
+        }
 
         public string DownloadPage(string url, string userAgent, WebProxy proxy, CancellationToken cs)
         {
@@ -29,9 +46,16 @@ namespace RealEstate.Parsing.Parsers
             HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             myHttpWebRequest.AllowAutoRedirect = true;
             myHttpWebRequest.Proxy = proxy ?? WebRequest.DefaultWebProxy;
+            cookie = new CookieContainer();
             myHttpWebRequest.CookieContainer = cookie;
             myHttpWebRequest.UserAgent = userAgent;
             myHttpWebRequest.Timeout = DEFAULTTIMEOUT;
+            myHttpWebRequest.KeepAlive = true;
+            myHttpWebRequest.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.Refresh);
+            myHttpWebRequest.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+            myHttpWebRequest.Headers[HttpRequestHeader.AcceptEncoding] = "gzip,deflate,sdch";
+            myHttpWebRequest.Headers[HttpRequestHeader.AcceptLanguage] = "en-US,en;q=0.8";
+            myHttpWebRequest.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
 
             if (cs.IsCancellationRequested)
             {
@@ -57,6 +81,7 @@ namespace RealEstate.Parsing.Parsers
             myHttpWebRequest.UserAgent = userAgent;
             myHttpWebRequest.Referer = referer;
             myHttpWebRequest.Timeout = DEFAULTTIMEOUT;
+            myHttpWebRequest.KeepAlive = true;
 
             if (cs.IsCancellationRequested)
             {

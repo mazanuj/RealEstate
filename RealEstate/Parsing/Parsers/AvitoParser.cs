@@ -16,29 +16,9 @@ namespace RealEstate.Parsing.Parsers
 {
     public class AvitoParser : ParserBase
     {
-        public void Test()
-        {
-            //var url = "http://www.avito.ru/moskva/kvartiry/prodam/vtorichka?s=1";
-            var url = "http://www.avito.ru/moskva/kvartiry/prodam/studii/vtorichka?s=1";
-            //var url = "http://www.avito.ru/moskva/kvartiry/prodam/novostroyka?s=1";
-            //var url = "http://www.avito.ru/moskva/kvartiry/prodam?s=1";
+        const string ROOT_URl = "http://www.avito.ru/";
 
-            var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddDays(0);
-
-            List<AdvertHeader> headers = LoadHeaders(url, toDate, 10);
-
-            List<Advert> adverts = new List<Advert>();
-
-            foreach (var head in headers.Take(3))
-            {
-                //adverts.Add(Parse(head, null, Can));
-            }
-
-            adverts.ForEach(s => Console.WriteLine(s.ToString() + "\r\n"));
-
-        }
-
-        public override List<AdvertHeader> LoadHeaders(string url, DateTime toDate, int maxCount)
+        public override List<AdvertHeader> LoadHeaders(string url, WebProxy proxy, DateTime toDate, int maxCount, int maxAttemptCount)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             int oldCount = -1;
@@ -49,20 +29,26 @@ namespace RealEstate.Parsing.Parsers
                 oldCount = headers.Count;
                 index++;
 
-                string result;
+                string result = null;
+                int attempt = 0;
 
-                try
+                while (attempt++ < maxAttemptCount)
                 {
-                    var uri = url + (url.Contains('?') ? '&' : '?') + "p=" + index;
-                    Trace.WriteLine("Downloading " + uri);
-                    result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), null, CancellationToken.None);
+                    try
+                    {
+                        var uri = url + (url.Contains('?') ? '&' : '?') + "p=" + index;
+                        Trace.WriteLine("Downloading " + uri);
+                        result = this.DownloadPage(uri, UserAgents.GetDefaultUserAgent(), proxy, CancellationToken.None);
+                        break;
 
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex.Message, "Web Error!");                        
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Trace.WriteLine(ex.Message, "Error!");
-                    break;
-                }
+
+                if (result == null) throw new Exception("Can't load header adverts");
 
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
@@ -276,8 +262,11 @@ namespace RealEstate.Parsing.Parsers
             var block = full.DocumentNode.SelectSingleNode(@".//span[contains(@class,'p_i_price t-item-price')]/strong");
             if (block != null)
             {
+                var priceString = block.InnerText.Replace("&nbsp;", "").Replace(" руб.", "");
+                if(priceString.Contains("Не указана"))
+                    return -1;
                 long price;
-                if (Int64.TryParse(block.InnerText.Replace("&nbsp;", "").Replace(" руб.", ""), out price))
+                if (Int64.TryParse(priceString, out price))
                     return price;
                 else
                     throw new ParsingException("Can't parse price", block.InnerText);
@@ -484,7 +473,7 @@ namespace RealEstate.Parsing.Parsers
             advert.Url = header.Url;
 
             string result;
-            result = this.DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct);
+            result = this.DownloadPage(advert.Url, UserAgents.GetDefaultUserAgent(), proxy, ct);
 
             Console.WriteLine("Downloaded description");
             HtmlDocument page = new HtmlDocument();
@@ -512,7 +501,7 @@ namespace RealEstate.Parsing.Parsers
             }
             catch (Exception)
             {
-                Trace.WriteLine(result);
+                Trace.WriteLine(advert.Url);
                 throw;
             }
         }

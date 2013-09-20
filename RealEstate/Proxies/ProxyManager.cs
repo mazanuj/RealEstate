@@ -43,6 +43,7 @@ namespace RealEstate.Proxies
         {
             lock (rejectLock)
             {
+                if (maxIndex == 0) return null;
                 if (index >= maxIndex) index = 0;
                 return Proxies[index++];
             }

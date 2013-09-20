@@ -7,13 +7,14 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Net;
 
 namespace RealEstate.Parsing
 {
     [Export(typeof(ParsingManager))]
     public class ParsingManager
     {
-        public List<AdvertHeader> LoadHeaders(TaskParsingParams param, List<ParserSetting> settings, CancellationToken ct, PauseToken pt)
+        public List<AdvertHeader> LoadHeaders(TaskParsingParams param, List<ParserSetting> settings, CancellationToken ct, PauseToken pt, WebProxy proxy, int maxAttemptCount)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             ParserBase parser = ParsersFactory.GetParser(param.site);
@@ -33,7 +34,7 @@ namespace RealEstate.Parsing
                         if (pt.IsPauseRequested)
                             pt.WaitUntillPaused();
 
-                        headers.AddRange(parser.LoadHeaders(url.Url, setting.GetDate(), param.MaxCount));                        
+                        headers.AddRange(parser.LoadHeaders(url.Url, proxy, setting.GetDate(), param.MaxCount, maxAttemptCount));                        
                     }
                 }
             }

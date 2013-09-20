@@ -7,17 +7,17 @@ using System.Threading;
 
 namespace RealEstate.Parsing.Parsers
 {
-    public class HandsParser : ParserBase
-    {
+    //public class HandsParser : ParserBase
+    //{
 
-        public override List<AdvertHeader> LoadHeaders(string url, DateTime toDate, int maxCount)
-        {
-            throw new NotImplementedException();
-        }
+    //    public override List<AdvertHeader> LoadHeaders(string url, System.Net.WebProxy proxy, DateTime toDate, int maxCount)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
 
-        public override Advert Parse(AdvertHeader header, System.Net.WebProxy proxy, CancellationToken ct, PauseToken pt)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    public override Advert Parse(AdvertHeader header, System.Net.WebProxy proxy, CancellationToken ct, PauseToken pt)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

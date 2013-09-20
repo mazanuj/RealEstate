@@ -7,16 +7,23 @@ namespace RealEstate.Parsing.Parsers
 {
     public static class ParsersFactory
     {
+        static AvitoParser AvitoParser = null;
+        static object _lock = new object();
+
         public static ParserBase GetParser(ImportSite site)
         {
-            switch (site)
+            lock (_lock)
             {
-                case ImportSite.Avito:
-                    return new AvitoParser();
-                case ImportSite.Hands:
-                    return new HandsParser();
-                default:
-                    throw new NotImplementedException();
+                switch (site)
+                {
+                    case ImportSite.Avito:
+                        if (AvitoParser == null) AvitoParser = new AvitoParser();
+                        return AvitoParser;
+                    case ImportSite.Hands:
+                    //return new HandsParser();
+                    default:
+                        throw new NotImplementedException();
+                } 
             }
         }
     }

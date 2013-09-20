@@ -5,36 +5,58 @@ using System.Linq;
 using System.Text;
 using Caliburn.Micro;
 using System.Diagnostics;
+using System.Threading;
 
 namespace RealEstate.ViewModels
 {
     [Export(typeof(ConsoleViewModel))]
     public class ConsoleViewModel : PropertyChangedBase
     {
+        private readonly Timer _timer;
+        private const int MaxConsoleLength = 5000;
+
         public ConsoleViewModel()
         {
             TraceListener debugListener = new MyTraceListener(this);
             Trace.Listeners.Add(debugListener);
             Trace.WriteLine("Start listening log");
+             _timer = new Timer(new TimerCallback(ClearUpConsole), null, 10000, 10000);
         }
 
         public void ClearConsole()
         {
-            ConsoleText = String.Empty;
+            _consoleTextBuilder.Clear();
+            NotifyOfPropertyChange(() => ConsoleText);
         }
 
         
-        private string _ConsoleText = null;
+        private StringBuilder _consoleTextBuilder = new StringBuilder();
         public string ConsoleText
         {
-            get { return _ConsoleText; }
-            set
-            {
-                _ConsoleText = value;
-                NotifyOfPropertyChange(() => ConsoleText);
-            }
+            get { return _consoleTextBuilder.ToString(); }
         }
-                    
+
+        public void AddText(string message)
+        {
+            _consoleTextBuilder.Append(message);
+            NotifyOfPropertyChange(() => ConsoleText);
+        }
+
+        private void ClearUpConsole(object state)
+        {
+            try
+            {
+                if (_consoleTextBuilder.Length > MaxConsoleLength)
+                {
+                    _consoleTextBuilder.Remove(0, _consoleTextBuilder.Length - MaxConsoleLength - 1);
+                    NotifyOfPropertyChange(() => ConsoleText);
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
+            }
+        }                    
     }
 
     public class MyTraceListener : TraceListener
@@ -50,8 +72,8 @@ namespace RealEstate.ViewModels
 
         public override void Write(string message)
         {
-            _model.ConsoleText += String.Format("[{0}] ", DateTime.Now.ToString("HH:mm.ss"));
-            _model.ConsoleText += message;
+            _model.AddText(String.Format("[{0}] ", DateTime.Now.ToString("HH:mm.ss")));
+            _model.AddText(message);
         }
 
         public override void WriteLine(string message)

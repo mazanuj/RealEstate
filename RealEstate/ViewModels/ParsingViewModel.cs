@@ -245,7 +245,10 @@ namespace RealEstate.ViewModels
                 var settings = _parserSettingManager.FindSettings(param.advertType, param.city,
                     param.site, param.period, param.realType, param.subType);
 
-                var headers = _parsingManager.LoadHeaders(param, settings, ct, pt);
+                int maxattempt = SettingsStore.MaxParsingAttemptCount;
+
+                WebProxy proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
+                var headers = _parsingManager.LoadHeaders(param, settings, ct, pt, proxy, maxattempt);
 
                 task.TotlaCount = headers.Count;
 
@@ -253,7 +256,7 @@ namespace RealEstate.ViewModels
                 ParserBase parser = ParsersFactory.GetParser(param.site);
 
                 int attempt = 0;
-                int maxattempt = SettingsStore.MaxParsingAttemptCount;
+                
                 for (int i = 0; i < headers.Count; i++)
                 {
                     Advert advert = null;
@@ -267,7 +270,7 @@ namespace RealEstate.ViewModels
 
                         Thread.Sleep(param.Delay * 1000);
 
-                        WebProxy proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
+                        proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
                         try
                         {
                             advert = parser.Parse(headers[i], proxy, ct, pt);
