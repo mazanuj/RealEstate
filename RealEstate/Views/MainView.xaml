@@ -5,17 +5,22 @@
         xmlns:views="clr-namespace:RealEstate.Views"
         Title="Real Estate" Height="600" Width="1300"        
         Style="{StaticResource VS2012WindowStyle}"
-        Icon="../Images/mainicon.png" Loaded="Window_Loaded">
+        Icon="../Images/mainicon.png" Loaded="Window_Loaded"
+        x:Name="mainWindow">
     <Grid>
         <Canvas HorizontalAlignment="Stretch" Background="White">
             <ToggleButton Width="20" Height="10" Canvas.ZIndex="5" Name="ToogleTools" Style="{StaticResource ExpanderToggleStyle}" Canvas.Top="18" Canvas.Right="15" ToolTip="{Binding ToogleToolsTooltip}"/>
-            <Grid Canvas.ZIndex="3"  Canvas.Top="4" Canvas.Right="130" Name="ConsoleWindow" Visibility="{Binding IsConsoleOpen, Converter={StaticResource bool2VisibilityConverter}}"
-                  Style="{StaticResource AnimatedVisibleChanging}">
+            <Grid Canvas.ZIndex="3"  Canvas.Top="4" Canvas.Right="130" x:Name="ConsoleWindow" Visibility="{Binding IsConsoleOpen, Converter={StaticResource bool2VisibilityConverter}}"
+                  Style="{StaticResource AnimatedVisibleChanging}"
+                  MouseDown="Grid_MouseDown" MouseMove="Grid_MouseMove" MouseUp="Grid_MouseUp" Cursor="SizeAll">
                 <Border  Background="#EFEFF2"
                          BorderBrush="{StaticResource VS2012WindowBorderBrush}"
                          BorderThickness="1">
                     <views:ConsoleView />
                 </Border>
+                <Grid.RenderTransform>
+                    <TranslateTransform x:Name="dragTransform"/>
+                </Grid.RenderTransform>
             </Grid>
             <Grid Canvas.ZIndex="2" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Canvas}}, Path=ActualWidth}"
                   Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Canvas}}, Path=ActualHeight}">

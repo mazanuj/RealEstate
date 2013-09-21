@@ -13,11 +13,6 @@ namespace RealEstate.Settings
         public static bool LogToFile { get; set; }
 
         [Settings]
-        [SectionName("Log")]
-        [DefaultValue("log.txt")]
-        public static string LogFileName { get; set; }
-
-        [Settings]
         [SectionName("Parsing")]
         [DefaultValue("5")]
         public static int MaxParsingAttemptCount { get; set; }

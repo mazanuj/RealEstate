@@ -41,21 +41,7 @@ namespace RealEstate.ViewModels
         protected override void OnActivate()
         {
             base.OnActivate();
-            LogFileName = SettingsStore.LogFileName;
             WriteToLog = SettingsStore.LogToFile;
-        }
-
-        private string _LogFileName = "log.txt";
-        [Required(ErrorMessage = "Введите имя файла")]
-        [RegularExpression(".+\\..+", ErrorMessage = "Неверный формат имени файла")]
-        public string LogFileName
-        {
-            get { return _LogFileName; }
-            set
-            {
-                _LogFileName = value;
-                NotifyOfPropertyChange(() => LogFileName);
-            }
         }
 
 
@@ -158,10 +144,9 @@ namespace RealEstate.ViewModels
                 await Task.Factory.StartNew(() =>
                 {
                     bool changed = false;
-                    if (WriteToLog != SettingsStore.LogToFile || LogFileName != SettingsStore.LogFileName)
+                    if (WriteToLog != SettingsStore.LogToFile)
                     {
                         SettingsStore.LogToFile = WriteToLog;
-                        SettingsStore.LogFileName = LogFileName;
 
                         _events.Publish(new LoggingEvent());
 

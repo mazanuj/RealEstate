@@ -475,7 +475,7 @@ namespace RealEstate.ViewModels
                 ps.UnPause();
             else
             {
-                Task.RunSynchronously();
+                Task.Start();
             }
         }
 

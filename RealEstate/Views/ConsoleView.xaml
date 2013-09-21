@@ -12,11 +12,18 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBox Style="{StaticResource ConsoleStyle}" Margin="4 3 4 0" Grid.Row="0" AcceptsReturn="True" Name="ConsoleText" IsReadOnlyCaretVisible="True" IsReadOnly="True" TextWrapping="Wrap" TextChanged="ConsoleText_TextChanged" UndoLimit="1" />
-        <Button Background="Transparent" Name="ClearConsole" Margin="3 1" Padding="2" HorizontalAlignment="Right" Grid.Row="1" BorderThickness="0" ToolTip="Очистить консоль" Style="{StaticResource ConsoleClearButtonStyle}">
-            <Image Source="../Images/RecycleIcon.png" Height="24" />
-        </Button>
+        <Grid Grid.Row="1" Cursor="Arrow">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" Margin="3" Height="20" Source="../Images/consoleicon.png" ToolTip="Консоль" />
+            <Button Grid.Column="1" Padding="0" Margin="20 3" Name="SendLog" ToolTip="Отправить лог" >
+                <Image Margin="3" Height="20" Source="../Images/send.png" />
+            </Button>
+        </Grid>
     </Grid>
 </UserControl>

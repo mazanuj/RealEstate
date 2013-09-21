@@ -14,13 +14,21 @@ namespace RealEstate.ViewModels
     {
         private readonly Timer _timer;
         private const int MaxConsoleLength = 5000;
+        private readonly Log.LogManager _LogManager;
 
-        public ConsoleViewModel()
+        [ImportingConstructor]
+        public ConsoleViewModel(Log.LogManager logManager)
         {
             TraceListener debugListener = new MyTraceListener(this);
             Trace.Listeners.Add(debugListener);
             Trace.WriteLine("Start listening log");
              _timer = new Timer(new TimerCallback(ClearUpConsole), null, 10000, 10000);
+             _LogManager = logManager;
+        }
+
+        public void SendLog()
+        {
+            _LogManager.SendEmail();
         }
 
         public void ClearConsole()

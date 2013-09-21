@@ -25,10 +25,6 @@
                     <GroupBox Margin="3 0 3 5" Grid.Row="0" Header="Лог" >
                         <StackPanel>
                             <CheckBox Content="Записывать в файл" Name="WriteToLog" />
-                            <DockPanel IsEnabled="{Binding ElementName= WriteToLog, Path=IsChecked}" Margin="0 7 0 0">
-                                <TextBlock Margin="30 3 3 3">Имя файла:</TextBlock>
-                                <TextBox Margin="3" Name="LogFileName" Text="{Binding LogFileName, ValidatesOnDataErrors=True, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged}" />
-                            </DockPanel>
                         </StackPanel>
                     </GroupBox>
 

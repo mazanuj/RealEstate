@@ -269,9 +269,6 @@
     <Resource Include="Images\settingsicon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\RecycleIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <SplashScreen Include="Images\splashscreen.png" />
   </ItemGroup>
   <ItemGroup>
@@ -283,7 +280,12 @@
       <Name>KTF.Proxy</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\consoleicon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\send.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.10\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.10\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
