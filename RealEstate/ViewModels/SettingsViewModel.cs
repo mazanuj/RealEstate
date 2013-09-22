@@ -12,6 +12,7 @@ using System.Diagnostics;
 using RealEstate.Log;
 using RealEstate.City;
 using System.Windows;
+using RealEstate.Parsing;
 
 namespace RealEstate.ViewModels
 {
@@ -21,15 +22,17 @@ namespace RealEstate.ViewModels
         private readonly IEventAggregator _events;
         private readonly SettingsManager _settingsManager;
         private readonly CityManager _cityManager;
+        private readonly ImagesManager _imagesManager;
 
         private const string ERROR_LABEL = "Ошибка";
 
         [ImportingConstructor]
-        public SettingsViewModel(IEventAggregator events, SettingsManager settingsManager, CityManager cityManager)
+        public SettingsViewModel(IEventAggregator events, SettingsManager settingsManager, CityManager cityManager, ImagesManager imagesManager)
         {
             _events = events;
             _settingsManager = settingsManager;
             _cityManager = cityManager;
+            _imagesManager = imagesManager;
         }
 
         protected override void OnInitialize()
@@ -42,8 +45,14 @@ namespace RealEstate.ViewModels
         {
             base.OnActivate();
             WriteToLog = SettingsStore.LogToFile;
-        }
+            SaveImages = SettingsStore.SaveImages;
+            MaxAttemptCount = SettingsStore.MaxParsingAttemptCount;
 
+            Task.Factory.StartNew(() =>
+            {
+                ImagesSpace = _imagesManager.GetDirectorySizeInMb();
+            });
+        }
 
         private bool _WriteToLog = false;
         public bool WriteToLog
@@ -208,6 +217,81 @@ namespace RealEstate.ViewModels
                 Trace.WriteLine(ex.ToString());
             }
         }
+
+        
+        private string  _ImagesSpace = null;
+        public string ImagesSpace
+        {
+            get { return _ImagesSpace; }
+            set
+            {
+                _ImagesSpace = value;
+                NotifyOfPropertyChange(() => ImagesSpace);
+            }
+        }
+
+        
+        private bool _SaveImages = false;
+        public bool SaveImages
+        {
+            get { return _SaveImages; }
+            set
+            {
+                _SaveImages = value;
+                NotifyOfPropertyChange(() => SaveImages);
+            }
+        }
+                    
+
+        public async void ClearImages()
+        {
+            Status = "Удаляю...";
+            try
+            {
+                await Task.Factory.StartNew(() =>
+                {
+                    _imagesManager.ClearImages();
+                });
+
+                ImagesSpace = "0";
+                Status = "Удалено";
+            }
+            catch (Exception ex)
+            {
+                Status = ERROR_LABEL;
+                Trace.WriteLine(ex.ToString());
+            }           
+        }
+
+        public async void SaveImagesSetting()
+        {
+            Status = "Сохраняю...";
+            try
+            {
+                await Task.Factory.StartNew(() =>
+                {
+                    bool changed = false;
+                    if (SaveImages != SettingsStore.SaveImages)
+                    {
+                        SettingsStore.SaveImages = SaveImages;
+
+                        changed = true;
+                    }
+
+                    if (changed)
+                        _settingsManager.Save();
+                });
+
+                Status = "Сохранено";
+
+            }
+            catch (Exception ex)
+            {
+                Status = ERROR_LABEL;
+                Trace.WriteLine(ex.ToString());
+            }
+        }
+                    
                     
     }
 }

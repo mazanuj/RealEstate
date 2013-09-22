@@ -12,7 +12,7 @@ namespace RealEstate.Exporting
     [Export(typeof(ExportSiteManager))]
     public class ExportSiteManager
     {
-        private RealEstateContext context = null;
+        private readonly RealEstateContext context = null;
         public BindableCollection<ExportSite> ExportSites = null;
 
         [ImportingConstructor]

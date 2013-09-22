@@ -34,7 +34,7 @@ namespace RealEstate.Parsing
                         if (pt.IsPauseRequested)
                             pt.WaitUntillPaused();
 
-                        headers.AddRange(parser.LoadHeaders(url.Url, proxy, setting.GetDate(), param.MaxCount, maxAttemptCount));                        
+                        headers.AddRange(parser.LoadHeaders(url, proxy, setting.GetDate(), param.MaxCount, maxAttemptCount));                        
                     }
                 }
             }

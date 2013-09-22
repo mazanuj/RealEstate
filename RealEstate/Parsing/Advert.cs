@@ -11,6 +11,7 @@ namespace RealEstate.Parsing
     {
         public string Url { get; set; }
         public DateTime DateSite { get; set; }
+        public ParserSetting Setting { get; set; }
     }
 
     public class Advert
@@ -104,7 +105,18 @@ namespace RealEstate.Parsing
     {
         public int Id { get; set; }
         public string URl {get;set;}
-        public string LocalPath {get;set;}
+
+        [NotMapped]
+        public string LocalName
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(URl)) return null;
+
+                var parts = URl.Split(new char[] { '/' });
+                return parts.LastOrDefault();
+            }
+        }
 
         public int AdvertId { get; set; }
     }

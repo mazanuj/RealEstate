@@ -18,7 +18,7 @@ namespace RealEstate.Parsing.Parsers
     {
         const string ROOT_URl = "http://www.avito.ru/";
 
-        public override List<AdvertHeader> LoadHeaders(string url, WebProxy proxy, DateTime toDate, int maxCount, int maxAttemptCount)
+        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, WebProxy proxy, DateTime toDate, int maxCount, int maxAttemptCount)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             int oldCount = -1;
@@ -36,7 +36,7 @@ namespace RealEstate.Parsing.Parsers
                 {
                     try
                     {
-                        var uri = url + (url.Contains('?') ? '&' : '?') + "p=" + index;
+                        string uri = url.Url + (url.Url.Contains('?') ? '&' : '?') + "p=" + index;
                         Trace.WriteLine("Downloading " + uri);
                         result = this.DownloadPage(uri, UserAgents.GetDefaultUserAgent(), proxy, CancellationToken.None);
                         break;
@@ -48,7 +48,7 @@ namespace RealEstate.Parsing.Parsers
                     }
                 }
 
-                if (result == null) throw new Exception("Can't load header adverts");
+                if (result == null) throw new ParsingException("Can't load headers adverts","");
 
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
@@ -65,7 +65,8 @@ namespace RealEstate.Parsing.Parsers
                         headers.Add(new AdvertHeader()
                         {
                             DateSite = date,
-                            Url = link
+                            Url = link,
+                            Setting = url.ParserSetting
                         });
                 }
             }

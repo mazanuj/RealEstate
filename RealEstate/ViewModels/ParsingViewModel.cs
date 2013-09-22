@@ -30,11 +30,13 @@ namespace RealEstate.ViewModels
         private readonly ImportManager _importManager;
         private readonly ParserSettingManager _parserSettingManager;
         private readonly ParsingManager _parsingManager;
+        private readonly AdvertsManager _advertsManager;
+        private readonly ImagesManager _imagesManager;
 
         [ImportingConstructor]
         public ParsingViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager,
             CityManager cityManager, ImportManager importManager, ParserSettingManager parserSettingManager,
-            ParsingManager parsingManager)
+            ParsingManager parsingManager, AdvertsManager advertsManager, ImagesManager imagesManager)
         {
             _events = events;
             _taskManager = taskManager;
@@ -43,6 +45,8 @@ namespace RealEstate.ViewModels
             _importManager = importManager;
             _parserSettingManager = parserSettingManager;
             _parsingManager = parsingManager;
+            _advertsManager = advertsManager;
+            _imagesManager = imagesManager;
             events.Subscribe(this);
             DisplayName = "Главная";
         }
@@ -181,6 +185,22 @@ namespace RealEstate.ViewModels
             }
         }
 
+        public void Stop()
+        {
+            foreach (var task in Tasks)
+            {
+                task.Stop();
+            }
+        }
+
+        public void Pause()
+        {
+            foreach (var task in Tasks)
+            {
+                task.Pause();
+            }
+        }
+
         public void Start()
         {
             if (this.ImportSite == Parsing.ImportSite.All)
@@ -250,9 +270,10 @@ namespace RealEstate.ViewModels
                 WebProxy proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
                 var headers = _parsingManager.LoadHeaders(param, settings, ct, pt, proxy, maxattempt);
 
-                task.TotlaCount = headers.Count;
+                task.TotalCount = headers.Count;
 
                 List<Advert> adverts = new List<Advert>();
+                List<long> spans = new List<long>();
                 ParserBase parser = ParsersFactory.GetParser(param.site);
 
                 int attempt = 0;
@@ -261,6 +282,9 @@ namespace RealEstate.ViewModels
                 {
                     Advert advert = null;
                     attempt = 0;
+                    int blocked = 0;
+                    DateTime start = DateTime.Now;
+
                     while (attempt++ < maxattempt)
                     {
                         if (ct.IsCancellationRequested)
@@ -286,6 +310,19 @@ namespace RealEstate.ViewModels
                             Trace.WriteLine(headers[i].Url);
                             Trace.WriteLine(wex.Message, "Web error");
                             _proxyManager.RejectProxy(proxy);
+                            if ((HttpWebResponse)wex.Response != null)
+                            {
+                                if (((HttpWebResponse)wex.Response).StatusCode == HttpStatusCode.Forbidden)
+                                {
+                                    blocked++;
+                                    if (blocked > maxattempt)
+                                    {
+                                        _events.Publish("Сервер заблокировал доступ. Операция приостановлена");
+                                        return;
+                                    }
+                                }
+                            }
+
                         }
                         catch (System.IO.IOException iex)
                         {
@@ -317,10 +354,24 @@ namespace RealEstate.ViewModels
                     {
                         adverts.Add(advert);
                         Trace.WriteLine(advert.ToString(), "Advert");
+                        _advertsManager.Save(advert, headers[i].Setting);
+
+                        if(SettingsStore.SaveImages)
+                            _imagesManager.DownloadImages(advert.Images, ct);
                     }
                     else
                     {
                         Trace.WriteLine("Advert was skipped", "Warning");
+                    }
+
+                    if (task.TotalCount > 0)
+                    {
+                        task.Progress = ((double)task.ParsedCount / (double)task.TotalCount) * 100;
+
+                        DateTime finish = DateTime.Now;
+                        spans.Add((finish - start).Ticks);
+
+                        task.Remaining = new TimeSpan(Convert.ToInt64(spans.Average()) * (task.TotalCount - task.ParsedCount));
                     }
                 }
 
@@ -330,6 +381,11 @@ namespace RealEstate.ViewModels
             catch (OperationCanceledException)
             {
                 Trace.WriteLine("Operation '" + task.Description + "' has been canceled");
+            }
+            catch (ParsingException pex)
+            {
+                Trace.WriteLine(pex.Message, "Error!");
+                _events.Publish("Ошибка загрузки объявлений");
             }
             catch (Exception ex)
             {
@@ -385,13 +441,13 @@ namespace RealEstate.ViewModels
         private System.Timers.Timer timer;
 
         private int _TotlaCount = 0;
-        public int TotlaCount
+        public int TotalCount
         {
             get { return _TotlaCount; }
             set
             {
                 _TotlaCount = value;
-                NotifyOfPropertyChange(() => TotlaCount);
+                NotifyOfPropertyChange(() => TotalCount);
             }
         }
 
@@ -428,6 +484,17 @@ namespace RealEstate.ViewModels
             {
                 _Remaining = value;
                 NotifyOfPropertyChange(() => Remaining);
+            }
+        }
+
+        private double _Progress = 0;
+        public double Progress
+        {
+            get { return _Progress; }
+            set
+            {
+                _Progress = value;
+                NotifyOfPropertyChange(() => Progress);
             }
         }
 

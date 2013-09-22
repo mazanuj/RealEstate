@@ -60,6 +60,8 @@ namespace RealEstate.Log
                     {
                         try
                         {
+                            Trace.WriteLine("Sending logs");
+
                             string log = "";
 
                             using (Stream stream = File.Open(_fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -95,6 +97,8 @@ namespace RealEstate.Log
                                 smtp.Send(message);
 
                                 _events.Publish("Отправлено");
+                                Trace.WriteLine("Logs sent");
+
                                 
                             }
                         }

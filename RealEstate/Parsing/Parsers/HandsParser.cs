@@ -15,7 +15,7 @@ namespace RealEstate.Parsing.Parsers
     public class HandsParser : ParserBase
     {
 
-        public override List<AdvertHeader> LoadHeaders(string url, WebProxy proxy, DateTime toDate, int maxCount, int maxAttemptCount)
+        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, WebProxy proxy, DateTime toDate, int maxCount, int maxAttemptCount)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             int oldCount = -1;
@@ -33,7 +33,7 @@ namespace RealEstate.Parsing.Parsers
                 {
                     try
                     {
-                        var uri = url + "page" + index;
+                        string uri = url.Url + "page" + index;
                         Trace.WriteLine("Downloading " + uri);
                         result = this.DownloadPage(uri, UserAgents.GetDefaultUserAgent(), proxy, CancellationToken.None);
                         break;
@@ -44,7 +44,7 @@ namespace RealEstate.Parsing.Parsers
                     }
                 }
 
-                if (result == null) throw new Exception("Can't load header adverts");
+                if (result == null) throw new Exception("Can't load headers adverts");
 
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
@@ -61,7 +61,8 @@ namespace RealEstate.Parsing.Parsers
                         headers.Add(new AdvertHeader()
                         {
                             DateSite = date,
-                            Url = link
+                            Url = link,
+                            Setting = url.ParserSetting
                         });
                 }
             }
@@ -267,9 +268,9 @@ namespace RealEstate.Parsing.Parsers
                 advert.MessageFull = textNode.InnerText;
 
                 var parts = advert.MessageFull.Split(new char[] { '\n' });
-                var phoneStr = parts.SingleOrDefault(s => s.Contains("Тел.: "));
+                var phoneStr = parts.SingleOrDefault(s => s.ToLower().Contains("тел.") || s.Contains("т."));
                 if (phoneStr != null)
-                    advert.PhoneNumber = phoneStr.Replace("Тел.: ", "").Trim();
+                    advert.PhoneNumber = phoneStr.ToLower().Trim(new string[]{"тел.: ", "т.", ":"}).Trim();
             }
             else
                 throw new ParsingException("Can't get description", "");
@@ -295,10 +296,7 @@ namespace RealEstate.Parsing.Parsers
             if (phoneNode != null)
             {
                 var sellerPhone = phoneNode.InnerText;
-                var name = sellerPhone.Replace("X", "").Replace("-", "")
-                    .Replace("Показать телефон", "").Replace("(", "").Replace(")", "")
-                    .Replace("+", "").Replace(" — ", "").Replace(",", "").Trim();
-
+                var name = sellerPhone.Trim(new string[] { "X", "-", "Показать телефон", "(", ")", "+", " — ", "," }).Trim();
                 return name;
 
             }

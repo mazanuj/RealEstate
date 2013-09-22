@@ -92,16 +92,24 @@ namespace RealEstate.ViewModels
                     if (context.Database.Exists())
                     {
                         //commented for development
-                        //if (!context.Database.CompatibleWithModel(false))
-                        //{
-                        //    Trace.WriteLine("Database has non-actual state. Please, update DB structure", "Error");
-                        //    dbError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n База данных в неактуальном состоянии. \r\n Обратитесь к программисту" };
-                        //}
+                        if (!context.Database.CompatibleWithModel(false))
+                        {
+                            Trace.WriteLine("Database has non-actual state. Please, update DB structure", "Error");
+                            criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n База данных в неактуальном состоянии. \r\n Обратитесь к программисту" };
+                        }
                     }
                     else
                     {
                         Trace.WriteLine("Database not exist. Creating...");
                         context.Database.CreateIfNotExists();
+                        context.Database.ExecuteSqlCommand("ALTER DATABASE realestatedb CHARACTER SET utf8 COLLATE utf8_general_ci;");
+
+                        context.Database.ExecuteSqlCommand("ALTER TABLE adverts CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+                        context.Database.ExecuteSqlCommand("ALTER TABLE exportsiteadverts CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+                        context.Database.ExecuteSqlCommand("ALTER TABLE exportsites CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+                        context.Database.ExecuteSqlCommand("ALTER TABLE images CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+                        context.Database.ExecuteSqlCommand("ALTER TABLE parsersettings CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+                        context.Database.ExecuteSqlCommand("ALTER TABLE parsersourceurls CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
                     }
                 }
             }

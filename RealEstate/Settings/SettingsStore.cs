@@ -16,5 +16,10 @@ namespace RealEstate.Settings
         [SectionName("Parsing")]
         [DefaultValue("5")]
         public static int MaxParsingAttemptCount { get; set; }
+
+        [Settings]
+        [SectionName("Images")]
+        [DefaultValue(false)]
+        public static bool SaveImages { get; set; }
     }
 }

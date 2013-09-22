@@ -51,4 +51,19 @@ namespace RealEstate.Utils
                 source.WaitUntillPaused();
         }
     }
+
+    public static class StringUtils
+    {
+        public static string Trim(this string text, string[] array)
+        {
+            var b = new StringBuilder(text);
+
+            foreach (var item in array)
+            {
+                b = b.Replace(item, "");
+            }
+
+            return b.ToString();
+        }
+    }
 }
