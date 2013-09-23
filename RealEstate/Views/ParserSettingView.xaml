@@ -15,9 +15,9 @@
                 BorderThickness="1 0 1 2" FlowDirection="LeftToRight">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
                     <ColumnDefinition Width="170" />
-                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="170" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -37,7 +37,7 @@
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="2" Style="{StaticResource RibbonToolBorder}">
-                    <StackPanel>
+                    <StackPanel Margin="0 0 20 0">
                         <TextBlock Style="{StaticResource RibbonTitle}">Выбрать сайт:</TextBlock>
                         <RadioButton GroupName="site" Content="avito.ru" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Avito}"/>
                         <RadioButton GroupName="site" Content="irr.ru" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Hands}"/>
@@ -47,7 +47,7 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150" />
-                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="120" />
                             <ColumnDefinition Width="130" />
                         </Grid.ColumnDefinitions>
 

@@ -96,6 +96,7 @@ namespace RealEstate.Parsing
         Today,
         Yesterday,
         Week,
-        All
+        All,
+        Custom
     }
 }

@@ -38,6 +38,7 @@ namespace RealEstate.ViewModels
         public SettingsViewModel SettingsViewModel;
         public ParsingViewModel ParsingViewModel;
         public ParserSettingViewModel ParserSettingViewModel;
+        public AdvertsViewModel AdvertsViewModel;
 
         [ImportingConstructor]
         public MainViewModel(IWindowManager windowManager, IEventAggregator events,
@@ -45,10 +46,10 @@ namespace RealEstate.ViewModels
             ConsoleViewModel consoleViewModel, Log.LogManager logManager, SettingsManager settingsManager,
             ImportManager importManager,
             SettingsViewModel settingsViewModel, ProxiesViewModel proxiesViewModel,
-            ParsingViewModel parsingViewModel, ParserSettingViewModel parserSettingViewModel)
+            ParsingViewModel parsingViewModel, ParserSettingViewModel parserSettingViewModel,
+            AdvertsViewModel advertsViewModel)
         {
-            _windowManager = windowManager;
-            this.ConsoleViewModel = consoleViewModel;
+            _windowManager = windowManager;           
             _logManager = logManager;
             _proxyManager = proxyManager;
             _cityManager = cityManager;
@@ -60,6 +61,8 @@ namespace RealEstate.ViewModels
             SettingsViewModel = settingsViewModel;
             ParsingViewModel = parsingViewModel;
             ParserSettingViewModel = parserSettingViewModel;
+            ConsoleViewModel = consoleViewModel;
+            AdvertsViewModel = advertsViewModel;
 
             _statusTimer = new System.Timers.Timer();
             _statusTimer.Interval = 5000;
@@ -68,8 +71,9 @@ namespace RealEstate.ViewModels
             Items.Add(parsingViewModel);
             Items.Add(proxiesViewModel);
             Items.Add(parserSettingViewModel);
+            Items.Add(advertsViewModel);
 
-            ActivateItem(parsingViewModel);
+            ActivateItem(advertsViewModel);
 
             //init ----------
 

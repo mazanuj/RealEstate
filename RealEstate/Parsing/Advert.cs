@@ -37,7 +37,7 @@ namespace RealEstate.Parsing
         public string Address { get; set; } //+
         public string MetroStation { get; set; } //+
 
-        public string MessageShort { get; set; }
+        public string MessageShort {get;set;}
         public string MessageFull { get; set; } //+
 
         public string Rooms { get; set; } //+
@@ -97,6 +97,14 @@ namespace RealEstate.Parsing
                 this.Rooms, this.AreaFull, this.Floor, this.FloorTotal, this.Name, 
                 this.City, this.Address, this.MetroStation, this.AdvertType, this.Usedtype ,
                 this.Price, this.PhoneNumber, this.RealEstateType );
+        }
+
+        public string MessageFullPreview
+        {
+            get
+            {
+               return MessageFull.Replace("\n"," ") + "...";
+            }
         }
 
     }

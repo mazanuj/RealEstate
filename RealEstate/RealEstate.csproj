@@ -116,6 +116,7 @@
     </ApplicationDefinition>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="City\CityManager.cs" />
+    <Compile Include="Converters\Behaviours.cs" />
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Db\RealEstateContext.cs" />
     <Compile Include="Exporting\ExportSite.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="Validation\ValidatingScreen.cs" />
     <Compile Include="Validation\ValidationGroupAttribute.cs" />
     <Compile Include="ViewModels\AddExportSiteViewModel.cs" />
+    <Compile Include="ViewModels\AdvertsViewModel.cs" />
     <Compile Include="ViewModels\ConsoleViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ParserSettingViewModel.cs" />
@@ -157,6 +159,9 @@
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\AddExportSiteView.xaml.cs">
       <DependentUpon>AddExportSiteView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AdvertsView.xaml.cs">
+      <DependentUpon>AdvertsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ConsoleView.xaml.cs">
       <DependentUpon>ConsoleView.xaml</DependentUpon>
@@ -194,6 +199,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\AddExportSiteView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AdvertsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -113,8 +113,8 @@
     <Style TargetType="{x:Type Button}" x:Key="ConsoleClearButtonStyle">
         <Setter Property="FontFamily" Value="Console" />
     </Style>
-    
-    
+
+
     <!--Expander region-->
 
     <Style TargetType="{x:Type ToggleButton}" x:Key="ExpanderToggleStyle">
@@ -200,14 +200,14 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="RibbonToolBorder" TargetType="{x:Type Border}" >
         <Setter Property="BorderThickness" Value="0 0 1 0"/>
         <Setter Property="BorderBrush" Value="{StaticResource VS2012WindowBorderBrush}" />
         <Setter Property="Margin" Value="5" />
         <Setter Property="Padding" Value="4" />
     </Style>
-    
+
     <Style x:Key="RibbonTitle" TargetType="{x:Type TextBlock}">
         <Setter Property="Margin" Value="0 4" />
         <Setter Property="FontWeight" Value="Bold" />
@@ -287,32 +287,24 @@
         </Setter>
     </Style>
 
-    <Style
-    x:Key="LinkButton"
-    TargetType="Button">
-        <Setter
-        Property="Template">
+    <Style x:Key="LinkButton" TargetType="Button">
+        <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate
-                TargetType="Button">
-                    <TextBlock
-                    TextDecorations="Underline">
+                <ControlTemplate TargetType="Button">
+                    <TextBlock TextDecorations="Underline">
                 <ContentPresenter /></TextBlock>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter
-        Property="Foreground"
-        Value="Blue" />
+        <Setter  Property="Foreground" Value="Blue" />
         <Style.Triggers>
-            <Trigger
-            Property="IsMouseOver"
-            Value="true">
-                <Setter
-                Property="Foreground"
-                Value="Red" />
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Foreground" Value="Red" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
+    <Style TargetType="{x:Type DataGrid}" >
+        <Setter Property="Background" Value="White" />
+    </Style>
 </ResourceDictionary>

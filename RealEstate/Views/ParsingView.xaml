@@ -15,10 +15,10 @@
                 BorderThickness="1 0 1 2" FlowDirection="LeftToRight">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="170" />
                     <ColumnDefinition Width="170" />
                     <ColumnDefinition Width="280" />
-                    <ColumnDefinition Width="400" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
@@ -74,7 +74,7 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="140" />
-                            <ColumnDefinition Width="130" />
+                            <ColumnDefinition Width="120" />
                             <ColumnDefinition Width="100" />
                         </Grid.ColumnDefinitions>
 
