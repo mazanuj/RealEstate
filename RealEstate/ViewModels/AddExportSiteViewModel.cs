@@ -33,14 +33,6 @@ namespace RealEstate.ViewModels
             this.DisplayName = "Добавить новый сайт";
         }
 
-        protected override void OnActivate()
-        {
-            base.OnActivate();
-
-            TitleCity = "";
-            Url = "";
-        }
-
         private string _Title = "";
         [Required(ErrorMessage = "Введите название сайта")]
         public string TitleCity

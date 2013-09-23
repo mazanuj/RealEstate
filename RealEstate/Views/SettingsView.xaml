@@ -94,7 +94,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <StackPanel Margin="10 30">
-                        <CheckBox Margin="10" Content="Записывать в файл" Name="SaveImages" />
+                        <CheckBox Margin="10" Content="Сохранять на диск" Name="SaveImages" />
                         <StackPanel Margin="10" Orientation="Horizontal">
                             <TextBlock Text="{Binding ImagesSpace, StringFormat='Всего места на диске {0} Мб'}" Margin="0 2 10 2" />
                             <Button Name="ClearImages" Content="Очистить" />

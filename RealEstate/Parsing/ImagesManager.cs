@@ -80,8 +80,10 @@ namespace RealEstate.Parsing
             }
         }
 
-        public IEnumerable<System.Drawing.Image> GetImages(ICollection<Image> imagesSource)
+        public List<System.Drawing.Image> GetImages(ICollection<Image> imagesSource)
         {
+            if (imagesSource == null) return null;
+
             var images = new List<System.Drawing.Image>();
             foreach (var imageSource in imagesSource)
             {

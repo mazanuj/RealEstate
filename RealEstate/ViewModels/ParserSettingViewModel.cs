@@ -23,20 +23,18 @@ namespace RealEstate.ViewModels
         private readonly CityManager _cityManager;
         private readonly ExportSiteManager _exportSiteManager;
         private readonly IWindowManager _windowManager;
-        private readonly AddExportSiteViewModel _addExportSiteViewModel;
         private readonly ParserSettingManager _parserSettingManager;
 
         [ImportingConstructor]
         public ParserSettingViewModel(IWindowManager windowManager, IEventAggregator events,
             TaskManager taskManager, ExportSiteManager exportSiteManager, CityManager cityManager,
-            AddExportSiteViewModel addExportSiteViewModel, ParserSettingManager parserSettingManager)
+            ParserSettingManager parserSettingManager)
         {
             _events = events;
             _windowManager = windowManager;
             _taskManager = taskManager;
             _cityManager = cityManager;
             _exportSiteManager = exportSiteManager;
-            _addExportSiteViewModel = addExportSiteViewModel;
             _parserSettingManager = parserSettingManager;
 
             events.Subscribe(this);
@@ -258,7 +256,7 @@ namespace RealEstate.ViewModels
                 var style = new Dictionary<string, object>();
                 style.Add("style", "VS2012ModalWindowStyle");
 
-                _windowManager.ShowDialog(_addExportSiteViewModel, settings: style);
+                _windowManager.ShowDialog(IoC.Get<AddExportSiteViewModel>(), settings: style);
             }
             catch (Exception ex)
             {

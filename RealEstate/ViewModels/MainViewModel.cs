@@ -222,17 +222,20 @@ namespace RealEstate.ViewModels
 
         public void OpenSettings()
         {
-            try
-            {
-                var style = new Dictionary<string, object>();
-                style.Add("style", "VS2012ModalWindowStyle");
+            Task.Factory.StartNew(() =>
+                {
+                    try
+                    {
+                        var style = new Dictionary<string, object>();
+                        style.Add("style", "VS2012ModalWindowStyle");
 
-                _windowManager.ShowDialog(SettingsViewModel, settings: style);
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine(ex.ToString(), "Error!");
-            }
+                        _windowManager.ShowDialog(SettingsViewModel, settings: style);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex.ToString(), "Error!");
+                    }
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         private bool isToolsOpen = true;

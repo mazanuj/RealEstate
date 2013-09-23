@@ -108,15 +108,15 @@
         </Border>
         <Grid Grid.Row="1" Margin="0">
             <DataGrid ItemsSource="{Binding Adverts}" CanUserResizeColumns="True" AutoGenerateColumns="False"
-                      SelectionMode="Single" SelectionUnit="FullRow" CanUserReorderColumns="True" CanUserSortColumns="True"
+                      SelectionMode="Single" SelectionUnit="Cell" CanUserReorderColumns="True" CanUserSortColumns="True"
                       IsReadOnly="True" behaviour:DataGridBehavior.DisplayRowNumber="True"
                       Name="AdvertsTable">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Дата" Binding="{Binding DateSite, StringFormat='dd.MM.yyyy mm:HH'}" />
+                    <DataGridTextColumn Header="Дата" Binding="{Binding DateSite, StringFormat='dd.MM.yyyy HH:mm'}" />
                     <DataGridTextColumn Header="Город" Binding="{Binding City}" />
-                    <DataGridTextColumn Header="Цена" Binding="{Binding Price}" />
                     <DataGridTextColumn Header="Район" Binding="{Binding Distinct}" />
                     <DataGridTextColumn Header="Адрес" Binding="{Binding Address}" />
+                    <DataGridTextColumn Header="Цена" Binding="{Binding Price}" />
                     <DataGridTextColumn Header="Комнат" Binding="{Binding Rooms}" />
                     <DataGridTextColumn Header="Площадь" Binding="{Binding AreaFull}" />
                     <DataGridTextColumn Header="Этаж" Binding="{Binding Floor}" />

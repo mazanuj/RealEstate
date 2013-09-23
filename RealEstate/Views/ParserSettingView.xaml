@@ -145,7 +145,7 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </ScrollViewer>
-                        <Button Name="SaveSources" HorizontalAlignment="Right" Margin="5" Grid.Row="2" Content="Сохранить" />
+                        <Button Name="SaveSources" HorizontalAlignment="Right" Margin="10" Grid.Row="2" Content="Сохранить" />
                     </Grid>
 
                     <Button Name="DeleteExportSite" Margin="3" Grid.Column="1" Grid.Row="2" Content="Удалить сайт"/>

@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace RealEstate.ViewModels
 {
@@ -127,8 +128,11 @@ namespace RealEstate.ViewModels
 
         public void Search()
         {
-            _Adverts.Clear();
-            _Adverts.AddRange(_context.Adverts.ToList());
+            Task.Factory.StartNew(() =>
+                    {
+                        _Adverts.Clear();
+                        _Adverts.AddRange(_context.Adverts.ToList());
+                    });
         }
 
 
@@ -162,7 +166,22 @@ namespace RealEstate.ViewModels
 
         public void Edit(Advert advert)
         {
+            Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    var style = new Dictionary<string, object>();
+                    style.Add("style", "VS2012ModalWindowStyle");
 
+                    var model = IoC.Get<AdvertViewModel>();
+                    model.Advert = advert;
+                    _windowManager.ShowDialog(model, settings: style);
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.ToString(), "Error!");
+                }
+            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
     }
