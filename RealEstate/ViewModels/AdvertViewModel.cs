@@ -23,6 +23,7 @@ namespace RealEstate.ViewModels
         private readonly IEventAggregator _events;
         private readonly RealEstateContext _context;
         private readonly ImagesManager _imagesManager;
+        private readonly ParserSettingManager _parserSettingManager;
 
         public Advert AdvertOriginal { get; set; }
         public Advert Advert { get; set; }
@@ -30,15 +31,32 @@ namespace RealEstate.ViewModels
 
 
         [ImportingConstructor]
-        public AdvertViewModel(IEventAggregator events, RealEstateContext context, ImagesManager imagesManager)
+        public AdvertViewModel(IEventAggregator events, RealEstateContext context, ImagesManager imagesManager, ParserSettingManager parserSettingManager)
         {
             _events = events;
             _context = context;
             _imagesManager = imagesManager;
-            DisplayName = "";
+            _parserSettingManager = parserSettingManager;
         }
 
-        protected override void OnActivate()
+        protected override void OnInitialize()
+        {
+            CopyAdvert();
+
+
+            if (AdvertOriginal.MessageFullPreview.Length > 60)
+                DisplayName = AdvertOriginal.MessageFullPreview.Substring(0, 60) + "...";
+            else
+                DisplayName = AdvertOriginal.MessageFullPreview;
+            GenerateHtmlFile();
+            LoadImages();
+
+            LoadCategories();
+
+            LoadAdvert();
+        }
+
+        private void CopyAdvert()
         {
             Advert = new Parsing.Advert();
             Advert.Address = AdvertOriginal.Address;
@@ -64,14 +82,21 @@ namespace RealEstate.ViewModels
             Advert.Title = AdvertOriginal.Title;
             Advert.Url = AdvertOriginal.Url;
             Advert.Usedtype = AdvertOriginal.Usedtype;
+        }
 
+        private void LoadAdvert()
+        {
+            SelectedRealEstateType = RealEstateTypes.SingleOrDefault(t => t.Type == AdvertOriginal.RealEstateType);
+            SelectedAdvertType = AdvertTypes.SingleOrDefault(t => t.Type == AdvertOriginal.AdvertType);
+            SelectedUsedType = _usedTypes.SingleOrDefault(t => t.Type == AdvertOriginal.Usedtype);
+        }
 
-            if (AdvertOriginal.MessageFullPreview.Length > 60)
-                DisplayName = AdvertOriginal.MessageFullPreview.Substring(0, 60) + "...";
-            else
-                DisplayName = AdvertOriginal.MessageFullPreview;
-            GenerateHtmlFile();
-            LoadImages();
+        private void LoadCategories()
+        {
+            _RealEstateTypes.AddRange(_parserSettingManager.RealEstateTypes());
+            _AdvertTypes.AddRange(_parserSettingManager.AdvertTypes());
+            SelectedRealEstateType = RealEstateTypes.First();
+            SelectedAdvertType = AdvertTypes.First();
         }
 
         private void LoadImages()
@@ -90,6 +115,11 @@ namespace RealEstate.ViewModels
             }, CancellationToken.None,
                       TaskCreationOptions.LongRunning,
                       TaskScheduler.Default);
+        }
+
+        public void Save()
+        {
+            AdvertOriginal.AreaFull = Advert.AreaFull;
         }
 
         public Uri URL
@@ -193,13 +223,87 @@ namespace RealEstate.ViewModels
             }
         }
 
-        public void Save()
+        public RealEstatetypeNamed _SelectedRealEstateType = null;
+        public RealEstatetypeNamed SelectedRealEstateType
         {
-            AdvertOriginal.AreaFull = Advert.AreaFull;
+            get { return _SelectedRealEstateType; }
+            set
+            {
+                _SelectedRealEstateType = value;
+                NotifyOfPropertyChange(() => SelectedRealEstateType);
+                NotifyOfPropertyChange(() => UsedTypes);
+            }
         }
 
+        private List<RealEstatetypeNamed> _RealEstateTypes = new List<RealEstatetypeNamed>();
+        public List<RealEstatetypeNamed> RealEstateTypes
+        {
+            get { return _RealEstateTypes; }
+        }
 
+        public AdvertTypeNamed _SelectedAdvertType = null;
+        public AdvertTypeNamed SelectedAdvertType
+        {
+            get { return _SelectedAdvertType; }
+            set
+            {
+                _SelectedAdvertType = value;
+                NotifyOfPropertyChange(() => SelectedAdvertType);
+            }
+        }
 
+        private List<AdvertTypeNamed> _AdvertTypes = new List<AdvertTypeNamed>();
+        public List<AdvertTypeNamed> AdvertTypes
+        {
+            get { return _AdvertTypes; }
+        }
+
+        public UsedTypeNamed _SelectedUsedType = null;
+        public UsedTypeNamed SelectedUsedType
+        {
+            get { return _SelectedUsedType; }
+            set
+            {
+                _SelectedUsedType = value;
+                NotifyOfPropertyChange(() => SelectedUsedType);
+            }
+        }
+
+        private RealEstateType current = RealEstateType.House;
+        private BindableCollection<UsedTypeNamed> _usedTypes = new BindableCollection<UsedTypeNamed>();
+        public BindableCollection<UsedTypeNamed> UsedTypes
+        {
+            get
+            {
+                if (current != SelectedRealEstateType.Type)
+                {
+                    _usedTypes.Clear();
+                    _usedTypes.AddRange(_parserSettingManager.SubTypes(SelectedRealEstateType.Type));
+                    current = SelectedRealEstateType.Type;
+                    SelectedUsedType = _usedTypes.First();
+                }
+                return _usedTypes;
+            }
+        }
+
+        public void OpenUrl()
+        {
+
+            Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    Process.Start(Advert.Url);
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.ToString());
+                    _events.Publish("Ошибка");
+                }
+            }, CancellationToken.None,
+                      TaskCreationOptions.None,
+                      TaskScheduler.Default);
+        }
     }
 
     public class ImageWrap

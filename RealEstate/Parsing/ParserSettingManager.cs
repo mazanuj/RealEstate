@@ -116,6 +116,28 @@ namespace RealEstate.Parsing
 
             return subs;
         }
+
+        public List<AdvertTypeNamed> AdvertTypes()
+        {
+            List<AdvertTypeNamed> subs = new List<AdvertTypeNamed>();
+            subs.Add(new AdvertTypeNamed() { Type = AdvertType.All, Name = "Все" });
+            subs.Add(new AdvertTypeNamed() { Type = AdvertType.Buy, Name = "Куплю" });
+            subs.Add(new AdvertTypeNamed() { Type = AdvertType.Pass, Name = "Сниму" });
+            subs.Add(new AdvertTypeNamed() { Type = AdvertType.Rent, Name = "Сдам" });
+            subs.Add(new AdvertTypeNamed() { Type = AdvertType.Sell, Name = "Продам" });
+
+            return subs;
+        }
+
+        public List<RealEstatetypeNamed> RealEstateTypes()
+        {
+            List<RealEstatetypeNamed> subs = new List<RealEstatetypeNamed>();
+            subs.Add(new RealEstatetypeNamed() { Type = RealEstateType.All, Name = "Все" });
+            subs.Add(new RealEstatetypeNamed() { Type = RealEstateType.Apartments, Name = "Квартиры" });
+            subs.Add(new RealEstatetypeNamed() { Type = RealEstateType.House, Name = "Дома" });
+            return subs;
+        }
+
     }
 
     public class UsedTypeNamed
@@ -123,4 +145,17 @@ namespace RealEstate.Parsing
         public Usedtype Type { get; set; }
         public string Name { get; set; }
     }
+
+    public class AdvertTypeNamed
+    {
+        public AdvertType Type { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class RealEstatetypeNamed
+    {
+        public RealEstateType Type { get; set; }
+        public string Name { get; set; }
+    }
+
 }

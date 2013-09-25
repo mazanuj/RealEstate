@@ -161,7 +161,9 @@ namespace RealEstate.ViewModels
                             Trace.WriteLine(ex.ToString());
                             _events.Publish("Ошибка");
                         }
-                    });
+                    }, CancellationToken.None,
+                      TaskCreationOptions.None,
+                      TaskScheduler.Default);
         }
 
         public void Edit(Advert advert)

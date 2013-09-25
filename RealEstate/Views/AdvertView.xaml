@@ -28,6 +28,9 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <TextBlock VerticalAlignment="Center" Grid.Row="0" Text="Город:" />
@@ -62,11 +65,22 @@
                 <TextBox Text="{Binding Advert.MessageShort}" Grid.Column="0" Grid.Row="9" Margin="4" Grid.ColumnSpan="2"  />
                 <TextBox Text="{Binding Advert.MessageFull}" Grid.Column="0" Grid.Row="10" Margin="4" Grid.ColumnSpan="2"
                          AcceptsReturn="True" Height="150"/>
+              
+                <StackPanel  Grid.Row="11" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <TextBlock Text="Категория: " Margin="4" />                    
+                    <ComboBox Margin="4" Name="RealEstateTypes" DisplayMemberPath="Name" />                    
+                    <ComboBox Margin="4" Name="UsedTypes" DisplayMemberPath="Name"  />
+                    <ComboBox Margin="4" Name="AdvertTypes" DisplayMemberPath="Name"  />
+                </StackPanel>
 
-                <Button Name="Save" Content="Сохранить" Grid.Column="0" Grid.Row="11" Margin="5" Grid.ColumnSpan="2" />
+                <TextBlock Text="Экспорт: " Margin="4" Grid.Row="12"/>
 
-
-
+                <StackPanel Grid.Row="14" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <Button Name="OpenUrl" Content="Cсылка" Style="{StaticResource LinkButton}" Margin="6 5 120 5" />
+                    
+                    <Button Name="ExportAdvert" Content="Экспортировать" Margin="4" />
+                    <Button Name="Save" Content="Сохранить" Margin="4"/>
+                </StackPanel>
 
             </Grid>
         </Border>
