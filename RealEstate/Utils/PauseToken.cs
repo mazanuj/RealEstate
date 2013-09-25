@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -66,4 +67,32 @@ namespace RealEstate.Utils
             return b.ToString();
         }
     }
+
+    public class CoroutineWrapper : IResult
+    {
+        private Action<CoroutineWrapper> work = x => { };
+
+        public ActionExecutionContext Context { get; set; }
+
+        public object Result { get; set; }
+
+        public CoroutineWrapper Init(Action<CoroutineWrapper> work)
+        {
+            this.work = work;
+            return this;
+        }
+
+        public void Execute(ActionExecutionContext context)
+        {
+            this.Context = context;
+            work.Invoke(this);
+        }
+
+        public void DoCompleted(ResultCompletionEventArgs args)
+        {
+            this.Completed(this, args);
+        }
+
+        public event EventHandler<ResultCompletionEventArgs> Completed = delegate { };
+    } 
 }

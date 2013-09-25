@@ -174,7 +174,7 @@ namespace RealEstate.ViewModels
                     style.Add("style", "VS2012ModalWindowStyle");
 
                     var model = IoC.Get<AdvertViewModel>();
-                    model.Advert = advert;
+                    model.AdvertOriginal = advert;
                     _windowManager.ShowDialog(model, settings: style);
                 }
                 catch (Exception ex)

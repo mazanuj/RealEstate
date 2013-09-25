@@ -3,27 +3,90 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:awe="http://schemas.awesomium.com/winfx"
         xmlns:utils="clr-namespace:RealEstate.Utils"
-        Title="AdvertView" Height="700" Width="700" Closing="Window_Closing">
+        Title="AdvertView" Height="700" Width="800" Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
-            
-        </Grid>
+        <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock VerticalAlignment="Center" Grid.Row="0" Text="Город:" />
+                <TextBlock VerticalAlignment="Center" Grid.Row="1" Text="Район:" />
+                <TextBlock VerticalAlignment="Center" Grid.Row="2" Text="Адрес:" />
+                <TextBlock VerticalAlignment="Center" Grid.Row="3" Text="Этаж: " />
+                <TextBlock VerticalAlignment="Center" Grid.Row="4" Text="Комнат:" />
+                <TextBlock VerticalAlignment="Center" Grid.Row="5" Text="Площадь (о/ж/к):"/>
+                <TextBlock VerticalAlignment="Center" Grid.Row="6" Text="Имя:" />
+                <TextBlock VerticalAlignment="Center" Grid.Row="7" Text="Контакт:" />
+                <TextBlock VerticalAlignment="Center" Grid.Row="8" Text="Цена: " />
+
+                <TextBox Text="{Binding Advert.City}" Grid.Column="1" Grid.Row="0" Margin="4" />
+                <TextBox Text="{Binding Advert.Distinct}" Grid.Column="1" Grid.Row="1" Margin="4" />
+                <TextBox Text="{Binding Advert.Address}" Grid.Column="1" Grid.Row="2" Margin="4" />
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3" >
+                    <TextBox Text="{Binding Advert.Floor}" Margin="4"  />
+                    <TextBlock Text="/" Margin="0 4" />
+                    <TextBox Text="{Binding Advert.FloorTotal}" Margin="4"/>
+                </StackPanel>
+                <TextBox Text="{Binding Advert.Rooms}" Grid.Column="1" Grid.Row="4" Margin="4" />
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="5">
+                    <TextBox Text="{Binding Advert.AreaFull}" Margin="4"  />
+                    <TextBlock Text="/" Margin="0 4" />
+                    <TextBox Text="{Binding Advert.AreaLiving}" Margin="4"/>
+                    <TextBlock Text="/" Margin="0 4" />
+                    <TextBox Text="{Binding Advert.AreaKitchen}" Margin="4"/>
+                </StackPanel>
+                <TextBox Text="{Binding Advert.Name}" Margin="4"  Grid.Column="1" Grid.Row="6"  />
+                <TextBox Text="{Binding Advert.PhoneNumber}" Margin="4"  Grid.Column="1" Grid.Row="7"/>
+                <TextBox Text="{Binding Advert.Price}" Grid.Column="1" Grid.Row="8" Margin="4" />
+                <TextBox Text="{Binding Advert.MessageShort}" Grid.Column="0" Grid.Row="9" Margin="4" Grid.ColumnSpan="2"  />
+                <TextBox Text="{Binding Advert.MessageFull}" Grid.Column="0" Grid.Row="10" Margin="4" Grid.ColumnSpan="2"
+                         AcceptsReturn="True" Height="150"/>
+
+                <Button Name="Save" Content="Сохранить" Grid.Column="0" Grid.Row="11" Margin="5" Grid.ColumnSpan="2" />
+
+
+
+
+            </Grid>
+        </Border>
+
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Загрузка изображений..." Visibility="{Binding ImagesLoaded, Converter={StaticResource negatedBoolToVisibilityConverter}}" TextAlignment="Center" VerticalAlignment="Center" Background="White"  Grid.RowSpan="2" Grid.Row="0" />
-                
-            <Image Source="{Binding SelectedImage}" Grid.Row="0" Margin="5" />
+            <TextBlock Text="Загрузка изображений..." Visibility="{Binding ImagesLoaded, Converter={StaticResource negatedBoolToVisibilityConverter}}" TextAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="2" Grid.ColumnSpan="2" Grid.Row="0" />
 
-            <ListBox Margin="3" Name="WrapImages" Grid.Row="1">
+            <Image Source="{Binding SelectedImage}" Grid.Row="0" Grid.ColumnSpan="2" />
+
+            <ListBox Margin="2 3" Name="WrapImages" Grid.Row="1" >
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"/>
@@ -36,10 +99,12 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <awe:WebControl Grid.Row="2"
+            <Button Name="DeletePhoto" Content="Удалить" Margin="3" Grid.Column="1" Grid.Row="1" />
+
+            <awe:WebControl Grid.Row="2" Grid.ColumnSpan="2"
             Name="webControl" 
             Source="{Binding URL}"
-            Margin="10" >
+            Margin="5" >
             </awe:WebControl>
         </Grid>
     </Grid>

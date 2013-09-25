@@ -268,7 +268,7 @@ namespace RealEstate.Parsing.Parsers
                 advert.MessageFull = textNode.InnerText;
 
                 var parts = advert.MessageFull.Split(new char[] { '\n' });
-                var phoneStr = parts.SingleOrDefault(s => s.ToLower().Contains("тел.") || s.Contains("т."));
+                var phoneStr = parts.LastOrDefault(s => s.ToLower().Contains("тел.") || s.Contains("т."));
                 if (phoneStr != null)
                     advert.PhoneNumber = phoneStr.ToLower().Trim(new string[]{"тел.: ", "т.", ":"}).Trim();
             }

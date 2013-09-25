@@ -10,6 +10,8 @@ using Caliburn.Micro;
 using Caliburn.Micro.Validation;
 using RealEstate.Db;
 using RealEstate.Parsing;
+using System.Windows.Media.Imaging;
+using System.Threading;
 
 namespace RealEstate.ViewModels
 {
@@ -22,6 +24,7 @@ namespace RealEstate.ViewModels
         private readonly RealEstateContext _context;
         private readonly ImagesManager _imagesManager;
 
+        public Advert AdvertOriginal { get; set; }
         public Advert Advert { get; set; }
         private bool MapLoaded;
 
@@ -37,7 +40,36 @@ namespace RealEstate.ViewModels
 
         protected override void OnActivate()
         {
-            DisplayName = Advert.MessageFullPreview.Substring(0, 20) + "...";
+            Advert = new Parsing.Advert();
+            Advert.Address = AdvertOriginal.Address;
+            Advert.AdvertType = AdvertOriginal.AdvertType;
+            Advert.AreaFull = AdvertOriginal.AreaFull;
+            Advert.AreaKitchen = AdvertOriginal.AreaKitchen;
+            Advert.AreaLiving = AdvertOriginal.AreaLiving;
+            Advert.City = AdvertOriginal.City;
+            Advert.DateSite = AdvertOriginal.DateSite;
+            Advert.DateUpdate = AdvertOriginal.DateUpdate;
+            Advert.Distinct = AdvertOriginal.Distinct;
+            Advert.Email = AdvertOriginal.Email;
+            Advert.Floor = AdvertOriginal.Floor;
+            Advert.FloorTotal = AdvertOriginal.FloorTotal;
+            Advert.MessageFull = AdvertOriginal.MessageFull;
+            Advert.MessageShort = Advert.MessageShort;
+            Advert.MetroStation = AdvertOriginal.MetroStation;
+            Advert.Name = AdvertOriginal.Name;
+            Advert.PhoneNumber = AdvertOriginal.PhoneNumber;
+            Advert.Price = AdvertOriginal.Price;
+            Advert.RealEstateType = AdvertOriginal.RealEstateType;
+            Advert.Rooms = AdvertOriginal.Rooms;
+            Advert.Title = AdvertOriginal.Title;
+            Advert.Url = AdvertOriginal.Url;
+            Advert.Usedtype = AdvertOriginal.Usedtype;
+
+
+            if (AdvertOriginal.MessageFullPreview.Length > 60)
+                DisplayName = AdvertOriginal.MessageFullPreview.Substring(0, 60) + "...";
+            else
+                DisplayName = AdvertOriginal.MessageFullPreview;
             GenerateHtmlFile();
             LoadImages();
         }
@@ -45,16 +77,19 @@ namespace RealEstate.ViewModels
         private void LoadImages()
         {
             Task.Factory.StartNew(() =>
+            {
+                var imgs = _imagesManager.GetImages(AdvertOriginal.Images);
+                for (int i = 0; i < imgs.Count; i++)
                 {
-                    _images.Clear();
-                    var imgs = _imagesManager.GetImages(Advert.Images);
-                    for (int i = 0; i < imgs.Count(); i++)
-                    {
-                        _images.Add(new ImageWrap() { Image = imgs[i], Title = (i + 1).ToString() });
-                    }
-                    ImagesLoaded = true;
-                    SelectedWrapImage = _images.First();
-                });
+                    _images.Add(new ImageWrap() { Image = imgs[i], Title = (i + 1).ToString() });
+                }
+
+                ImagesLoaded = true;
+                SelectedWrapImage = _images.First();
+
+            }, CancellationToken.None,
+                      TaskCreationOptions.LongRunning,
+                      TaskScheduler.Default);
         }
 
         public Uri URL
@@ -79,7 +114,7 @@ namespace RealEstate.ViewModels
 "<script type=\"text/javascript\">ymaps.ready(init);function init () {var myGeocoder = ymaps.geocode('" + fullAdress + "');myGeocoder.then(" +
 "function (res) {var myMap = new ymaps.Map('map', {center: res.geoObjects.get(0).geometry.getCoordinates(),zoom: 12});myMap.controls" +
 ".add('smallZoomControl').add('searchControl');   var nearest = res.geoObjects.get(0);var name = nearest.properties.get('name'); nearest.properties.set('iconContent', name);nearest.options.set('preset', 'twirl#redStretchyIcon');" +
-"myMap.geoObjects.add(res.geoObjects);}); }</script></head><body><div id=\"map\" style=\"width:400px; height:300px\"></div></body></html>";
+"myMap.geoObjects.add(res.geoObjects);}); }</script></head><body><div id=\"map\" style=\"width:360px; height:280px; margin: 0;\"></div></body></html>";
 
             return html;
         }
@@ -90,7 +125,7 @@ namespace RealEstate.ViewModels
             {
                 try
                 {
-                    var source = GetHtmlSource(this.Advert);
+                    var source = GetHtmlSource(this.AdvertOriginal);
                     File.WriteAllText(FileName, source);
                     MapLoaded = true;
                     NotifyOfPropertyChange(() => URL);
@@ -100,7 +135,9 @@ namespace RealEstate.ViewModels
                     Trace.WriteLine(ex.ToString(), "Map error");
                     _events.Publish("Ошибка загрузки карты");
                 }
-            });
+            }, CancellationToken.None,
+                      TaskCreationOptions.LongRunning,
+                      TaskScheduler.Default);
         }
 
         private BindableCollection<ImageWrap> _images = new BindableCollection<ImageWrap>();
@@ -118,12 +155,31 @@ namespace RealEstate.ViewModels
                 _selected = value;
                 NotifyOfPropertyChange(() => SelectedWrapImage);
                 NotifyOfPropertyChange(() => SelectedImage);
+                NotifyOfPropertyChange(() => CanDeletePhoto);
             }
         }
 
-        public System.Drawing.Image SelectedImage
+        public BitmapSource SelectedImage
         {
-            get { return SelectedWrapImage.Image; }
+            get
+            {
+                if (SelectedWrapImage == null) return null;
+                return SelectedWrapImage.Image;
+            }
+        }
+
+        public void DeletePhoto()
+        {
+            _images.Remove(SelectedWrapImage);
+            SelectedWrapImage = null;
+        }
+
+        public bool CanDeletePhoto
+        {
+            get
+            {
+                return SelectedImage != null;
+            }
         }
 
         private bool _ImagesLoaded = false;
@@ -137,11 +193,18 @@ namespace RealEstate.ViewModels
             }
         }
 
+        public void Save()
+        {
+            AdvertOriginal.AreaFull = Advert.AreaFull;
+        }
+
+
+
     }
 
     public class ImageWrap
     {
-        public System.Drawing.Image Image { get; set; }
+        public System.Windows.Media.Imaging.BitmapSource Image { get; set; }
         public string Title { get; set; }
     }
 }

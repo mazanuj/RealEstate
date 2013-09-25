@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading;
 using System.Net;
 using System.Diagnostics;
+using System.Windows.Media.Imaging;
 
 namespace RealEstate.Parsing
 {
@@ -73,18 +74,18 @@ namespace RealEstate.Parsing
 
         private void DownloadImage(Image imageSource, string path)
         {
-            if (!File.Exists(path) || new FileInfo(path).Length != 0)
+            if (!File.Exists(path) || new FileInfo(path).Length == 0)
             {
                 WebClient client = new WebClient();
                 client.DownloadFile(imageSource.URl, path);
             }
         }
 
-        public List<System.Drawing.Image> GetImages(ICollection<Image> imagesSource)
+        public List<BitmapImage> GetImages(ICollection<Image> imagesSource)
         {
             if (imagesSource == null) return null;
 
-            var images = new List<System.Drawing.Image>();
+            var images = new List<BitmapImage>();
             foreach (var imageSource in imagesSource)
             {
                 try
@@ -95,7 +96,10 @@ namespace RealEstate.Parsing
 
                     if (File.Exists(path))
                     {
-                        images.Add(System.Drawing.Image.FromFile(path));
+                        FileInfo f = new FileInfo(path);
+                        var img = new BitmapImage(new Uri(f.FullName));
+                        img.Freeze();
+                        images.Add(img);
                     }
 
                 }
