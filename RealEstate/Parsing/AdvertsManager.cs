@@ -47,5 +47,11 @@ namespace RealEstate.Parsing
 
             _context.SaveChanges();
         }
+
+        public void Delete(Advert advert)
+        {
+            _context.Adverts.Remove(advert);
+            _context.SaveChanges();
+        }
     }
 }

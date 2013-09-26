@@ -76,8 +76,9 @@
                 <TextBlock Text="Экспорт: " Margin="4" Grid.Row="12"/>
 
                 <StackPanel Grid.Row="14" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <Button Name="OpenUrl" Content="Cсылка" Style="{StaticResource LinkButton}" Margin="6 5 120 5" />
+                    <Button Name="OpenUrl" Content="Cсылка" Style="{StaticResource LinkButton}" Margin="6 5 50 5" />
                     
+                    <Button Name="Delete" Content="Удалить" Margin="4" />
                     <Button Name="ExportAdvert" Content="Экспортировать" Margin="4" />
                     <Button Name="Save" Content="Сохранить" Margin="4"/>
                 </StackPanel>

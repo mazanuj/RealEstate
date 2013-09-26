@@ -178,6 +178,8 @@ namespace RealEstate.ViewModels
                     var model = IoC.Get<AdvertViewModel>();
                     model.AdvertOriginal = advert;
                     _windowManager.ShowDialog(model, settings: style);
+
+                    Search();
                 }
                 catch (Exception ex)
                 {

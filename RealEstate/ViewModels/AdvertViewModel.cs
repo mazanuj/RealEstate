@@ -24,6 +24,7 @@ namespace RealEstate.ViewModels
         private readonly RealEstateContext _context;
         private readonly ImagesManager _imagesManager;
         private readonly ParserSettingManager _parserSettingManager;
+        private readonly AdvertsManager _advertsManager;
 
         public Advert AdvertOriginal { get; set; }
         public Advert Advert { get; set; }
@@ -31,12 +32,14 @@ namespace RealEstate.ViewModels
 
 
         [ImportingConstructor]
-        public AdvertViewModel(IEventAggregator events, RealEstateContext context, ImagesManager imagesManager, ParserSettingManager parserSettingManager)
+        public AdvertViewModel(IEventAggregator events, RealEstateContext context, ImagesManager imagesManager,
+            ParserSettingManager parserSettingManager, AdvertsManager advertsManager)
         {
             _events = events;
             _context = context;
             _imagesManager = imagesManager;
             _parserSettingManager = parserSettingManager;
+            _advertsManager = advertsManager;
         }
 
         protected override void OnInitialize()
@@ -120,6 +123,12 @@ namespace RealEstate.ViewModels
         public void Save()
         {
             AdvertOriginal.AreaFull = Advert.AreaFull;
+        }
+
+        public void Delete()
+        {
+            _advertsManager.Delete(AdvertOriginal);
+            TryClose();
         }
 
         public Uri URL
