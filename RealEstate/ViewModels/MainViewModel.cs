@@ -73,7 +73,7 @@ namespace RealEstate.ViewModels
             Items.Add(parserSettingViewModel);
             Items.Add(advertsViewModel);
 
-            ActivateItem(advertsViewModel);
+            ActivateItem(parsingViewModel);
 
             //init ----------
 
