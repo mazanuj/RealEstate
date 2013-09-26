@@ -92,6 +92,7 @@ namespace RealEstate.ViewModels
             SelectedRealEstateType = RealEstateTypes.SingleOrDefault(t => t.Type == AdvertOriginal.RealEstateType);
             SelectedAdvertType = AdvertTypes.SingleOrDefault(t => t.Type == AdvertOriginal.AdvertType);
             SelectedUsedType = _usedTypes.SingleOrDefault(t => t.Type == AdvertOriginal.Usedtype);
+            var count = AdvertOriginal.ExportSites.Count(); //bug fix for unloading first time
         }
 
         private void LoadCategories()
@@ -109,9 +110,9 @@ namespace RealEstate.ViewModels
                 var imgs = _imagesManager.GetImages(AdvertOriginal.Images);
                 for (int i = 0; i < imgs.Count; i++)
                 {
-                    _images.Add(new ImageWrap() { Image = imgs[i], Title = (i + 1).ToString() });
+                    imgs[i].Title = (i + 1).ToString();
                 }
-
+                _images.AddRange(imgs);
                 ImagesLoaded = true;
                 SelectedWrapImage = _images.First();
 
@@ -122,7 +123,52 @@ namespace RealEstate.ViewModels
 
         public void Save()
         {
-            AdvertOriginal.AreaFull = Advert.AreaFull;
+            try
+            {
+                AdvertOriginal.Address = Advert.Address;
+                AdvertOriginal.AdvertType = SelectedAdvertType.Type;
+                AdvertOriginal.AreaFull = Advert.AreaFull;
+                AdvertOriginal.AreaKitchen = Advert.AreaKitchen;
+                AdvertOriginal.AreaLiving = Advert.AreaLiving;
+                AdvertOriginal.City = Advert.City;
+                AdvertOriginal.DateUpdate = DateTime.Now;
+                AdvertOriginal.Distinct = Advert.Distinct;
+                AdvertOriginal.Email = Advert.Email;
+                AdvertOriginal.Floor = Advert.Floor;
+                AdvertOriginal.FloorTotal = Advert.FloorTotal;
+                AdvertOriginal.MessageFull = Advert.MessageFull;
+                AdvertOriginal.MessageShort = Advert.MessageShort;
+                AdvertOriginal.MetroStation = Advert.MetroStation;
+                AdvertOriginal.Name = Advert.Name;
+                AdvertOriginal.PhoneNumber = Advert.PhoneNumber;
+                AdvertOriginal.Price = Advert.Price;
+                AdvertOriginal.RealEstateType = SelectedRealEstateType.Type;
+                AdvertOriginal.Rooms = Advert.Rooms;
+                AdvertOriginal.Title = Advert.Title;
+                AdvertOriginal.Url = Advert.Url;
+                AdvertOriginal.Usedtype = SelectedUsedType.Type;
+
+                SaveImages();
+
+                _advertsManager.Save(AdvertOriginal);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString(), "Advert saving error");
+                _events.Publish("Ошибка сохраниения");
+            }
+        }
+
+        private void SaveImages()
+        {
+            foreach (var image in AdvertOriginal.Images.ToList())
+            {
+                if (!WrapImages.Any(i => i.Id == image.Id))
+                {
+                    AdvertOriginal.Images.Remove(AdvertOriginal.Images.First(i => i.Id == image.Id));
+                    _imagesManager.DeleteImage(image.Id);
+                }
+            }
         }
 
         public void Delete()
@@ -284,6 +330,8 @@ namespace RealEstate.ViewModels
         {
             get
             {
+                if (SelectedRealEstateType == null) return null;
+
                 if (current != SelectedRealEstateType.Type)
                 {
                     _usedTypes.Clear();
@@ -318,6 +366,7 @@ namespace RealEstate.ViewModels
     public class ImageWrap
     {
         public System.Windows.Media.Imaging.BitmapSource Image { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
     }
 }

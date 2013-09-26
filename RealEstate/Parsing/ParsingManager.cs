@@ -8,13 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Net;
+using RealEstate.Proxies;
 
 namespace RealEstate.Parsing
 {
     [Export(typeof(ParsingManager))]
     public class ParsingManager
     {
-        public List<AdvertHeader> LoadHeaders(TaskParsingParams param, List<ParserSetting> settings, CancellationToken ct, PauseToken pt, WebProxy proxy, int maxAttemptCount)
+        public List<AdvertHeader> LoadHeaders(TaskParsingParams param, List<ParserSetting> settings, CancellationToken ct, PauseToken pt, WebProxy proxy, int maxAttemptCount, ProxyManager proxyManager)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             ParserBase parser = ParsersFactory.GetParser(param.site);
@@ -34,7 +35,7 @@ namespace RealEstate.Parsing
                         if (pt.IsPauseRequested)
                             pt.WaitUntillPaused();
 
-                        headers.AddRange(parser.LoadHeaders(url, proxy, setting.GetDate(), param.MaxCount, maxAttemptCount));                        
+                        headers.AddRange(parser.LoadHeaders(url, proxy, setting.GetDate(), param.MaxCount, maxAttemptCount, proxyManager));                        
                     }
                 }
             }

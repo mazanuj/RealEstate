@@ -76,6 +76,15 @@ namespace RealEstate.Parsing
             set { AdvertTypeValue = (int)value; }
         }
 
+        [Column("ImportSite", TypeName = "int")]
+        public int ImportSiteValue { get; set; }
+        [NotMapped]
+        public ImportSite ImportSite
+        {
+            get { return (ImportSite)ImportSiteValue; }
+            set { ImportSiteValue = (int)value; }
+        }
+
         public bool isGold { get; set; }
 
         public bool isUnique { get; set; }
@@ -126,7 +135,7 @@ namespace RealEstate.Parsing
             }
         }
 
-        public int AdvertId { get; set; }
+        public Advert Advert { get; set; }
     }
 
     public enum RealEstateType

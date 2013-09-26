@@ -21,5 +21,10 @@ namespace RealEstate.Settings
         [SectionName("Images")]
         [DefaultValue(false)]
         public static bool SaveImages { get; set; }
+
+        [Settings]
+        [SectionName("Parsing")]
+        [DefaultValue("http://ya.ru")]
+        public static string UrlForChecking { get; set; }
     }
 }

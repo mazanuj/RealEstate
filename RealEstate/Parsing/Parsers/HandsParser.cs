@@ -9,13 +9,14 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using RealEstate.Proxies;
 
 namespace RealEstate.Parsing.Parsers
 {
     public class HandsParser : ParserBase
     {
 
-        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, WebProxy proxy, DateTime toDate, int maxCount, int maxAttemptCount)
+        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, WebProxy proxy, DateTime toDate, int maxCount, int maxAttemptCount, ProxyManager proxyManager)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             int oldCount = -1;
@@ -41,6 +42,7 @@ namespace RealEstate.Parsing.Parsers
                     catch (Exception ex)
                     {
                         Trace.WriteLine(ex.Message, "Web Error!");
+                        proxyManager.RejectProxy(proxy);
                     }
                 }
 
@@ -106,6 +108,7 @@ namespace RealEstate.Parsing.Parsers
 
             advert.DateSite = header.DateSite;
             advert.Url = header.Url;
+            advert.ImportSite = ImportSite.Hands;
 
             string result;
             result = this.DownloadPage(advert.Url, UserAgents.GetDefaultUserAgent(), proxy, ct);

@@ -8,6 +8,8 @@ using System.Threading;
 using System.Net;
 using System.Diagnostics;
 using System.Windows.Media.Imaging;
+using RealEstate.ViewModels;
+using RealEstate.Db;
 
 namespace RealEstate.Parsing
 {
@@ -15,9 +17,12 @@ namespace RealEstate.Parsing
     public class ImagesManager
     {
         private const string FolderName = "saved images";
+        private readonly RealEstateContext _context = null;
 
-        public ImagesManager()
+        [ImportingConstructor]
+        public ImagesManager(RealEstateContext context)
         {
+            this._context = context;
             Init();
         }
 
@@ -81,11 +86,11 @@ namespace RealEstate.Parsing
             }
         }
 
-        public List<BitmapImage> GetImages(ICollection<Image> imagesSource)
+        public List<ImageWrap> GetImages(ICollection<Image> imagesSource)
         {
             if (imagesSource == null) return null;
 
-            var images = new List<BitmapImage>();
+            var images = new List<ImageWrap>();
             foreach (var imageSource in imagesSource)
             {
                 try
@@ -99,7 +104,7 @@ namespace RealEstate.Parsing
                         FileInfo f = new FileInfo(path);
                         var img = new BitmapImage(new Uri(f.FullName));
                         img.Freeze();
-                        images.Add(img);
+                        images.Add(new ImageWrap() { Image = img, Id = imageSource.Id });
                     }
 
                 }
@@ -110,6 +115,15 @@ namespace RealEstate.Parsing
             }
 
             return images;
+        }
+
+        public void DeleteImage(int id)
+        {
+            var img = _context.Images.SingleOrDefault(i => i.Id == id);
+            if (img != null)
+            {
+                _context.Images.Remove(img);
+            }
         }
     }
 }

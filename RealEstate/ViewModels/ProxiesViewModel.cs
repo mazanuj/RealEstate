@@ -255,7 +255,7 @@ namespace RealEstate.ViewModels
             _events.Publish("Проверка прокси...");
 
             check = 0;
-            var proxyChecker = new ProxyChecker();
+            var proxyChecker = new ProxyChecker(SettingsStore.UrlForChecking);
             proxyChecker.Checked += proxyChecker_Checked;
             var @checked = proxyChecker.GetTestedProxies(proxies, token);
             var checkedCount = @checked.Count();

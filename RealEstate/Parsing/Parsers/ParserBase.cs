@@ -10,6 +10,7 @@ using HtmlAgilityPack;
 using System.Web;
 using RealEstate.Utils;
 using System.Net.Cache;
+using RealEstate.Proxies;
 
 namespace RealEstate.Parsing.Parsers
 {
@@ -17,7 +18,7 @@ namespace RealEstate.Parsing.Parsers
     {
         protected const int DEFAULTTIMEOUT = 3000;
 
-        public abstract List<AdvertHeader> LoadHeaders(ParserSourceUrl url, WebProxy proxy, DateTime toDate, int maxCount, int maxAttemptCount);
+        public abstract List<AdvertHeader> LoadHeaders(ParserSourceUrl url, WebProxy proxy, DateTime toDate, int maxCount, int maxAttemptCount, ProxyManager proxyManager);
 
         public abstract Advert Parse(AdvertHeader header, WebProxy proxy, CancellationToken ct, PauseToken pt);
 

@@ -41,9 +41,9 @@ namespace RealEstate.Parsing
         {
             Trace.WriteLine("Restore import sites settings to default");
             ParsingSites.Clear();
-            ParsingSites.Add(new ParsingSite() { Site = ImportSite.All, DisplayName = GetSiteName(ImportSite.All), Deep = 500, Delay = 5 });
-            ParsingSites.Add(new ParsingSite() { Site = ImportSite.Avito, DisplayName = GetSiteName(ImportSite.Avito), Deep = 200, Delay = 10 });
-            ParsingSites.Add(new ParsingSite() { Site = ImportSite.Hands, DisplayName = GetSiteName(ImportSite.Hands), Deep = 1000, Delay = 5 });
+            ParsingSites.Add(new ParsingSite() { Site = ImportSite.All, DisplayName = GetSiteName(ImportSite.All), Deep = 200, Delay = 20 });
+            ParsingSites.Add(new ParsingSite() { Site = ImportSite.Avito, DisplayName = GetSiteName(ImportSite.Avito), Deep = 200, Delay = 20 });
+            ParsingSites.Add(new ParsingSite() { Site = ImportSite.Hands, DisplayName = GetSiteName(ImportSite.Hands), Deep = 200, Delay = 5 });
 
             Save();
 

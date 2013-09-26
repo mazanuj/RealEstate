@@ -17,7 +17,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="170" />
-                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
@@ -53,9 +53,9 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Column="0" Grid.Row="0" Margin="5 3">От:</TextBlock>
-                            <DatePicker Grid.Column="1" Grid.Row="0"  Name="From" />
+                            <DatePicker Grid.Column="1" Grid.Row="0"  Name="Start" />
                             <TextBlock Grid.Column="0" Grid.Row="1"  Margin="5 3">До:</TextBlock>
-                            <DatePicker Grid.Column="1" Grid.Row="1" Margin="0 2" Name="To" />
+                            <DatePicker Grid.Column="1" Grid.Row="1" Margin="0 2" Name="Final" />
                         </Grid>
                     </Grid>
                 </Border>

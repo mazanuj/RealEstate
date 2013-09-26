@@ -13,6 +13,7 @@ using RealEstate.Log;
 using RealEstate.City;
 using System.Windows;
 using RealEstate.Parsing;
+using RealEstate.Validation;
 
 namespace RealEstate.ViewModels
 {
@@ -47,6 +48,7 @@ namespace RealEstate.ViewModels
             WriteToLog = SettingsStore.LogToFile;
             SaveImages = SettingsStore.SaveImages;
             MaxAttemptCount = SettingsStore.MaxParsingAttemptCount;
+            UrlToCheck = SettingsStore.UrlForChecking;
 
             Task.Factory.StartNew(() =>
             {
@@ -189,6 +191,20 @@ namespace RealEstate.ViewModels
             }
         }
 
+
+        private string _urlToCheck = "";
+        [Required(ErrorMessage = "Введите название города")]
+        [Url(ErrorMessage="Не валидный url")]
+        public string UrlToCheck
+        {
+            get { return _urlToCheck; }
+            set
+            {
+                _urlToCheck = value;
+                NotifyOfPropertyChange(() => UrlToCheck);
+            }
+        }
+
         public async void SaveParsing()
         {
             Status = "Сохраняю...";
@@ -197,9 +213,10 @@ namespace RealEstate.ViewModels
                 await Task.Factory.StartNew(() =>
                 {
                     bool changed = false;
-                    if (MaxAttemptCount != SettingsStore.MaxParsingAttemptCount)
+                    if (MaxAttemptCount != SettingsStore.MaxParsingAttemptCount || UrlToCheck != SettingsStore.UrlForChecking)
                     {
                         SettingsStore.MaxParsingAttemptCount = MaxAttemptCount;
+                        SettingsStore.UrlForChecking = UrlToCheck;
 
                         changed = true;
                     }

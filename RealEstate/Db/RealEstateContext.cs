@@ -46,6 +46,11 @@ namespace RealEstate.Db
                 .HasMany(p => p.Urls)
                 .WithRequired(u => u.ParserSetting)
                 .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Advert>()
+                .HasMany(a => a.Images)
+                .WithRequired(i => i.Advert)
+                .WillCascadeOnDelete();
         }
     }
 }

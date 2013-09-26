@@ -36,6 +36,11 @@ namespace RealEstate.ViewModels
             DisplayName = "Объявления";
         }
 
+        protected override void OnInitialize()
+        {
+            SelectedCity = Cities.FirstOrDefault();
+        }
+
         private ParsePeriod _ParsePeriod = ParsePeriod.Today;
         public ParsePeriod ParsePeriod
         {
@@ -102,6 +107,28 @@ namespace RealEstate.ViewModels
             }
         }
 
+        private DateTime _Start = DateTime.Now;
+        public DateTime Start
+        {
+            get { return _Start; }
+            set
+            {
+                _Start = value;
+                NotifyOfPropertyChange(() => Start);
+            }
+        }
+
+        private DateTime _Final = DateTime.Now;
+        public DateTime Final
+        {
+            get { return _Final; }
+            set
+            {
+                _Final = value;
+                NotifyOfPropertyChange(() => Final);
+            }
+        }
+
         public BindableCollection<CityWrap> Cities
         {
             get
@@ -128,11 +155,59 @@ namespace RealEstate.ViewModels
 
         public void Search()
         {
-            Task.Factory.StartNew(() =>
-                    {
-                        _Adverts.Clear();
-                        _Adverts.AddRange(_context.Adverts.ToList());
-                    });
+            try
+            {
+
+                _Adverts.Clear();
+                DateTime start = DateTime.MinValue;
+                DateTime final = DateTime.MaxValue;
+
+                if (ParsePeriod != Parsing.ParsePeriod.Custom)
+                {
+                    start = Parsing.ParserSetting.GetDate(ParsePeriod);
+                }
+                else
+                {
+                    start = Start;
+                    final = Final;
+                }
+
+                bool citySearch = SelectedCity.City != Cities.First().City;
+                bool importSearch = ImportSite != Parsing.ImportSite.All;
+                bool realSearch = RealEstateType != Parsing.RealEstateType.All;
+                bool usedSearch = Usedtype != Parsing.Usedtype.All;
+                bool advertSearch = AdvertType != Parsing.AdvertType.All;
+                bool dateSearch = ParsePeriod != Parsing.ParsePeriod.All;
+
+                Task.Factory.StartNew(() =>
+                        {
+                            try
+                            {
+                                var adverts = from a in _context.Adverts
+                                              where
+                                                 (citySearch ? a.City == SelectedCity.City : true)
+                                              && (importSearch ? a.ImportSiteValue == (int)ImportSite : true)
+                                              && (realSearch ? a.RealEstateTypeValue == (int)RealEstateType : true)
+                                              && (usedSearch ? a.UsedtypeValue == (int)Usedtype : true)
+                                              && (advertSearch ? a.AdvertTypeValue == (int)AdvertType : true)
+                                              && (dateSearch ? (a.DateSite <= final && a.DateSite >= start) : true)
+                                              select a;
+
+                                _Adverts.AddRange(adverts);
+                            }
+                            catch (Exception ex)
+                            {
+                                Trace.WriteLine(ex.ToString());
+                                _events.Publish("Ошибка");
+                            }
+                        });
+
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString());
+                _events.Publish("Ошибка");
+            }
         }
 
 

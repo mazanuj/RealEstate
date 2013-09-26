@@ -73,16 +73,22 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                    <DockPanel Margin="3 10 3 5" Grid.Row="0">
-                        <TextBlock Margin="30 3 3 3">Число попыток на объявление: </TextBlock>
-                        <TextBox Margin="3" Text="{Binding MaxAttemptCount, Mode=TwoWay, Converter={StaticResource intConverter}, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" />
-                    </DockPanel>
+                    <TextBlock Margin="8">Число попыток на объявление:</TextBlock>
+                    <TextBox Grid.Column="1" Margin="8" Text="{Binding MaxAttemptCount, Mode=TwoWay, Converter={StaticResource intConverter}, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" />
 
-                    <Button Content="Сохранить" Name="SaveParsing" Margin="5"
+                    <TextBlock Grid.Row="1" Margin="8">Url для проверки прокси:</TextBlock>
+                    <TextBox Grid.Row="1" Grid.Column="1" Margin="8" Text="{Binding UrlToCheck, Mode=TwoWay, ValidatesOnDataErrors=True}" />
+
+                    <Button Grid.Column="1" Content="Сохранить" Name="SaveParsing" Margin="5"
                             Grid.Row="3" HorizontalAlignment="Right"/>
                 </Grid>
             </TabItem>
@@ -98,7 +104,7 @@
                         <StackPanel Margin="10" Orientation="Horizontal">
                             <TextBlock Text="{Binding ImagesSpace, StringFormat='Всего места на диске {0} Мб'}" Margin="0 2 10 2" />
                             <Button Name="ClearImages" Content="Очистить" />
-                        </StackPanel>                    
+                        </StackPanel>
                     </StackPanel>
 
                     <Button Content="Сохранить" Name="SaveImagesSetting" Margin="5"

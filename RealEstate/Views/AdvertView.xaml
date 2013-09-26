@@ -64,20 +64,40 @@
                 <TextBox Text="{Binding Advert.Price}" Grid.Column="1" Grid.Row="8" Margin="4" />
                 <TextBox Text="{Binding Advert.MessageShort}" Grid.Column="0" Grid.Row="9" Margin="4" Grid.ColumnSpan="2"  />
                 <TextBox Text="{Binding Advert.MessageFull}" Grid.Column="0" Grid.Row="10" Margin="4" Grid.ColumnSpan="2"
-                         AcceptsReturn="True" Height="150"/>
-              
+                         AcceptsReturn="True" TextWrapping="Wrap" Height="150"/>
+
                 <StackPanel  Grid.Row="11" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <TextBlock Text="Категория: " Margin="4" />                    
-                    <ComboBox Margin="4" Name="RealEstateTypes" DisplayMemberPath="Name" />                    
+                    <TextBlock Text="Категория: " Margin="4" />
+                    <ComboBox Margin="4" Name="RealEstateTypes" DisplayMemberPath="Name" />
                     <ComboBox Margin="4" Name="UsedTypes" DisplayMemberPath="Name"  />
                     <ComboBox Margin="4" Name="AdvertTypes" DisplayMemberPath="Name"  />
                 </StackPanel>
 
-                <TextBlock Text="Экспорт: " Margin="4" Grid.Row="12"/>
+                <StackPanel Grid.Row="12" Grid.ColumnSpan="2">
+                    <TextBlock Text="Экспорт: " Margin="4" />
+                    <ScrollViewer>
+                        <ItemsControl ItemsSource="{Binding AdvertOriginal.ExportSites}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="10 3">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="270" />
+                                            <ColumnDefinition Width="22" />
+                                            <ColumnDefinition Width="20" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock HorizontalAlignment="Right" Grid.Column="1" Margin="10 3" Text="{Binding DisplayName}" />
+                                        <Rectangle Grid.Column="2" Fill="Green" Width="18" Height="18" Margin="3" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </StackPanel>
 
                 <StackPanel Grid.Row="14" Grid.ColumnSpan="2" Orientation="Horizontal">
                     <Button Name="OpenUrl" Content="Cсылка" Style="{StaticResource LinkButton}" Margin="6 5 50 5" />
-                    
+
                     <Button Name="Delete" Content="Удалить" Margin="4" />
                     <Button Name="ExportAdvert" Content="Экспортировать" Margin="4" />
                     <Button Name="Save" Content="Сохранить" Margin="4"/>

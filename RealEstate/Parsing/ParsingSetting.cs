@@ -66,7 +66,12 @@ namespace RealEstate.Parsing
 
         public DateTime GetDate()
         {
-            switch (ParsePeriod)
+            return GetDate(this.ParsePeriod);
+        }
+
+        public static DateTime GetDate(ParsePeriod period)
+        {
+            switch (period)
             {
                 case ParsePeriod.Today:
                     return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddDays(0);
@@ -77,7 +82,7 @@ namespace RealEstate.Parsing
                 case ParsePeriod.All:
                     return DateTime.MinValue;
                 default:
-                    throw new NotImplementedException();
+                    return DateTime.MinValue;
             }
         }
 

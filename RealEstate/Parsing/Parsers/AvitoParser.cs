@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Drawing;
 using System.IO;
 using RealEstate.Utils;
+using RealEstate.Proxies;
 
 namespace RealEstate.Parsing.Parsers
 {
@@ -18,7 +19,7 @@ namespace RealEstate.Parsing.Parsers
     {
         const string ROOT_URl = "http://www.avito.ru/";
 
-        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, WebProxy proxy, DateTime toDate, int maxCount, int maxAttemptCount)
+        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, WebProxy proxy, DateTime toDate, int maxCount, int maxAttemptCount, ProxyManager proxyManager)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             int oldCount = -1;
@@ -44,7 +45,8 @@ namespace RealEstate.Parsing.Parsers
                     }
                     catch (Exception ex)
                     {
-                        Trace.WriteLine(ex.Message, "Web Error!");                        
+                        Trace.WriteLine(ex.Message, "Web Error!");
+                        proxyManager.RejectProxy(proxy);
                     }
                 }
 
@@ -56,19 +58,25 @@ namespace RealEstate.Parsing.Parsers
                 if (page.DocumentNode.SelectSingleNode(@"//h2[contains(@class,'nulus_h2')]") != null)
                     break;
 
-                foreach (HtmlNode tier in page.DocumentNode.SelectNodes(@"//div[contains(@class,'t_i_i')]"))
+                var tiers = page.DocumentNode.SelectNodes(@"//div[contains(@class,'t_i_i')]");
+                if (tiers != null)
                 {
-                    var link = ParseLinkToFullDescription(tier);
-                    var date = ParseDate(tier);
+                    foreach (HtmlNode tier in tiers)
+                    {
+                        var link = ParseLinkToFullDescription(tier);
+                        var date = ParseDate(tier);
 
-                    if (date > toDate)
-                        headers.Add(new AdvertHeader()
-                        {
-                            DateSite = date,
-                            Url = link,
-                            Setting = url.ParserSetting
-                        });
+                        if (date > toDate)
+                            headers.Add(new AdvertHeader()
+                            {
+                                DateSite = date,
+                                Url = link,
+                                Setting = url.ParserSetting
+                            });
+                    }
                 }
+                else
+                    throw new ParsingException("can't find adverts", "");
             }
             while (headers.Count != oldCount && headers.Count < maxCount);
 
@@ -168,7 +176,7 @@ namespace RealEstate.Parsing.Parsers
 
         private void ParseTitle(HtmlDocument full, Advert advert)
         {
-            var header = full.DocumentNode.SelectSingleNode(@".//h1[contains(@class,'item_title')]");
+            var header = full.DocumentNode.SelectSingleNode(@".//h1[contains(@class,'item_title') or contains(@class,'item_title item_title-large')]");
             if (header != null)
             {
                 var title = Normalize(header.InnerText);
@@ -222,7 +230,7 @@ namespace RealEstate.Parsing.Parsers
             var cityLabel = full.GetElementbyId("map");
             if (cityLabel != null)
             {
-                var city = cityLabel.ChildNodes.First(s => s.Name == "a");
+                var city = cityLabel.ChildNodes.FirstOrDefault(s => s.Name == "a" || s.Name == "span");
                 if (city != null)
                     return Normalize(city.InnerText).TrimEnd(new[] { ',', ' ' });
             }
@@ -472,6 +480,7 @@ namespace RealEstate.Parsing.Parsers
 
             advert.DateSite = header.DateSite;
             advert.Url = header.Url;
+            advert.ImportSite = ImportSite.Avito;
 
             string result;
             result = this.DownloadPage(advert.Url, UserAgents.GetDefaultUserAgent(), proxy, ct);
