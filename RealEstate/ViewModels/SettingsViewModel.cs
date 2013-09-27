@@ -180,7 +180,7 @@ namespace RealEstate.ViewModels
 
         
         private int _MaxAttemptCount = 5;
-        [Range(1, 10)]
+        [Range(1, 1000)]
         public int MaxAttemptCount
         {
             get { return _MaxAttemptCount; }

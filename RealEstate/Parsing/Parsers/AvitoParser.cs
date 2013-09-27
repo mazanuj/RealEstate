@@ -12,6 +12,7 @@ using System.Drawing;
 using System.IO;
 using RealEstate.Utils;
 using RealEstate.Proxies;
+using RealEstate.ViewModels;
 
 namespace RealEstate.Parsing.Parsers
 {
@@ -19,7 +20,7 @@ namespace RealEstate.Parsing.Parsers
     {
         const string ROOT_URl = "http://www.avito.ru/";
 
-        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, WebProxy proxy, DateTime toDate, int maxCount, int maxAttemptCount, ProxyManager proxyManager)
+        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             int oldCount = -1;
@@ -35,11 +36,13 @@ namespace RealEstate.Parsing.Parsers
 
                 while (attempt++ < maxAttemptCount)
                 {
+                    WebProxy proxy = param.useProxy ? proxyManager.GetNextProxy() : null;
+
                     try
                     {
                         string uri = url.Url + (url.Url.Contains('?') ? '&' : '?') + "p=" + index;
                         Trace.WriteLine("Downloading " + uri);
-                        result = this.DownloadPage(uri, UserAgents.GetDefaultUserAgent(), proxy, CancellationToken.None);
+                        result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None);
                         break;
 
                     }
@@ -78,7 +81,7 @@ namespace RealEstate.Parsing.Parsers
                 else
                     throw new ParsingException("can't find adverts", "");
             }
-            while (headers.Count != oldCount && headers.Count < maxCount);
+            while (headers.Count != oldCount && headers.Count < param.MaxCount);
 
             return headers;
         }
@@ -483,7 +486,7 @@ namespace RealEstate.Parsing.Parsers
             advert.ImportSite = ImportSite.Avito;
 
             string result;
-            result = this.DownloadPage(advert.Url, UserAgents.GetDefaultUserAgent(), proxy, ct);
+            result = this.DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct);
 
             Console.WriteLine("Downloaded description");
             HtmlDocument page = new HtmlDocument();

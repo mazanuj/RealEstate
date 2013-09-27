@@ -268,7 +268,7 @@ namespace RealEstate.ViewModels
                 int maxattempt = SettingsStore.MaxParsingAttemptCount;
 
                 WebProxy proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
-                var headers = _parsingManager.LoadHeaders(param, settings, ct, pt, proxy, maxattempt, _proxyManager);
+                var headers = _parsingManager.LoadHeaders(param, settings, ct, pt, maxattempt, _proxyManager);
 
                 task.TotalCount = headers.Count;
 

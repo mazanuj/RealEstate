@@ -15,7 +15,7 @@ namespace RealEstate.Parsing
     [Export(typeof(ParsingManager))]
     public class ParsingManager
     {
-        public List<AdvertHeader> LoadHeaders(TaskParsingParams param, List<ParserSetting> settings, CancellationToken ct, PauseToken pt, WebProxy proxy, int maxAttemptCount, ProxyManager proxyManager)
+        public List<AdvertHeader> LoadHeaders(TaskParsingParams param, List<ParserSetting> settings, CancellationToken ct, PauseToken pt, int maxAttemptCount, ProxyManager proxyManager)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             ParserBase parser = ParsersFactory.GetParser(param.site);
@@ -35,7 +35,7 @@ namespace RealEstate.Parsing
                         if (pt.IsPauseRequested)
                             pt.WaitUntillPaused();
 
-                        headers.AddRange(parser.LoadHeaders(url, proxy, setting.GetDate(), param.MaxCount, maxAttemptCount, proxyManager));                        
+                        headers.AddRange(parser.LoadHeaders(url, setting.GetDate(), param, maxAttemptCount, proxyManager));                        
                     }
                 }
             }

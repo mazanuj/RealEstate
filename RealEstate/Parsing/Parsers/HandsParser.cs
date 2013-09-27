@@ -10,13 +10,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using RealEstate.Proxies;
+using RealEstate.ViewModels;
 
 namespace RealEstate.Parsing.Parsers
 {
     public class HandsParser : ParserBase
     {
 
-        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, WebProxy proxy, DateTime toDate, int maxCount, int maxAttemptCount, ProxyManager proxyManager)
+        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             int oldCount = -1;
@@ -32,11 +33,13 @@ namespace RealEstate.Parsing.Parsers
 
                 while (attempt++ < maxAttemptCount)
                 {
+                    WebProxy proxy = param.useProxy ? proxyManager.GetNextProxy() : null;
                     try
                     {
                         string uri = url.Url + "page" + index;
                         Trace.WriteLine("Downloading " + uri);
-                        result = this.DownloadPage(uri, UserAgents.GetDefaultUserAgent(), proxy, CancellationToken.None);
+
+                        result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None);
                         break;
                     }
                     catch (Exception ex)
@@ -46,7 +49,7 @@ namespace RealEstate.Parsing.Parsers
                     }
                 }
 
-                if (result == null) throw new Exception("Can't load headers adverts");
+                if (result == null) throw new ParsingException("Can't load headers adverts","");
 
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
@@ -68,7 +71,7 @@ namespace RealEstate.Parsing.Parsers
                         });
                 }
             }
-            while (headers.Count != oldCount && headers.Count < maxCount);
+            while (headers.Count != oldCount && headers.Count < param.MaxCount);
 
             return headers;
         }
@@ -111,7 +114,7 @@ namespace RealEstate.Parsing.Parsers
             advert.ImportSite = ImportSite.Hands;
 
             string result;
-            result = this.DownloadPage(advert.Url, UserAgents.GetDefaultUserAgent(), proxy, ct);
+            result = this.DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct);
 
             HtmlDocument page = new HtmlDocument();
             page.LoadHtml(result);
