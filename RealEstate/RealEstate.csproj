@@ -77,10 +77,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Nini.1.1.0\lib\net20\Nini.dll</HintPath>
     </Reference>
-    <Reference Include="RealEstate.Parsing.Ocr, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OCR\RealEstate.Parsing.Ocr.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -124,6 +120,7 @@
     <Compile Include="Exporting\ExportSite.cs" />
     <Compile Include="Exporting\ExportSiteManager.cs" />
     <Compile Include="Log\LogManager.cs" />
+    <Compile Include="OCR\ocrs.cs" />
     <Compile Include="Parsing\AdvertsManager.cs" />
     <Compile Include="Parsing\ImportManager.cs" />
     <Compile Include="Parsing\ParserSettingManager.cs" />
