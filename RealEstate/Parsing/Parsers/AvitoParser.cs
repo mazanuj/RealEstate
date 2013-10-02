@@ -406,10 +406,10 @@ namespace RealEstate.Parsing.Parsers
                         {
                             var src = Normalize(href.Value).TrimStart('/');
 
-                            result.Add(new Image() { URl = src });
+                            result.Add(new Image() { URl = "http://" + src });
                         }
                     }
-                    catch (Exception exc)
+                    catch (Exception)
                     {
                         if (result.Count > 0)
                             continue;

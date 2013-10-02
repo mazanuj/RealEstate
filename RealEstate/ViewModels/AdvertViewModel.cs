@@ -92,7 +92,10 @@ namespace RealEstate.ViewModels
             SelectedRealEstateType = RealEstateTypes.SingleOrDefault(t => t.Type == AdvertOriginal.RealEstateType);
             SelectedAdvertType = AdvertTypes.SingleOrDefault(t => t.Type == AdvertOriginal.AdvertType);
             SelectedUsedType = _usedTypes.SingleOrDefault(t => t.Type == AdvertOriginal.Usedtype);
-            var count = AdvertOriginal.ExportSites.Count(); //bug fix for unloading first time
+            if (AdvertOriginal.ExportSites != null)
+            {
+                var count = AdvertOriginal.ExportSites.Count();
+            }//bug fix for unloading first time
         }
 
         private void LoadCategories()
@@ -107,14 +110,22 @@ namespace RealEstate.ViewModels
         {
             Task.Factory.StartNew(() =>
             {
-                var imgs = _imagesManager.GetImages(AdvertOriginal.Images);
-                for (int i = 0; i < imgs.Count; i++)
+                try
                 {
-                    imgs[i].Title = (i + 1).ToString();
+                    var imgs = _imagesManager.GetImages(AdvertOriginal.Images);
+                    for (int i = 0; i < imgs.Count; i++)
+                    {
+                        imgs[i].Title = (i + 1).ToString();
+                    }
+                    _images.AddRange(imgs);
+                    ImagesLoaded = true;
+                    SelectedWrapImage = _images.First();
                 }
-                _images.AddRange(imgs);
-                ImagesLoaded = true;
-                SelectedWrapImage = _images.First();
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.ToString());
+                    _events.Publish("Ошибка загрузки изображений");
+                }
 
             }, CancellationToken.None,
                       TaskCreationOptions.LongRunning,

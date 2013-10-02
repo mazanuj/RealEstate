@@ -30,6 +30,7 @@ namespace RealEstate.Db
         public DbSet<ParserSourceUrl> ParserSourceUrls { get; set; }
         public DbSet<ExportSite> ExportSites { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<ExportSetting> ExportSettings { get; set; }
 
         public RealEstateContext()
             : base("RealEstateContext")

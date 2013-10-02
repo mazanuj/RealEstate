@@ -1,0 +1,97 @@
+﻿<UserControl x:Class="RealEstate.Views.ExportSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1000">
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border Height="180" Visibility="{Binding IsToolsOpen, Converter={StaticResource bool2VisibilityConverter}}" BorderBrush="{StaticResource VS2012WindowBorderBrush}" 
+                BorderThickness="1 0 1 2" FlowDirection="LeftToRight">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="170" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource RibbonTitle}">Город:</TextBlock>
+                        <ComboBox Margin="5 2" Name="Cities" DisplayMemberPath="City"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="130" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" >
+                            <TextBlock  Style="{StaticResource RibbonTitle}">Вид недвижимости:</TextBlock>
+                            <RadioButton  GroupName="realstatetype" Content="Все" Margin="5 2" IsChecked="{Binding Path=RealEstateType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>
+                            <RadioButton  GroupName="realstatetype" Content="Квартиры" Margin="5 2" IsChecked="{Binding Path=RealEstateType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Apartments}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" >
+                            <TextBlock  Style="{StaticResource RibbonTitle}">Подрубрика:</TextBlock>
+                            <ItemsControl Name="UsedTypes" Margin="5 0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <RadioButton  GroupName="usedtype" Content="{Binding Name}" Margin="0 2" IsChecked="{Binding Path=Type, Mode=OneTime, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}" cal:Message.Attach="ChangeSubtype($dataContext)"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" >
+                            <TextBlock  Style="{StaticResource RibbonTitle}">Вид сделки:</TextBlock>
+                            <RadioButton  GroupName="adverttype" Content="Продажа" Margin="5 2" IsChecked="{Binding Path=AdvertType, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Sell}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel Margin="2 0 20 0">
+                        <TextBlock Style="{StaticResource RibbonTitle}">На сайт:</TextBlock>
+                        <ScrollViewer Margin="5 2">
+                            <ItemsControl Name="ExportSites">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <RadioButton  GroupName="export" Content="{Binding DisplayName}" Margin="3" cal:Message.Attach="ChangeExportSite($dataContext)"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="3" Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource RibbonTitle}">Телефон:</TextBlock>
+                        <CheckBox Name="ReplacePhoneNumber" Content="Заменять номера телефонов" Margin="5 2" />
+                        <TextBlock Style="{StaticResource RibbonTitle}" Margin="0 15 0 0">Наценка:</TextBlock>
+                        <StackPanel Margin="5 2" Orientation="Horizontal">
+                            <TextBox Name="Margin" Width="40" />
+                            <TextBlock Margin="4 0">%</TextBlock>
+                        </StackPanel>
+                        <TextBlock Style="{StaticResource RibbonTitle}" Margin="0 15 0 0">Задержка:</TextBlock>
+                        <StackPanel Margin="5 2" Orientation="Horizontal">
+                            <TextBox Width="40"  Name="Delay" />
+                            <TextBlock Margin="4 0">мин</TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="4" Style="{StaticResource RibbonToolBorder}">
+                    <Button Name="Save" Content="Сохранить" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

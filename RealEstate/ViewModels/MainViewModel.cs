@@ -47,7 +47,7 @@ namespace RealEstate.ViewModels
             ImportManager importManager,
             SettingsViewModel settingsViewModel, ProxiesViewModel proxiesViewModel,
             ParsingViewModel parsingViewModel, ParserSettingViewModel parserSettingViewModel,
-            AdvertsViewModel advertsViewModel)
+            AdvertsViewModel advertsViewModel, ExportSettingsViewModel exportSettingsViewModel)
         {
             _windowManager = windowManager;           
             _logManager = logManager;
@@ -72,6 +72,7 @@ namespace RealEstate.ViewModels
             Items.Add(proxiesViewModel);
             Items.Add(parserSettingViewModel);
             Items.Add(advertsViewModel);
+            Items.Add(exportSettingsViewModel);
 
             ActivateItem(parsingViewModel);
 
@@ -163,7 +164,7 @@ namespace RealEstate.ViewModels
                     while (!RealEstate.Views.Loader.IsFormLoaded)
                         Thread.Sleep(300);
 
-                    Thread.Sleep(500);
+                    Thread.Sleep(1000);
                     _events.Publish(criticalError);
                 });
         }
