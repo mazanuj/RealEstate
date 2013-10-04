@@ -91,6 +91,8 @@ namespace RealEstate.Parsing
 
         public string Tag { get; set; }
 
+        public int ParsingNumber { get; set; }
+
         public DateTime DateSite{ get; set; } //+
         public DateTime DateUpdate { get; set; } //+
 

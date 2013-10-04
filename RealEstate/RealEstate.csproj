@@ -121,11 +121,12 @@
     <Compile Include="Converters\Behaviours.cs" />
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Db\RealEstateContext.cs" />
+    <Compile Include="Exporting\ExportingManager.cs" />
     <Compile Include="Exporting\ExportSetting.cs" />
     <Compile Include="Exporting\ExportSite.cs" />
     <Compile Include="Exporting\ExportSiteManager.cs" />
     <Compile Include="Log\LogManager.cs" />
-    <Compile Include="OCR\ocrs.cs" />
+    <Compile Include="OCRs\OCRs.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Parsing\AdvertsManager.cs" />
     <Compile Include="Parsing\ImportManager.cs" />

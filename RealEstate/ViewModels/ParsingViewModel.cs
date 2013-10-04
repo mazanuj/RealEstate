@@ -203,6 +203,7 @@ namespace RealEstate.ViewModels
 
         public void Start()
         {
+            _advertsManager.IncrementParsingNumber();
             if (this.ImportSite == Parsing.ImportSite.All)
             {
                 foreach (var site in Enum.GetValues(typeof(ImportSite)))
@@ -352,6 +353,7 @@ namespace RealEstate.ViewModels
 
                     if (advert != null)
                     {
+                        advert.ParsingNumber = _advertsManager.LastParsingNumber;
                         adverts.Add(advert);
                         Trace.WriteLine(advert.ToString(), "Advert");
                         _advertsManager.Save(advert, headers[i].Setting);

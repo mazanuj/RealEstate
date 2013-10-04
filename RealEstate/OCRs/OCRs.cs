@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 
-namespace RealEstateParser.Ocr
+namespace RealEstateParser.OCRs
 {
     public abstract class SimpleOcr
     {

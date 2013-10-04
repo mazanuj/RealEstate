@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using RealEstate.Exporting;
 
 namespace RealEstate.ViewModels
 {
@@ -22,16 +23,20 @@ namespace RealEstate.ViewModels
         private readonly ParserSettingManager _parserSettingManager;
         private readonly CityManager _cityManager;
         private readonly RealEstateContext _context;
+        private readonly ExportingManager _exportingManager;
+        private readonly AdvertsManager _advertsManager;
 
         [ImportingConstructor]
         public AdvertsViewModel(IEventAggregator events, IWindowManager windowManager, ParserSettingManager parserSettingManager,
-            CityManager cityManager, RealEstateContext context)
+            CityManager cityManager, RealEstateContext context, ExportingManager exportingManager, AdvertsManager advertsManager)
         {
             _events = events;
             _windowManager = windowManager;
             _parserSettingManager = parserSettingManager;
             _cityManager = cityManager;
             _context = context;
+            _exportingManager = exportingManager;
+            _advertsManager = advertsManager;
             events.Subscribe(this);
             DisplayName = "Объявления";
         }
@@ -178,6 +183,7 @@ namespace RealEstate.ViewModels
                 bool usedSearch = Usedtype != Parsing.Usedtype.All;
                 bool advertSearch = AdvertType != Parsing.AdvertType.All;
                 bool dateSearch = ParsePeriod != Parsing.ParsePeriod.All;
+                bool lastParsing = OnlyLastParsing;
 
                 Task.Factory.StartNew(() =>
                         {
@@ -191,9 +197,12 @@ namespace RealEstate.ViewModels
                                               && (usedSearch ? a.UsedtypeValue == (int)Usedtype : true)
                                               && (advertSearch ? a.AdvertTypeValue == (int)AdvertType : true)
                                               && (dateSearch ? (a.DateSite <= final && a.DateSite >= start) : true)
+                                              && (lastParsing ? a.ParsingNumber == _advertsManager.LastParsingNumber : true)
                                               select a;
 
-                                _Adverts.AddRange(adverts);
+
+                                var filtered =  _exportingManager.Filter(_advertsManager.Filter(adverts, Unique),ExportStatus);
+                                _Adverts.AddRange(filtered);
                             }
                             catch (Exception ex)
                             {
@@ -263,5 +272,41 @@ namespace RealEstate.ViewModels
             }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
+        
+        private UniqueEnum _Unique = UniqueEnum.All;
+        public UniqueEnum Unique
+        {
+            get { return _Unique; }
+            set
+            {
+                _Unique = value;
+                NotifyOfPropertyChange(() => Unique);
+            }
+        }
+
+        
+        private ExportStatus _ExportStatus = ExportStatus.Unprocessed;
+        public ExportStatus ExportStatus
+        {
+            get { return _ExportStatus; }
+            set
+            {
+                _ExportStatus = value;
+                NotifyOfPropertyChange(() => ExportStatus);
+            }
+        }
+
+        
+        private bool _OnlyLastParsing = false;
+        public bool OnlyLastParsing
+        {
+            get { return _OnlyLastParsing; }
+            set
+            {
+                _OnlyLastParsing = value;
+                NotifyOfPropertyChange(() => OnlyLastParsing);
+            }
+        }
+                     
     }
 }

@@ -45,6 +45,5 @@ namespace RealEstate.Exporting
         {
             ExportSites = new BindableCollection<ExportSite>(context.ExportSites.OrderBy(e => e.ParseSettings.Count));
         }
-
     }
 }

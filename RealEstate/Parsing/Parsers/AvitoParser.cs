@@ -465,7 +465,7 @@ namespace RealEstate.Parsing.Parsers
             if (phoneUrl != null)
             {
                 var phoneImage = DownloadImage(phoneUrl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, advert.Url);
-                var phoneText = new StringBuilder(new RealEstate.Parsing.Ocr.AvitoOcr().Recognize(phoneImage));
+                var phoneText = new StringBuilder(new RealEstateParser.OCRs.AvitoOcr().Recognize(phoneImage));
 
                 //System.IO.File.WriteAllBytes(@"c:/test/" + phoneImage.GetHashCode() + ".png", phoneImage);
 

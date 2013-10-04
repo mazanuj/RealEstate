@@ -6,7 +6,7 @@
              xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
              xmlns:behaviour="clr-namespace:RealEstate.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="1100">
+             d:DesignHeight="400" d:DesignWidth="1300">
     <Grid Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -98,11 +98,20 @@
                     </Grid>
                 </Border>
                 <Grid Grid.Column="4">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <Button  Content="Поиск" Name="Search"  HorizontalAlignment="Left" Margin="10" />
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <RadioButton GroupName="unique"  Margin="5 20 5 2" Content="Все"  IsChecked="{Binding Path=Unique, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}" />
+                        <RadioButton GroupName="unique"  Margin="5 2"  Content="Новые" IsChecked="{Binding Path=Unique, Converter={StaticResource enumBooleanConverter}, ConverterParameter=New}" />
+                        <RadioButton GroupName="unique"  Margin="5 2"  Content="Уникальные" IsChecked="{Binding Path=Unique, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Unique}" />
+                        <CheckBox Grid.Row="3" Margin="-2 5 5 5" Name="OnlyLastParsing" Content="Последний парсинг" />
+                        <RadioButton GroupName="exported"  Margin="5 2" Content="Необработаные" IsChecked="{Binding Path=ExportStatus, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Unprocessed}" />
+                        <RadioButton GroupName="exported"  Margin="5 2" Content="Экспортированые" IsChecked="{Binding Path=ExportStatus, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Exported}" />
+                        <RadioButton GroupName="exported"  Margin="5 2" Content="Готовые к экспорту" IsChecked="{Binding Path=ExportStatus, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Exporting}"  />
+                    </StackPanel>
+                    <Button Grid.Column="1" VerticalAlignment="Top" Content="Поиск" Name="Search"  HorizontalAlignment="Left" Margin="10" />
                 </Grid>
             </Grid>
         </Border>

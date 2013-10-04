@@ -258,11 +258,11 @@ namespace RealEstate.Parsing.Parsers
             var phoneNode = page.DocumentNode.SelectSingleNode(".//input[contains(@id,'allphones') and contains(@type,'hidden')]");
             if (phoneNode != null)
             {
-                var sellerPhone = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(phoneNode.GetAttributeValue("value", "")));
-                if (advert.Name != string.Empty)
-                    advert.PhoneNumber = sellerPhone.Replace(advert.Name, "").Trim();
-                else
-                    advert.PhoneNumber = sellerPhone.Trim();
+                var sellerPhone = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(phoneNode.GetAttributeValue("value", ""))).Trim();
+                Regex r = new Regex("\"(.+.jpg)\">");
+                sellerPhone = r.Match(sellerPhone).Groups[0].Value;
+                var phoneImage = DownloadImage(sellerPhone, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, Normalize(advert.Url));
+                advert.PhoneNumber = new RealEstateParser.OCRs.HandsOcr().Recognize(phoneImage);
             }
         }
 

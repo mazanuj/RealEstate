@@ -42,6 +42,7 @@ namespace RealEstate.Parsing
                     oldAdvert.DateUpdate = DateTime.Now;
                     oldAdvert.Name = advert.Name;
                     oldAdvert.Title = advert.Title;
+                    oldAdvert.ParsingNumber = advert.ParsingNumber;
                 }
             }
 
@@ -58,5 +59,34 @@ namespace RealEstate.Parsing
             _context.Adverts.Remove(advert);
             _context.SaveChanges();
         }
+
+        public IEnumerable<Advert> Filter(IEnumerable<Advert> adverts, UniqueEnum filter)
+        {
+            return adverts;
+        }
+
+        private int _lastParsingNumber = -1;
+        public int LastParsingNumber
+        {
+            get
+            {
+                if(_lastParsingNumber == -1)
+                    _lastParsingNumber = _context.Adverts.Max(a => a.ParsingNumber);
+                return _lastParsingNumber;
+            }
+        }
+
+        public void IncrementParsingNumber()
+        {
+            var dumb = LastParsingNumber;
+            _lastParsingNumber++;
+        }
+    }
+
+    public enum UniqueEnum
+    {
+        All,
+        New,
+        Unique
     }
 }
