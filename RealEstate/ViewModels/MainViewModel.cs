@@ -34,6 +34,7 @@ namespace RealEstate.ViewModels
         private readonly SettingsManager _settingsManager;
         private readonly ImportManager _importManager;
         private readonly System.Timers.Timer _statusTimer;
+        private readonly ExportingManager _exportingManager;
         public ConsoleViewModel ConsoleViewModel;
         public SettingsViewModel SettingsViewModel;
         public ParsingViewModel ParsingViewModel;
@@ -47,7 +48,8 @@ namespace RealEstate.ViewModels
             ImportManager importManager,
             SettingsViewModel settingsViewModel, ProxiesViewModel proxiesViewModel,
             ParsingViewModel parsingViewModel, ParserSettingViewModel parserSettingViewModel,
-            AdvertsViewModel advertsViewModel, ExportSettingsViewModel exportSettingsViewModel)
+            AdvertsViewModel advertsViewModel, ExportSettingsViewModel exportSettingsViewModel,
+            ExportingManager exportingManager)
         {
             _windowManager = windowManager;           
             _logManager = logManager;
@@ -56,6 +58,7 @@ namespace RealEstate.ViewModels
             _exportSiteManager = exportSiteManager;
             _importManager = importManager;
             _events = events;
+            _exportingManager = exportingManager;
             events.Subscribe(this);
             _settingsManager = settingsManager;
             SettingsViewModel = settingsViewModel;
@@ -144,6 +147,7 @@ namespace RealEstate.ViewModels
             try
             {
                 InitExportSites();
+                InitExportQueue();
             }
             catch (Exception ex)
             {
@@ -167,6 +171,11 @@ namespace RealEstate.ViewModels
                     Thread.Sleep(1000);
                     _events.Publish(criticalError);
                 });
+        }
+
+        private void InitExportQueue()
+        {
+            _exportingManager.ResoreQueue();
         }
 
         protected override void OnInitialize()

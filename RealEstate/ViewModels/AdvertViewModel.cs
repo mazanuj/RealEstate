@@ -12,6 +12,7 @@ using RealEstate.Db;
 using RealEstate.Parsing;
 using System.Windows.Media.Imaging;
 using System.Threading;
+using RealEstate.Exporting;
 
 namespace RealEstate.ViewModels
 {
@@ -25,6 +26,7 @@ namespace RealEstate.ViewModels
         private readonly ImagesManager _imagesManager;
         private readonly ParserSettingManager _parserSettingManager;
         private readonly AdvertsManager _advertsManager;
+        private readonly ExportingManager _exportingManager;
 
         public Advert AdvertOriginal { get; set; }
         public Advert Advert { get; set; }
@@ -33,13 +35,14 @@ namespace RealEstate.ViewModels
 
         [ImportingConstructor]
         public AdvertViewModel(IEventAggregator events, RealEstateContext context, ImagesManager imagesManager,
-            ParserSettingManager parserSettingManager, AdvertsManager advertsManager)
+            ParserSettingManager parserSettingManager, AdvertsManager advertsManager, ExportingManager exportingManager)
         {
             _events = events;
             _context = context;
             _imagesManager = imagesManager;
             _parserSettingManager = parserSettingManager;
             _advertsManager = advertsManager;
+            _exportingManager = exportingManager;
         }
 
         protected override void OnInitialize()
@@ -62,6 +65,7 @@ namespace RealEstate.ViewModels
         private void CopyAdvert()
         {
             Advert = new Parsing.Advert();
+            Advert.Id = AdvertOriginal.Id;
             Advert.Address = AdvertOriginal.Address;
             Advert.AdvertType = AdvertOriginal.AdvertType;
             Advert.AreaFull = AdvertOriginal.AreaFull;
@@ -371,6 +375,11 @@ namespace RealEstate.ViewModels
             }, CancellationToken.None,
                       TaskCreationOptions.None,
                       TaskScheduler.Default);
+        }
+
+        public void ExportAdvert()
+        {
+            _exportingManager.AddAdvertToExport(AdvertOriginal);
         }
     }
 

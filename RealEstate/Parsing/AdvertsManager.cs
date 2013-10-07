@@ -30,7 +30,7 @@ namespace RealEstate.Parsing
             else
             {
                 if (oldAdvert.ExportSites == null) advert.ExportSites = new List<Exporting.ExportSite>();
-                if(!oldAdvert.ExportSites.Contains(setting.ExportSite))
+                if (!oldAdvert.ExportSites.Contains(setting.ExportSite))
                     oldAdvert.ExportSites.Add(setting.ExportSite);
 
                 if (oldAdvert.DateSite != advert.DateSite)
@@ -62,7 +62,40 @@ namespace RealEstate.Parsing
 
         public IEnumerable<Advert> Filter(IEnumerable<Advert> adverts, UniqueEnum filter)
         {
-            return adverts;
+            switch (filter)
+            {
+                case UniqueEnum.All:
+                    return adverts;
+                case UniqueEnum.New:
+                    return adverts.Where(a => IsAdvertNew(a, adverts)).AsParallel();
+                case UniqueEnum.Unique:
+                    return adverts.Where(a => IsAdvertUnique(a, adverts)).AsParallel();
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private bool IsAdvertNew(Advert advert, IEnumerable<Advert> adverts)
+        {
+            var items = from a in adverts
+                        where a.Id != advert.Id
+                        && ((a.PhoneNumber == advert.PhoneNumber
+                        && a.MessageFull != advert.MessageFull)
+                        || a.MessageFull == advert.MessageFull)
+                        select a;
+
+            return !items.Any(a => a.DateSite > advert.DateSite); //todo search from exported
+        }
+
+        private bool IsAdvertUnique(Advert advert, IEnumerable<Advert> adverts)
+        {
+            var items = from a in adverts
+                        where a.Id != advert.Id
+                        && (a.PhoneNumber == advert.PhoneNumber
+                        || a.MessageFull == advert.MessageFull)
+                        select a;
+
+            return items.Count() == 0;
         }
 
         private int _lastParsingNumber = -1;
@@ -70,8 +103,13 @@ namespace RealEstate.Parsing
         {
             get
             {
-                if(_lastParsingNumber == -1)
-                    _lastParsingNumber = _context.Adverts.Max(a => a.ParsingNumber);
+                if (_lastParsingNumber == -1)
+                {
+                    if (_context.Adverts.FirstOrDefault() == null)
+                        _lastParsingNumber = 0;
+                    else
+                        _lastParsingNumber = _context.Adverts.Max(a => a.ParsingNumber);
+                }
                 return _lastParsingNumber;
             }
         }

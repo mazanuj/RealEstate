@@ -203,54 +203,62 @@ namespace RealEstate.ViewModels
 
         public void Start()
         {
-            _advertsManager.IncrementParsingNumber();
-            if (this.ImportSite == Parsing.ImportSite.All)
+            try
             {
-                foreach (var site in Enum.GetValues(typeof(ImportSite)))
+                _advertsManager.IncrementParsingNumber();
+                if (this.ImportSite == Parsing.ImportSite.All)
                 {
-                    var s = (ImportSite)site;
-
-                    if (s != Parsing.ImportSite.All)
+                    foreach (var site in Enum.GetValues(typeof(ImportSite)))
                     {
-                        TaskParsingParams param = new TaskParsingParams();
+                        var s = (ImportSite)site;
 
-                        param.city = SelectedCity.City;
-                        param.period = this.ParsePeriod;
-                        param.site = s;
-                        param.realType = this.RealEstateType;
-                        param.subType = this.Usedtype;
-                        param.advertType = this.AdvertType;
-                        param.useProxy = UseProxy;
-                        param.Delay = ImportSites.First(i => i.Site == s).Delay;
-                        param.MaxCount = ImportSites.First(i => i.Site == s).Deep;
+                        if (s != Parsing.ImportSite.All)
+                        {
+                            TaskParsingParams param = new TaskParsingParams();
 
-                        ParsingTask realTask = new ParsingTask();
-                        realTask.Description = _importManager.GetSiteName(s);
-                        realTask.Task = new Task(() => StartInternal(param, realTask.cs.Token, realTask.ps.PauseToken, realTask));
-                        Tasks.Add(realTask);
-                        _taskManager.AddTask(realTask);
+                            param.city = SelectedCity.City;
+                            param.period = this.ParsePeriod;
+                            param.site = s;
+                            param.realType = this.RealEstateType;
+                            param.subType = this.Usedtype;
+                            param.advertType = this.AdvertType;
+                            param.useProxy = UseProxy;
+                            param.Delay = ImportSites.First(i => i.Site == s).Delay;
+                            param.MaxCount = ImportSites.First(i => i.Site == s).Deep;
+
+                            ParsingTask realTask = new ParsingTask();
+                            realTask.Description = _importManager.GetSiteName(s);
+                            realTask.Task = new Task(() => StartInternal(param, realTask.cs.Token, realTask.ps.PauseToken, realTask));
+                            Tasks.Add(realTask);
+                            _taskManager.AddTask(realTask);
+                        }
                     }
                 }
+                else
+                {
+                    TaskParsingParams param = new TaskParsingParams();
+
+                    param.city = SelectedCity.City;
+                    param.period = this.ParsePeriod;
+                    param.site = this.ImportSite;
+                    param.realType = this.RealEstateType;
+                    param.subType = this.Usedtype;
+                    param.advertType = this.AdvertType;
+                    param.useProxy = UseProxy;
+                    param.Delay = ImportSites.First(i => i.Site == this.ImportSite).Delay;
+                    param.MaxCount = ImportSites.First(i => i.Site == this.ImportSite).Deep;
+
+                    ParsingTask realTask = new ParsingTask();
+                    realTask.Description = _importManager.GetSiteName(param.site);
+                    realTask.Task = new Task(() => StartInternal(param, realTask.cs.Token, realTask.ps.PauseToken, realTask));
+                    Tasks.Add(realTask);
+                    _taskManager.AddTask(realTask);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                TaskParsingParams param = new TaskParsingParams();
-
-                param.city = SelectedCity.City;
-                param.period = this.ParsePeriod;
-                param.site = this.ImportSite;
-                param.realType = this.RealEstateType;
-                param.subType = this.Usedtype;
-                param.advertType = this.AdvertType;
-                param.useProxy = UseProxy;
-                param.Delay = ImportSites.First(i => i.Site == this.ImportSite).Delay;
-                param.MaxCount = ImportSites.First(i => i.Site == this.ImportSite).Deep;
-
-                ParsingTask realTask = new ParsingTask();
-                realTask.Description = _importManager.GetSiteName(param.site);
-                realTask.Task = new Task(() => StartInternal(param, realTask.cs.Token, realTask.ps.PauseToken, realTask));
-                Tasks.Add(realTask);
-                _taskManager.AddTask(realTask);
+                Trace.WriteLine(ex.ToString(), "Error!");
+                _events.Publish("Ошибка запуска парсинга!");
             }
         }
 

@@ -189,6 +189,8 @@ namespace RealEstate.ViewModels
                         {
                             try
                             {
+                                if (_context.Adverts.FirstOrDefault() == null) return;
+
                                 var adverts = from a in _context.Adverts
                                               where
                                                  (citySearch ? a.City == SelectedCity.City : true)
@@ -200,8 +202,8 @@ namespace RealEstate.ViewModels
                                               && (lastParsing ? a.ParsingNumber == _advertsManager.LastParsingNumber : true)
                                               select a;
 
-
-                                var filtered =  _exportingManager.Filter(_advertsManager.Filter(adverts, Unique),ExportStatus);
+                                var byUnique = _advertsManager.Filter(adverts.ToList(), Unique);
+                                var filtered = _exportingManager.Filter(byUnique, ExportStatus);
                                 _Adverts.AddRange(filtered);
                             }
                             catch (Exception ex)

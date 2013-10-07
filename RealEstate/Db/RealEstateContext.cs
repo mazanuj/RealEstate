@@ -31,6 +31,7 @@ namespace RealEstate.Db
         public DbSet<ExportSite> ExportSites { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<ExportSetting> ExportSettings { get; set; }
+        public DbSet<ExportItem> ExportItems { get; set; }
 
         public RealEstateContext()
             : base("RealEstateContext")

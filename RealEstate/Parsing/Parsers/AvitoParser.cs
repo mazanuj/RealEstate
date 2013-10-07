@@ -233,9 +233,9 @@ namespace RealEstate.Parsing.Parsers
             var cityLabel = full.GetElementbyId("map");
             if (cityLabel != null)
             {
-                var city = cityLabel.ChildNodes.FirstOrDefault(s => s.Name == "a" || s.Name == "span");
+                var city = cityLabel.ChildNodes.Where(span => span.Attributes["class"] != null && span.Attributes["class"].Value == "c-1"); //todo check this
                 if (city != null)
-                    return Normalize(city.InnerText).TrimEnd(new[] { ',', ' ' });
+                    return Normalize(String.Join(", ", city.Select(c => c.InnerText))).TrimEnd(new[] { ',', ' ' });
             }
 
             return null;
@@ -266,6 +266,13 @@ namespace RealEstate.Parsing.Parsers
                         advert.Address = Normalize(addressBlock.InnerText).TrimEnd(new[] { ',' }).TrimStart(new[] { ',' });
                     }
                 }
+            }
+
+            if (String.IsNullOrEmpty(advert.Address))
+            {
+                var adress = full.DocumentNode.SelectSingleNode(@"//span[@itemprop='streetAddress']");
+                if (adress != null)
+                    advert.Address = adress.InnerText; //todo check this
             }
         }
 
