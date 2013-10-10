@@ -135,13 +135,13 @@ namespace RealEstate.ViewModels
 
         private float _Margin = 0;
         [Range(0, 100)]
-        public float Margin
+        public float MoneyMargin
         {
             get { return _Margin; }
             set
             {
                 _Margin = value;
-                NotifyOfPropertyChange(() => Margin);
+                NotifyOfPropertyChange(() => MoneyMargin);
             }
         }
 
@@ -210,7 +210,7 @@ namespace RealEstate.ViewModels
                 setting.City = SelectedCity.City;
                 setting.Delay = Delay;
                 setting.ExportSite = SelectedExportSite;
-                setting.Margin = Margin;
+                setting.Margin = MoneyMargin;
                 setting.RealEstateType = RealEstateType;
                 setting.ReplacePhoneNumber = ReplacePhoneNumber;
                 setting.Usedtype = Usedtype;
@@ -239,7 +239,7 @@ namespace RealEstate.ViewModels
                         AdvertType = setting.AdvertType;
                         SelectedCity = Cities.SingleOrDefault(c => c.City == setting.City);
                         Delay = setting.Delay;
-                        Margin = setting.Margin;
+                        MoneyMargin = setting.Margin;
                         RealEstateType = setting.RealEstateType;
                         ReplacePhoneNumber = setting.ReplacePhoneNumber;
                         Usedtype = setting.Usedtype;
@@ -249,7 +249,7 @@ namespace RealEstate.ViewModels
                         AdvertType = DefaultAdvertType;
                         SelectedCity = Cities.SingleOrDefault(c => c.City == DefaultCity);
                         Delay = DefaultDelay;
-                        Margin = DefaultMargin;
+                        MoneyMargin = DefaultMargin;
                         RealEstateType = DefaultRealEstateType;
                         ReplacePhoneNumber = DefaultReplacePhone;
                         Usedtype = DefaulUsedtype;

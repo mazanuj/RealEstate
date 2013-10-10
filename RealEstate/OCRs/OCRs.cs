@@ -46,7 +46,7 @@ namespace RealEstateParser.OCRs
             }
         }
 
-        private string ParseRow(int fromY, int y, Bitmap bmp)
+        protected virtual string ParseRow(int fromY, int y, Bitmap bmp)
         {
             var currentLetter = 0;
             var result = "";
@@ -82,7 +82,7 @@ namespace RealEstateParser.OCRs
             public char Letter { get; set; }
             public int Weight { get; set; }
         }
-        private char ResolveLetter(int currentLetter)
+        protected virtual string ResolveLetter(int currentLetter)
         {
             var bestLetter = '#';
             var bestWeight = int.MaxValue;
@@ -98,10 +98,10 @@ namespace RealEstateParser.OCRs
                 }
             }
 
-            return bestLetter;
+            return bestLetter.ToString();
         }
 
-        private int CalcRowWeight(int y, Bitmap bmp)
+        protected virtual int CalcRowWeight(int y, Bitmap bmp)
         {
             var weight = 0;
 
@@ -117,7 +117,7 @@ namespace RealEstateParser.OCRs
 
             return weight;
         }
-        private int CalcColumnWeight(int x, int yMin, int yMax, Bitmap bmp)
+        protected virtual int CalcColumnWeight(int x, int yMin, int yMax, Bitmap bmp)
         {
             var weight = 0;
 
@@ -175,9 +175,60 @@ namespace RealEstateParser.OCRs
                     new Map{Letter = '7', Weight = 4106},
                     new Map{Letter = '8', Weight = 7065},
                     new Map{Letter = '9', Weight = 5828},
-                    new Map{Letter = '-', Weight = 1275},
+                    new Map{Letter = '+', Weight = 1275},
                 };
             }
+        }
+        const int MIN_WEIGHT = 170;
+        protected override string ParseRow(int fromY, int y, Bitmap bmp)
+        {
+            var currentLetter = 0;
+            var result = "";
+
+            for (var x = 0; x < bmp.Width; x++)
+            {
+                var columnWeight = CalcColumnWeight(x, fromY, y, bmp);
+                if (columnWeight < MIN_WEIGHT)
+                {
+                    // end of the letter
+                    if (currentLetter != 0)
+                    {
+                        result += ResolveLetter(currentLetter);
+                        currentLetter = 0;
+                    }
+                    else
+                    {
+                        // start of text whitespace -> just ignore
+                    }
+                }
+                else
+                {
+                    currentLetter += columnWeight;
+                }
+            }
+
+            return result;
+        }
+
+        protected override string ResolveLetter(int currentLetter)
+        {
+            if (currentLetter <= MIN_WEIGHT) return String.Empty;
+
+            var bestLetter = "#";
+            var bestWeight = int.MaxValue;
+
+            foreach (var letter in Symbols)
+            {
+                var delta = Math.Abs(currentLetter - letter.Weight);
+
+                if (delta < bestWeight)
+                {
+                    bestLetter = letter.Letter.ToString();
+                    bestWeight = delta;
+                }
+            }
+
+            return bestLetter;
         }
     }
 

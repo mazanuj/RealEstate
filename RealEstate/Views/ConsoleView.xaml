@@ -13,14 +13,24 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBox Style="{StaticResource ConsoleStyle}" Margin="4 3 4 0" Grid.Row="0" AcceptsReturn="True" Name="ConsoleText" IsReadOnlyCaretVisible="True" IsReadOnly="True" TextWrapping="Wrap" TextChanged="ConsoleText_TextChanged" UndoLimit="1" />
-        <Grid Grid.Row="1" Cursor="Arrow">
+        <TextBox AcceptsReturn="True" Name="ConsoleCommand" Margin="4 0" Grid.Row="1" Visibility="{Binding IsConsoleOpen, Converter={StaticResource bool2VisibilityConverter}}"  />
+        <Grid Grid.Row="2" Cursor="Arrow">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Image Grid.Column="0" Margin="3" Height="20" Source="../Images/consoleicon.png" ToolTip="Консоль" />
+            <Button Name="Console" Grid.Column="0" Margin="3" BorderThickness="0">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
+                            <Image Height="20" Source="../Images/consoleicon.png" ToolTip="Консоль" />
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
             <Button Grid.Column="1" Padding="0" Margin="20 3" Name="SendLog" ToolTip="Отправить лог" >
                 <Image Margin="3" Height="20" Source="../Images/send.png" />
             </Button>

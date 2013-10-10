@@ -78,7 +78,7 @@
                         <CheckBox Name="ReplacePhoneNumber" Content="Заменять номера телефонов" Margin="5 2" />
                         <TextBlock Style="{StaticResource RibbonTitle}" Margin="0 15 0 0">Наценка:</TextBlock>
                         <StackPanel Margin="5 2" Orientation="Horizontal">
-                            <TextBox Name="Margin" Width="40" />
+                            <TextBox Name="MoneyMargin" Width="40" />
                             <TextBlock Margin="4 0">%</TextBlock>
                         </StackPanel>
                         <TextBlock Style="{StaticResource RibbonTitle}" Margin="0 15 0 0">Задержка:</TextBlock>

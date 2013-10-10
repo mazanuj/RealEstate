@@ -6,6 +6,8 @@ using System.Text;
 using Caliburn.Micro;
 using System.Diagnostics;
 using System.Threading;
+using RealEstate.Commands;
+using System.Threading.Tasks;
 
 namespace RealEstate.ViewModels
 {
@@ -15,15 +17,17 @@ namespace RealEstate.ViewModels
         private readonly Timer _timer;
         private const int MaxConsoleLength = 5000;
         private readonly Log.LogManager _LogManager;
+        private readonly CommandsProcessor _commandsProcessor;
 
         [ImportingConstructor]
-        public ConsoleViewModel(Log.LogManager logManager)
+        public ConsoleViewModel(Log.LogManager logManager, CommandsProcessor commandsProcessor)
         {
             TraceListener debugListener = new MyTraceListener(this);
             Trace.Listeners.Add(debugListener);
             Trace.WriteLine("Start listening log");
-             _timer = new Timer(new TimerCallback(ClearUpConsole), null, 10000, 10000);
-             _LogManager = logManager;
+            _timer = new Timer(new TimerCallback(ClearUpConsole), null, 10000, 10000);
+            _LogManager = logManager;
+            _commandsProcessor = commandsProcessor;
         }
 
         public void SendLog()
@@ -37,7 +41,7 @@ namespace RealEstate.ViewModels
             NotifyOfPropertyChange(() => ConsoleText);
         }
 
-        
+
         private StringBuilder _consoleTextBuilder = new StringBuilder();
         public string ConsoleText
         {
@@ -64,7 +68,61 @@ namespace RealEstate.ViewModels
             {
                 Trace.WriteLine(ex.Message);
             }
-        }                    
+        }
+
+
+        private bool _IsConsoleOpen = false;
+        public bool IsConsoleOpen
+        {
+            get { return _IsConsoleOpen; }
+            set
+            {
+                _IsConsoleOpen = value;
+                NotifyOfPropertyChange(() => IsConsoleOpen);
+            }
+        }
+
+
+        private string _ConsoleCommand = String.Empty;
+        public string ConsoleCommand
+        {
+            get { return _ConsoleCommand; }
+            set
+            {
+                _ConsoleCommand = value;
+
+                if (_ConsoleCommand.EndsWith("\r\n"))
+                {
+                    CommandEntered(_ConsoleCommand.Trim());
+                    ConsoleCommand = String.Empty;
+                }
+                NotifyOfPropertyChange(() => ConsoleCommand);
+            }
+            
+        }
+
+        private void CommandEntered(string command)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    Trace.WriteLine(Module.Char + command);
+                    _commandsProcessor.ProcessCommand(command);
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.ToString());
+                }
+            });
+        }
+
+        public void Console()
+        {
+            IsConsoleOpen = !IsConsoleOpen;
+        }
+
+
     }
 
     public class MyTraceListener : TraceListener

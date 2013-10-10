@@ -344,7 +344,7 @@ namespace RealEstate.ViewModels
                             Trace.WriteLine(pex.Message + ": " + pex.UnrecognizedData, "Unrecognized data");
                             break;
                         }
-                        catch (OperationCanceledException cex)
+                        catch (OperationCanceledException)
                         {
                             Trace.WriteLine("Canceled");
                             _events.Publish("Отменено");

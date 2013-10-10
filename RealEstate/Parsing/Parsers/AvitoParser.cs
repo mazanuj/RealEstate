@@ -13,6 +13,7 @@ using System.IO;
 using RealEstate.Utils;
 using RealEstate.Proxies;
 using RealEstate.ViewModels;
+using RealEstate.OCRs;
 
 namespace RealEstate.Parsing.Parsers
 {
@@ -472,11 +473,10 @@ namespace RealEstate.Parsing.Parsers
             if (phoneUrl != null)
             {
                 var phoneImage = DownloadImage(phoneUrl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, advert.Url);
-                var phoneText = new StringBuilder(new RealEstateParser.OCRs.AvitoOcr().Recognize(phoneImage));
+                var phoneText = OCRManager.RecognizeImage(phoneImage);
 
                 //System.IO.File.WriteAllBytes(@"c:/test/" + phoneImage.GetHashCode() + ".png", phoneImage);
 
-                phoneText.Replace("-", "");
                 advert.PhoneNumber = phoneText.ToString();
             }
         }

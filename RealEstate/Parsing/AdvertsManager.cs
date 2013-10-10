@@ -60,6 +60,17 @@ namespace RealEstate.Parsing
             _context.SaveChanges();
         }
 
+        public void DeleteAll()
+        {
+            // _context.Database.ExecuteSqlCommand("TRUNCATE TABLE adverts;"); //it just not work WTF???
+            foreach (var advert in _context.Adverts)
+            {
+                _context.Adverts.Remove(advert);
+            }
+
+            _context.SaveChanges();
+        }
+
         public IEnumerable<Advert> Filter(IEnumerable<Advert> adverts, UniqueEnum filter)
         {
             switch (filter)

@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using RealEstate.Proxies;
 using RealEstate.ViewModels;
+using RealEstate.OCRs;
 
 namespace RealEstate.Parsing.Parsers
 {
@@ -259,10 +260,12 @@ namespace RealEstate.Parsing.Parsers
             if (phoneNode != null)
             {
                 var sellerPhone = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(phoneNode.GetAttributeValue("value", ""))).Trim();
-                Regex r = new Regex("\"(.+.jpg)\">");
+                Regex r = new Regex(@"'(.+jpg)'");
                 sellerPhone = r.Match(sellerPhone).Groups[0].Value;
-                var phoneImage = DownloadImage(sellerPhone, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, Normalize(advert.Url));
-                advert.PhoneNumber = new RealEstateParser.OCRs.HandsOcr().Recognize(phoneImage);
+                if (sellerPhone == "") return;
+
+                var phoneImage = DownloadImage(sellerPhone.Trim(new char[]{'\''}), UserAgents.GetRandomUserAgent(), null, CancellationToken.None, Normalize(advert.Url));
+                advert.PhoneNumber = OCRManager.RecognizeImage(phoneImage);
             }
         }
 

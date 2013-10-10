@@ -107,6 +107,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Tesseract">
+      <HintPath>..\packages\Tesseract.1.0.0-alpha2\lib\net40\Tesseract.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -118,6 +121,7 @@
     </ApplicationDefinition>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="City\CityManager.cs" />
+    <Compile Include="Commands\CommandsProcessor.cs" />
     <Compile Include="Converters\Behaviours.cs" />
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Db\RealEstateContext.cs" />
@@ -126,6 +130,7 @@
     <Compile Include="Exporting\ExportSite.cs" />
     <Compile Include="Exporting\ExportSiteManager.cs" />
     <Compile Include="Log\LogManager.cs" />
+    <Compile Include="OCRs\OCRManager.cs" />
     <Compile Include="OCRs\OCRs.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Parsing\AdvertsManager.cs" />
@@ -320,6 +325,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SmartProcessing\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="x86\liblept168.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\libtesseract302.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.10\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.10\tools\Microsoft.Bcl.Build.targets')" />
