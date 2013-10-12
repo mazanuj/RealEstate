@@ -44,6 +44,8 @@ namespace RealEstate.Parsing.Parsers
                         string uri = url.Url + (url.Url.Contains('?') ? '&' : '?') + "p=" + index;
                         Trace.WriteLine("Downloading " + uri);
                         result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None);
+                        if (result.Length < 200)
+                            throw new BadResponseException();
                         break;
 
                     }
@@ -54,7 +56,7 @@ namespace RealEstate.Parsing.Parsers
                     }
                 }
 
-                if (result == null) throw new ParsingException("Can't load headers adverts","");
+                if (result == null) throw new ParsingException("Can't load headers adverts", "");
 
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
@@ -189,7 +191,7 @@ namespace RealEstate.Parsing.Parsers
                 var parts = title.Split(',');
                 if (parts.Length > 1)
                 {
-                    advert.Rooms = parts[0];
+                    advert.Rooms = parts[0].Trim(new string[] { ">", "-к квартира" }).Trim();
 
                     if (parts.Length > 1)
                     {
@@ -283,7 +285,7 @@ namespace RealEstate.Parsing.Parsers
             if (block != null)
             {
                 var priceString = block.InnerText.Replace("&nbsp;", "").Replace(" руб.", "");
-                if(priceString.Contains("Не указана"))
+                if (priceString.Contains("Не указана"))
                     return -1;
                 long price;
                 if (Int64.TryParse(priceString, out price))
@@ -298,22 +300,9 @@ namespace RealEstate.Parsing.Parsers
         private static AdvertType MapType(string param)
         {
             var dealMap = new Dictionary<string, AdvertType> {
-                { "201_1058", AdvertType.Buy },
-                { "201_1060", AdvertType.Pass },
-                { "201_1061", AdvertType.Rent },
-                { "201_1059", AdvertType.Sell },
-                { "202_1064", AdvertType.Sell },
-                { "202_1065", AdvertType.Pass },
-                { "202_1063", AdvertType.Buy },
-                { "202_1066", AdvertType.Rent },
-                { "203_1069", AdvertType.Sell },
-                { "203_1068", AdvertType.Buy },
-                { "204_1074", AdvertType.Sell },
-                { "204_1075", AdvertType.Pass },
-                { "204_1073", AdvertType.Buy },
-                { "204_1076", AdvertType.Rent },
-                { "536_5545", AdvertType.Sell },
-                { "536_5546", AdvertType.Rent },
+                { "prodam", AdvertType.Sell },
+                { "sdam", AdvertType.Pass }
+
             };
 
             return dealMap.ContainsKey(param) ? dealMap[param] : AdvertType.All;
@@ -322,7 +311,7 @@ namespace RealEstate.Parsing.Parsers
         private static Usedtype MapUsedtype(string param)
         {
             var subTypeMap = new Dictionary<string, Usedtype> {
-                { "499_5255", Usedtype.New },
+                { "novostroyka", Usedtype.New }
             };
 
             return subTypeMap.ContainsKey(param) ? subTypeMap[param] : Usedtype.All;
@@ -331,14 +320,7 @@ namespace RealEstate.Parsing.Parsers
         private static RealEstateType MapRealEstateType(string param)
         {
             var typeMap = new Dictionary<string, RealEstateType> {
-                { "201_1058", RealEstateType.Apartments },
-                { "201_1060", RealEstateType.Apartments },
-                { "201_1061", RealEstateType.Apartments },
-                { "201_1059", RealEstateType.Apartments },
-                { "202_1064", RealEstateType.House },
-                { "202_1065", RealEstateType.House },
-                { "202_1063", RealEstateType.House },
-                { "202_1066", RealEstateType.House },
+                { "kvartiry", RealEstateType.Apartments }
             };
 
             return typeMap.ContainsKey(param) ? typeMap[param] : RealEstateType.All;
@@ -346,42 +328,49 @@ namespace RealEstate.Parsing.Parsers
 
         private void ParseCategory(HtmlDocument full, Advert advert)
         {
-            var nodes = full.DocumentNode.SelectNodes(@"//dl[@class='description description-expanded']/dd[@class='item-params c-1']/div/a");
+            var nodes = full.DocumentNode.SelectNodes(@"//dl[@class='description description-expanded']/dd[@class='item-params c-1']/div[1]/a");
             if (nodes != null && nodes.Count > 0)
             {
-                foreach (var node in nodes)
+                var node = nodes.Last();
+
+                if (node.Attributes.Contains("href"))
                 {
-                    if (node.Attributes.Contains("href"))
+                    var href = node.Attributes["href"].Value;
+
+                    var param = href.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                    var count = param.Count();
+                    for (int i = 0; i < count; i++)
                     {
-                        var href = node.Attributes["href"].Value;
-
-                        var paramsRegex = new Regex(@"params=([0-9\._]+)").Match(href);
-                        if (paramsRegex.Success)
+                        switch (i)
                         {
-                            foreach (var param in paramsRegex.Groups[1].Value.Split('.'))
-                            {
-                                var type = MapType(param);
-                                if (type != AdvertType.All)
-                                {
-                                    advert.AdvertType = type;
-                                }
+                            case 1:
+                                var realEstateType = MapRealEstateType(param[i]);
 
-                                var usedType = MapUsedtype(param);
-                                if (usedType != Usedtype.All)
-                                {
-                                    advert.Usedtype = usedType;
-                                }
-
-                                var realEstateType = MapRealEstateType(param);
                                 if (realEstateType != RealEstateType.All)
-                                {
                                     advert.RealEstateType = realEstateType;
-                                }
-                            }
 
+                                break;
+                            case 2:
+                                var type = MapType(param[i]);
+
+                                if (type != AdvertType.All)
+                                    advert.AdvertType = type;
+
+                                if (count == 3)
+                                    advert.Usedtype = Usedtype.Used;
+
+                                break;
+                            case 3:
+                                var usedType = MapUsedtype(param[i]);
+
+                                if (usedType != Usedtype.All)
+                                    advert.Usedtype = usedType;
+
+                                break;
                         }
                     }
                 }
+
             }
 
         }
@@ -483,25 +472,25 @@ namespace RealEstate.Parsing.Parsers
 
         public override Advert Parse(AdvertHeader header, WebProxy proxy, CancellationToken ct, PauseToken pt)
         {
-
             Advert advert = new Advert();
 
-            advert.DateUpdate = DateTime.Now;
-
-            advert.DateSite = header.DateSite;
-            advert.Url = header.Url;
-            advert.ImportSite = ImportSite.Avito;
-
-            string result;
-            result = this.DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct);
-
-            Console.WriteLine("Downloaded description");
-            HtmlDocument page = new HtmlDocument();
-            page.LoadHtml(result);
-
-            Console.WriteLine("parsed description");
             try
-            {
+            {                
+                advert.DateUpdate = DateTime.Now;
+
+                advert.DateSite = header.DateSite;
+                advert.Url = header.Url;
+                advert.ImportSite = ImportSite.Avito;
+
+                string result;
+                result = this.DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct);
+                if (result.Length < 200)
+                    throw new BadResponseException();
+
+                Console.WriteLine("Downloaded description");
+                HtmlDocument page = new HtmlDocument();
+                page.LoadHtml(result);
+
                 ParseTitle(page, advert);
 
                 advert.Name = ParseSeller(page);

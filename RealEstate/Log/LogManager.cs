@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Net.Mail;
 using System.Net;
+using System.Threading;
 
 namespace RealEstate.Log
 {
@@ -18,14 +19,14 @@ namespace RealEstate.Log
     public class LogManager : IHandle<LoggingEvent>
     {
         private const string TraceListenerName = "filewriter";
-        private string _fileName = "log.txt";
+        private const string _fileName = "log.txt";
         private readonly IEventAggregator _events;
+        private TextWriterTraceListener text = null;
 
-        private void EnableLogToFile(string fileName)
+        private void EnableLogToFile()
         {
             Trace.Listeners.Remove(TraceListenerName);
-            _fileName = fileName;
-            TextWriterTraceListener text = new TextWriterTraceListener(_fileName, TraceListenerName);
+            text = new TextWriterTraceListener(_fileName, TraceListenerName);
             Trace.AutoFlush = true;
             Trace.Listeners.Add(text);
             Trace.WriteLine(String.Format("Start write log to file '{0}' at {1}", _fileName, DateTime.Now));
@@ -35,6 +36,8 @@ namespace RealEstate.Log
         {
             Trace.WriteLine("Disabling write to file");
             Trace.Listeners.Remove(TraceListenerName);
+            Trace.Close();
+            text.Dispose();
         }
 
         [ImportingConstructor]
@@ -47,7 +50,7 @@ namespace RealEstate.Log
         public void Handle(LoggingEvent message)
         {
             if (SettingsStore.LogToFile)
-                EnableLogToFile(_fileName);
+                EnableLogToFile();
             else
                 DisableLogToFile();
         }
@@ -110,6 +113,21 @@ namespace RealEstate.Log
 
                     }
                 });
+        }
+
+        public void ClearLogFile()
+        {
+            try
+            {
+                DisableLogToFile();
+                Thread.Sleep(500);
+                File.Delete(_fileName);
+                EnableLogToFile();
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.Message, "Error");
+            }
         }
     }
 

@@ -339,6 +339,10 @@ namespace RealEstate.ViewModels
                             Trace.WriteLine(iex.Message, "IO error");
                             _proxyManager.RejectProxy(proxy);
                         }
+                        catch (BadResponseException)
+                        {
+                            Trace.WriteLine("Bad response from proxy");
+                        }
                         catch (ParsingException pex)
                         {
                             Trace.WriteLine(pex.Message + ": " + pex.UnrecognizedData, "Unrecognized data");

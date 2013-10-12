@@ -14,4 +14,9 @@ namespace RealEstate.Parsing.Parsers
             UnrecognizedData = unrecognizedData;
         }
     }
+
+    public class BadResponseException : Exception
+    {
+
+    }
 }

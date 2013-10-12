@@ -41,6 +41,9 @@ namespace RealEstate.Parsing.Parsers
                         Trace.WriteLine("Downloading " + uri);
 
                         result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None);
+                        if (result.Length < 200)
+                            throw new BadResponseException();
+
                         break;
                     }
                     catch (Exception ex)
@@ -50,7 +53,7 @@ namespace RealEstate.Parsing.Parsers
                     }
                 }
 
-                if (result == null) throw new ParsingException("Can't load headers adverts","");
+                if (result == null) throw new ParsingException("Can't load headers adverts", "");
 
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
@@ -108,20 +111,24 @@ namespace RealEstate.Parsing.Parsers
         {
             Advert advert = new Advert();
 
-            advert.DateUpdate = DateTime.Now;
-
-            advert.DateSite = header.DateSite;
-            advert.Url = header.Url;
-            advert.ImportSite = ImportSite.Hands;
-
-            string result;
-            result = this.DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct);
-
-            HtmlDocument page = new HtmlDocument();
-            page.LoadHtml(result);
-
             try
             {
+
+                advert.DateUpdate = DateTime.Now;
+
+                advert.DateSite = header.DateSite;
+                advert.Url = header.Url;
+                advert.ImportSite = ImportSite.Hands;
+
+                string result;
+                result = this.DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct);
+                if (result.Length < 200)
+                    throw new BadResponseException();
+
+                HtmlDocument page = new HtmlDocument();
+                page.LoadHtml(result);
+
+
                 ParseCategory(advert);
                 ParseTitle(page, advert);
                 ParsePrice(page, advert);
@@ -264,7 +271,7 @@ namespace RealEstate.Parsing.Parsers
                 sellerPhone = r.Match(sellerPhone).Groups[0].Value;
                 if (sellerPhone == "") return;
 
-                var phoneImage = DownloadImage(sellerPhone.Trim(new char[]{'\''}), UserAgents.GetRandomUserAgent(), null, CancellationToken.None, Normalize(advert.Url));
+                var phoneImage = DownloadImage(sellerPhone.Trim(new char[] { '\'' }), UserAgents.GetRandomUserAgent(), null, CancellationToken.None, Normalize(advert.Url));
                 advert.PhoneNumber = OCRManager.RecognizeImage(phoneImage);
             }
         }
@@ -279,7 +286,7 @@ namespace RealEstate.Parsing.Parsers
                 var parts = advert.MessageFull.Split(new char[] { '\n' });
                 var phoneStr = parts.LastOrDefault(s => s.ToLower().Contains("тел.") || s.Contains("т."));
                 if (phoneStr != null)
-                    advert.PhoneNumber = phoneStr.ToLower().Trim(new string[]{"тел.: ", "т.", ":"}).Trim();
+                    advert.PhoneNumber = phoneStr.ToLower().Trim(new string[] { "тел.: ", "т.", ":" }).Trim();
             }
             else
                 throw new ParsingException("Can't get description", "");

@@ -1,4 +1,5 @@
 ﻿using RealEstate.Db;
+using RealEstate.Log;
 using RealEstate.Parsing;
 using System;
 using System.Collections.Generic;
@@ -13,14 +14,13 @@ namespace RealEstate.Commands
     [Export(typeof(CommandsProcessor))]
     public class CommandsProcessor
     {
-        private readonly RealEstateContext _context = null;
         private readonly Dictionary<string, Module> Modules = new Dictionary<string, Module>();
 
         [ImportingConstructor]
-        public CommandsProcessor(RealEstateContext context, AdvertsManager advertsManager)
+        public CommandsProcessor(AdvertsManager advertsManager, LogManager logManager)
         {
-            _context = context;
             Modules.Add("advert", new AdvertsModule(advertsManager));
+            Modules.Add("log", new LogModule(logManager));
         }
 
         private Module LastModule = null;
@@ -65,17 +65,21 @@ namespace RealEstate.Commands
     {
         public virtual bool Process(string[] args)
         {
-            if (args[0] == "cancel" || args[0] == "n" || args[0] == "no" || args[0] == "exit")
+            if (args[0] == "y" || args[0] == "yes")
+            {
+                if (SuredAction != null)
+                    return SuredAction.Invoke();
+            }
+            else if (args[0] == "cancel" || args[0] == "n" || args[0] == "no" || args[0] == "exit")
             {
                 WaitForResponse = false;
                 Write("Command canceled");
                 return true;
             }
-
-            if (args.Count() > 1 && (args[1] == "man" || args[1] == "help"))
+            else if (args.Count() > 1 && (args[1] == "man" || args[1] == "help"))
             {
                 Write(this.Help);
-                return false;
+                return true;
             }
 
             return false;
@@ -116,23 +120,18 @@ namespace RealEstate.Commands
 
             var count = args.Count();
 
-            if (count == 1 && (args[0] == "y" || args[0] == "yes"))
-            {
-                if (SuredAction != null)
-                    return SuredAction.Invoke();
-            }
-            else if (count >= 3 && args[1].Contains("rem") && args[2].Contains("all"))
+            if (count >= 3 && args[1].Contains("rem") && args[2].Contains("all"))
             {
                 BeSure(RemoveAll);
                 return false;
             }
             else
             {
-                Write("Proper command not found!");               
+                Write("Proper command not found!");
             }
 
             return false;
-            
+
         }
 
         private bool RemoveAll()
@@ -140,7 +139,7 @@ namespace RealEstate.Commands
             try
             {
                 _manager.DeleteAll();
-                Write("deleted");               
+                Write("deleted");
             }
             catch (Exception ex)
             {
@@ -162,4 +161,42 @@ namespace RealEstate.Commands
             get { return "advert \r\n\t\t [remove [-all]]"; }
         }
     }
+
+    public class LogModule : Module
+    {
+        private readonly LogManager _logManager = null;
+
+        public LogModule(LogManager logManager)
+        {
+            _logManager = logManager;
+        }
+
+        public override bool Process(string[] args)
+        {
+            if (base.Process(args))
+                return true;
+            var count = args.Count();
+
+            if (count == 2 && args[1] == "clear")
+            {
+                _logManager.ClearLogFile();
+            }
+            else
+            {
+                Write("Proper command not found!");
+            }
+
+            return false;
+        }
+        public override string Description
+        {
+            get { return "Manage log file"; }
+        }
+
+        public override string Help
+        {
+            get { return "log \r\n\t\t[clear]"; }
+        }
+    }
+
 }
