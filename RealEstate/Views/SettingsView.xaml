@@ -74,6 +74,8 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -88,8 +90,14 @@
                     <TextBlock Grid.Row="1" Margin="8">Url для проверки прокси:</TextBlock>
                     <TextBox Grid.Row="1" Grid.Column="1" Margin="8" Text="{Binding UrlToCheck, Mode=TwoWay, ValidatesOnDataErrors=True}" />
 
+                    <TextBlock Grid.Row="2" Margin="8">Записывать объявления в лог:</TextBlock>
+                    <CheckBox Grid.Column="1" Grid.Row="2" Name="LogSuccessAdverts" />
+
+                    <TextBlock  Grid.Row="3" Margin="8">Таймаут запроса:</TextBlock>
+                    <TextBox Grid.Row="3" Grid.Column="1" Margin="8" Text="{Binding DefaultTimeout, Mode=TwoWay, Converter={StaticResource intConverter}, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" />
+
                     <Button Grid.Column="1" Content="Сохранить" Name="SaveParsing" Margin="5"
-                            Grid.Row="3" HorizontalAlignment="Right"/>
+                            Grid.Row="5" HorizontalAlignment="Right"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Изображения" Style="{StaticResource TabItemPaging}">

@@ -316,15 +316,17 @@ namespace RealEstate.ViewModels
                         }
                         catch (System.Net.WebException wex)
                         {
-                            Trace.WriteLine(headers[i].Url);
                             Trace.WriteLine(wex.Message, "Web error");
                             _proxyManager.RejectProxy(proxy);
+
                             if ((HttpWebResponse)wex.Response != null)
                             {
                                 if (((HttpWebResponse)wex.Response).StatusCode == HttpStatusCode.Forbidden)
                                 {
+                                    _proxyManager.RejectProxyFull(proxy);
+
                                     blocked++;
-                                    if (blocked > maxattempt)
+                                    if (blocked > maxattempt - 2)
                                     {
                                         _events.Publish("Сервер заблокировал доступ. Операция приостановлена");
                                         return;
@@ -333,15 +335,15 @@ namespace RealEstate.ViewModels
                             }
 
                         }
-                        catch (System.IO.IOException iex)
+                        catch (System.IO.IOException)
                         {
-                            Trace.WriteLine(headers[i].Url);
-                            Trace.WriteLine(iex.Message, "IO error");
+                            Trace.WriteLine("IO error");
                             _proxyManager.RejectProxy(proxy);
                         }
                         catch (BadResponseException)
                         {
                             Trace.WriteLine("Bad response from proxy");
+                            _proxyManager.RejectProxy(proxy);
                         }
                         catch (ParsingException pex)
                         {

@@ -12,14 +12,13 @@ using RealEstate.Utils;
 using System.Net.Cache;
 using RealEstate.Proxies;
 using RealEstate.ViewModels;
+using RealEstate.Settings;
 
 namespace RealEstate.Parsing.Parsers
 {
     public abstract class ParserBase
     {
-        protected const int DEFAULTTIMEOUT = 3000;
-
-        public abstract List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager);
+        public abstract List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager, CancellationToken token);
 
         public abstract Advert Parse(AdvertHeader header, WebProxy proxy, CancellationToken ct, PauseToken pt);
 
@@ -31,7 +30,7 @@ namespace RealEstate.Parsing.Parsers
             {
                 HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
                 myHttpWebRequest.CookieContainer = cookie;
-                myHttpWebRequest.Timeout = DEFAULTTIMEOUT;
+                myHttpWebRequest.Timeout = SettingsStore.DefaultTimeout;
                 myHttpWebRequest.Proxy = new WebProxy("127.0.0.1:8888"); //for fiddler
                 myHttpWebRequest.GetResponse();
             }
@@ -51,7 +50,7 @@ namespace RealEstate.Parsing.Parsers
             cookie = new CookieContainer();
             myHttpWebRequest.CookieContainer = cookie;
             myHttpWebRequest.UserAgent = userAgent;
-            myHttpWebRequest.Timeout = DEFAULTTIMEOUT;
+            myHttpWebRequest.Timeout = SettingsStore.DefaultTimeout;
             myHttpWebRequest.KeepAlive = true;
             myHttpWebRequest.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.Refresh);
             myHttpWebRequest.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
@@ -82,7 +81,7 @@ namespace RealEstate.Parsing.Parsers
             myHttpWebRequest.CookieContainer = cookie;
             myHttpWebRequest.UserAgent = userAgent;
             myHttpWebRequest.Referer = referer;
-            myHttpWebRequest.Timeout = DEFAULTTIMEOUT;
+            myHttpWebRequest.Timeout = SettingsStore.DefaultTimeout;
             myHttpWebRequest.KeepAlive = true;
 
             if (cs.IsCancellationRequested)

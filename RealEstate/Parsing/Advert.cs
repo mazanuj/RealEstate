@@ -103,10 +103,10 @@ namespace RealEstate.Parsing
         {
             return String.Format(
                 "Rooms: '{0}', Area: '{1:#.0#}', Floor: '{2}', Floor total: '{3}', Seller: '{4}', "
-              + "City: '{5}' , Adress: '{6}', Metro: '{7}', AdverType: '{8}', UsedType: '{9}',Price: '{10}',"
+              + "City: '{5}' , Adress: '{6}', Date: '{7:m}', AdverType: '{8}', UsedType: '{9}',Price: '{10}',"
               + "Phone: '{11}', RealEstateType: '{12}'", 
                 this.Rooms, this.AreaFull, this.Floor, this.FloorTotal, this.Name, 
-                this.City, this.Address, this.MetroStation, this.AdvertType, this.Usedtype ,
+                this.City, this.Address, this.DateSite, this.AdvertType, this.Usedtype ,
                 this.Price, this.PhoneNumber, this.RealEstateType );
         }
 

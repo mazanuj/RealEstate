@@ -49,6 +49,7 @@ namespace RealEstate.ViewModels
             SaveImages = SettingsStore.SaveImages;
             MaxAttemptCount = SettingsStore.MaxParsingAttemptCount;
             UrlToCheck = SettingsStore.UrlForChecking;
+            LogSuccessAdverts = SettingsStore.LogSuccessAdverts;
 
             Task.Factory.StartNew(() =>
             {
@@ -205,6 +206,34 @@ namespace RealEstate.ViewModels
             }
         }
 
+        
+        private bool _LogSuccessAdverts = false;
+        public bool LogSuccessAdverts
+        {
+            get { return _LogSuccessAdverts; }
+            set
+            {
+                _LogSuccessAdverts = value;
+                NotifyOfPropertyChange(() => LogSuccessAdverts);
+            }
+        }
+
+        
+        private int _DefaultTimeout = 3000;
+        [Required]
+        [Range(1000, 180000)]
+        public int DefaultTimeout
+        {
+            get { return _DefaultTimeout; }
+            set
+            {
+                _DefaultTimeout = value;
+                NotifyOfPropertyChange(() => DefaultTimeout);
+            }
+        }
+                    
+                    
+
         public async void SaveParsing()
         {
             Status = "Сохраняю...";
@@ -213,10 +242,13 @@ namespace RealEstate.ViewModels
                 await Task.Factory.StartNew(() =>
                 {
                     bool changed = false;
-                    if (MaxAttemptCount != SettingsStore.MaxParsingAttemptCount || UrlToCheck != SettingsStore.UrlForChecking)
+                    if (MaxAttemptCount != SettingsStore.MaxParsingAttemptCount || UrlToCheck != SettingsStore.UrlForChecking
+                        || LogSuccessAdverts != SettingsStore.LogSuccessAdverts || DefaultTimeout != SettingsStore.DefaultTimeout)
                     {
                         SettingsStore.MaxParsingAttemptCount = MaxAttemptCount;
                         SettingsStore.UrlForChecking = UrlToCheck;
+                        SettingsStore.LogSuccessAdverts = LogSuccessAdverts;
+                        SettingsStore.DefaultTimeout = DefaultTimeout;
 
                         changed = true;
                     }

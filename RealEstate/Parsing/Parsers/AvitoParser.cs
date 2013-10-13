@@ -21,7 +21,7 @@ namespace RealEstate.Parsing.Parsers
     {
         const string ROOT_URl = "http://www.avito.ru/";
 
-        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager)
+        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager, CancellationToken token)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             int oldCount = -1;
@@ -37,6 +37,7 @@ namespace RealEstate.Parsing.Parsers
 
                 while (attempt++ < maxAttemptCount)
                 {
+                    token.ThrowIfCancellationRequested();
                     WebProxy proxy = param.useProxy ? proxyManager.GetNextProxy() : null;
 
                     try
@@ -44,8 +45,11 @@ namespace RealEstate.Parsing.Parsers
                         string uri = url.Url + (url.Url.Contains('?') ? '&' : '?') + "p=" + index;
                         Trace.WriteLine("Downloading " + uri);
                         result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None);
-                        if (result.Length < 200)
+                        if (result.Length < 200 || !result.Contains("квартир"))
+                        {
+                            proxyManager.RejectProxyFull(proxy);
                             throw new BadResponseException();
+                        }
                         break;
 
                     }
@@ -82,7 +86,10 @@ namespace RealEstate.Parsing.Parsers
                     }
                 }
                 else
+                {
+                    Trace.TraceInformation(result);
                     throw new ParsingException("can't find adverts", "");
+                }
             }
             while (headers.Count != oldCount && headers.Count < param.MaxCount);
 
@@ -508,7 +515,7 @@ namespace RealEstate.Parsing.Parsers
 
                 return advert;
             }
-            catch (Exception)
+            catch (ParsingException)
             {
                 Trace.WriteLine(advert.Url);
                 throw;

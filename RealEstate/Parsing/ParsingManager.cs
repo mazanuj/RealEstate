@@ -30,12 +30,12 @@ namespace RealEstate.Parsing
                     {
                         if (headers.Count > param.MaxCount) break;
 
-                        if (ct.IsCancellationRequested)
-                            throw new OperationCanceledException();
+                        ct.ThrowIfCancellationRequested();
+
                         if (pt.IsPauseRequested)
                             pt.WaitUntillPaused();
 
-                        headers.AddRange(parser.LoadHeaders(url, setting.GetDate(), param, maxAttemptCount, proxyManager));                        
+                        headers.AddRange(parser.LoadHeaders(url, setting.GetDate(), param, maxAttemptCount, proxyManager, ct));                        
                     }
                 }
             }

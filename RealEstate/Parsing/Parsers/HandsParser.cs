@@ -18,11 +18,12 @@ namespace RealEstate.Parsing.Parsers
     public class HandsParser : ParserBase
     {
 
-        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager)
+        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager, CancellationToken token)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             int oldCount = -1;
             int index = 0;
+            int maxIndex = 10;
 
             do
             {
@@ -34,15 +35,19 @@ namespace RealEstate.Parsing.Parsers
 
                 while (attempt++ < maxAttemptCount)
                 {
+                    token.ThrowIfCancellationRequested();
                     WebProxy proxy = param.useProxy ? proxyManager.GetNextProxy() : null;
                     try
                     {
-                        string uri = url.Url + "page" + index;
+                        string uri = url.Url + ((index != 1) ? ("page" + index) : "");
                         Trace.WriteLine("Downloading " + uri);
 
                         result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None);
-                        if (result.Length < 200)
+                        if (result.Length < 200 || !result.Contains("квартир"))
+                        {
+                            proxyManager.RejectProxyFull(proxy);
                             throw new BadResponseException();
+                        }
 
                         break;
                     }
@@ -61,7 +66,19 @@ namespace RealEstate.Parsing.Parsers
                 //if (page.DocumentNode.SelectSingleNode(@"//div[contains(@class,'adds_cont clear')]") != null)
                 //    break;
 
-                foreach (HtmlNode tier in page.DocumentNode.SelectNodes(@"//div[@data-position and @data-item-id]"))
+                var tiers = page.DocumentNode.SelectNodes(@"//div[@data-position and @data-item-id]");
+                if (tiers == null)
+                {
+                    Trace.TraceInformation(result);
+                    throw new ParsingException("Can't find headers adverts", "");
+                }
+
+                if (index == 1)
+                {
+                    maxIndex = GetMaxIndex(page);
+                }
+
+                foreach (HtmlNode tier in tiers)
                 {
                     var link = ParseLinkToFullDescription(tier);
                     var date = ParseDate(tier);
@@ -75,9 +92,23 @@ namespace RealEstate.Parsing.Parsers
                         });
                 }
             }
-            while (headers.Count != oldCount && headers.Count < param.MaxCount);
-
+            while (headers.Count != oldCount && headers.Count < param.MaxCount && index <= maxIndex);
             return headers;
+        }
+
+        private int GetMaxIndex(HtmlDocument page)
+        {
+            var maxNode = page.DocumentNode.SelectSingleNode(@"//ul[contains(@class,'same_adds_paging')]/li[last()]");
+            if (maxNode != null)
+            {
+                int max = 0;
+                if (Int32.TryParse(maxNode.InnerText, out max))
+                    return max;
+                else
+                    throw new ParsingException("can't parse max index!", maxNode.InnerText);
+            }
+            else
+                throw new ParsingException("can't find max index!", "");
         }
 
         private DateTime ParseDate(HtmlNode tier)
@@ -136,6 +167,8 @@ namespace RealEstate.Parsing.Parsers
                 advert.Name = ParseSeller(page);
                 ParseAddress(page, advert);
 
+                advert.MetroStation = ParseMetro(page);
+
                 ParseProperties(page, advert);
 
                 ParseDescription(page, advert);
@@ -145,11 +178,20 @@ namespace RealEstate.Parsing.Parsers
 
                 return advert;
             }
-            catch (Exception)
+            catch (ParsingException)
             {
                 Trace.WriteLine(advert.Url);
                 throw;
             }
+        }
+
+        private string ParseMetro(HtmlDocument page)
+        {
+            var metroNode = page.DocumentNode.SelectSingleNode(@"//span[contains(@class,'metro')]");
+            if (metroNode != null)
+                return metroNode.InnerText;
+
+            return null;
         }
 
         private void ParseCategory(Advert advert)

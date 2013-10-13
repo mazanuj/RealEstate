@@ -13,6 +13,8 @@ using RealEstate.Parsing;
 using System.Windows.Media.Imaging;
 using System.Threading;
 using RealEstate.Exporting;
+using RealEstate.Views;
+using Awesomium.Windows.Controls;
 
 namespace RealEstate.ViewModels
 {
@@ -27,6 +29,7 @@ namespace RealEstate.ViewModels
         private readonly ParserSettingManager _parserSettingManager;
         private readonly AdvertsManager _advertsManager;
         private readonly ExportingManager _exportingManager;
+        private WebControl _browser = null;
 
         public Advert AdvertOriginal { get; set; }
         public Advert Advert { get; set; }
@@ -60,6 +63,15 @@ namespace RealEstate.ViewModels
             LoadCategories();
 
             LoadAdvert();
+        }
+
+        protected override void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+            if (view is AdvertView)
+            {
+                _browser = (view as AdvertView).webControl;
+            }
         }
 
         private void CopyAdvert()
@@ -208,15 +220,33 @@ namespace RealEstate.ViewModels
 
         private string GetHtmlSource(Advert advert)
         {
-            string fullAdress = advert.City + "," + advert.Address;
-            string html = "<!DOCTYPE html><html><head><title>Карта</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
-"<script src=\"http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU\" type=\"text/javascript\"></script>" +
-"<script type=\"text/javascript\">ymaps.ready(init);function init () {var myGeocoder = ymaps.geocode('" + fullAdress + "');myGeocoder.then(" +
-"function (res) {var myMap = new ymaps.Map('map', {center: res.geoObjects.get(0).geometry.getCoordinates(),zoom: 12});myMap.controls" +
-".add('smallZoomControl').add('searchControl');   var nearest = res.geoObjects.get(0);var name = nearest.properties.get('name'); nearest.properties.set('iconContent', name);nearest.options.set('preset', 'twirl#redStretchyIcon');" +
-"myMap.geoObjects.add(res.geoObjects);}); }</script></head><body><div id=\"map\" style=\"width:360px; height:280px; margin: 0;\"></div></body></html>";
+            try
+            {
+                string fullAdress = advert.City + "," + advert.Address;
+                const string MACROS = "%FULLADDRESS%";
 
-            return html;
+                return File.ReadAllText("map template.html").Replace(MACROS, fullAdress);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString());
+                _events.Publish("Ошибка инициализации карты");
+                return String.Empty;
+            }
+        }
+
+        public void SaveAddress()
+        {
+            try
+            {
+                Advert.Address = _browser.ExecuteJavascriptWithResult("GetNewAddress()");
+                NotifyOfPropertyChange(() => Advert);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString(), "Error!");
+                _events.Publish("Ошибка сохранения адреса");
+            }
         }
 
         private void GenerateHtmlFile()

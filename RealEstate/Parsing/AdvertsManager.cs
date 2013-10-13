@@ -38,7 +38,8 @@ namespace RealEstate.Parsing
                     oldAdvert.MessageFull = advert.MessageFull;
                     oldAdvert.Price = advert.Price;
                     oldAdvert.PhoneNumber = advert.PhoneNumber;
-                    oldAdvert.DateSite = advert.DateSite;
+                    if(oldAdvert.DateSite < advert.DateSite)
+                        oldAdvert.DateSite = advert.DateSite;
                     oldAdvert.DateUpdate = DateTime.Now;
                     oldAdvert.Name = advert.Name;
                     oldAdvert.Title = advert.Title;
