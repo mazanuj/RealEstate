@@ -103,7 +103,7 @@ namespace RealEstate.ViewModels
                         if (!context.Database.CompatibleWithModel(false))
                         {
                             Trace.WriteLine("Database has non-actual state. Please, update DB structure", "Error");
-                            criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n База данных в неактуальном состоянии. \r\n Обратитесь к программисту" };
+                            criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \regCity\n База данных в неактуальном состоянии. \regCity\n Обратитесь к программисту" };
                         }
                     }
                     else
@@ -124,12 +124,12 @@ namespace RealEstate.ViewModels
             catch (System.Data.DataException sokex)
             {
                 Trace.WriteLine(sokex.ToString());
-                criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n Невозможно подключиться к базе данных. \r\n Проверьте строку подключения" };
+                criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \regCity\n Невозможно подключиться к базе данных. \regCity\n Проверьте строку подключения" };
             }
             catch (Exception ex)
             {
                 Trace.WriteLine(ex.ToString());
-                criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n Смотрите лог для подробностей." };
+                criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \regCity\n Смотрите лог для подробностей." };
             }
 
             try
@@ -141,7 +141,7 @@ namespace RealEstate.ViewModels
             catch (Exception ex)
             {
                 Trace.WriteLine(ex.ToString());
-                criticalError = new CriticalErrorEvent() { Message = "Ошибка инициализации файлов данных. \r\n Смотрите лог для подробностей." };
+                criticalError = new CriticalErrorEvent() { Message = "Ошибка инициализации файлов данных. \regCity\n Смотрите лог для подробностей." };
             }
 
             try
@@ -152,7 +152,7 @@ namespace RealEstate.ViewModels
             catch (Exception ex)
             {
                 Trace.WriteLine(ex.ToString());
-                criticalError = new CriticalErrorEvent() { Message = "Ошибка инициализации данных из базы. \r\n Смотрите лог для подробностей." };
+                criticalError = new CriticalErrorEvent() { Message = "Ошибка инициализации данных из базы. \regCity\n Смотрите лог для подробностей." };
             }
 
             if (criticalError == null)
@@ -195,7 +195,7 @@ namespace RealEstate.ViewModels
                 catch (Exception ex)
                 {
                     Trace.WriteLine(ex.ToString());
-                    MessageBox.Show("Ошибка сохранения настрок! \r\n См. лог для подробностей", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Ошибка сохранения настрок! \regCity\n См. лог для подробностей", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
 

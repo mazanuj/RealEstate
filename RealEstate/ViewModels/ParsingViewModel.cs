@@ -17,6 +17,7 @@ using System.Diagnostics;
 using RealEstate.Parsing.Parsers;
 using System.Net;
 using RealEstate.Settings;
+using RealEstate.SmartProcessing;
 
 namespace RealEstate.ViewModels
 {
@@ -32,11 +33,13 @@ namespace RealEstate.ViewModels
         private readonly ParsingManager _parsingManager;
         private readonly AdvertsManager _advertsManager;
         private readonly ImagesManager _imagesManager;
+        private readonly SmartProcessor _smartProcessor;
 
         [ImportingConstructor]
         public ParsingViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager,
             CityManager cityManager, ImportManager importManager, ParserSettingManager parserSettingManager,
-            ParsingManager parsingManager, AdvertsManager advertsManager, ImagesManager imagesManager)
+            ParsingManager parsingManager, AdvertsManager advertsManager, ImagesManager imagesManager,
+            SmartProcessor smartProcessor)
         {
             _events = events;
             _taskManager = taskManager;
@@ -47,6 +50,7 @@ namespace RealEstate.ViewModels
             _parsingManager = parsingManager;
             _advertsManager = advertsManager;
             _imagesManager = imagesManager;
+            _smartProcessor = smartProcessor;
             events.Subscribe(this);
             DisplayName = "Главная";
         }
@@ -368,6 +372,7 @@ namespace RealEstate.ViewModels
                     if (advert != null)
                     {
                         advert.ParsingNumber = _advertsManager.LastParsingNumber;
+                        _smartProcessor.Process(advert, param);
                         adverts.Add(advert);
                         Trace.WriteLine(advert.ToString(), "Advert");
                         _advertsManager.Save(advert, headers[i].Setting);

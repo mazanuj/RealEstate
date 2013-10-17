@@ -135,7 +135,8 @@ namespace RealEstate.ViewModels
                     }
                     _images.AddRange(imgs);
                     ImagesLoaded = true;
-                    SelectedWrapImage = _images.First();
+                    if(_images.Count > 0)
+                        SelectedWrapImage = _images.First();
                 }
                 catch (Exception ex)
                 {
@@ -222,7 +223,7 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                string fullAdress = advert.City + "," + advert.Address;
+                string fullAdress = (String.IsNullOrEmpty(advert.Distinct) ? advert.City : advert.Distinct) + "," + advert.Address;
                 const string MACROS = "%FULLADDRESS%";
 
                 return File.ReadAllText("map template.html").Replace(MACROS, fullAdress);

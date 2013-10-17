@@ -91,7 +91,7 @@ namespace RealEstate.ViewModels
             {
                 _ConsoleCommand = value;
 
-                if (_ConsoleCommand.EndsWith("\r\n"))
+                if (_ConsoleCommand.EndsWith("\regCity\n"))
                 {
                     CommandEntered(_ConsoleCommand.Trim());
                     ConsoleCommand = String.Empty;

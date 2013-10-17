@@ -323,7 +323,7 @@ namespace RealEstate.Parsing.Parsers
             var textNode = page.DocumentNode.SelectSingleNode(".//p[contains(@class,'text')]");
             if (textNode != null)
             {
-                advert.MessageFull = textNode.InnerText;
+                advert.MessageFull = Normalize(textNode.InnerText);
 
                 var parts = advert.MessageFull.Split(new char[] { '\n' });
                 var phoneStr = parts.LastOrDefault(s => s.ToLower().Contains("тел.") || s.Contains("т."));
@@ -354,7 +354,7 @@ namespace RealEstate.Parsing.Parsers
             if (phoneNode != null)
             {
                 var sellerPhone = phoneNode.InnerText;
-                var name = sellerPhone.Trim(new string[] { "X", "-", "Показать телефон", "(", ")", "+", " — ", "," }).Trim();
+                var name = sellerPhone.Trim(new string[] { "X", "-", "Показать телефон", "(", ")", "+", " — ", ",", ";" }).Trim();
                 return name;
 
             }
