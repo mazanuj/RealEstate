@@ -151,6 +151,7 @@
     <Compile Include="Settings\SettingsArtibutes.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="SmartProcessing\SmartProcessor.cs" />
+    <Compile Include="SmartProcessing\YandexMapApi.cs" />
     <Compile Include="Style\VS2012WindowStyle.cs" />
     <Compile Include="TaskManagers\TaskManager.cs" />
     <Compile Include="TaskManagers\RealEstateTask.cs" />
