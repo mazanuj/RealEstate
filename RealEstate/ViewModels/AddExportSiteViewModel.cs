@@ -8,6 +8,7 @@ using Caliburn.Micro;
 using Caliburn.Micro.Validation;
 using RealEstate.Exporting;
 using RealEstate.Validation;
+using RealEstate.City;
 
 namespace RealEstate.ViewModels
 {
@@ -17,12 +18,14 @@ namespace RealEstate.ViewModels
     {
         private readonly IEventAggregator _events;
         private readonly ExportSiteManager _exportSiteManager;
+        private readonly CityManager _cityManager;
 
         [ImportingConstructor]
-        public AddExportSiteViewModel(IEventAggregator events, ExportSiteManager exportSiteManager)
+        public AddExportSiteViewModel(IEventAggregator events, ExportSiteManager exportSiteManager, CityManager citymanager)
         {
             _events = events;
             _exportSiteManager = exportSiteManager;
+            _cityManager = citymanager;
 
             //events.Subscribe(this);
         }
@@ -60,6 +63,24 @@ namespace RealEstate.ViewModels
             }
         }
 
+        public BindableCollection<CityWrap> Cities
+        {
+            get
+            {
+                return _cityManager.Cities;
+            }
+        }
+
+        private CityWrap _selectedCity = null;
+        public CityWrap SelectedCity
+        {
+            get { return _selectedCity; }
+            set
+            {
+                _selectedCity = value;
+                NotifyOfPropertyChange(() => SelectedCity);
+            }
+        }
         public void Create()
         {
             if (!HasErrors)
@@ -67,6 +88,7 @@ namespace RealEstate.ViewModels
                 var site = new ExportSite();
                 site.DisplayName = TitleCity;
                 site.Url = Url;
+                site.City = SelectedCity.City;
 
                 _exportSiteManager.Add(site);
 

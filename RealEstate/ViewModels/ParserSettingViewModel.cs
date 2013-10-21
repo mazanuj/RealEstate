@@ -49,6 +49,8 @@ namespace RealEstate.ViewModels
 
             SelectedCity = _cityManager.Cities.FirstOrDefault();
             Usedtype = Parsing.Usedtype.All;
+
+            NotifyOfPropertyChange(() => ExportSites);
         }
 
         public void Handle(ToolsOpenEvent message)
@@ -143,9 +145,12 @@ namespace RealEstate.ViewModels
             {
                 _selectedCity = value;
                 NotifyOfPropertyChange(() => SelectedCity);
-                FilterValuesChanged();
+                NotifyOfPropertyChange(() => ExportSites);
+                SelectedExportSite = ExportSites.FirstOrDefault();
             }
         }
+
+
 
 
         private void FilterValuesChanged()
@@ -156,7 +161,6 @@ namespace RealEstate.ViewModels
                 {
                     var set = new ParserSetting();
                     set.AdvertType = AdvertType;
-                    set.City = SelectedCity.City;
                     set.ExportSite = SelectedExportSite;
                     set.ImportSite = ImportSite;
                     set.ParsePeriod = ParsePeriod;
@@ -183,11 +187,11 @@ namespace RealEstate.ViewModels
 
         public ParserSetting SelectedParserSetting { get; set; }
 
-        public BindableCollection<ExportSite> ExportSites
+        public IEnumerable<ExportSite> ExportSites
         {
             get
             {
-                return _exportSiteManager.ExportSites;
+                return _exportSiteManager.ExportSites.Where(e => String.IsNullOrEmpty(SelectedCity.City) ? true : e.City == SelectedCity.City);
             }
         }
 
@@ -257,6 +261,8 @@ namespace RealEstate.ViewModels
                 style.Add("style", "VS2012ModalWindowStyle");
 
                 _windowManager.ShowDialog(IoC.Get<AddExportSiteViewModel>(), settings: style);
+
+                NotifyOfPropertyChange(() => ExportSites);
             }
             catch (Exception ex)
             {
@@ -276,6 +282,8 @@ namespace RealEstate.ViewModels
                         _exportSiteManager.Delete(SelectedExportSite);
 
                         _events.Publish("Настройки сайта удалены");
+
+                        NotifyOfPropertyChange(() => ExportSites);
                     }
                     catch (Exception ex)
                     {

@@ -14,8 +14,6 @@ namespace RealEstate.Parsing
     {
         public int Id { get; set; }
 
-        public string City { get; set; }
-
         [Column("RealEstateType", TypeName = "int")]
         public int RealEstateTypeValue { get; set; }
         [NotMapped]

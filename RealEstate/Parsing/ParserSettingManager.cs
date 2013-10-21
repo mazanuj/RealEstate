@@ -26,7 +26,6 @@ namespace RealEstate.Parsing
             var set = from s in context.ParserSettings
                       where
                         s.AdvertTypeValue == (int)setting.AdvertType &&
-                        s.City == setting.City &&
                         s.ExportSite.Id == setting.ExportSite.Id &&
                         s.ImportSiteValue == (int)setting.ImportSite &&
                         s.ParsePeriodValue == (int)setting.ParsePeriod &&
@@ -49,11 +48,11 @@ namespace RealEstate.Parsing
             var set = from s in context.ParserSettings
                       where
                         s.AdvertTypeValue == (int)advertType &&
-                        s.City == city &&
                         s.ImportSiteValue == (int)site &&
                         s.ParsePeriodValue == (int)period &&
                         s.RealEstateTypeValue == (int)type &&
-                        s.UsedtypeValue == (int)subtype
+                        s.UsedtypeValue == (int)subtype &&
+                        String.IsNullOrEmpty(city) ? true : s.ExportSite.City == city 
                       select s;
 
             return set.ToList();

@@ -11,6 +11,7 @@ namespace RealEstate.Exporting
         public int Id { get; set; }
         public string DisplayName { get; set; }
         public string Url {get;set;}
+        public string City { get; set; }
 
         public virtual ICollection<ParserSetting> ParseSettings { get; set; }
         public virtual ICollection<Advert> Adverts { get; set; }

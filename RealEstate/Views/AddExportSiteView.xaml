@@ -7,6 +7,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -20,7 +21,10 @@
             <TextBlock Grid.Column="0" Grid.Row="1" Margin="3">URL:</TextBlock>
             <TextBox Grid.Column="1" Grid.Row="1" Margin="3" Name="Url" />
 
-            <Button Name="Create" Grid.Row="2" Grid.ColumnSpan="2" Content="Создать" Margin="5" 
+            <TextBlock Grid.Column="0" Grid.Row="2" Margin="3">Город:</TextBlock>
+            <ComboBox Grid.Column="1" Grid.Row="2" Margin="3" Name="Cities" DisplayMemberPath="City"/>
+
+            <Button Name="Create" Grid.Row="3" Grid.ColumnSpan="2" Content="Создать" Margin="5" 
                     VerticalAlignment="Bottom" HorizontalAlignment="Right" />
         </Grid>
     </Grid>
