@@ -13,7 +13,14 @@ namespace RealEstate.SmartProcessing
     [Export(typeof(SmartProcessor))]
     public class SmartProcessor
     {
-        public void Process(Advert advert, TaskParsingParams param)
+        private readonly RulesManager _rulesManager;
+
+        [ImportingConstructor]
+        public SmartProcessor(RulesManager rulesManager)
+        {
+            _rulesManager = rulesManager;
+        }
+        public bool Process(Advert advert, TaskParsingParams param)
         {
             if (param.site == ImportSite.Hands)
             {
@@ -24,6 +31,20 @@ namespace RealEstate.SmartProcessing
 
                 }
             }
+
+            foreach (var rule in _rulesManager.Rules)
+            {
+                if(rule.Conditions.TrueForAll(c => c.IsSatisfy(advert)))
+                {
+                    switch (rule.Verb)
+                    {
+                        case Verb.Skip:
+                            return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         private void ParseAddress_Hands(Advert advert)
@@ -32,11 +53,11 @@ namespace RealEstate.SmartProcessing
             Regex regRestrict = new Regex(@"([\w,\ , \-]+\ р[\w,\-]+н\.)");
 
             bool containsObl = true;
-            var m = regCity.Match(advert.MessageFull);
+            var message = advert.MessageFull.ToLower();
+            var m = regCity.Match(message);
             if (m.Success)
             {
                 var findedCity = m.Groups[0].Value;
-                Trace.TraceInformation("Found city in advert message: " + findedCity);
                 if (!advert.City.Contains(findedCity))
                 {
 
@@ -53,7 +74,6 @@ namespace RealEstate.SmartProcessing
             if (m.Success)
             {
                 var foundedDestinct = m.Groups[0].Value;
-                Trace.TraceInformation("Found distinct in advert message: " + foundedDestinct);
 
                 if (containsObl)
                 {

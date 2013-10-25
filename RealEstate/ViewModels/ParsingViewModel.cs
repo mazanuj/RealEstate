@@ -290,7 +290,7 @@ namespace RealEstate.ViewModels
                 ParserBase parser = ParsersFactory.GetParser(param.site);
 
                 int attempt = 0;
-                
+
                 for (int i = 0; i < headers.Count; i++)
                 {
                     Advert advert = null;
@@ -372,13 +372,17 @@ namespace RealEstate.ViewModels
                     if (advert != null)
                     {
                         advert.ParsingNumber = _advertsManager.LastParsingNumber;
-                        _smartProcessor.Process(advert, param);
-                        adverts.Add(advert);
-                        Trace.WriteLine(advert.ToString(), "Advert");
-                        _advertsManager.Save(advert, headers[i].Setting);
+                        if (_smartProcessor.Process(advert, param))
+                        {
+                            adverts.Add(advert);
+                            Trace.WriteLine(advert.ToString(), "Advert");
+                            _advertsManager.Save(advert, headers[i].Setting);
 
-                        if(SettingsStore.SaveImages)
-                            _imagesManager.DownloadImages(advert.Images, ct);
+                            if (SettingsStore.SaveImages)
+                                _imagesManager.DownloadImages(advert.Images, ct);
+                        }
+                        else
+                            Trace.TraceInformation("Advert was skipped due rules condition");
                     }
                     else
                     {
@@ -437,7 +441,7 @@ namespace RealEstate.ViewModels
             Task.Factory.StartNew(() =>
             {
                 Thread.Sleep(3000);
-                task.Stop();                
+                task.Stop();
                 Tasks.Remove(task);
             });
         }

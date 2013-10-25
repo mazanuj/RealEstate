@@ -1,0 +1,142 @@
+﻿using RealEstate.Parsing;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Xml.Linq;
+
+namespace RealEstate.SmartProcessing
+{
+    [Export(typeof(RulesManager))]
+    public class RulesManager
+    {
+        const string FILENAME = "SmartProcessing//ProcessingRules.xml";
+
+        public List<Rule> Rules { get; set; }
+
+        public void Load()
+        {
+            ConditionFactory factory = new ConditionFactory();
+
+            XDocument doc = XDocument.Load(FILENAME);
+            foreach (var source in doc.Root.Elements("source"))
+            {
+                ImportSite site = (ImportSite)Enum.Parse(typeof(ImportSite), source.Attribute("ImportSite").Value);
+
+                foreach (var rule in source.Elements("rule"))
+                {
+                    var verb = Verb.Skip;
+                    if (rule.Element("verb") != null)
+                    {
+
+                    }
+                    else if (rule.Attribute("verb") != null)
+                    {
+                        verb = (Verb)Enum.Parse(typeof(Verb), rule.Attribute("verb").Value);
+                    }
+                    else
+                    {
+                        Trace.TraceError("Invalid rule. Missing verb: " + rule.ToString());
+                        continue;
+                    }
+
+                    var r = new Rule();
+                    r.Verb = verb;
+
+                    foreach (var condition in rule.Element("conditions").Elements())
+                    {
+                        Condition cond = factory.GetCondition(condition.Name.LocalName);
+                        cond.Parse(condition);
+                        r.Conditions.Add(cond);
+                    }
+
+                    Rules.Add(r);
+                }
+            }
+        }
+
+        public RulesManager()
+        {
+            Rules = new List<Rule>();
+        }
+    }
+
+    public class Rule
+    {
+        public Verb Verb { get; set; }
+        public List<Condition> Conditions { get; set; }
+        public Rule()
+        {
+            Conditions = new List<Condition>();
+        }
+
+    }
+
+    public enum Verb
+    {
+        Skip
+    }
+
+    public class ConditionFactory
+    {
+        public Condition GetCondition(string name)
+        {
+            switch (name)
+            {
+                case "equals": return new Equals();
+                case "contains": return new Contains();
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+    }
+
+    public abstract class Condition
+    {
+        protected string Property { get; set; }
+        protected string Value { get; set; }
+        public abstract bool IsSatisfy(Advert advert);
+        public void Parse(XElement element)
+        {
+            if (element.Attribute("property") != null)
+                Property = element.Attribute("property").Value;
+            if (element.Attribute("value") != null)
+                Value = element.Attribute("value").Value;
+        }
+    }
+
+    public class Equals : Condition
+    {
+        public override bool IsSatisfy(Advert advert)
+        {
+            var prop = typeof(Advert).GetProperty(Property);
+            if (prop != null)
+            {
+                var value = prop.GetValue(advert, null);
+                return value.ToString() == Value;
+            }
+
+            return false;
+        }
+    }
+
+    public class Contains : Condition
+    {
+        public override bool IsSatisfy(Advert advert)
+        {
+            var prop = typeof(Advert).GetProperty(Property);
+            if (prop != null)
+            {
+                var value = prop.GetValue(advert, null);
+                if (value is string)
+                {
+                    return (value as string).Contains(Value);
+                }
+            }
+
+            return false;
+        }
+    }
+}

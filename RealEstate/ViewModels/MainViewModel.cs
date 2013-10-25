@@ -19,6 +19,7 @@ using RealEstate.Proxies;
 using RealEstate.City;
 using RealEstate.Exporting;
 using RealEstate.Parsing;
+using RealEstate.SmartProcessing;
 
 namespace RealEstate.ViewModels
 {
@@ -28,13 +29,8 @@ namespace RealEstate.ViewModels
         private readonly IWindowManager _windowManager;
         private readonly IEventAggregator _events;
         private readonly Log.LogManager _logManager;
-        private readonly ProxyManager _proxyManager;
-        private readonly CityManager _cityManager;
-        private readonly ExportSiteManager _exportSiteManager;
-        private readonly SettingsManager _settingsManager;
         private readonly ImportManager _importManager;
         private readonly System.Timers.Timer _statusTimer;
-        private readonly ExportingManager _exportingManager;
         public ConsoleViewModel ConsoleViewModel;
         public SettingsViewModel SettingsViewModel;
         public ParsingViewModel ParsingViewModel;
@@ -45,7 +41,7 @@ namespace RealEstate.ViewModels
         public MainViewModel(IWindowManager windowManager, IEventAggregator events,
             ProxyManager proxyManager, CityManager cityManager, ExportSiteManager exportSiteManager,
             ConsoleViewModel consoleViewModel, Log.LogManager logManager, SettingsManager settingsManager,
-            ImportManager importManager,
+            ImportManager importManager, RulesManager rulesManager,
             SettingsViewModel settingsViewModel, ProxiesViewModel proxiesViewModel,
             ParsingViewModel parsingViewModel, ParserSettingViewModel parserSettingViewModel,
             AdvertsViewModel advertsViewModel, ExportSettingsViewModel exportSettingsViewModel,
@@ -53,14 +49,10 @@ namespace RealEstate.ViewModels
         {
             _windowManager = windowManager;           
             _logManager = logManager;
-            _proxyManager = proxyManager;
-            _cityManager = cityManager;
-            _exportSiteManager = exportSiteManager;
             _importManager = importManager;
             _events = events;
-            _exportingManager = exportingManager;
+
             events.Subscribe(this);
-            _settingsManager = settingsManager;
             SettingsViewModel = settingsViewModel;
             ParsingViewModel = parsingViewModel;
             ParserSettingViewModel = parserSettingViewModel;
@@ -86,7 +78,7 @@ namespace RealEstate.ViewModels
             Trace.WriteLine("Start initialization...");
 
             Trace.WriteLine("Loading settings from file...");
-            _settingsManager.Initialize();
+            settingsManager.Initialize();
             Trace.WriteLine("Loading settings from file done");
 
             _events.Publish(new LoggingEvent());
@@ -134,9 +126,10 @@ namespace RealEstate.ViewModels
 
             try
             {
-                InitProxy();
-                InitCity();
-                InitImportSites();
+                InitProxy(proxyManager);
+                InitCity(cityManager);
+                InitImportSites(importManager);
+                InitRules(rulesManager);
             }
             catch (Exception ex)
             {
@@ -146,8 +139,8 @@ namespace RealEstate.ViewModels
 
             try
             {
-                InitExportSites();
-                InitExportQueue();
+                InitExportSites(exportSiteManager);
+                InitExportQueue(exportingManager);
             }
             catch (Exception ex)
             {
@@ -173,9 +166,16 @@ namespace RealEstate.ViewModels
                 });
         }
 
-        private void InitExportQueue()
+        private static void InitRules(RulesManager rulesManager)
         {
-            _exportingManager.ResoreQueue();
+            Trace.WriteLine("Init rules...");
+            rulesManager.Load();
+            Trace.WriteLine("Rules parse ok");
+        }
+
+        private void InitExportQueue(ExportingManager exportingManager)
+        {
+            exportingManager.ResoreQueue();
         }
 
         protected override void OnInitialize()
@@ -202,32 +202,32 @@ namespace RealEstate.ViewModels
             base.OnDeactivate(close);
         }
 
-        private void InitProxy()
+        private void InitProxy(ProxyManager proxyManager)
         {
             Trace.WriteLine("Loading proxies...");
 
-            _proxyManager.Restore();
+            proxyManager.Restore();
         }
 
-        private void InitCity()
+        private void InitCity(CityManager cityManager)
         {
             Trace.WriteLine("Loading cities...");
 
-            _cityManager.Restore();
+            cityManager.Restore();
         }
 
-        private void InitImportSites()
+        private void InitImportSites(ImportManager importManager)
         {
             Trace.WriteLine("Loading import sites...");
 
-            _importManager.Restore();
+            importManager.Restore();
         }
 
-        private void InitExportSites()
+        private void InitExportSites(ExportSiteManager exportSiteManager)
         {
             Trace.WriteLine("Loading sites for export...");
 
-            _exportSiteManager.Restore();
+            exportSiteManager.Restore();
         }
 
         public void OpenSettings()

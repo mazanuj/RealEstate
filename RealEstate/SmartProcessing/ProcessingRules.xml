@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<rules>
+  <source ImportSite="Hands">
+    <rule verb="Skip">
+      <conditions>
+        <equals property="City" value="Ярославль" />
+        <contains property="MessageFull" value="Ростов-Ярославский" />
+      </conditions>
+    </rule>
+  </source>
+</rules>

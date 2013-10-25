@@ -12,8 +12,7 @@ namespace RealEstate.SmartProcessing
         {
             string urlXml = "http://geocode-maps.yandex.ru/1.x/?geocode=" + Address + "&results=1";
             WebClient client = new WebClient();
-            string result = client.DownloadString(urlXml);
-            return result;
+            return client.DownloadString(urlXml);
         }
     }
 }
