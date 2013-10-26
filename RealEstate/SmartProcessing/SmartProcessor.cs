@@ -34,7 +34,8 @@ namespace RealEstate.SmartProcessing
 
             foreach (var rule in _rulesManager.Rules)
             {
-                if(rule.Conditions.TrueForAll(c => c.IsSatisfy(advert)))
+                if(rule.Conditions.TrueForAll(c => c.IsSatisfy(advert)) 
+                    && (rule.Site == ImportSite.All || advert.ImportSite == rule.Site))
                 {
                     switch (rule.Verb)
                     {
@@ -47,44 +48,34 @@ namespace RealEstate.SmartProcessing
             return true;
         }
 
-        private void ParseAddress_Hands(Advert advert)
+        private bool ParseAddress_Hands(Advert advert)
         {
             Regex regCity = new Regex(@"кв[\w,\.,\,, \-]*\ в ([\w,\ ,\.]+),");
             Regex regRestrict = new Regex(@"([\w,\ , \-]+\ р[\w,\-]+н\.)");
 
-            bool containsObl = true;
             var message = advert.MessageFull.ToLower();
             var m = regCity.Match(message);
             if (m.Success)
             {
-                var findedCity = m.Groups[0].Value;
-                if (!advert.City.Contains(findedCity))
-                {
-
-                    var inRestrict = new string[] { "пос. ", "д. ", "с. " };
-                    bool isRestrict = false;
-                    if (inRestrict.Any(findedCity.Contains))
-                        isRestrict = true;
-
-                    containsObl = advert.City.Contains("обл");
-                }
+                return false;
+                //var findedCity = m.Groups[0].Value;
+                //if (!advert.City.Contains(findedCity))
+                //{
+                //    var inRestrict = new string[] { "пос. ", "д. ", "с. " };
+                //    bool isRestrict = false;
+                //    if (inRestrict.Any(findedCity.Contains))
+                //        isRestrict = true;
+                //}
             }
 
             m = regRestrict.Match(advert.MessageFull);
             if (m.Success)
             {
                 var foundedDestinct = m.Groups[0].Value;
-
-                if (containsObl)
-                {
-                    advert.Distinct = foundedDestinct.Trim();
-                }                
+             
             }
 
-
-
-
-
+            return true;
 
         }
     }

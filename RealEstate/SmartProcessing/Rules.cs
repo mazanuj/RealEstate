@@ -21,12 +21,12 @@ namespace RealEstate.SmartProcessing
             ConditionFactory factory = new ConditionFactory();
 
             XDocument doc = XDocument.Load(FILENAME);
-            foreach (var source in doc.Root.Elements("source"))
+            foreach (var rule in doc.Root.Elements("rule"))
             {
-                ImportSite site = (ImportSite)Enum.Parse(typeof(ImportSite), source.Attribute("ImportSite").Value);
-
-                foreach (var rule in source.Elements("rule"))
+                try
                 {
+                    ImportSite site = (ImportSite)Enum.Parse(typeof(ImportSite), rule.Attribute("ImportSite").Value);
+
                     var verb = Verb.Skip;
                     if (rule.Element("verb") != null)
                     {
@@ -44,6 +44,7 @@ namespace RealEstate.SmartProcessing
 
                     var r = new Rule();
                     r.Verb = verb;
+                    r.Site = site;
 
                     foreach (var condition in rule.Element("conditions").Elements())
                     {
@@ -53,6 +54,10 @@ namespace RealEstate.SmartProcessing
                     }
 
                     Rules.Add(r);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Invalid rule. {1}: {0}", rule.ToString(), ex.Message);
                 }
             }
         }
@@ -67,6 +72,7 @@ namespace RealEstate.SmartProcessing
     {
         public Verb Verb { get; set; }
         public List<Condition> Conditions { get; set; }
+        public ImportSite Site { get; set; }
         public Rule()
         {
             Conditions = new List<Condition>();
@@ -132,7 +138,7 @@ namespace RealEstate.SmartProcessing
                 var value = prop.GetValue(advert, null);
                 if (value is string)
                 {
-                    return (value as string).Contains(Value);
+                    return (value as string).ToLower().Contains(Value.ToLower());
                 }
             }
 
