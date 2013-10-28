@@ -244,7 +244,7 @@ namespace RealEstate.ViewModels
             catch (Exception ex)
             {
                 Trace.WriteLine(ex.ToString());
-                MessageBox.Show("Ошибка сохранения!\regCity\nСмотри лог для подробностей", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Ошибка сохранения!\r\nСмотри лог для подробностей", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

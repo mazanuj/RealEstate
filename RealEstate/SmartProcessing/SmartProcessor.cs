@@ -26,9 +26,10 @@ namespace RealEstate.SmartProcessing
             {
                 //http://yaroslavl.irr.ru/real-estate/apartments-sale/secondary/search/rooms=1/currency=RUR/sourcefrom=6,1,4,5/date_create=today/
 
-                if (advert.Url.Contains("sourcefrom=6,1,4,5")) //from print
+                if (String.IsNullOrEmpty(advert.Address)) //from print
                 {
-
+                    if (!TryParseAddress_Hands(advert)) 
+                        return false;
                 }
             }
 
@@ -37,6 +38,7 @@ namespace RealEstate.SmartProcessing
                 if(rule.Conditions.TrueForAll(c => c.IsSatisfy(advert)) 
                     && (rule.Site == ImportSite.All || advert.ImportSite == rule.Site))
                 {
+                    Trace.TraceInformation("Rule match: " + rule.ToString());
                     switch (rule.Verb)
                     {
                         case Verb.Skip:
@@ -48,31 +50,31 @@ namespace RealEstate.SmartProcessing
             return true;
         }
 
-        private bool ParseAddress_Hands(Advert advert)
+        private bool TryParseAddress_Hands(Advert advert)
         {
             Regex regCity = new Regex(@"кв[\w,\.,\,, \-]*\ в ([\w,\ ,\.]+),");
-            Regex regRestrict = new Regex(@"([\w,\ , \-]+\ р[\w,\-]+н\.)");
+            Regex regAddress = new Regex(@"на\ (([\w-]+\.?\ *(\w+\.\ )*[\w-]+)(,?\ д\.?\ ?(\d+\w*))?)");
 
             var message = advert.MessageFull.ToLower();
             var m = regCity.Match(message);
             if (m.Success)
             {
-                return false;
-                //var findedCity = m.Groups[0].Value;
-                //if (!advert.City.Contains(findedCity))
-                //{
-                //    var inRestrict = new string[] { "пос. ", "д. ", "с. " };
-                //    bool isRestrict = false;
-                //    if (inRestrict.Any(findedCity.Contains))
-                //        isRestrict = true;
-                //}
+                var findedCity = m.Groups[0].Value;
+                if (!advert.City.Contains(findedCity))
+                {
+                    var inRegion = new string[] { "пос. ", "д. ", "с. " };
+                    if (inRegion.Any(findedCity.Contains))
+                    {
+                        Trace.TraceInformation("Skipped as regional");
+                        return false;
+                    }
+                }
             }
 
-            m = regRestrict.Match(advert.MessageFull);
-            if (m.Success)
+            m = regAddress.Match(advert.MessageFull);
+            if(m.Success && m.Groups.Count > 5)
             {
-                var foundedDestinct = m.Groups[0].Value;
-             
+                advert.Address = m.Groups[1].Value;
             }
 
             return true;

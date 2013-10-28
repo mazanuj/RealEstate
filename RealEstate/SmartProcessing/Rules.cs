@@ -78,6 +78,11 @@ namespace RealEstate.SmartProcessing
             Conditions = new List<Condition>();
         }
 
+        public override string ToString()
+        {
+            return String.Format("Site: {0}, Verb: {1}, Conditions [{2}]", Site.ToString(), Verb.ToString(), String.Join(", ",Conditions.Select(c => c.ToString()).ToArray()));
+        }
+
     }
 
     public enum Verb
@@ -126,6 +131,11 @@ namespace RealEstate.SmartProcessing
 
             return false;
         }
+
+        public override string ToString()
+        {
+            return String.Format("{0} = {1}", Property, Value);
+        }
     }
 
     public class Contains : Condition
@@ -143,6 +153,11 @@ namespace RealEstate.SmartProcessing
             }
 
             return false;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0}.Contains('{1}')", Property, Value);
         }
     }
 }

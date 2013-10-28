@@ -32,6 +32,7 @@ namespace RealEstate.Parsing.Parsers
 
                 string result = null;
                 int attempt = 0;
+                string uri = "";
 
                 while (attempt++ < maxAttemptCount)
                 {
@@ -39,10 +40,11 @@ namespace RealEstate.Parsing.Parsers
                     WebProxy proxy = param.useProxy ? proxyManager.GetNextProxy() : null;
                     try
                     {
-                        string uri = url.Url + ((index != 1) ? ("page" + index) : "");
+                        uri = url.Url + ((index != 1) ? ("page" + index) : "");
+                        var referer = url.Url + ((index != 1) ? ("page" + (index - 1)) : "");
                         Trace.WriteLine("Downloading " + uri);
 
-                        result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None);
+                        result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, referer, true);
                         if (result.Length < 200 || !result.Contains("квартир"))
                         {
                             proxyManager.RejectProxyFull(proxy);
@@ -78,19 +80,27 @@ namespace RealEstate.Parsing.Parsers
                     maxIndex = GetMaxIndex(page);
                 }
 
+                Trace.TraceInformation("--------URLs-------------");
+                Trace.TraceInformation("!! " + uri);                
+
                 foreach (HtmlNode tier in tiers)
                 {
                     var link = ParseLinkToFullDescription(tier);
                     var date = ParseDate(tier);
 
                     if (date > toDate)
+                    {
+                        Trace.TraceInformation(link);
                         headers.Add(new AdvertHeader()
                         {
                             DateSite = date,
                             Url = link,
                             Setting = url.ParserSetting
                         });
+                    }
                 }
+
+                Trace.TraceInformation("----------------------");
             }
             while (headers.Count != oldCount && headers.Count < param.MaxCount && index <= maxIndex);
             return headers;

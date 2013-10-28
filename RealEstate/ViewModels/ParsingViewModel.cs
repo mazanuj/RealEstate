@@ -382,7 +382,7 @@ namespace RealEstate.ViewModels
                                 _imagesManager.DownloadImages(advert.Images, ct);
                         }
                         else
-                            Trace.TraceInformation("Advert was skipped due rules condition");
+                            Trace.TraceInformation("Advert was skipped due smart processor rule");
                     }
                     else
                     {

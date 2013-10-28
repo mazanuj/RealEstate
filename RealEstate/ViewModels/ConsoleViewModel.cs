@@ -19,6 +19,8 @@ namespace RealEstate.ViewModels
         private readonly Log.LogManager _LogManager;
         private readonly CommandsProcessor _commandsProcessor;
 
+        public bool IsOpen { get; set; }
+
         [ImportingConstructor]
         public ConsoleViewModel(Log.LogManager logManager, CommandsProcessor commandsProcessor)
         {
@@ -51,7 +53,8 @@ namespace RealEstate.ViewModels
         public void AddText(string message)
         {
             _consoleTextBuilder.Append(message);
-            NotifyOfPropertyChange(() => ConsoleText);
+            if (IsOpen)
+                NotifyOfPropertyChange(() => ConsoleText);
         }
 
         private void ClearUpConsole(object state)
@@ -91,14 +94,14 @@ namespace RealEstate.ViewModels
             {
                 _ConsoleCommand = value;
 
-                if (_ConsoleCommand.EndsWith("\regCity\n"))
+                if (_ConsoleCommand.EndsWith("\r\n"))
                 {
                     CommandEntered(_ConsoleCommand.Trim());
                     ConsoleCommand = String.Empty;
                 }
                 NotifyOfPropertyChange(() => ConsoleCommand);
             }
-            
+
         }
 
         private void CommandEntered(string command)

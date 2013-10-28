@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Net;
 using RealEstate.Proxies;
+using System.Diagnostics;
 
 namespace RealEstate.Parsing
 {
@@ -35,7 +36,8 @@ namespace RealEstate.Parsing
                         if (pt.IsPauseRequested)
                             pt.WaitUntillPaused();
 
-                        headers.AddRange(parser.LoadHeaders(url, setting.GetDate(), param, maxAttemptCount, proxyManager, ct));                        
+                        var hds = parser.LoadHeaders(url, setting.GetDate(), param, maxAttemptCount, proxyManager, ct);
+                        headers.AddRange(hds);                        
                     }
                 }
             }

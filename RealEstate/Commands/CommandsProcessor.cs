@@ -57,7 +57,7 @@ namespace RealEstate.Commands
 
         private void ShowHelp()
         {
-            Module.Write(String.Join("\regCity\n", Modules.Select(module => module.Key + ":  " + module.Value.Description)));
+            Module.Write(String.Join("\r\n", Modules.Select(module => module.Key + ":  " + module.Value.Description)));
         }
     }
 
@@ -158,7 +158,7 @@ namespace RealEstate.Commands
 
         public override string Help
         {
-            get { return "advert \regCity\n\t\t [remove [-all]]"; }
+            get { return "advert \r\n\t\t [remove [-all]]"; }
         }
     }
 
@@ -195,7 +195,7 @@ namespace RealEstate.Commands
 
         public override string Help
         {
-            get { return "log \regCity\n\t\t[clear]"; }
+            get { return "log \r\n\t\t[clear]"; }
         }
     }
 

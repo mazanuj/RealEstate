@@ -40,14 +40,14 @@ namespace RealEstate.Parsing.Parsers
             }
         }
 
-        public string DownloadPage(string url, string userAgent, WebProxy proxy, CancellationToken cs)
+        public string DownloadPage(string url, string userAgent, WebProxy proxy, CancellationToken cs, string referer = null, bool useCookie = false)
         {
             string HtmlResult = null;
 
             HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             myHttpWebRequest.AllowAutoRedirect = true;
             myHttpWebRequest.Proxy = proxy ?? WebRequest.DefaultWebProxy;
-            cookie = new CookieContainer();
+            if(!useCookie) cookie = new CookieContainer();
             myHttpWebRequest.CookieContainer = cookie;
             myHttpWebRequest.UserAgent = userAgent;
             myHttpWebRequest.Timeout = SettingsStore.DefaultTimeout;
@@ -57,6 +57,7 @@ namespace RealEstate.Parsing.Parsers
             myHttpWebRequest.Headers[HttpRequestHeader.AcceptEncoding] = "gzip,deflate,sdch";
             myHttpWebRequest.Headers[HttpRequestHeader.AcceptLanguage] = "en-US,en;q=0.8";
             myHttpWebRequest.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+            myHttpWebRequest.Referer = referer;
 
             if (cs.IsCancellationRequested)
             {
