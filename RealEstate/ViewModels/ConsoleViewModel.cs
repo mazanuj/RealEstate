@@ -19,7 +19,17 @@ namespace RealEstate.ViewModels
         private readonly Log.LogManager _LogManager;
         private readonly CommandsProcessor _commandsProcessor;
 
-        public bool IsOpen { get; set; }
+        private bool _isOpen = false;
+        public bool IsOpen
+        {
+            get { return _isOpen; }
+            set
+            {
+                _isOpen = value;
+                if(_isOpen)
+                    NotifyOfPropertyChange(() => ConsoleText);
+            }
+        }
 
         [ImportingConstructor]
         public ConsoleViewModel(Log.LogManager logManager, CommandsProcessor commandsProcessor)
@@ -27,7 +37,7 @@ namespace RealEstate.ViewModels
             TraceListener debugListener = new MyTraceListener(this);
             Trace.Listeners.Add(debugListener);
             Trace.WriteLine("Start listening log");
-            _timer = new Timer(new TimerCallback(ClearUpConsole), null, 10000, 10000);
+            _timer = new Timer(new TimerCallback(ClearUpConsole), null, 10000, 5000);
             _LogManager = logManager;
             _commandsProcessor = commandsProcessor;
         }

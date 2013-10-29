@@ -41,7 +41,7 @@ namespace RealEstate.ViewModels
         public MainViewModel(IWindowManager windowManager, IEventAggregator events,
             ProxyManager proxyManager, CityManager cityManager, ExportSiteManager exportSiteManager,
             ConsoleViewModel consoleViewModel, Log.LogManager logManager, SettingsManager settingsManager,
-            ImportManager importManager, RulesManager rulesManager,
+            ImportManager importManager, RulesManager rulesManager, OKATO.OKATODriver okatoDriver,
             SettingsViewModel settingsViewModel, ProxiesViewModel proxiesViewModel,
             ParsingViewModel parsingViewModel, ParserSettingViewModel parserSettingViewModel,
             AdvertsViewModel advertsViewModel, ExportSettingsViewModel exportSettingsViewModel,
@@ -141,6 +141,7 @@ namespace RealEstate.ViewModels
             {
                 InitExportSites(exportSiteManager);
                 InitExportQueue(exportingManager);
+                InitOKATODriver(okatoDriver);
             }
             catch (Exception ex)
             {
@@ -164,6 +165,12 @@ namespace RealEstate.ViewModels
                     Thread.Sleep(1000);
                     _events.Publish(criticalError);
                 });
+        }
+
+        private static void InitOKATODriver(OKATO.OKATODriver okatoDriver)
+        {
+            Trace.WriteLine("Loading okato table...");
+            okatoDriver.Load();
         }
 
         private static void InitRules(RulesManager rulesManager)

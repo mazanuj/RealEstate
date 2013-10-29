@@ -37,13 +37,26 @@ namespace RealEstate.Parsing
                 {
                     oldAdvert.MessageFull = advert.MessageFull;
                     oldAdvert.Price = advert.Price;
-                    oldAdvert.PhoneNumber = advert.PhoneNumber;
-                    if(oldAdvert.DateSite < advert.DateSite)
+                    if (String.IsNullOrEmpty(advert.Distinct))
+                        oldAdvert.PhoneNumber = advert.PhoneNumber;
+
+                    if (oldAdvert.DateSite < advert.DateSite)
                         oldAdvert.DateSite = advert.DateSite;
+
                     oldAdvert.DateUpdate = DateTime.Now;
-                    oldAdvert.Name = advert.Name;
-                    oldAdvert.Title = advert.Title;
+                    if (String.IsNullOrEmpty(advert.Distinct))
+                        oldAdvert.Name = advert.Name;
+
+                    if (String.IsNullOrEmpty(advert.Distinct))
+                        oldAdvert.Title = advert.Title;
+
                     oldAdvert.ParsingNumber = advert.ParsingNumber;
+
+                    if (String.IsNullOrEmpty(advert.Distinct))
+                        oldAdvert.Address = advert.Address;
+
+                    if (String.IsNullOrEmpty(advert.Distinct))
+                        oldAdvert.Distinct = advert.Distinct;
                 }
             }
 

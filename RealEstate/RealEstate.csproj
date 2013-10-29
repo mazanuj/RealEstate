@@ -140,6 +140,8 @@
     <Compile Include="OCRs\OCRManager.cs" />
     <Compile Include="OCRs\OCRs.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="OKATO\KLADRDriver.cs" />
+    <Compile Include="OKATO\OKATODriver.cs" />
     <Compile Include="Parsing\AdvertsManager.cs" />
     <Compile Include="Parsing\ImportManager.cs" />
     <Compile Include="Parsing\ParserSettingManager.cs" />
@@ -339,8 +341,9 @@
     <Content Include="map template.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="OKATO\okato_data.sql" />
-    <Content Include="OKATO\okato_schema.sql" />
+    <Content Include="OKATO\dump.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="SmartProcessing\ProcessingRules.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

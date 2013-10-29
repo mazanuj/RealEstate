@@ -1,8 +1,10 @@
 ﻿using KladrApiClient;
+using RealEstate.OKATO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace RealEstate.SmartProcessing
@@ -49,9 +51,15 @@ namespace RealEstate.SmartProcessing
             if (id == null) return null;
 
 
-            var parts = address.Split(' ');
+            var parts = address.Split(' ').Where(s => !s.Contains("просп")
+                && !s.Contains("шосс") && !s.Contains("улиц")
+                && !s.Contains("тракт"));
+
             var max = parts.Max(s => s.Length);
-            address = parts.First(s => s.Length == max).Trim(new char[] { ',', '.' }).Trim();
+            address = parts.First().Trim(new char[] { ',', '.' }).Trim();
+
+            Regex r = new Regex(@"\d+");
+            var number = parts.FirstOrDefault(p => r.IsMatch(p)) ?? "1";
 
             stopWaitHandle.Reset();
             kladrClient.FindAddress(new Dictionary<string, string>
@@ -75,7 +83,7 @@ namespace RealEstate.SmartProcessing
             stopWaitHandle.Reset();
             kladrClient.FindAddress(new Dictionary<string, string>
                                         {
-                                            {"query", "1"},
+                                            {"query", number},
                                             {"contentType", "building"},
                                             {"streetId", id},
                                             {"withParent", "1"},
@@ -84,11 +92,18 @@ namespace RealEstate.SmartProcessing
 
             stopWaitHandle.WaitOne();
 
+            id = null;
             if (_response != null)
                 if (_response.result != null && _response.result.Count() > 0)
                     id = _response.result[0].id;
 
-            return null;
+            if (id == null) return null;
+
+            KLADRDriver dr = new KLADRDriver();
+            var okato = dr.GetOKATO(id);
+
+            OKATODriver ok = new OKATODriver();
+            return ok.GetDistinctByCode(okato);
 
         }
 
