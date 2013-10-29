@@ -18,6 +18,7 @@ namespace RealEstate.Parsing.Parsers
     public class HandsParser : ParserBase
     {
 
+
         public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager, CancellationToken token)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
@@ -40,11 +41,11 @@ namespace RealEstate.Parsing.Parsers
                     WebProxy proxy = param.useProxy ? proxyManager.GetNextProxy() : null;
                     try
                     {
-                        uri = url.Url + ((index != 1) ? ("page" + index) : "");
-                        var referer = url.Url + ((index != 1) ? ("page" + (index - 1)) : "");
+                        uri = url.Url + ((index != 1) ? ("page" + index) : "") + "/";
+                        var referer = url.Url + ((index - 1 != 1) ? ("page" + (index - 1)) : "");
                         Trace.WriteLine("Downloading " + uri);
 
-                        result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, referer, true);
+                        result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, true);
                         if (result.Length < 200 || !result.Contains("квартир"))
                         {
                             proxyManager.RejectProxyFull(proxy);
@@ -80,8 +81,8 @@ namespace RealEstate.Parsing.Parsers
                     maxIndex = GetMaxIndex(page);
                 }
 
-                Trace.TraceInformation("--------URLs-------------");
-                Trace.TraceInformation("!! " + uri);                
+                //Trace.TraceInformation("--------URLs-------------");
+                //Trace.TraceInformation("!! " + uri);                
 
                 foreach (HtmlNode tier in tiers)
                 {
@@ -90,7 +91,7 @@ namespace RealEstate.Parsing.Parsers
 
                     if (date > toDate)
                     {
-                        Trace.TraceInformation(link);
+                        //Trace.TraceInformation(link);
                         headers.Add(new AdvertHeader()
                         {
                             DateSite = date,
@@ -100,7 +101,7 @@ namespace RealEstate.Parsing.Parsers
                     }
                 }
 
-                Trace.TraceInformation("----------------------");
+                //Trace.TraceInformation("----------------------");
             }
             while (headers.Count != oldCount && headers.Count < param.MaxCount && index <= maxIndex);
             return headers;

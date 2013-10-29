@@ -24,14 +24,13 @@ namespace RealEstate.Parsing.Parsers
 
         protected CookieContainer cookie = new CookieContainer();
 
-        protected void InitCookie(string url)
+        protected virtual void InitCookie(string url)
         {
             try
             {
                 HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
                 myHttpWebRequest.CookieContainer = cookie;
                 myHttpWebRequest.Timeout = SettingsStore.DefaultTimeout;
-                myHttpWebRequest.Proxy = new WebProxy("127.0.0.1:8888"); //for fiddler
                 myHttpWebRequest.GetResponse();
             }
             catch (Exception ex)
@@ -40,7 +39,7 @@ namespace RealEstate.Parsing.Parsers
             }
         }
 
-        public string DownloadPage(string url, string userAgent, WebProxy proxy, CancellationToken cs, string referer = null, bool useCookie = false)
+        public string DownloadPage(string url, string userAgent, WebProxy proxy, CancellationToken cs, bool useCookie = false)
         {
             string HtmlResult = null;
 
@@ -53,11 +52,10 @@ namespace RealEstate.Parsing.Parsers
             myHttpWebRequest.Timeout = SettingsStore.DefaultTimeout;
             myHttpWebRequest.KeepAlive = true;
             myHttpWebRequest.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.Refresh);
-            myHttpWebRequest.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+            myHttpWebRequest.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
             myHttpWebRequest.Headers[HttpRequestHeader.AcceptEncoding] = "gzip,deflate,sdch";
             myHttpWebRequest.Headers[HttpRequestHeader.AcceptLanguage] = "en-US,en;q=0.8";
             myHttpWebRequest.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-            myHttpWebRequest.Referer = referer;
 
             if (cs.IsCancellationRequested)
             {

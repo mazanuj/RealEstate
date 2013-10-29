@@ -30,6 +30,8 @@ namespace RealEstate.SmartProcessing
                 {
                     if (!TryParseAddress_Hands(advert)) 
                         return false;
+
+                    DetectDistinct(advert);
                 }
             }
 
@@ -79,6 +81,12 @@ namespace RealEstate.SmartProcessing
 
             return true;
 
+        }
+
+        private void DetectDistinct(Advert advert)
+        {
+            KladrApi api = new KladrApi();
+            advert.Distinct = api.GetDistinct(advert.City, advert.Address);
         }
     }
 }
