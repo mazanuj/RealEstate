@@ -29,6 +29,12 @@ namespace RealEstate.SmartProcessing
             if (String.IsNullOrEmpty(city) || String.IsNullOrEmpty(address))
                 return null;
 
+            if(address.Contains('/'))
+            {
+                var ind = address.IndexOf('/');
+                address = address.Substring(0, ind);
+            }
+
             city = System.Web.HttpUtility.HtmlEncode(city);
             address = System.Web.HttpUtility.HtmlEncode(address);
 

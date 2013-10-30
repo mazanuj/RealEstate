@@ -96,6 +96,11 @@ namespace RealEstate.Parsing
         public DateTime DateSite{ get; set; } //+
         public DateTime DateUpdate { get; set; } //+
 
+        public bool ContainsImages
+        {
+            get { return Images != null && Images.Count > 0; }
+        }
+
         public virtual ICollection<Image> Images { get; set; } //+
         public virtual ICollection<ExportSite> ExportSites { get; set; }
 

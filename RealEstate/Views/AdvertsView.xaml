@@ -121,6 +121,13 @@
                       IsReadOnly="True" behaviour:DataGridBehavior.DisplayRowNumber="True"
                       Name="AdvertsTable">
                 <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="../Images/image.png" Visibility="{Binding ContainsImages, Converter={StaticResource bool2VisibilityConverter}}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Дата" Binding="{Binding DateSite, StringFormat='dd.MM.yyyy HH:mm'}" />
                     <DataGridTextColumn Header="Город" Binding="{Binding City}" />
                     <DataGridTextColumn Header="Район" Binding="{Binding Distinct}" />
@@ -129,8 +136,8 @@
                     <DataGridTextColumn Header="Комнат" Binding="{Binding Rooms}" />
                     <DataGridTextColumn Header="Площадь" Binding="{Binding AreaFull}" />
                     <DataGridTextColumn Header="Этаж" Binding="{Binding Floor}" />
-                    <DataGridTextColumn Header="Имя" Binding="{Binding Name}" MaxWidth="100" />
-                    <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneNumber}" MaxWidth="100"/>
+                    <DataGridTextColumn Header="Имя" Binding="{Binding Name}" Width="100" />
+                    <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneNumber}" Width="100"/>
                     <DataGridTemplateColumn Header="Ссылка">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

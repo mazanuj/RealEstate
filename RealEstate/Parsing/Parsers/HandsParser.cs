@@ -391,7 +391,7 @@ namespace RealEstate.Parsing.Parsers
             if (priceNode != null)
             {
                 var price = priceNode.InnerText;
-                int pr = -1;
+                int pr;
                 Int32.TryParse(price.Replace(" руб.", "").Replace(".", "").Trim(), out pr);
                 advert.Price = pr;
             }

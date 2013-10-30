@@ -40,18 +40,18 @@ namespace RealEstate.SmartProcessing
 
                 if (param.site == ImportSite.Hands)
                 {
-                    //http://yaroslavl.irr.ru/real-estate/apartments-sale/secondary/search/rooms=1/currency=RUR/sourcefrom=6,1,4,5/date_create=today/
-
                     if (String.IsNullOrEmpty(advert.Address)) //from print
                     {
                         if (!TryParseAddress_Hands(advert))
                             return false;
-
-                        ClarifyAddress(advert);
-
-                        DetectDistinct(advert);
                     }
                 }
+
+                ClarifyAddress(advert);
+
+                DetectDistinct(advert);
+
+                DetectPrice(advert);
 
                 foreach (var rule in _rulesManager.Rules)
                 {
@@ -79,7 +79,8 @@ namespace RealEstate.SmartProcessing
         private void ClarifyAddress(Advert advert)
         {
             YandexMapApi api = new YandexMapApi();
-            advert.Address = api.SearchObject(advert.City + ", " + advert.Address);
+            var newAddress = api.SearchObject(advert.City + ", " + advert.Address);
+            advert.Address = newAddress.ToLower().Trim() == advert.City.ToLower().Trim() ? string.Empty : newAddress;
         }
 
         private bool TryParseAddress_Hands(Advert advert)
@@ -124,14 +125,38 @@ namespace RealEstate.SmartProcessing
 
         private void DetectPrice(Advert advert)
         {
-            //Regex regPrice = new Regex(@"");
-            //var m = regPrice.Match(advert.MessageFull);
-            //if (m.Success && m.Groups.Count > 1)
-            //{
-            //    long price;
-            //    Int64.TryParse(m.Groups[1].Value, out price);
-            //    advert.Price = price;
-            //}
+            if (advert.Price == 0)
+            {
+                Regex regPrice = new Regex(@"(?<full>(?<mln>\d+\ млн.\ *)?(?<ths>\d+\ тыс.\ *)?\d*\ *руб.)");
+                var m = regPrice.Match(advert.MessageFull);
+                if (m.Success && m.Groups.Count > 1)
+                {
+                    string strPrice = "0";
+                    if (m.Groups["mln"].Value == "" && m.Groups["ths"].Value == "")
+                    {
+                        strPrice = m.Groups["full"].Value;
+                    }
+                    else if (m.Groups["mln"].Value == "" ^ m.Groups["ths"].Value == "")
+                    {
+                        if (m.Groups["mln"].Value != "")
+                            strPrice = m.Groups["mln"].Value.Replace("млн.", "000 000");
+                        if (m.Groups["ths"].Value != "")
+                            strPrice = m.Groups["ths"].Value.Replace("тыс.", "000");
+                    }
+                    else
+                        if (m.Groups["mln"].Value != "" && m.Groups["ths"].Value != "")
+                    {
+                        strPrice = m.Groups["mln"].Value.Replace("млн.", "");
+                        var ths = Int32.Parse(m.Groups["ths"].Value.Replace("тыс.", "").Replace(" ", ""));
+                        strPrice += ths.ToString("000") + "000";
+                    }
+                    strPrice = strPrice.Replace("руб.","").Replace(" ","").Trim();
+
+                    long price;
+                    Int64.TryParse(strPrice, out price);
+                    advert.Price = price;
+                }
+            }
         }
     }
 }

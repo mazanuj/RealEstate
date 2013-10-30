@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 	<head><title>Карта</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -18,7 +18,7 @@
 			name = nearest.properties.get('name');
 			nearest.properties.set('iconContent', name); 
 			nearest.options.set('preset', 'twirl#blueStretchyIcon');
-			myMap.geoObjects.add(res.geoObjects);
+			myMap.geoObjects.add(res.geoObjects.get(0));
 			
             attachReverseGeocode(myMap);			
 		});
@@ -56,6 +56,6 @@
 	</script>
 	</head>
 	<body>
-		<div id="map" style="width:350px; height:270px; margin: 0;"></div>
+		<div id="map" style="width:360px; height:265px; margin: 0;"></div>
 	</body>
 </html>

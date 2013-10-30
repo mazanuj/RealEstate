@@ -293,7 +293,7 @@ namespace RealEstate.Parsing.Parsers
             {
                 var priceString = block.InnerText.Replace("&nbsp;", "").Replace(" руб.", "");
                 if (priceString.Contains("Не указана"))
-                    return -1;
+                    return 0;
                 long price;
                 if (Int64.TryParse(priceString, out price))
                     return price;
