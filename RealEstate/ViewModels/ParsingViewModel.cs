@@ -379,7 +379,7 @@ namespace RealEstate.ViewModels
                             _advertsManager.Save(advert, headers[i].Setting);
 
                             if (SettingsStore.SaveImages)
-                                _imagesManager.DownloadImages(advert.Images, ct);
+                                _imagesManager.DownloadImages(advert.Images, ct, advert.ImportSite);
                         }
                         else
                         {

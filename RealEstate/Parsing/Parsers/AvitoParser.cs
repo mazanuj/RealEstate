@@ -400,7 +400,7 @@ namespace RealEstate.Parsing.Parsers
             {
                 foreach (var link in gallery.SelectNodes("//div[contains(@class, 'll fit')]/a"))
                 {
-                    if (result.Count > 5)
+                    if (result.Count >= Settings.SettingsStore.MaxCountOfImages)
                         break;
 
                     try

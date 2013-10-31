@@ -288,7 +288,7 @@ namespace RealEstate.Parsing.Parsers
             {
                 foreach (var link in gallery.SelectNodes("li/a/img"))
                 {
-                    if (result.Count > 5)
+                    if (result.Count >= Settings.SettingsStore.MaxCountOfImages)
                         break;
 
                     try
@@ -385,12 +385,13 @@ namespace RealEstate.Parsing.Parsers
 
         }
 
-        private static void ParsePrice(HtmlDocument page, Advert advert)
+        private void ParsePrice(HtmlDocument page, Advert advert)
         {
             var priceNode = page.DocumentNode.SelectSingleNode(".//div[contains(@class,'credit_cost')]");
+            priceNode.SelectSingleNode("u").RemoveAllChildren();
             if (priceNode != null)
             {
-                var price = priceNode.InnerText;
+                var price = Normalize(priceNode.InnerText);
                 int pr;
                 Int32.TryParse(price.Replace(" руб.", "").Replace(".", "").Trim(), out pr);
                 advert.Price = pr;

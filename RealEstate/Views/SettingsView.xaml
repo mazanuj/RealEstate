@@ -104,10 +104,15 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <StackPanel Margin="10 30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.ColumnSpan="2" Margin="10 30">
                         <CheckBox Margin="10" Content="Сохранять на диск" Name="SaveImages" />
                         <StackPanel Margin="10" Orientation="Horizontal">
                             <TextBlock Text="{Binding ImagesSpace, StringFormat='Всего места на диске {0} Мб'}" Margin="0 2 10 2" />
@@ -115,7 +120,11 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <Button Content="Сохранить" Name="SaveImagesSetting" Margin="5"
+                    <TextBlock Grid.Row="1" Margin="8">Максимальное количество изображений:</TextBlock>
+                    <TextBox Grid.Row="1" Grid.Column="1" Margin="8" Text="{Binding MaxImagesCount, Mode=TwoWay, ValidatesOnDataErrors=True}" />
+
+
+                    <Button Grid.Column="1" Content="Сохранить" Name="SaveImagesSetting" Margin="5"
                             Grid.Row="3" HorizontalAlignment="Right"/>
                 </Grid>
             </TabItem>

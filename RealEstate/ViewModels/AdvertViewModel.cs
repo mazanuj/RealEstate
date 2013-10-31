@@ -128,7 +128,7 @@ namespace RealEstate.ViewModels
             {
                 try
                 {
-                    var imgs = _imagesManager.GetImages(AdvertOriginal.Images);
+                    var imgs = _imagesManager.GetImages(AdvertOriginal.Images, AdvertOriginal.ImportSite);
                     for (int i = 0; i < imgs.Count; i++)
                     {
                         imgs[i].Title = (i + 1).ToString();
@@ -223,7 +223,7 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                string fullAdress = (String.IsNullOrEmpty(advert.Distinct) ? advert.City : advert.Distinct) + "," + advert.Address;
+                string fullAdress = advert.City + ", " + advert.Address;
                 const string MACROS = "%FULLADDRESS%";
 
                 return File.ReadAllText("map template.html").Replace(MACROS, fullAdress);

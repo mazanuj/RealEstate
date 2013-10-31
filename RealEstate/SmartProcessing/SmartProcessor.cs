@@ -44,6 +44,8 @@ namespace RealEstate.SmartProcessing
                     {
                         if (!TryParseAddress_Hands(advert))
                             return false;
+
+                        RemoveAdvertisers(advert);
                     }
                 }
 
@@ -73,6 +75,15 @@ namespace RealEstate.SmartProcessing
             {
                 Trace.WriteLine(ex.ToString(), "Error!");
                 return false;
+            }
+        }
+
+        private void RemoveAdvertisers(Advert advert)
+        {
+            if(advert.MessageFull.Contains("Дата выхода объявления"))
+            {
+                var ind = advert.MessageFull.IndexOf("Дата выхода");
+                advert.MessageFull = advert.MessageFull.Substring(0, ind);
             }
         }
 

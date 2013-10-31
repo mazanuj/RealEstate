@@ -10,6 +10,9 @@ using System.Diagnostics;
 using System.Windows.Media.Imaging;
 using RealEstate.ViewModels;
 using RealEstate.Db;
+using System.Drawing;
+using System.Drawing.Imaging;
+using RealEstate.Parsing.Parsers;
 
 namespace RealEstate.Parsing
 {
@@ -57,7 +60,7 @@ namespace RealEstate.Parsing
             }
         }
 
-        public void DownloadImages(ICollection<Image> images, CancellationToken ct)
+        public void DownloadImages(ICollection<Image> images, CancellationToken ct, ImportSite site)
         {
             Trace.WriteLine("Downloading images...");
 
@@ -68,7 +71,7 @@ namespace RealEstate.Parsing
                 try
                 {
                     var path = Path.Combine(FolderName, imageSource.LocalName);
-                    DownloadImage(imageSource, path);
+                    DownloadImage(imageSource, path, site);
                 }
                 catch (Exception ex)
                 {
@@ -77,16 +80,49 @@ namespace RealEstate.Parsing
             }
         }
 
-        private void DownloadImage(Image imageSource, string path)
+        private void DownloadImage(Image imageSource, string path, ImportSite site)
+        {
+            int WidthToCrop = 0;
+            int HeightToCrop = 0;
+
+            if(site == ImportSite.Avito)
+            {
+                HeightToCrop = 40;
+            }
+
+            DownloadImage2(imageSource, path, WidthToCrop, HeightToCrop);
+        }
+
+        private void DownloadImage2(Image imageSource, string path, int WidthToCrop, int HeightToCrop)
         {
             if (!File.Exists(path) || new FileInfo(path).Length == 0)
             {
-                WebClient client = new WebClient();
-                client.DownloadFile(imageSource.URl, path);
+
+                var phoneImage = ParserBase.DownloadImage(imageSource.URl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, null);
+                using (var memory = new MemoryStream(phoneImage))
+                {
+                    using (var image = (Bitmap)Bitmap.FromStream(memory))
+                    {
+                        int sourceWidth = image.Width;
+                        int sourceHeight = image.Height;
+
+                        int destWidth = sourceWidth - WidthToCrop < 0 ? sourceWidth : sourceWidth - WidthToCrop;
+                        int destHeight = sourceHeight - HeightToCrop < 0 ? sourceHeight : sourceHeight - HeightToCrop;
+
+                        using (Bitmap objBitmap = new Bitmap(destWidth, destHeight))
+                        {
+                            using (Graphics objGraphics = Graphics.FromImage(objBitmap))
+                            {
+                                objGraphics.DrawImageUnscaled(image, 0, 0);
+                                objBitmap.Save(path, ImageFormat.Jpeg);
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        public List<ImageWrap> GetImages(ICollection<Image> imagesSource)
+        public List<ImageWrap> GetImages(ICollection<Image> imagesSource, ImportSite site)
         {
             if (imagesSource == null) return null;
 
@@ -97,7 +133,7 @@ namespace RealEstate.Parsing
                 {
                     var path = Path.Combine(FolderName, imageSource.LocalName);
 
-                    DownloadImage(imageSource, path);
+                    DownloadImage(imageSource, path, site);
 
                     if (File.Exists(path))
                     {
@@ -123,6 +159,31 @@ namespace RealEstate.Parsing
             if (img != null)
             {
                 _context.Images.Remove(img);
+            }
+        }
+
+        public void CropImage(int Width, int Height, string sourceFilePath, string saveFilePath)
+        {
+            int sourceX = 0;
+            int sourceY = 0;
+            int destX = 0;
+            int destY = 0;
+
+            Bitmap sourceImage = new Bitmap(sourceFilePath);
+
+            int sourceWidth = sourceImage.Width;
+            int sourceHeight = sourceImage.Height;
+
+            int destWidth = sourceWidth - Width < 0 ? sourceWidth : sourceWidth - Width;
+            int destHeight = sourceHeight - Height < 0 ? sourceHeight : sourceHeight - Height;
+
+            using (Bitmap objBitmap = new Bitmap(destWidth, destHeight))
+            {
+                using (Graphics objGraphics = Graphics.FromImage(objBitmap))
+                {
+                    objGraphics.DrawImage(sourceImage, new Rectangle(destX, destY, destWidth, destHeight), new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight), GraphicsUnit.Pixel);
+                    objBitmap.Save("11" + saveFilePath, ImageFormat.Jpeg);
+                }
             }
         }
     }

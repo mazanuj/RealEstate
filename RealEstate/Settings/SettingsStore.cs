@@ -28,6 +28,11 @@ namespace RealEstate.Settings
         public static bool SaveImages { get; set; }
 
         [Settings]
+        [SectionName("Images")]
+        [DefaultValue(3)]
+        public static int MaxCountOfImages { get; set; }
+
+        [Settings]
         [SectionName("Parsing")]
         [DefaultValue("http://ya.ru")]
         public static string UrlForChecking { get; set; }

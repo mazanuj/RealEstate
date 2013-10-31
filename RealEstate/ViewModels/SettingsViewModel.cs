@@ -290,7 +290,19 @@ namespace RealEstate.ViewModels
                 NotifyOfPropertyChange(() => SaveImages);
             }
         }
-                    
+
+
+        private int _MaxImagesCount = 3;
+        [Range(1, 20)]
+        public int MaxImagesCount
+        {
+            get { return _MaxImagesCount; }
+            set
+            {
+                _MaxImagesCount = value;
+                NotifyOfPropertyChange(() => MaxImagesCount);
+            }
+        }           
 
         public async void ClearImages()
         {
@@ -320,9 +332,10 @@ namespace RealEstate.ViewModels
                 await Task.Factory.StartNew(() =>
                 {
                     bool changed = false;
-                    if (SaveImages != SettingsStore.SaveImages)
+                    if (SaveImages != SettingsStore.SaveImages || MaxImagesCount != SettingsStore.MaxCountOfImages)
                     {
                         SettingsStore.SaveImages = SaveImages;
+                        SettingsStore.MaxCountOfImages = MaxImagesCount;
 
                         changed = true;
                     }

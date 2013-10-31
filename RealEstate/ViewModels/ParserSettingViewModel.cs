@@ -129,6 +129,11 @@ namespace RealEstate.ViewModels
             }
         }
 
+        public bool IsSiteAviabe
+        {
+            get { return _ImportSite == Modes.ModeManager.Mode || Modes.ModeManager.Mode == Parsing.ImportSite.All; }
+        }
+
         public BindableCollection<CityWrap> Cities
         {
             get
