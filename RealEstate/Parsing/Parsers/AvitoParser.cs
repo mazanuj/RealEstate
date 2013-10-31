@@ -87,7 +87,7 @@ namespace RealEstate.Parsing.Parsers
                 }
                 else
                 {
-                    Trace.TraceInformation(result);
+                    Trace.TraceInformation(url.Url);
                     throw new ParsingException("can't find adverts", "");
                 }
             }

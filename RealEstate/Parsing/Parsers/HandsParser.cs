@@ -72,7 +72,7 @@ namespace RealEstate.Parsing.Parsers
                 var tiers = page.DocumentNode.SelectNodes(@"//div[@data-position and @data-item-id]");
                 if (tiers == null)
                 {
-                    Trace.TraceInformation(result);
+                    Trace.TraceInformation(url.Url);
                     throw new ParsingException("Can't find headers adverts", "");
                 }
 
