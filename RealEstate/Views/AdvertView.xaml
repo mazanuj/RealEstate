@@ -29,6 +29,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
@@ -36,44 +37,46 @@
                 <TextBlock VerticalAlignment="Center" Grid.Row="0" Text="Город:" />
                 <TextBlock VerticalAlignment="Center" Grid.Row="1" Text="Район:" />
                 <TextBlock VerticalAlignment="Center" Grid.Row="2" Text="Адрес:" />
-                <TextBlock VerticalAlignment="Center" Grid.Row="3" Text="Этаж: " />
-                <TextBlock VerticalAlignment="Center" Grid.Row="4" Text="Комнат:" />
-                <TextBlock VerticalAlignment="Center" Grid.Row="5" Text="Площадь (о/ж/к):"/>
-                <TextBlock VerticalAlignment="Center" Grid.Row="6" Text="Имя:" />
-                <TextBlock VerticalAlignment="Center" Grid.Row="7" Text="Контакт:" />
-                <TextBlock VerticalAlignment="Center" Grid.Row="8" Text="Цена: " />
+                <TextBlock VerticalAlignment="Center" Grid.Row="3" Text="Метро:" />
+                <TextBlock VerticalAlignment="Center" Grid.Row="4" Text="Этаж: " />
+                <TextBlock VerticalAlignment="Center" Grid.Row="5" Text="Комнат:" />
+                <TextBlock VerticalAlignment="Center" Grid.Row="6" Text="Площадь (о/ж/к):"/>
+                <TextBlock VerticalAlignment="Center" Grid.Row="7" Text="Имя:" />
+                <TextBlock VerticalAlignment="Center" Grid.Row="8" Text="Контакт:" />
+                <TextBlock VerticalAlignment="Center" Grid.Row="9" Text="Цена: " />
 
                 <TextBox Text="{Binding Advert.City}" Grid.Column="1" Grid.Row="0" Margin="4" />
                 <TextBox Text="{Binding Advert.Distinct}" Grid.Column="1" Grid.Row="1" Margin="4" />
                 <TextBox Text="{Binding Advert.Address}" Grid.Column="1" Grid.Row="2" Margin="4" />
-                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3" >
+                <TextBox Text="{Binding Advert.MetroStation}" Grid.Column="1" Grid.Row="3" Margin="4" />
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" >
                     <TextBox Text="{Binding Advert.Floor}" Margin="4"  />
                     <TextBlock Text="/" Margin="0 4" />
                     <TextBox Text="{Binding Advert.FloorTotal}" Margin="4"/>
                 </StackPanel>
-                <TextBox Text="{Binding Advert.Rooms}" Grid.Column="1" Grid.Row="4" Margin="4" />
-                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="5">
+                <TextBox Text="{Binding Advert.Rooms}" Grid.Column="1" Grid.Row="5" Margin="4" />
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="6">
                     <TextBox Text="{Binding Advert.AreaFull}" Margin="4"  />
                     <TextBlock Text="/" Margin="0 4" />
                     <TextBox Text="{Binding Advert.AreaLiving}" Margin="4"/>
                     <TextBlock Text="/" Margin="0 4" />
                     <TextBox Text="{Binding Advert.AreaKitchen}" Margin="4"/>
                 </StackPanel>
-                <TextBox Text="{Binding Advert.Name}" Margin="4"  Grid.Column="1" Grid.Row="6"  />
-                <TextBox Text="{Binding Advert.PhoneNumber}" Margin="4"  Grid.Column="1" Grid.Row="7"/>
-                <TextBox Text="{Binding Advert.Price}" Grid.Column="1" Grid.Row="8" Margin="4" />
-                <TextBox Text="{Binding Advert.MessageShort}" Grid.Column="0" Grid.Row="9" Margin="4" Grid.ColumnSpan="2"  />
-                <TextBox Text="{Binding Advert.MessageFull}" Grid.Column="0" Grid.Row="10" Margin="4" Grid.ColumnSpan="2"
+                <TextBox Text="{Binding Advert.Name}" Margin="4"  Grid.Column="1" Grid.Row="7"  />
+                <TextBox Text="{Binding Advert.PhoneNumber}" Margin="4"  Grid.Column="1" Grid.Row="8"/>
+                <TextBox Text="{Binding Advert.Price}" Grid.Column="1" Grid.Row="9" Margin="4" />
+                <TextBox Text="{Binding Advert.MessageShort}" Grid.Column="0" Grid.Row="10" Margin="4" Grid.ColumnSpan="2"  />
+                <TextBox Text="{Binding Advert.MessageFull}" Grid.Column="0" Grid.Row="11" Margin="4" Grid.ColumnSpan="2"
                          AcceptsReturn="True" TextWrapping="Wrap" Height="150"/>
 
-                <StackPanel  Grid.Row="11" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <StackPanel  Grid.Row="12" Grid.ColumnSpan="2" Orientation="Horizontal">
                     <TextBlock Text="Категория: " Margin="4" />
                     <ComboBox Margin="4" Name="RealEstateTypes" DisplayMemberPath="Name" />
                     <ComboBox Margin="4" Name="UsedTypes" DisplayMemberPath="Name"  />
                     <ComboBox Margin="4" Name="AdvertTypes" DisplayMemberPath="Name"  />
                 </StackPanel>
 
-                <StackPanel Grid.Row="12" Grid.ColumnSpan="2">
+                <StackPanel Grid.Row="13" Grid.ColumnSpan="2">
                     <TextBlock Text="Экспорт: " Margin="4" />
                     <ScrollViewer>
                         <ItemsControl ItemsSource="{Binding AdvertOriginal.ExportSites}">
@@ -95,7 +98,7 @@
                     </ScrollViewer>
                 </StackPanel>
 
-                <StackPanel Grid.Row="14" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <StackPanel Grid.Row="15" Grid.ColumnSpan="2" Orientation="Horizontal">
                     <Button Name="OpenUrl" Content="Cсылка" Style="{StaticResource LinkButton}" Margin="6 5 50 5" />
 
                     <Button Name="Delete" Content="Удалить" Margin="4" />

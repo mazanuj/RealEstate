@@ -8,23 +8,34 @@ namespace RealEstate.Modes
 {
     public static class ModeManager
     {
-        public static ImportSite Mode { get; set; }
+        public static ImportSite SiteMode { get; set; }
+        public static ReleaseMode Mode { get; set; }
 
         static ModeManager()
         {
-            Mode = ImportSite.All;
+            SiteMode = ImportSite.All;
+            Mode = ReleaseMode.Release;
         }
 
         public static void SetMode(string[] args)
         {
             if (args.Contains("-hands"))
             {
-                Mode = Parsing.ImportSite.Hands;
+                SiteMode = Parsing.ImportSite.Hands;
             }
             else if (args.Contains("-avito"))
             {
-                Mode = Parsing.ImportSite.Avito;
+                SiteMode = Parsing.ImportSite.Avito;
             }
+
+            if (args.Contains("-debug"))
+                Mode = ReleaseMode.Debug;
         }
+    }
+
+    public enum ReleaseMode
+    {
+        Debug,
+        Release
     }
 }

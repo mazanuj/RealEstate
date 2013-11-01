@@ -58,6 +58,21 @@ namespace RealEstate.Parsing
                 if (!String.IsNullOrEmpty(advert.Distinct))
                     oldAdvert.Distinct = advert.Distinct;
 
+                if (!String.IsNullOrEmpty(advert.MetroStation))
+                    oldAdvert.MetroStation = advert.MetroStation;
+
+                if (!String.IsNullOrEmpty(advert.AO))
+                    oldAdvert.AO = advert.AO;
+
+                if (advert.AreaFull != 0)
+                    oldAdvert.AreaFull = advert.AreaFull;
+
+                if (advert.AreaKitchen != 0)
+                    oldAdvert.AreaKitchen = advert.AreaKitchen;
+
+                if (advert.AreaLiving != 0)
+                    oldAdvert.AreaLiving = advert.AreaLiving;
+
             }
 
             _context.SaveChanges();

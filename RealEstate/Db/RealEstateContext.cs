@@ -12,6 +12,7 @@ using MySql.Data.MySqlClient;
 using RealEstate.Exporting;
 using RealEstate.Parsing;
 using System.ComponentModel.Composition;
+using RealEstate.Migrations;
 
 namespace RealEstate.Db
 {
@@ -23,7 +24,7 @@ namespace RealEstate.Db
         static RealEstateContext()
         {
             isOk = false;
-            Database.SetInitializer<RealEstateContext>(new DropCreateDatabaseIfModelChanges<RealEstateContext>());
+            Database.SetInitializer<RealEstateContext>(new MigrateDatabaseToLatestVersion<RealEstateContext, Configuration>());
         }
 
         public DbSet<Advert> Adverts { get; set; }

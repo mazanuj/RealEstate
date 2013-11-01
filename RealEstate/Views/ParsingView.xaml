@@ -150,6 +150,7 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <TextBlock Grid.Column="1" Text="{Binding Description}" />
                                     <TextBlock FontWeight="Bold" Grid.Column="2">
@@ -190,6 +191,17 @@
                                         </TextBlock.Text>
                                     </TextBlock>
                                     <ProgressBar Grid.Row="1" Grid.ColumnSpan="10" Margin="0 1 0 0" Height="3" Value="{Binding Progress}" />
+                                    <Expander Grid.Row="2" Grid.ColumnSpan="10" Margin="0 1 0 0" Header="Источники">
+                                        <Border BorderThickness="1" BorderBrush="WhiteSmoke">
+                                            <ItemsControl ItemsSource="{Binding SourceUrls}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding }" Margin="20 5" />
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </Border>
+                                    </Expander>
                                 </Grid>
                             </Border>
                         </DataTemplate>

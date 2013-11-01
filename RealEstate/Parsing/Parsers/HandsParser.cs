@@ -17,8 +17,6 @@ namespace RealEstate.Parsing.Parsers
 {
     public class HandsParser : ParserBase
     {
-
-
         public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager, CancellationToken token)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
@@ -185,7 +183,7 @@ namespace RealEstate.Parsing.Parsers
                 ParseDescription(page, advert);
 
                 advert.Images = ParsePhotos(page);
-                ParsePhone(page, advert);
+                ParsePhone(page, advert, proxy);
 
                 return advert;
             }
@@ -198,7 +196,7 @@ namespace RealEstate.Parsing.Parsers
 
         private string ParseMetro(HtmlDocument page)
         {
-            var metroNode = page.DocumentNode.SelectSingleNode(@"//span[contains(@class,'metro')]");
+            var metroNode = page.DocumentNode.SelectSingleNode(@"//div[contains(@class,'clear')]/div/p/span[contains(@class,'metro')]");
             if (metroNode != null)
                 return metroNode.InnerText;
 
@@ -264,6 +262,9 @@ namespace RealEstate.Parsing.Parsers
                                 case "Район города":
                                     advert.Distinct = parts[1].Trim();
                                     break;
+                                case "АО":
+                                    advert.AO = parts[1].Replace("административный округ", "").Trim();
+                                    break;
                                 default:
                                     break;
                             }
@@ -314,7 +315,7 @@ namespace RealEstate.Parsing.Parsers
             return result;
         }
 
-        private void ParsePhone(HtmlDocument page, Advert advert)
+        private void ParsePhone(HtmlDocument page, Advert advert, WebProxy proxy)
         {
             var phoneNode = page.DocumentNode.SelectSingleNode(".//input[contains(@id,'allphones') and contains(@type,'hidden')]");
             if (phoneNode != null)
@@ -324,7 +325,23 @@ namespace RealEstate.Parsing.Parsers
                 sellerPhone = r.Match(sellerPhone).Groups[0].Value;
                 if (sellerPhone == "") return;
 
-                var phoneImage = DownloadImage(sellerPhone.Trim(new char[] { '\'' }), UserAgents.GetRandomUserAgent(), null, CancellationToken.None, Normalize(advert.Url));
+                byte[] phoneImage = null;
+
+                for (int i = 0; i < 5; i++)
+                {
+                    try
+                    {
+                        phoneImage = DownloadImage(sellerPhone.Trim(new char[] { '\'' }), UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, Normalize(advert.Url));
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.Write("Error when downloading image: " + ex.Message, "Web error!");
+                    }
+                }
+
+                if (phoneImage == null) throw new ParsingException("can't download phone image", "");
+
                 advert.PhoneNumber = OCRManager.RecognizeImage(phoneImage);
             }
         }

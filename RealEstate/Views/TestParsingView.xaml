@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="RealEstate.Views.TestParsingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="900">
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border Height="180" Visibility="{Binding IsToolsOpen, Converter={StaticResource bool2VisibilityConverter}}" BorderBrush="{StaticResource VS2012WindowBorderBrush}" 
+                BorderThickness="1 0 1 2" FlowDirection="LeftToRight">
+            <Grid></Grid>
+        </Border>
+        <Grid Grid.Row="1" Margin="150 20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <TextBlock Margin="10 0">Url к объявлению: </TextBlock>
+            <TextBox Grid.Column="1" Name="Url" />
+            
+            <Button Margin="0 10" Content="Старт" Name="Parse" Grid.Row="1" Grid.Column="1" Width="100" HorizontalAlignment="Right" />
+            
+            <TextBlock Grid.Row="2" FontWeight="Bold">Статистика:</TextBlock>
+            
+            <TextBlock Margin="10 4" Grid.Row="3">Общий статус: </TextBlock>
+            <TextBlock Name="Summary" Grid.Column="1" Margin="10 4" Grid.Row="3"></TextBlock>
+
+            <TextBlock Margin="10 4" Grid.Row="4">Степень распознавания:</TextBlock>
+            <TextBlock Name="Coverage" Grid.Column="1" Margin="10 4" Grid.Row="4"></TextBlock>
+            
+            <Button Grid.Column="1" Width="100" HorizontalAlignment="Right" Content="Показать" Name="Show" Margin="10 40 0 40" Grid.Row="5" />
+
+        </Grid>
+    </Grid>
+
+</UserControl>

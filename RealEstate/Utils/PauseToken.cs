@@ -51,6 +51,11 @@ namespace RealEstate.Utils
             if (source != null)
                 source.WaitUntillPaused();
         }
+
+        public static PauseToken None
+        {
+            get { return new PauseToken(null); }
+        }
     }
 
     public static class StringUtils

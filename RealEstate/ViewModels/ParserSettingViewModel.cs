@@ -131,7 +131,7 @@ namespace RealEstate.ViewModels
 
         public bool IsSiteAviabe
         {
-            get { return _ImportSite == Modes.ModeManager.Mode || Modes.ModeManager.Mode == Parsing.ImportSite.All; }
+            get { return _ImportSite == Modes.ModeManager.SiteMode || Modes.ModeManager.SiteMode == Parsing.ImportSite.All; }
         }
 
         public BindableCollection<CityWrap> Cities
@@ -249,7 +249,7 @@ namespace RealEstate.ViewModels
             catch (Exception ex)
             {
                 Trace.WriteLine(ex.ToString());
-                MessageBox.Show("Ошибка сохранения!\r\nСмотри лог для подробностей", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                _events.Publish("Ошибка сохранения!");
             }
         }
 

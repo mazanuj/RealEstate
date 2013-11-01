@@ -86,14 +86,15 @@ namespace RealEstate.Parsing
             int HeightToCrop = 0;
 
             if(site == ImportSite.Avito)
-            {
                 HeightToCrop = 40;
-            }
+            else if (site == ImportSite.Hands)
+                HeightToCrop = 55;
+            
 
-            DownloadImage2(imageSource, path, WidthToCrop, HeightToCrop);
+            DownloadImage(imageSource, path, WidthToCrop, HeightToCrop);
         }
 
-        private void DownloadImage2(Image imageSource, string path, int WidthToCrop, int HeightToCrop)
+        private void DownloadImage(Image imageSource, string path, int WidthToCrop, int HeightToCrop)
         {
             if (!File.Exists(path) || new FileInfo(path).Length == 0)
             {
@@ -111,6 +112,7 @@ namespace RealEstate.Parsing
 
                         using (Bitmap objBitmap = new Bitmap(destWidth, destHeight))
                         {
+                            objBitmap.MakeTransparent();
                             using (Graphics objGraphics = Graphics.FromImage(objBitmap))
                             {
                                 objGraphics.DrawImageUnscaled(image, 0, 0);

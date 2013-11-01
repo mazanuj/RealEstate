@@ -699,7 +699,7 @@
 								<ColumnDefinition Width="30" />
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
-							<Rectangle x:Name="rectangle" Width="30" Height="30" Fill="{StaticResource ExpanderButtonBackgroundBrush}" HorizontalAlignment="Center" Stroke="{StaticResource ExpanderButtonBorderBrush}" VerticalAlignment="Center" />
+							<Rectangle x:Name="rectangle" Width="15" Height="15" Fill="{StaticResource ExpanderButtonBackgroundBrush}" HorizontalAlignment="Center" Stroke="{StaticResource ExpanderButtonBorderBrush}" VerticalAlignment="Center" />
 							<Path x:Name="arrow" Width="10" Height="6" Fill="{StaticResource GlyphBackgroundBrush}" Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z " Stretch="Fill" RenderTransformOrigin="0.5, 0.5" />
 							<ContentPresenter Grid.Column="1" HorizontalAlignment="Stretch" Margin="4,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center" />
 						</Grid>

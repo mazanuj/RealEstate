@@ -23,8 +23,6 @@ namespace RealEstate.Parsing
 
             foreach (var setting in settings)
             {
-                if (headers.Count > param.MaxCount) break;
-
                 if (setting.Urls != null)
                 {
                     foreach (var url in setting.Urls)

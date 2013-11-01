@@ -88,11 +88,14 @@ namespace RealEstate.Parsing
                 }
             }
 
-            var forDeleting = setting.Urls.Where(url => !urls.Contains(url)).ToList();
-
-            foreach (var url in forDeleting)
+            if (setting.Urls != null)
             {
-                context.ParserSourceUrls.Remove(url);
+                var forDeleting = setting.Urls.Where(url => !urls.Contains(url)).ToList();
+
+                foreach (var url in forDeleting)
+                {
+                    context.ParserSourceUrls.Remove(url);
+                }
             }
 
             context.SaveChanges();

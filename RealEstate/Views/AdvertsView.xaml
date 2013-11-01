@@ -132,6 +132,8 @@
                     <DataGridTextColumn Header="Город" Binding="{Binding City}" />
                     <DataGridTextColumn Header="Район" Binding="{Binding Distinct}" />
                     <DataGridTextColumn Header="Адрес" Binding="{Binding Address}" />
+                    <DataGridTextColumn Header="Метро" Binding="{Binding MetroStation}" />
+                    <DataGridTextColumn Header="AO" Binding="{Binding AO}" />
                     <DataGridTextColumn Header="Цена" Binding="{Binding Price}" />
                     <DataGridTextColumn Header="Комнат" Binding="{Binding Rooms}" />
                     <DataGridTextColumn Header="Площадь" Binding="{Binding AreaFull}" />

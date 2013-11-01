@@ -18,6 +18,7 @@ using RealEstate.Parsing.Parsers;
 using System.Net;
 using RealEstate.Settings;
 using RealEstate.SmartProcessing;
+using System.Collections.ObjectModel;
 
 namespace RealEstate.ViewModels
 {
@@ -278,6 +279,18 @@ namespace RealEstate.ViewModels
                 var settings = _parserSettingManager.FindSettings(param.advertType, param.city,
                     param.site, param.period, param.realType, param.subType);
 
+                App.Current.Dispatcher.Invoke((System.Action)(() =>
+                    {
+                        foreach (var setting in settings)
+                        {
+                            if (setting.Urls != null)
+                                foreach (var url in setting.Urls.Select(u => u.Url))
+                                {
+                                    task.SourceUrls.Add(url);
+                                }
+                        }
+                    }));
+
                 int maxattempt = SettingsStore.MaxParsingAttemptCount;
 
                 WebProxy proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
@@ -466,6 +479,12 @@ namespace RealEstate.ViewModels
     public class ParsingTask : RealEstateTask
     {
         private System.Timers.Timer timer;
+
+        private ObservableCollection<string> _SourceUrls = new ObservableCollection<string>();
+        public ObservableCollection<string> SourceUrls
+        {
+            get { return _SourceUrls; }
+        }
 
         private int _TotlaCount = 0;
         public int TotalCount

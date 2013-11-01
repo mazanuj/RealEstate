@@ -20,40 +20,58 @@ namespace RealEstate.SmartProcessing
         {
             _rulesManager = rulesManager;
         }
-        public bool Process(Advert advert, TaskParsingParams param)
+
+        public bool Process(Advert advert, TaskParsingParams param, bool ignoreSkip = false)
         {
             try
             {
-                foreach (var rule in _rulesManager.Rules.Where(r => r.Verb == Verb.Skip))
+                if (!ignoreSkip)
                 {
-                    if (rule.Conditions.TrueForAll(c => c.IsSatisfy(advert))
-                        && (rule.Site == ImportSite.All || advert.ImportSite == rule.Site))
+                    foreach (var rule in _rulesManager.Rules.Where(r => r.Verb == Verb.Skip))
                     {
-                        //Trace.TraceInformation("Rule match: " + rule.ToString());
-                        switch (rule.Verb)
+                        if (rule.Conditions.TrueForAll(c => c.IsSatisfy(advert))
+                            && (rule.Site == ImportSite.All || advert.ImportSite == rule.Site))
                         {
-                            case Verb.Skip:
-                                return false;
+                            //Trace.TraceInformation("Rule match: " + rule.ToString());
+                            switch (rule.Verb)
+                            {
+                                case Verb.Skip:
+                                    return false;
+                            }
                         }
                     }
                 }
 
+                if (String.IsNullOrEmpty(advert.Address)) //from print
+                {
+                    if (!TryParseAddress(advert) && !ignoreSkip)
+                        return false;
+
+                }
+
+
                 if (param.site == ImportSite.Hands)
                 {
-                    if (String.IsNullOrEmpty(advert.Address)) //from print
-                    {
-                        if (!TryParseAddress_Hands(advert))
-                            return false;
-
-                        RemoveAdvertisers(advert);
-                    }
+                    RemoveAdvertisers(advert);
                 }
+
+                var oldAddress = advert.Address;
 
                 ClarifyAddress(advert);
 
-                DetectDistinct(advert);
+                DetectDistinct(advert, oldAddress);
+
+                if(String.IsNullOrEmpty(advert.Address))
+                {
+                    TryParseAddress(advert);
+                    ClarifyAddress(advert);
+                }
+
+                RemoveStreetLabel(advert);
 
                 DetectPrice(advert);
+
+                DetectArea(advert);
 
                 foreach (var rule in _rulesManager.Rules)
                 {
@@ -64,7 +82,9 @@ namespace RealEstate.SmartProcessing
                         switch (rule.Verb)
                         {
                             case Verb.Skip:
-                                return false;
+                                if (!ignoreSkip)
+                                    return false;
+                                break;
                         }
                     }
                 }
@@ -78,9 +98,33 @@ namespace RealEstate.SmartProcessing
             }
         }
 
+        private void DetectArea(Advert advert)
+        {
+            if (advert.AreaFull == 0)
+            {
+                Regex regArea = new Regex(@"пл(\.|ощадь) (?<area>\d+)\ *кв\.?\ *м\.?", RegexOptions.IgnoreCase);
+
+                var m = regArea.Match(advert.MessageFull);
+                if (m.Success && m.Groups["area"].Value != "")
+                {
+                    float fullArea;
+                    if (float.TryParse(m.Groups["area"].Value, out fullArea))
+                    {
+                        advert.AreaFull = fullArea;
+                        return;
+                    }
+                }
+            }       
+        }
+
+        private void RemoveStreetLabel(Advert advert)
+        {
+            advert.Address = advert.Address.Replace("улица", "").Replace("ул.", "").Trim();
+        }
+
         private void RemoveAdvertisers(Advert advert)
         {
-            if(advert.MessageFull.Contains("Дата выхода объявления"))
+            if (advert.MessageFull.Contains("Дата выхода объявления"))
             {
                 var ind = advert.MessageFull.IndexOf("Дата выхода");
                 advert.MessageFull = advert.MessageFull.Substring(0, ind);
@@ -94,7 +138,7 @@ namespace RealEstate.SmartProcessing
             advert.Address = newAddress.ToLower().Trim() == advert.City.ToLower().Trim() ? string.Empty : newAddress;
         }
 
-        private bool TryParseAddress_Hands(Advert advert)
+        private bool TryParseAddress(Advert advert)
         {
             Regex regCity = new Regex(@"кв[\w,\.,\,, \-]*\ в ([\w,\ ,\.]+),");
             Regex regAddress = new Regex(@"\ на\ +(([\w-]+\.?\ *(?:\w+\.\ +)*[\w-]+)(?:,?\ *д\.?\ *(\d+\w*))?)");
@@ -116,21 +160,78 @@ namespace RealEstate.SmartProcessing
             }
 
             m = regAddress.Match(advert.MessageFull);
-            if (m.Success && m.Groups.Count > 3)
+            if (m.Success && m.Groups.Count > 3 && !m.Value.Contains("берег"))
             {
                 advert.Address = m.Groups[1].Value;
+            }
+
+            string street = null;
+
+            if(String.IsNullOrEmpty(advert.Address))
+            {
+                Regex rCity1 = new Regex(@"(?<street>ул.\ *(?:\ *\w\.?\-?)*\ *),", RegexOptions.IgnoreCase);
+               
+
+                m = rCity1.Match(advert.MessageFull);
+
+                if(m.Success && m.Groups["street"].Value != "")
+                {
+                    street = m.Groups["street"].Value;
+                }
+
+            }
+
+            if (String.IsNullOrEmpty(advert.Address))
+            {
+                Regex regHigh = new Regex(@"(?<highway>\w+\ +ш.)\W", RegexOptions.IgnoreCase);
+                m = regHigh.Match(advert.MessageFull);
+                if (m.Success && m.Groups["highway"].Value != "")
+                {
+                    street = m.Groups["highway"].Value;
+                }
+            }
+
+            if(street != null)
+            {
+                Regex rHouse = new Regex(@"(?<house>д\.?\ *\d+\ */?\ *\d*\ *\w)\W", RegexOptions.IgnoreCase);
+                m = rHouse.Match(advert.MessageFull);
+                var house = "";
+                if (m.Success && m.Groups["house"].Value != "")
+                {
+                    house = ", " + m.Groups["house"].Value.Replace('/', 'к');
+                }
+
+                advert.Address = street + house;
             }
 
             return true;
 
         }
 
-        private void DetectDistinct(Advert advert)
+        private void DetectDistinct(Advert advert, string oldAddress)
         {
-            if (!string.IsNullOrEmpty(advert.City) && !string.IsNullOrEmpty(advert.Address))
+            if (String.IsNullOrEmpty(advert.Distinct))
             {
-                KladrApi api = new KladrApi();
-                advert.Distinct = api.GetDistinct(advert.City, advert.Address);
+                var parts = oldAddress.Split(',');
+                if (parts.Count() > 0)
+                {
+                    if (parts[0].Contains("р-н") && parts[0].Split(' ').Count() == 2)
+                    {
+                        advert.Distinct = parts[0].Replace("р-н", "").Trim();
+                        return;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(advert.City) && !string.IsNullOrEmpty(advert.Address))
+                {
+                    KladrApi api = new KladrApi();
+                    advert.Distinct = api.GetDistinct(advert.City, advert.Address);
+                }
+
+                if (advert.Distinct == null)
+                {
+
+                }
             }
         }
 
@@ -156,18 +257,57 @@ namespace RealEstate.SmartProcessing
                     }
                     else
                         if (m.Groups["mln"].Value != "" && m.Groups["ths"].Value != "")
-                    {
-                        strPrice = m.Groups["mln"].Value.Replace("млн.", "");
-                        var ths = Int32.Parse(m.Groups["ths"].Value.Replace("тыс.", "").Replace(" ", ""));
-                        strPrice += ths.ToString("000") + "000";
-                    }
-                    strPrice = strPrice.Replace("руб.","").Replace(" ","").Trim();
+                        {
+                            strPrice = m.Groups["mln"].Value.Replace("млн.", "");
+                            var ths = Int32.Parse(m.Groups["ths"].Value.Replace("тыс.", "").Replace(" ", ""));
+                            strPrice += ths.ToString("000") + "000";
+                        }
+                    strPrice = strPrice.Replace("руб.", "").Replace(" ", "").Trim();
 
                     long price;
                     Int64.TryParse(strPrice, out price);
                     advert.Price = price;
                 }
             }
+        }
+
+        public double ComputeCoverage(Advert advert)
+        {
+            double total = 0;
+            double current = 0;
+
+            total++;
+            if (!String.IsNullOrEmpty(advert.Address))
+                current++;
+
+            total++;
+            if (!String.IsNullOrEmpty(advert.Distinct))
+                current++;
+
+            total++;
+            if (!String.IsNullOrEmpty(advert.Rooms))
+                current++;
+
+            total++;
+            if (!String.IsNullOrEmpty(advert.PhoneNumber))
+                current++;
+
+            total++;
+            if (!String.IsNullOrEmpty(advert.City))
+                current++;
+
+            total++;
+            if (advert.AreaFull != 0)
+                current++;
+
+            if (advert.City.ToLower() == "москва")
+            {
+                total++;
+                if (!String.IsNullOrEmpty(advert.MetroStation))
+                    current++;
+            }
+
+            return current / total;
         }
     }
 }

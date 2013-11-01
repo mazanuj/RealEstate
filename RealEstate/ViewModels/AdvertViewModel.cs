@@ -149,6 +149,11 @@ namespace RealEstate.ViewModels
                       TaskScheduler.Default);
         }
 
+        public bool CanSave
+        {
+            get { return AdvertOriginal.Id != 0; }
+        }
+
         public void Save()
         {
             try

@@ -20,6 +20,7 @@ using RealEstate.City;
 using RealEstate.Exporting;
 using RealEstate.Parsing;
 using RealEstate.SmartProcessing;
+using RealEstate.Modes;
 
 namespace RealEstate.ViewModels
 {
@@ -45,9 +46,9 @@ namespace RealEstate.ViewModels
             SettingsViewModel settingsViewModel, ProxiesViewModel proxiesViewModel,
             ParsingViewModel parsingViewModel, ParserSettingViewModel parserSettingViewModel,
             AdvertsViewModel advertsViewModel, ExportSettingsViewModel exportSettingsViewModel,
-            ExportingManager exportingManager)
+            ExportingManager exportingManager, TestParsingViewModel testParsingViewModel)
         {
-            _windowManager = windowManager;           
+            _windowManager = windowManager;
             _logManager = logManager;
             _importManager = importManager;
             _events = events;
@@ -68,6 +69,9 @@ namespace RealEstate.ViewModels
             Items.Add(parserSettingViewModel);
             Items.Add(advertsViewModel);
             Items.Add(exportSettingsViewModel);
+
+            if (ModeManager.Mode == ReleaseMode.Debug)
+                Items.Add(testParsingViewModel);
 
             ActivateItem(parsingViewModel);
 
@@ -95,7 +99,7 @@ namespace RealEstate.ViewModels
                         if (!context.Database.CompatibleWithModel(false))
                         {
                             Trace.WriteLine("Database has non-actual state. Please, update DB structure", "Error");
-                            criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n База данных в неактуальном состоянии. \regCity\n Обратитесь к программисту" };
+                            criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n База данных в неактуальном состоянии. \r\n Обратитесь к программисту" };
                         }
                     }
                     else
@@ -165,6 +169,14 @@ namespace RealEstate.ViewModels
                     Thread.Sleep(1000);
                     _events.Publish(criticalError);
                 });
+        }
+
+        public override void CanClose(Action<bool> callback)
+        {
+            if (MessageBox.Show("Действительно закрыть приложение?", "Внимание", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
+                callback(true);
+            else
+                callback(false);
         }
 
         private static void InitOKATODriver(OKATO.OKATODriver okatoDriver)

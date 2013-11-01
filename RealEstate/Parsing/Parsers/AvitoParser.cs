@@ -253,7 +253,7 @@ namespace RealEstate.Parsing.Parsers
 
         private void ParseAddress(HtmlDocument full, Advert advert)
         {
-            var addressLabel = full.DocumentNode.SelectSingleNode(@"//dt[@class='description_term']/span[text() = 'Адрес']");
+            var addressLabel = full.DocumentNode.SelectSingleNode(@"//div[@class='description_term']/span[text() = 'Адрес']");
             if (addressLabel != null)
             {
                 var nextBlock = addressLabel.ParentNode.NextSibling;
@@ -266,14 +266,14 @@ namespace RealEstate.Parsing.Parsers
                         if (link != null)
                             link.Remove();
 
-                        var metro = addressBlock.SelectSingleNode(@"./span");
+                        var metro = addressBlock.SelectSingleNode(@"./span[@class='p_i_metro']");
                         if (metro != null)
                         {
                             advert.MetroStation = metro.InnerText.TrimEnd(new[] { ',' });
                             metro.Remove();
                         }
 
-                        advert.Address = Normalize(addressBlock.InnerText).TrimEnd(new[] { ',' }).TrimStart(new[] { ',' });
+                        advert.Address = Normalize(addressBlock.InnerText).TrimEnd(new[] { ',' }).TrimStart(new[] { ',' }).Trim();
                     }
                 }
             }
@@ -282,7 +282,7 @@ namespace RealEstate.Parsing.Parsers
             {
                 var adress = full.DocumentNode.SelectSingleNode(@"//span[@itemprop='streetAddress']");
                 if (adress != null)
-                    advert.Address = adress.InnerText; //todo check this
+                    advert.Address = adress.InnerText;
             }
         }
 
@@ -461,14 +461,30 @@ namespace RealEstate.Parsing.Parsers
             return null;
         }
 
-        private void ParsePhone(HtmlDocument full, Advert advert)
+        private void ParsePhone(HtmlDocument full, Advert advert, WebProxy proxy)
         {
             var itemId = Normalize(full.GetElementbyId("item_id").InnerText);
 
             var phoneUrl = ParsePhoneImageUrl(full, itemId);
             if (phoneUrl != null)
             {
-                var phoneImage = DownloadImage(phoneUrl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, advert.Url);
+                byte[] phoneImage = null;
+
+                for (int i = 0; i < 5; i++)
+                {
+                    try
+                    {
+                        phoneImage = DownloadImage(phoneUrl, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, advert.Url);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.Write("Error when downloading image: " + ex.Message, "Web error!");
+                    }
+                }
+
+                if (phoneImage == null) throw new ParsingException("can't download phone image", "");
+
                 var phoneText = OCRManager.RecognizeImage(phoneImage);
 
                 //System.IO.File.WriteAllBytes(@"c:/test/" + phoneImage.GetHashCode() + ".png", phoneImage);
@@ -511,7 +527,7 @@ namespace RealEstate.Parsing.Parsers
                 advert.Price = ParsePrice(page);
 
                 advert.Images = ParsePhotos(page);
-                ParsePhone(page, advert);
+                ParsePhone(page, advert, proxy);
 
                 return advert;
             }

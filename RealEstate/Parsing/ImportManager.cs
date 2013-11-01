@@ -54,7 +54,7 @@ namespace RealEstate.Parsing
             using (XmlReader reader = XmlReader.Create(FileName))
             {
                 XmlSerializer ser = new XmlSerializer(typeof(List<ParsingSite>), new XmlRootAttribute("sites"));
-                ParsingSites.AddRange(((List<ParsingSite>)ser.Deserialize(reader)).Where(s => s.Site == Modes.ModeManager.Mode || Modes.ModeManager.Mode == ImportSite.All));
+                ParsingSites.AddRange(((List<ParsingSite>)ser.Deserialize(reader)).Where(s => s.Site == Modes.ModeManager.SiteMode || Modes.ModeManager.SiteMode == ImportSite.All));
             }
         }
 
