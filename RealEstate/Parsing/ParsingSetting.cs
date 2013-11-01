@@ -12,6 +12,12 @@ namespace RealEstate.Parsing
 {
     public class ParserSetting
     {
+
+        public ParserSetting()
+        {
+            Urls = new List<ParserSourceUrl>();
+        }
+
         public int Id { get; set; }
 
         [Column("RealEstateType", TypeName = "int")]

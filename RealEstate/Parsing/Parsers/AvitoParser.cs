@@ -506,7 +506,7 @@ namespace RealEstate.Parsing.Parsers
                 advert.ImportSite = ImportSite.Avito;
 
                 string result;
-                result = this.DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct);
+                result = this.DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct, true);
                 if (result.Length < 200)
                     throw new BadResponseException();
 
