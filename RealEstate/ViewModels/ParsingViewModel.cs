@@ -365,7 +365,10 @@ namespace RealEstate.ViewModels
                         catch (ParsingException pex)
                         {
                             Trace.WriteLine(pex.Message + ": " + pex.UnrecognizedData, "Unrecognized data");
-                            break;
+                            if (attempt + 1 >= maxattempt)
+                                break;
+                            else
+                                attempt = maxattempt - 2;
                         }
                         catch (OperationCanceledException)
                         {
@@ -388,7 +391,8 @@ namespace RealEstate.ViewModels
                         if (_smartProcessor.Process(advert, param))
                         {
                             adverts.Add(advert);
-                            Trace.WriteLine(advert.ToString(), "Advert");
+                            if (SettingsStore.LogSuccessAdverts)
+                                Trace.WriteLine(advert.ToString(), "Advert");
                             _advertsManager.Save(advert, headers[i].Setting);
 
                             if (SettingsStore.SaveImages)

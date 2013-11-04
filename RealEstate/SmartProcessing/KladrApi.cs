@@ -59,7 +59,7 @@ namespace RealEstate.SmartProcessing
 
             var parts = address.Split(' ').Where(s => !s.Contains("просп")
                 && !s.Contains("шосс") && !s.Contains("улиц")
-                && !s.Contains("тракт"));
+                && !s.Contains("тракт") && !s.Contains("проезд") && !s.Contains("переул"));
 
             var max = parts.Max(s => s.Length);
             address = parts.First().Trim(new char[] { ',', '.' }).Trim();
@@ -98,15 +98,53 @@ namespace RealEstate.SmartProcessing
 
             stopWaitHandle.WaitOne();
 
-            id = null;
+            string buildId = null;
             if (_response != null)
                 if (_response.result != null && _response.result.Count() > 0)
-                    id = _response.result[0].id;
+                    buildId = _response.result[0].id;
 
-            if (id == null) return null;
+            if (buildId == null)
+            {
+                stopWaitHandle.Reset();
+                kladrClient.FindAddress(new Dictionary<string, string>
+                                        {
+                                            {"query", "1"},
+                                            {"contentType", "building"},
+                                            {"streetId", id},
+                                            {"withParent", "1"},
+                                            {"limit", "1"}
+                                        }, call);
+
+                stopWaitHandle.WaitOne();
+
+                if (_response != null)
+                    if (_response.result != null && _response.result.Count() > 0)
+                        buildId = _response.result[0].id;
+
+                if(buildId == null)
+                {
+                    stopWaitHandle.Reset();
+                    kladrClient.FindAddress(new Dictionary<string, string>
+                                        {
+                                            {"query", "2"},
+                                            {"contentType", "building"},
+                                            {"streetId", id},
+                                            {"withParent", "1"},
+                                            {"limit", "1"}
+                                        }, call);
+
+                    stopWaitHandle.WaitOne();
+
+                    if (_response != null)
+                        if (_response.result != null && _response.result.Count() > 0)
+                            buildId = _response.result[0].id;
+                }
+            }
+
+            if (buildId == null) return null;
 
             KLADRDriver dr = new KLADRDriver();
-            var okato = dr.GetOKATO(id);
+            var okato = dr.GetOKATO(buildId);
 
             OKATODriver ok = new OKATODriver();
             return ok.GetDistinctByCode(okato);

@@ -327,20 +327,15 @@ namespace RealEstate.Parsing.Parsers
 
                 byte[] phoneImage = null;
 
-                for (int i = 0; i < 5; i++)
+                try
                 {
-                    try
-                    {
-                        phoneImage = DownloadImage(sellerPhone.Trim(new char[] { '\'' }), UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, Normalize(advert.Url));
-                        break;
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.Write("Error when downloading image: " + ex.Message, "Web error!");
-                    }
+                    phoneImage = DownloadImage(sellerPhone.Trim(new char[] { '\'' }), UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, Normalize(advert.Url));
                 }
-
-                if (phoneImage == null) throw new ParsingException("can't download phone image", "");
+                catch (Exception ex)
+                {
+                    Trace.Write("Error when downloading image", "Web error!");
+                    throw;
+                }
 
                 advert.PhoneNumber = OCRManager.RecognizeImage(phoneImage);
             }

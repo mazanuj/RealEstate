@@ -150,8 +150,8 @@ namespace RealEstate.Parsing.Parsers
                             switch (dateS[1])
                             {
                                 case "янв.": month = 1; break;
-                                case "фев.": month = 2; break;
-                                case "мар.": month = 3; break;
+                                case "февр.": month = 2; break;
+                                case "марта": month = 3; break;
                                 case "апр.": month = 4; break;
                                 case "мая": month = 5; break;
                                 case "июня": month = 6; break;
@@ -159,7 +159,7 @@ namespace RealEstate.Parsing.Parsers
                                 case "авг.": month = 8; break;
                                 case "сен.": month = 9; break;
                                 case "окт.": month = 10; break;
-                                case "ноя.": month = 11; break;
+                                case "нояб.": month = 11; break;
                                 case "дек.": month = 12; break;
                                 default:
                                     throw new ParsingException("Can't parse date information", dateString);
@@ -238,17 +238,28 @@ namespace RealEstate.Parsing.Parsers
                 throw new ParsingException("none header", "");
         }
 
-        private string ParseCity(HtmlDocument full)
+        private void ParseCity(Advert advert, HtmlDocument full)
         {
             var cityLabel = full.GetElementbyId("map");
             if (cityLabel != null)
             {
                 var city = cityLabel.ChildNodes.Where(span => span.Attributes["class"] != null && span.Attributes["class"].Value == "c-1"); //todo check this
                 if (city != null)
-                    return Normalize(String.Join(", ", city.Select(c => c.InnerText))).TrimEnd(new[] { ',', ' ' });
-            }
+                    advert.City = Normalize(String.Join(", ", city.Select(c => c.InnerText))).TrimEnd(new[] { ',', ' ' });
 
-            return null;
+                var link = cityLabel.SelectSingleNode(@"./a");
+                if (link != null)
+                    link.Remove();
+
+                var div = cityLabel.SelectSingleNode(@"./div");
+                if (div != null)
+                    div.Remove();
+
+                var parts = cityLabel.InnerText.Split(',');
+                var dist = parts.FirstOrDefault(s => s.Contains("р-н "));
+                if (dist != null)
+                    advert.Distinct = Normalize(dist).Trim().Replace("р-н ", "");
+            }
         }
 
         private void ParseAddress(HtmlDocument full, Advert advert)
@@ -470,20 +481,15 @@ namespace RealEstate.Parsing.Parsers
             {
                 byte[] phoneImage = null;
 
-                for (int i = 0; i < 5; i++)
+                try
                 {
-                    try
-                    {
-                        phoneImage = DownloadImage(phoneUrl, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, advert.Url);
-                        break;
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.Write("Error when downloading image: " + ex.Message, "Web error!");
-                    }
+                    phoneImage = DownloadImage(phoneUrl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, advert.Url);
                 }
-
-                if (phoneImage == null) throw new ParsingException("can't download phone image", "");
+                catch (Exception)
+                {
+                    Trace.Write("Error during downloading image!");
+                    throw;
+                }
 
                 var phoneText = OCRManager.RecognizeImage(phoneImage);
 
@@ -498,7 +504,7 @@ namespace RealEstate.Parsing.Parsers
             Advert advert = new Advert();
 
             try
-            {                
+            {
                 advert.DateUpdate = DateTime.Now;
 
                 advert.DateSite = header.DateSite;
@@ -517,7 +523,7 @@ namespace RealEstate.Parsing.Parsers
                 ParseTitle(page, advert);
 
                 advert.Name = ParseSeller(page);
-                advert.City = ParseCity(page);
+                ParseCity(advert, page);
                 ParseAddress(page, advert);
 
                 ParseCategory(page, advert);

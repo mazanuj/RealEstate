@@ -65,6 +65,8 @@ namespace RealEstate.SmartProcessing
                 {
                     TryParseAddress(advert);
                     ClarifyAddress(advert);
+
+                    advert.Address = advert.Address ?? oldAddress;
                 }
 
                 RemoveStreetLabel(advert);
@@ -133,9 +135,12 @@ namespace RealEstate.SmartProcessing
 
         private void ClarifyAddress(Advert advert)
         {
-            YandexMapApi api = new YandexMapApi();
-            var newAddress = api.SearchObject(advert.City + ", " + advert.Address);
-            advert.Address = newAddress.ToLower().Trim() == advert.City.ToLower().Trim() ? string.Empty : newAddress;
+            if (!String.IsNullOrEmpty(advert.Address))
+            {
+                YandexMapApi api = new YandexMapApi();
+                var newAddress = api.SearchObject(advert.City + ", " + advert.Address.Replace("ул.", ""));
+                advert.Address = newAddress.ToLower().Trim() == advert.City.ToLower().Trim() ? null : newAddress;
+            }
         }
 
         private bool TryParseAddress(Advert advert)

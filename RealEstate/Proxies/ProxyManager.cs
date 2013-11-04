@@ -51,22 +51,28 @@ namespace RealEstate.Proxies
 
         public void RejectProxy(WebProxy proxy)
         {
-            lock (rejectLock)
+            if (proxy != null)
             {
-                if (this.SuspectedProxies.Contains(proxy))
-                    RejectProxyFull(proxy);
-                else
-                    SuspectedProxies.Add(proxy);
-            }         
+                lock (rejectLock)
+                {
+                    if (this.SuspectedProxies.Contains(proxy))
+                        RejectProxyFull(proxy);
+                    else
+                        SuspectedProxies.Add(proxy);
+                }
+            }
         }
 
         public void RejectProxyFull(WebProxy proxy)
         {
-            lock (rejectLock)
+            if (proxy != null)
             {
-                this.Proxies.Remove(proxy);
-                this.SuspectedProxies.Remove(proxy);
-                this.RejectedProxies.Add(proxy); 
+                lock (rejectLock)
+                {
+                    this.Proxies.Remove(proxy);
+                    this.SuspectedProxies.Remove(proxy);
+                    this.RejectedProxies.Add(proxy);
+                }
             }
         }
 

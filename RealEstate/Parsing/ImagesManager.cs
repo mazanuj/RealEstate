@@ -98,8 +98,8 @@ namespace RealEstate.Parsing
         {
             if (!File.Exists(path) || new FileInfo(path).Length == 0)
             {
-
-                var phoneImage = ParserBase.DownloadImage(imageSource.URl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, null);
+                AvitoParser p = new AvitoParser();
+                var phoneImage = p.DownloadImage(imageSource.URl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, null);
                 using (var memory = new MemoryStream(phoneImage))
                 {
                     using (var image = (Bitmap)Bitmap.FromStream(memory))
