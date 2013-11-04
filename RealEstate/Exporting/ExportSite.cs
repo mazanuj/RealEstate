@@ -15,5 +15,11 @@ namespace RealEstate.Exporting
 
         public virtual ICollection<ParserSetting> ParseSettings { get; set; }
         public virtual ICollection<Advert> Adverts { get; set; }
+
+        public ExportSite()
+        {
+            ParseSettings = new List<ParserSetting>();
+            Adverts = new List<Advert>();
+        }
     }
 }

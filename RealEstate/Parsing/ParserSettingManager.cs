@@ -52,7 +52,7 @@ namespace RealEstate.Parsing
                         s.ParsePeriodValue == (int)period &&
                         s.RealEstateTypeValue == (int)type &&
                         s.UsedtypeValue == (int)subtype &&
-                        String.IsNullOrEmpty(city) ? true : s.ExportSite.City == city 
+                        (s.ExportSite.City == city || String.IsNullOrEmpty(city))
                       select s;
 
             return set.ToList();
