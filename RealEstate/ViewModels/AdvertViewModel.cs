@@ -15,6 +15,7 @@ using System.Threading;
 using RealEstate.Exporting;
 using RealEstate.Views;
 using Awesomium.Windows.Controls;
+using RealEstate.SmartProcessing;
 
 namespace RealEstate.ViewModels
 {
@@ -29,6 +30,7 @@ namespace RealEstate.ViewModels
         private readonly ParserSettingManager _parserSettingManager;
         private readonly AdvertsManager _advertsManager;
         private readonly ExportingManager _exportingManager;
+        private readonly SmartProcessor _smart;
         private WebControl _browser = null;
 
         public Advert AdvertOriginal { get; set; }
@@ -38,7 +40,8 @@ namespace RealEstate.ViewModels
 
         [ImportingConstructor]
         public AdvertViewModel(IEventAggregator events, RealEstateContext context, ImagesManager imagesManager,
-            ParserSettingManager parserSettingManager, AdvertsManager advertsManager, ExportingManager exportingManager)
+            ParserSettingManager parserSettingManager, AdvertsManager advertsManager, ExportingManager exportingManager,
+            SmartProcessor smart)
         {
             _events = events;
             _context = context;
@@ -46,6 +49,7 @@ namespace RealEstate.ViewModels
             _parserSettingManager = parserSettingManager;
             _advertsManager = advertsManager;
             _exportingManager = exportingManager;
+            _smart = smart;
         }
 
         protected override void OnInitialize()
@@ -79,6 +83,10 @@ namespace RealEstate.ViewModels
             Advert = new Parsing.Advert();
             Advert.Id = AdvertOriginal.Id;
             Advert.Address = AdvertOriginal.Address;
+            Advert.Street = AdvertOriginal.Street;
+            Advert.House = AdvertOriginal.House;
+            Advert.HousePart = AdvertOriginal.HousePart;
+            Advert.AO = AdvertOriginal.AO;
             Advert.AdvertType = AdvertOriginal.AdvertType;
             Advert.AreaFull = AdvertOriginal.AreaFull;
             Advert.AreaKitchen = AdvertOriginal.AreaKitchen;
@@ -112,6 +120,11 @@ namespace RealEstate.ViewModels
             {
                 var count = AdvertOriginal.ExportSites.Count();
             }//bug fix for unloading first time
+
+            if(!String.IsNullOrEmpty(Advert.Address) && String.IsNullOrEmpty(Advert.Street))
+            {
+                _smart.FillAddress(Advert);
+            }
         }
 
         private void LoadCategories()
@@ -159,6 +172,10 @@ namespace RealEstate.ViewModels
             try
             {
                 AdvertOriginal.Address = Advert.Address;
+                AdvertOriginal.Street = Advert.Street;
+                AdvertOriginal.House = Advert.House;
+                AdvertOriginal.HousePart = Advert.HousePart;
+                AdvertOriginal.AO = Advert.AO;
                 AdvertOriginal.AdvertType = SelectedAdvertType.Type;
                 AdvertOriginal.AreaFull = Advert.AreaFull;
                 AdvertOriginal.AreaKitchen = Advert.AreaKitchen;
@@ -246,6 +263,7 @@ namespace RealEstate.ViewModels
             try
             {
                 Advert.Address = _browser.ExecuteJavascriptWithResult("GetNewAddress()");
+                _smart.FillAddress(Advert);
                 NotifyOfPropertyChange(() => Advert);
             }
             catch (Exception ex)

@@ -9,6 +9,7 @@
             <BooleanToVisibilityConverter x:Key="bool2VisibilityConverter" />
             <converters:EnumBooleanConverter x:Key="enumBooleanConverter" />
             <converters:IntConverter x:Key="intConverter" />
+            <converters:ImageFilledConverter x:Key="imageFilledConverter" />
             <converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
             <converters:CombiningConverter x:Key="negatedBoolToVisibilityConverter" Converter1="{StaticResource inverseBooleanConverter}" Converter2="{StaticResource bool2VisibilityConverter}" />
             <converters:CombiningConverter x:Key="EnumToVisibilityConverter" Converter1="{StaticResource enumBooleanConverter}" Converter2="{StaticResource bool2VisibilityConverter}" />

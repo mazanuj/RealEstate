@@ -1,9 +1,11 @@
-﻿using System;
+﻿using RealEstate.Parsing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace RealEstate.Converters
 {
@@ -97,5 +99,28 @@ namespace RealEstate.Converters
         }
 
         #endregion
+    }
+
+    public class ImageFilledConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            var contains = (bool)values[0] ? "" : "-";
+            if ((ImportSite)values[1] == ImportSite.Avito)
+            {
+                return new BitmapImage(new Uri(@"pack://application:,,,/Images/avito" + contains + ".png"));
+            }
+            else if ((ImportSite)values[1] == ImportSite.Hands)
+            {
+                return new BitmapImage(new Uri(@"pack://application:,,,/Images/hands" + contains + ".png"));
+            }
+
+            return null;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

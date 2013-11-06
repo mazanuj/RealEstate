@@ -99,7 +99,7 @@ namespace RealEstate.Parsing
             if (!File.Exists(path) || new FileInfo(path).Length == 0)
             {
                 AvitoParser p = new AvitoParser();
-                var phoneImage = p.DownloadImage(imageSource.URl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, null);
+                var phoneImage = p.DownloadImage(imageSource.URl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, null, false);
                 using (var memory = new MemoryStream(phoneImage))
                 {
                     using (var image = (Bitmap)Bitmap.FromStream(memory))
@@ -110,12 +110,14 @@ namespace RealEstate.Parsing
                         int destWidth = sourceWidth - WidthToCrop < 0 ? sourceWidth : sourceWidth - WidthToCrop;
                         int destHeight = sourceHeight - HeightToCrop < 0 ? sourceHeight : sourceHeight - HeightToCrop;
 
-                        using (Bitmap objBitmap = new Bitmap(destWidth, destHeight))
+                        //image.Save(path);
+                        using (Bitmap objBitmap = new Bitmap(destWidth, destHeight, image.PixelFormat))
                         {
+                            objBitmap.SetResolution(image.HorizontalResolution, image.VerticalResolution);
                             objBitmap.MakeTransparent();
                             using (Graphics objGraphics = Graphics.FromImage(objBitmap))
                             {
-                                objGraphics.DrawImageUnscaled(image, 0, 0);
+                                objGraphics.DrawImage(image, new RectangleF(0, 0, destWidth, destHeight), new RectangleF(0, 0, destWidth, destHeight), GraphicsUnit.Pixel);
                                 objBitmap.Save(path, ImageFormat.Jpeg);
                             }
                         }
@@ -129,7 +131,7 @@ namespace RealEstate.Parsing
             if (imagesSource == null) return null;
 
             var images = new List<ImageWrap>();
-            foreach (var imageSource in imagesSource)
+            foreach (var imageSource in imagesSource.Take(Settings.SettingsStore.MaxCountOfImages))
             {
                 try
                 {

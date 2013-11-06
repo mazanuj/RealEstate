@@ -72,7 +72,7 @@ namespace RealEstate.Parsing.Parsers
 
         }
 
-        public byte[] DownloadImage(string url, string userAgent, WebProxy proxy, CancellationToken cs, string referer, bool useCookie = false)
+        public byte[] DownloadImage(string url, string userAgent, WebProxy proxy, CancellationToken cs, string referer,  bool isPhone, bool useCookie = false)
         {
             HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             myHttpWebRequest.AllowAutoRedirect = true;
@@ -81,7 +81,7 @@ namespace RealEstate.Parsing.Parsers
             myHttpWebRequest.CookieContainer = cookie;
             myHttpWebRequest.UserAgent = userAgent;
             myHttpWebRequest.Referer = referer;
-            myHttpWebRequest.Timeout = SettingsStore.DefaultTimeout;
+            myHttpWebRequest.Timeout = isPhone ? SettingsStore.DefaultTimeout : 60000;
             myHttpWebRequest.KeepAlive = true;
 
             if (cs.IsCancellationRequested)

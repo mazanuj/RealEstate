@@ -124,7 +124,14 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="../Images/image.png" Visibility="{Binding ContainsImages, Converter={StaticResource bool2VisibilityConverter}}"/>
+                                <Image>
+                                    <Image.Source>
+                                        <MultiBinding Converter="{StaticResource imageFilledConverter}">
+                                            <Binding Path="ContainsImages" />
+                                            <Binding Path="ImportSite" />
+                                        </MultiBinding>
+                                    </Image.Source>
+                                </Image>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

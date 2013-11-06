@@ -35,6 +35,9 @@ namespace RealEstate.Parsing
         public string City { get; set; } //+
         public string Distinct { get; set; }
         public string Address { get; set; } //+
+        public string Street { get; set; }
+        public string House { get; set; }
+        public string HousePart { get; set; }
         public string MetroStation { get; set; } //+
         public string AO { get; set; }
 

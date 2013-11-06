@@ -384,6 +384,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\image.png" />
+    <Resource Include="Images\avito-.png" />
+    <Resource Include="Images\avito.png" />
+    <Resource Include="Images\hands-.png" />
+    <Resource Include="Images\hands.png" />
     <Content Include="map template.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

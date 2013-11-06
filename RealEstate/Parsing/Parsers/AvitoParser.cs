@@ -483,7 +483,7 @@ namespace RealEstate.Parsing.Parsers
 
                 try
                 {
-                    phoneImage = DownloadImage(phoneUrl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, advert.Url);
+                    phoneImage = DownloadImage(phoneUrl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, advert.Url, true);
                 }
                 catch (Exception)
                 {

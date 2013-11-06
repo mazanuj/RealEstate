@@ -228,14 +228,13 @@ namespace RealEstate.Parsing.Parsers
 
         private void ParseProperties(HtmlDocument page, Advert advert)
         {
-            var detailsNodes = page.DocumentNode.SelectNodes("//ul[contains(@class,'form_info form_info_short')]");
+            var detailsNodes = page.DocumentNode.SelectNodes("//ul[contains(@class,'form_info form_info_short') or contains(@class,'form_info')]");
             if (detailsNodes != null)
             {
                 foreach (var detailsNode in detailsNodes)
                 {
                     foreach (var detail in detailsNode.SelectNodes("li"))
                     {
-
                         var parts = detail.InnerText.Trim().Split(new char[] { ':' });
                         try
                         {
@@ -264,6 +263,12 @@ namespace RealEstate.Parsing.Parsers
                                     break;
                                 case "АО":
                                     advert.AO = parts[1].Replace("административный округ", "").Trim();
+                                    break;
+                                case "Продавец":
+                                    advert.Name = parts[1].Trim();
+                                    break;
+                                case "Контактное лицо":
+                                    advert.Name = parts[1].Trim();
                                     break;
                                 default:
                                     break;
@@ -329,7 +334,7 @@ namespace RealEstate.Parsing.Parsers
 
                 try
                 {
-                    phoneImage = DownloadImage(sellerPhone.Trim(new char[] { '\'' }), UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, Normalize(advert.Url));
+                    phoneImage = DownloadImage(sellerPhone.Trim(new char[] { '\'' }), UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, Normalize(advert.Url), true);
                 }
                 catch (Exception ex)
                 {

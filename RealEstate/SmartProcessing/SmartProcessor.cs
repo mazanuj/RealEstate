@@ -75,6 +75,8 @@ namespace RealEstate.SmartProcessing
 
                 DetectArea(advert);
 
+                FillAddress(advert);
+
                 foreach (var rule in _rulesManager.Rules)
                 {
                     if (rule.Conditions.TrueForAll(c => c.IsSatisfy(advert))
@@ -313,6 +315,25 @@ namespace RealEstate.SmartProcessing
             }
 
             return current / total;
+        }
+
+        public void FillAddress(Advert advert)
+        {
+            if(!String.IsNullOrEmpty(advert.Address))
+            {
+                var parts = advert.Address.Split(',');
+                advert.Street = parts[0];
+                if(parts.Count() > 1)
+                {
+                    Regex r = new Regex(@"(?<house>\d+)(?:к|\\|/)?(?<housepart>\d+)?");
+                    var m = r.Match(parts[1]);
+                    if (m.Success)
+                    {
+                        advert.House = m.Groups["house"].Value;
+                        advert.HousePart = m.Groups["housepart"].Value;
+                    }
+                }
+            }
         }
     }
 }
