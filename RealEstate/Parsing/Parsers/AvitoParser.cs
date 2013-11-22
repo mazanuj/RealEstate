@@ -26,11 +26,15 @@ namespace RealEstate.Parsing.Parsers
             List<AdvertHeader> headers = new List<AdvertHeader>();
             int oldCount = -1;
             int index = 0;
+            bool reAtempt = false;
 
             do
             {
-                oldCount = headers.Count;
-                index++;
+                if (!reAtempt)
+                {
+                    oldCount = headers.Count;
+                    index++;
+                }
 
                 string result = null;
                 int attempt = 0;
@@ -71,6 +75,8 @@ namespace RealEstate.Parsing.Parsers
                 var tiers = page.DocumentNode.SelectNodes(@"//div[contains(@class,'t_i_i')]");
                 if (tiers != null)
                 {
+                    reAtempt = false;
+
                     foreach (HtmlNode tier in tiers)
                     {
                         var link = ParseLinkToFullDescription(tier);
@@ -87,8 +93,8 @@ namespace RealEstate.Parsing.Parsers
                 }
                 else
                 {
-                    Trace.TraceInformation(url.Url);
-                    throw new ParsingException("can't find adverts", "");
+                    Trace.TraceInformation("Can't find adverts");
+                    reAtempt = true;
                 }
             }
             while (headers.Count != oldCount && headers.Count < param.MaxCount);

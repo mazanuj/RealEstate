@@ -438,9 +438,7 @@ namespace RealEstate.ViewModels
             }
             finally
             {
-                Thread.Sleep(5000);
                 task.Stop();
-                Tasks.Remove(task);
                 Trace.WriteLine("Task has been closed", "Info");
             }
         }
@@ -458,11 +456,16 @@ namespace RealEstate.ViewModels
         public void StopTask(ParsingTask task)
         {
             Task.Factory.StartNew(() =>
-            {
-                Thread.Sleep(3000);
+            {                
                 task.Stop();
+                Thread.Sleep(3000);
                 Tasks.Remove(task);
             });
+        }
+
+        public void RemoveTask(ParsingTask task)
+        {
+            Tasks.Remove(task);
         }
 
     }
@@ -572,10 +575,13 @@ namespace RealEstate.ViewModels
 
         public override void Stop()
         {
-            IsCanceled = true;
-            timer.Stop();
-            timer.Dispose();
-            cs.Cancel();
+            if (!IsCanceled)
+            {
+                IsCanceled = true;
+                timer.Stop();
+                timer.Dispose();
+                cs.Cancel();
+            }
         }
 
         public override void Start()

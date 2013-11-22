@@ -172,15 +172,22 @@
                                         </TextBlock.Text>
                                     </TextBlock>
                                     <StackPanel Grid.Column="4" Orientation="Horizontal">
-                                        <Button Margin="4 0" Visibility="{Binding IsRunning, Converter={StaticResource negatedBoolToVisibilityConverter}}"
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding IsCanceled, Converter={StaticResource negatedBoolToVisibilityConverter}}" >
+                                            <Button Margin="4 0" Visibility="{Binding IsRunning, Converter={StaticResource negatedBoolToVisibilityConverter}}"
                                                 Style="{StaticResource LinkButton}" Content="Старт" 
                                                 cal:Message.Attach="StartTask($dataContext)"/>
-                                        <Button x:Name="PauseButton" Margin="4 0" Visibility="{Binding IsRunning, Converter={StaticResource bool2VisibilityConverter}}" 
+                                            <Button x:Name="PauseButton" Margin="4 0" Visibility="{Binding IsRunning, Converter={StaticResource bool2VisibilityConverter}}" 
                                                 Style="{StaticResource LinkButton}" Content="Пауза" 
                                                 cal:Message.Attach="PauseTask($dataContext)"/>
-                                        <Button Margin="4 0" Style="{StaticResource LinkButton}" 
+                                            <Button Margin="4 0" Style="{StaticResource LinkButton}" 
                                                 Content="Стоп" 
                                                 cal:Message.Attach="StopTask($dataContext)"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding IsCanceled, Converter={StaticResource bool2VisibilityConverter}}" >
+                                            <Button Margin="4 0" Style="{StaticResource LinkButton}" 
+                                                Content="Удалить" 
+                                                cal:Message.Attach="RemoveTask($dataContext)"/>
+                                        </StackPanel>
                                     </StackPanel>
                                     <TextBlock FontWeight="Bold" Grid.Column="6">
                                         <TextBlock.Text>
