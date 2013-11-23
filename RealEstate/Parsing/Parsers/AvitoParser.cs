@@ -27,6 +27,7 @@ namespace RealEstate.Parsing.Parsers
             int oldCount = -1;
             int index = 0;
             bool reAtempt = false;
+            int attempt = 0;
 
             do
             {
@@ -34,10 +35,13 @@ namespace RealEstate.Parsing.Parsers
                 {
                     oldCount = headers.Count;
                     index++;
+                    attempt = 0;
                 }
 
+                reAtempt = false;
+
                 string result = null;
-                int attempt = 0;
+
 
                 while (attempt++ < maxAttemptCount)
                 {
@@ -64,7 +68,12 @@ namespace RealEstate.Parsing.Parsers
                     }
                 }
 
-                if (result == null) throw new ParsingException("Can't load headers adverts", "");
+                if (result == null)
+                {
+                    Trace.WriteLine("Can't load headers adverts", "");
+                    if (attempt++ < maxAttemptCount) reAtempt = true;
+                    continue;
+                }
 
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
@@ -72,11 +81,9 @@ namespace RealEstate.Parsing.Parsers
                 if (page.DocumentNode.SelectSingleNode(@"//h2[contains(@class,'nulus_h2')]") != null)
                     break;
 
-                var tiers = page.DocumentNode.SelectNodes(@"//div[contains(@class,'t_i_i')]");
+                var tiers = page.DocumentNode.SelectNodes(@"//div[contains(@class,'item s')]");
                 if (tiers != null)
                 {
-                    reAtempt = false;
-
                     foreach (HtmlNode tier in tiers)
                     {
                         var link = ParseLinkToFullDescription(tier);
@@ -93,11 +100,12 @@ namespace RealEstate.Parsing.Parsers
                 }
                 else
                 {
-                    Trace.TraceInformation("Can't find adverts");
-                    reAtempt = true;
+                    Trace.WriteLine("Can't find adverts");
+                    if (attempt++ < maxAttemptCount) reAtempt = true;
+                    continue;
                 }
             }
-            while (headers.Count != oldCount && headers.Count < param.MaxCount);
+            while ((headers.Count != oldCount || reAtempt) && headers.Count < param.MaxCount);
 
             return headers;
         }
@@ -117,7 +125,7 @@ namespace RealEstate.Parsing.Parsers
 
         private string ParseLinkToFullDescription(HtmlNode tier)
         {
-            var link = tier.SelectSingleNode(@".//h3[@class='t_i_h3']/a");
+            var link = tier.SelectSingleNode(@".//h3[@class='title']/a");
             if (link != null && link.Attributes.Contains("href"))
                 return "http://www.avito.ru" + Normalize(link.Attributes["href"].Value);
 
@@ -126,7 +134,7 @@ namespace RealEstate.Parsing.Parsers
 
         private DateTime ParseDate(HtmlNode tier)
         {
-            var whenNode = tier.SelectSingleNode(@".//div[contains(@class,'t_i_date')]");
+            var whenNode = tier.SelectSingleNode(@".//div[contains(@class,'date')]");
             if (whenNode != null && !string.IsNullOrEmpty(whenNode.InnerText))
             {
                 var whenItems = new List<string>(whenNode.InnerText.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries));
