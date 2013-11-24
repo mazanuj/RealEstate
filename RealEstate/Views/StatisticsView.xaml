@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="700">
+             d:DesignHeight="400" d:DesignWidth="800">
     <Grid Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -16,14 +17,15 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
                     <StackPanel>
                         <TextBlock Style="{StaticResource RibbonTitle}">Проверить на количество:</TextBlock>
-                        <RadioButton GroupName="site" Content="Все" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>
+                        <!--<RadioButton GroupName="site" Content="Все" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>-->
                         <RadioButton GroupName="site" Content="avito.ru" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Avito}"/>
-                        <RadioButton GroupName="site" Content="irr.ru" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Hands}"/>
+                        <!--<RadioButton GroupName="site" Content="irr.ru" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Hands}"/>-->
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
@@ -39,9 +41,10 @@
                         <Border Grid.Row="1" Style="{StaticResource RibbonToolBorder}" BorderThickness="0 0 0 1">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Задержка:" Margin="2"/>
-                                <TextBox Name="Delay" Margin="2" Width="100" />
+                                <TextBox Margin="2" Width="100" Text="{Binding Delay, Mode=TwoWay, Converter={StaticResource intConverter}, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}"/>
                             </StackPanel>
                         </Border>
+
                         <StackPanel Orientation="Horizontal" Margin="5 0" Grid.Row="2" HorizontalAlignment="Left">
                             <Button Name="Start" Margin="3" Content="Старт" />
                             <Button Name="Pause" Margin="3" Content="Пауза" />
@@ -49,15 +52,104 @@
                         </StackPanel>
                     </Grid>
                 </Border>
+                <Border Grid.Column="2" Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource RibbonTitle}">Отчёт:</TextBlock>
+                        <Button Name="Save" Content="Сохранить" Margin="5" />
+                        <Button Name="RestoreLast" Content="Загрузить" Margin="5"/>
+                    </StackPanel>
+                </Border>
             </Grid>
         </Border>
         <Grid Grid.Row="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-            </Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <ScrollViewer Grid.Row="0" Visibility="{Binding ShowTasks, Converter={StaticResource bool2VisibilityConverter}}" Margin="4" Padding="4" MaxHeight="140">
+                <ItemsControl Name="Tasks">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="4" Padding="2" CornerRadius="3" BorderThickness="1" BorderBrush="{StaticResource VS2012WindowBorderBrush}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="250" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Column="1" Text="{Binding Description}" />
+                                    <TextBlock FontWeight="Bold" Grid.Column="2">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="Прошло {0}:{1}:{2}">
+                                                <Binding Path="PassBy.Hours"/>
+                                                <Binding Path="PassBy.Minutes"/>
+                                                <Binding Path="PassBy.Seconds"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBlock FontWeight="Bold" Grid.Column="3">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="Осталось {0}:{1}:{2}">
+                                                <Binding Path="Remaining.Hours"/>
+                                                <Binding Path="Remaining.Minutes"/>
+                                                <Binding Path="Remaining.Seconds"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <StackPanel Grid.Column="4" Orientation="Horizontal">
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding IsCanceled, Converter={StaticResource negatedBoolToVisibilityConverter}}" >
+                                            <Button Margin="4 0" Visibility="{Binding IsRunning, Converter={StaticResource negatedBoolToVisibilityConverter}}"
+                                                Style="{StaticResource LinkButton}" Content="Старт" 
+                                                cal:Message.Attach="StartTask($dataContext)"/>
+                                            <Button x:Name="PauseButton" Margin="4 0" Visibility="{Binding IsRunning, Converter={StaticResource bool2VisibilityConverter}}" 
+                                                Style="{StaticResource LinkButton}" Content="Пауза" 
+                                                cal:Message.Attach="PauseTask($dataContext)"/>
+                                            <Button Margin="4 0" Style="{StaticResource LinkButton}" 
+                                                Content="Стоп" 
+                                                cal:Message.Attach="StopTask($dataContext)"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding IsCanceled, Converter={StaticResource bool2VisibilityConverter}}" >
+                                            <Button Margin="4 0" Style="{StaticResource LinkButton}" 
+                                                Content="Удалить" 
+                                                cal:Message.Attach="RemoveTask($dataContext)"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <TextBlock FontWeight="Bold" Grid.Column="6">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="Получено объявлений {0}/{1}">
+                                                <Binding Path="ParsedCount"/>
+                                                <Binding Path="TotalCount"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <ProgressBar Grid.Row="1" Grid.ColumnSpan="10" Margin="0 1 0 0" Height="3" Value="{Binding Progress}" />
+                                    <Expander Grid.Row="2" Grid.ColumnSpan="10" Margin="0 1 0 0" Header="Источники">
+                                        <Border BorderThickness="1" BorderBrush="WhiteSmoke">
+                                            <ItemsControl ItemsSource="{Binding SourceUrls}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding }" Margin="20 5" />
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </Border>
+                                    </Expander>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <TabControl Grid.Row="1"  Margin="4" Padding="4" x:Name="StatItems"/>
         </Grid>
     </Grid>
 </UserControl>

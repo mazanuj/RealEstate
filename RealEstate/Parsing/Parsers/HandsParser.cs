@@ -416,5 +416,10 @@ namespace RealEstate.Parsing.Parsers
             else
                 throw new ParsingException("none price", "");
         }
+
+        public override int GetTotalCount(string sourceUrl, ProxyManager proxyManager, bool useProxy, CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

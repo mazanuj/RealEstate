@@ -14,6 +14,7 @@ using RealEstate.Utils;
 using RealEstate.Proxies;
 using RealEstate.ViewModels;
 using RealEstate.OCRs;
+using RealEstate.Settings;
 
 namespace RealEstate.Parsing.Parsers
 {
@@ -52,7 +53,7 @@ namespace RealEstate.Parsing.Parsers
                     {
                         string uri = url.Url + (url.Url.Contains('?') ? '&' : '?') + "p=" + index;
                         Trace.WriteLine("Downloading " + uri);
-                        result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None);
+                        result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, token);
                         if (result.Length < 200 || !result.Contains("квартир"))
                         {
                             proxyManager.RejectProxyFull(proxy);
@@ -81,7 +82,7 @@ namespace RealEstate.Parsing.Parsers
                 if (page.DocumentNode.SelectSingleNode(@"//h2[contains(@class,'nulus_h2')]") != null)
                     break;
 
-                var tiers = page.DocumentNode.SelectNodes(@"//div[contains(@class,'item s')]");
+                var tiers = page.DocumentNode.SelectNodes(@"//div[contains(@class,'item ')]");
                 if (tiers != null)
                 {
                     foreach (HtmlNode tier in tiers)
@@ -108,6 +109,69 @@ namespace RealEstate.Parsing.Parsers
             while ((headers.Count != oldCount || reAtempt) && headers.Count < param.MaxCount);
 
             return headers;
+        }
+
+        public override int GetTotalCount(string sourceUrl, ProxyManager proxyManager, bool useProxy, CancellationToken token)
+        {
+
+            List<AdvertHeader> headers = new List<AdvertHeader>();
+            bool reAtempt = false;
+            int attempt = 0;
+
+            do
+            {
+                string result = null;
+                reAtempt = false;
+
+                while (attempt++ < SettingsStore.MaxParsingAttemptCount)
+                {
+                    token.ThrowIfCancellationRequested();
+
+                    WebProxy proxy = useProxy ? proxyManager.GetNextProxy() : null;
+
+                    try
+                    {
+                        Trace.WriteLine("Downloading " + sourceUrl);
+                        result = this.DownloadPage(sourceUrl, UserAgents.GetRandomUserAgent(), proxy, token);
+                        if (result.Length < 200 || !result.Contains("квартир"))
+                        {
+                            proxyManager.RejectProxyFull(proxy);
+                            throw new BadResponseException();
+                        }
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex.Message, "Web Error!");
+                        proxyManager.RejectProxy(proxy);
+                    }
+                }
+
+                if (result == null)
+                {
+                    Trace.WriteLine("Can't load headers adverts", "");
+                    if (attempt++ < SettingsStore.MaxParsingAttemptCount) reAtempt = true;
+                    continue;
+                }
+
+                HtmlDocument page = new HtmlDocument();
+                page.LoadHtml(result);
+
+                var countNode = page.DocumentNode.SelectSingleNode(@"//span[@class='catalog_breadcrumbs-count']");
+                if (countNode != null)
+                {
+                    return Int32.Parse(Normalize(countNode.InnerText.Replace("&nbsp;","")).Trim().Trim(new char[]{',', ' '}));
+                }
+                else
+                {
+                    Trace.WriteLine("Can't find adverts");
+                    if (attempt++ < SettingsStore.MaxParsingAttemptCount) reAtempt = true;
+                    continue;
+                }
+            }
+            while (reAtempt);
+
+            throw new ParsingException("Can't find total count", "");
         }
 
         private string ParseSeller(HtmlDocument full)
@@ -329,38 +393,62 @@ namespace RealEstate.Parsing.Parsers
             throw new ParsingException("Can't find price", "");
         }
 
-        private static AdvertType MapType(string param)
+        static Dictionary<string, AdvertType> dealMap = null;
+        static Dictionary<string, Usedtype> subTypeMap = null;
+        static Dictionary<string, RealEstateType> typeMap = null;
+
+        static AvitoParser()
         {
-            var dealMap = new Dictionary<string, AdvertType> {
+            dealMap = new Dictionary<string, AdvertType> {
                 { "prodam", AdvertType.Sell },
                 { "sdam", AdvertType.Pass }
 
             };
 
+            subTypeMap = new Dictionary<string, Usedtype> {
+                { "novostroyka", Usedtype.New },
+                { "vtorichka", Usedtype.Used },
+                { "", Usedtype.All }
+            };
+
+            typeMap = new Dictionary<string, RealEstateType> {
+                { "kvartiry", RealEstateType.Apartments }
+            };
+        }
+
+        private static AdvertType MapType(string param)
+        {
             return dealMap.ContainsKey(param) ? dealMap[param] : AdvertType.All;
+        }
+
+        public static string MapType(AdvertType type)
+        {
+            return dealMap.First(t => t.Value == type).Key;
         }
 
         private static Usedtype MapUsedtype(string param)
         {
-            var subTypeMap = new Dictionary<string, Usedtype> {
-                { "novostroyka", Usedtype.New }
-            };
-
             return subTypeMap.ContainsKey(param) ? subTypeMap[param] : Usedtype.All;
+        }
+
+        public static string MapUsedType(Usedtype type)
+        {
+            return subTypeMap.First(t => t.Value == type).Key;
         }
 
         private static RealEstateType MapRealEstateType(string param)
         {
-            var typeMap = new Dictionary<string, RealEstateType> {
-                { "kvartiry", RealEstateType.Apartments }
-            };
-
             return typeMap.ContainsKey(param) ? typeMap[param] : RealEstateType.All;
+        }
+
+        public static string MapRealEstateType(RealEstateType type)
+        {
+            return typeMap.First(t => t.Value == type).Key;
         }
 
         private void ParseCategory(HtmlDocument full, Advert advert)
         {
-            var nodes = full.DocumentNode.SelectNodes(@"//dl[@class='description description-expanded']/dd[@class='item-params c-1']/div[1]/a");
+            var nodes = full.DocumentNode.SelectNodes(@"//div[@class='description description-expanded']/div[@class='item-params c-1']/div[1]/a");
             if (nodes != null && nodes.Count > 0)
             {
                 var node = nodes.Last();

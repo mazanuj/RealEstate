@@ -6,21 +6,23 @@ using System.IO;
 using Caliburn.Micro;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
+using System.Xml.Serialization;
 
 namespace RealEstate.City
 {
     [Export(typeof(CityManager))]
     public class CityManager
     {
-        private const string FileName = "cities.txt";
+        private const string FileName = "City\\cities.xml";
         public BindableCollection<CityWrap> Cities = new BindableCollection<CityWrap>();
 
         public void Restore()
         {
             if (File.Exists(FileName))
             {
-                var cities = File.ReadAllLines(FileName);
-                Cities.AddRange(cities.Select(c => new CityWrap(){City = c}));
+                XmlSerializer reader = new XmlSerializer(typeof(List<CityWrap>));
+                StreamReader file = new System.IO.StreamReader(FileName);
+                Cities.AddRange((List<CityWrap>)reader.Deserialize(file));
             }
             else
             {
@@ -32,7 +34,7 @@ namespace RealEstate.City
         {
             Trace.WriteLine("Restore default cities");
             Cities.Add(new CityWrap() { City = "" });
-            Cities.Add(new CityWrap() { City = "Ярославль" });
+            Cities.Add(new CityWrap() { City = "Ярославль", AvitoKey = "yaroslavl" });
 
             Save();
         }
@@ -45,15 +47,17 @@ namespace RealEstate.City
                 str.Close();
             }
 
-            if (Cities.Count != 0)
-            {
-                File.WriteAllLines(FileName, Cities.Select(c => c.City).ToArray());
-            }
+            var writer = new XmlSerializer(typeof(List<CityWrap>));
+            StreamWriter file = new System.IO.StreamWriter(FileName);
+            writer.Serialize(file, Cities.ToList());
+            file.Close();
         }
     }
 
     public class CityWrap
     {
         public string City { get; set; }
+        public string AvitoKey { get; set; }
+        public string HandsKey { get; set; }
     }
 }

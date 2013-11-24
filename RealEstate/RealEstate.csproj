@@ -182,6 +182,7 @@
     <Compile Include="SmartProcessing\Rules.cs" />
     <Compile Include="SmartProcessing\SmartProcessor.cs" />
     <Compile Include="SmartProcessing\YandexMapApi.cs" />
+    <Compile Include="Statistics\StatisticsManager.cs" />
     <Compile Include="Style\VS2012WindowStyle.cs" />
     <Compile Include="TaskManagers\TaskManager.cs" />
     <Compile Include="TaskManagers\RealEstateTask.cs" />
@@ -203,6 +204,7 @@
     <Compile Include="ViewModels\ScreenWithToogleTools.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\StatisticsViewModel.cs" />
+    <Compile Include="ViewModels\StatisticTabViewModel.cs" />
     <Compile Include="ViewModels\TestParsingViewModel.cs" />
     <Compile Include="Views\AddExportSiteView.xaml.cs">
       <DependentUpon>AddExportSiteView.xaml</DependentUpon>
@@ -233,6 +235,9 @@
     </Compile>
     <Compile Include="Views\StatisticsView.xaml.cs">
       <DependentUpon>StatisticsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StatisticTabView.xaml.cs">
+      <DependentUpon>StatisticTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TestParsingView.xaml.cs">
       <DependentUpon>TestParsingView.xaml</DependentUpon>
@@ -310,6 +315,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\StatisticsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StatisticTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -399,6 +408,9 @@
     <Resource Include="Images\avito.png" />
     <Resource Include="Images\hands-.png" />
     <Resource Include="Images\hands.png" />
+    <Content Include="City\cities.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="map template.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -415,6 +427,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.10\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.10\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

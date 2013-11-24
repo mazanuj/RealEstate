@@ -20,6 +20,8 @@ namespace RealEstate.Parsing.Parsers
     {
         public abstract List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager, CancellationToken token);
 
+        public abstract int GetTotalCount(string sourceUrl, ProxyManager proxyManager, bool useProxy, CancellationToken token);
+
         public abstract Advert Parse(AdvertHeader header, WebProxy proxy, CancellationToken ct, PauseToken pt);
 
         protected CookieContainer cookie = new CookieContainer();
