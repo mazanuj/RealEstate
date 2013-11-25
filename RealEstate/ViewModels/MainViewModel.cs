@@ -47,7 +47,7 @@ namespace RealEstate.ViewModels
             ParsingViewModel parsingViewModel, ParserSettingViewModel parserSettingViewModel,
             AdvertsViewModel advertsViewModel, ExportSettingsViewModel exportSettingsViewModel,
             ExportingManager exportingManager, TestParsingViewModel testParsingViewModel,
-            StatisticsViewModel statViewModel)
+            StatisticsViewModel statViewModel, RulesViewModel rulesView)
         {
             _windowManager = windowManager;
             _logManager = logManager;
@@ -71,6 +71,7 @@ namespace RealEstate.ViewModels
             Items.Add(advertsViewModel);
             Items.Add(exportSettingsViewModel);
             Items.Add(statViewModel);
+            Items.Add(rulesView);
 
             if (ModeManager.Mode == ReleaseMode.Debug)
                 Items.Add(testParsingViewModel);

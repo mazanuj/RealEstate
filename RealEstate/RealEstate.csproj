@@ -201,6 +201,7 @@
     <Compile Include="ViewModels\ParserSettingViewModel.cs" />
     <Compile Include="ViewModels\ParsingViewModel.cs" />
     <Compile Include="ViewModels\ProxiesViewModel.cs" />
+    <Compile Include="ViewModels\RulesViewModel.cs" />
     <Compile Include="ViewModels\ScreenWithToogleTools.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\StatisticsViewModel.cs" />
@@ -229,6 +230,9 @@
     </Compile>
     <Compile Include="Views\ProxiesView.xaml.cs">
       <DependentUpon>ProxiesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RulesView.xaml.cs">
+      <DependentUpon>RulesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
@@ -307,6 +311,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProxiesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RulesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -419,6 +427,7 @@
     </Content>
     <Content Include="SmartProcessing\ProcessingRules.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="x86\liblept168.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

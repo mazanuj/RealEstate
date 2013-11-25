@@ -77,6 +77,8 @@ namespace RealEstate.SmartProcessing
 
                 FillAddress(advert);
 
+               System.Reflection.PropertyInfo proper;
+
                 foreach (var rule in _rulesManager.Rules)
                 {
                     if (rule.Conditions.TrueForAll(c => c.IsSatisfy(advert))
@@ -90,17 +92,28 @@ namespace RealEstate.SmartProcessing
                                     return false;
                                 break;
                             case Verb.RemoveAll:
-                                var prop = typeof(Advert).GetProperty(rule.VerbValue);
-                                if (prop != null)
-                                {
-                                    prop.SetValue(advert, "", null);
-                                }
-                                break;
-                            case Verb.RemoveAfter:
-                                var proper = typeof(Advert).GetProperty(rule.VerbValue);
+                                proper = typeof(Advert).GetProperty(rule.VerbValue);
                                 if (proper != null)
                                 {
                                     proper.SetValue(advert, "", null);
+                                }
+                                break;
+                            case Verb.RemoveAfter:
+                                proper = typeof(Advert).GetProperty(rule.VerbValue);
+                                if (proper != null)
+                                {
+                                    var value = (string)proper.GetValue(advert, null);
+                                    value = value.Remove(value.IndexOf(rule.VerbValue));
+                                    proper.SetValue(advert, value, null);
+                                }
+                                break;
+                            case Verb.Cut:
+                                proper = typeof(Advert).GetProperty(rule.VerbValue);
+                                if (proper != null)
+                                {
+                                    var value = (string)proper.GetValue(advert, null);
+                                    value = value.Replace(rule.VerbValue, "");
+                                    proper.SetValue(advert, value, null);
                                 }
                                 break;
                         }

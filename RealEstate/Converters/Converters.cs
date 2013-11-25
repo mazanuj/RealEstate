@@ -1,7 +1,9 @@
 ﻿using RealEstate.Parsing;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Data;
@@ -119,6 +121,37 @@ namespace RealEstate.Converters
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class EnumToTextConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            // To get around the stupid WPF designer bug
+            if (value != null)
+            {
+                FieldInfo fi = value.GetType().GetField(value.ToString());
+
+                // To get around the stupid WPF designer bug
+                if (fi != null)
+                {
+                    var attributes = (DisplayAttribute[])fi.GetCustomAttributes(typeof(DisplayAttribute), false);
+
+                    return ((attributes.Length > 0) &&
+                            (!String.IsNullOrEmpty(attributes[0].Name)))
+                               ?
+                                attributes[0].Name
+                               : value.ToString();
+                }
+            }
+
+            return string.Empty;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
         }

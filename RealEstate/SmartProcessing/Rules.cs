@@ -1,7 +1,9 @@
 ﻿using RealEstate.Parsing;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -14,7 +16,7 @@ namespace RealEstate.SmartProcessing
     {
         const string FILENAME = "SmartProcessing//ProcessingRules.xml";
 
-        public List<Rule> Rules { get; set; }
+        public ObservableCollection<Rule> Rules { get; set; }
 
         public void Load()
         {
@@ -68,7 +70,7 @@ namespace RealEstate.SmartProcessing
 
         public RulesManager()
         {
-            Rules = new List<Rule>();
+            Rules = new ObservableCollection<Rule>();
         }
     }
 
@@ -88,14 +90,27 @@ namespace RealEstate.SmartProcessing
             return String.Format("Site: {0}, Verb: {1}, Conditions [{2}]", Site.ToString(), Verb.ToString(), String.Join(", ", Conditions.Select(c => c.ToString()).ToArray()));
         }
 
+        public string ToDisplayString
+        {
+            get
+            {
+                return String.Format("Сайт: {0}, Дествие: {1}, Условия [{2}]", Site.ToString(), Verb.ToString(), String.Join(", ", Conditions.Select(c => c.ToString()).ToArray()));
+            }
+        }
+
     }
 
     public enum Verb
     {
+        [Display(Name="Нет действия")]
         None,
+        [Display(Name = "Пропустить объявление")]
         Skip,
+        [Display(Name = "Вырезать текст")]
         Cut,
+        [Display(Name = "Удалить текст после")]
         RemoveAfter,
+        [Display(Name = "Удалить весь текст")]
         RemoveAll
     }
 
