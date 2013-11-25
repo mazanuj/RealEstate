@@ -27,10 +27,13 @@ namespace RealEstate.SmartProcessing
                 {
                     ImportSite site = (ImportSite)Enum.Parse(typeof(ImportSite), rule.Attribute("ImportSite").Value);
 
-                    var verb = Verb.Skip;
+                    var verb = Verb.None;
+                    string verbValue = null;
+
                     if (rule.Element("verb") != null)
                     {
-
+                        verb = (Verb)Enum.Parse(typeof(Verb), rule.Element("verb").Attribute("name").Value);
+                        verbValue = rule.Element("verb").Attribute("value").Value;
                     }
                     else if (rule.Attribute("verb") != null)
                     {
@@ -45,6 +48,7 @@ namespace RealEstate.SmartProcessing
                     var r = new Rule();
                     r.Verb = verb;
                     r.Site = site;
+                    r.VerbValue = verbValue;
 
                     foreach (var condition in rule.Element("conditions").Elements())
                     {
@@ -71,6 +75,7 @@ namespace RealEstate.SmartProcessing
     public class Rule
     {
         public Verb Verb { get; set; }
+        public string VerbValue { get; set; }
         public List<Condition> Conditions { get; set; }
         public ImportSite Site { get; set; }
         public Rule()
@@ -80,14 +85,18 @@ namespace RealEstate.SmartProcessing
 
         public override string ToString()
         {
-            return String.Format("Site: {0}, Verb: {1}, Conditions [{2}]", Site.ToString(), Verb.ToString(), String.Join(", ",Conditions.Select(c => c.ToString()).ToArray()));
+            return String.Format("Site: {0}, Verb: {1}, Conditions [{2}]", Site.ToString(), Verb.ToString(), String.Join(", ", Conditions.Select(c => c.ToString()).ToArray()));
         }
 
     }
 
     public enum Verb
     {
-        Skip
+        None,
+        Skip,
+        Cut,
+        RemoveAfter,
+        RemoveAll
     }
 
     public class ConditionFactory
@@ -109,7 +118,7 @@ namespace RealEstate.SmartProcessing
         protected string Property { get; set; }
         protected string Value { get; set; }
         public abstract bool IsSatisfy(Advert advert);
-        public void Parse(XElement element)
+        public virtual void Parse(XElement element)
         {
             if (element.Attribute("property") != null)
                 Property = element.Attribute("property").Value;
@@ -140,6 +149,7 @@ namespace RealEstate.SmartProcessing
 
     public class Contains : Condition
     {
+        public bool IgnoreCase = true;
         public override bool IsSatisfy(Advert advert)
         {
             var prop = typeof(Advert).GetProperty(Property);
@@ -148,11 +158,23 @@ namespace RealEstate.SmartProcessing
                 var value = prop.GetValue(advert, null);
                 if (value is string)
                 {
-                    return (value as string).ToLower().Contains(Value.ToLower());
+                    if (IgnoreCase)
+                        return (value as string).ToLower().Contains(Value.ToLower());
+                    else
+                        return (value as string).Contains(Value);
                 }
             }
 
             return false;
+        }
+
+        public override void Parse(XElement element)
+        {
+            base.Parse(element);
+            if(element.Attribute("ignorecase") != null)
+            {
+                this.IgnoreCase = bool.Parse(element.Attribute("ignorecase").Value);
+            }
         }
 
         public override string ToString()

@@ -18,4 +18,40 @@
       <contains property="MessageFull" value="Кировск" />
     </conditions>
   </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="АН" ignorecase="false" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="Агент" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="Риэл" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="недвиж" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="Жилищ" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="Компан" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
 </rules>
