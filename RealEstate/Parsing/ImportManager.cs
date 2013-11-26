@@ -8,6 +8,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using Caliburn.Micro;
+using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Parsing
 {
@@ -93,8 +94,11 @@ namespace RealEstate.Parsing
 
     public enum ImportSite
     {
+        [Display(Name="Все")]
         All,
+        [Display(Name = "avito.ru")]
         Avito,
+        [Display(Name = "Из рук в руки")]
         Hands
     }
 }

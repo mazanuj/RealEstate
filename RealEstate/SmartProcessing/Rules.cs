@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using RealEstate.Utils;
 
 namespace RealEstate.SmartProcessing
 {
@@ -94,7 +95,7 @@ namespace RealEstate.SmartProcessing
         {
             get
             {
-                return String.Format("Сайт: {0}, Дествие: {1}, Условия [{2}]", Site.ToString(), Verb.ToString(), String.Join(", ", Conditions.Select(c => c.ToString()).ToArray()));
+                return String.Format("Сайт: {0}, Дествие: {1}, Условия [{2}]", Site.GetDisplayName(), Verb.GetDisplayName(), String.Join(", ", Conditions.Select(c => c.ToString()).ToArray()));
             }
         }
 

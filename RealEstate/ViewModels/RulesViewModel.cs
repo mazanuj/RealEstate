@@ -25,11 +25,6 @@ namespace RealEstate.ViewModels
         public RulesViewModel(RulesManager manager)
         {
             _rulesManager = manager;
-        }
-
-        protected override void OnInitialize()
-        {
-            base.OnInitialize();
             DisplayName = "Обработка объявлений";
         }
 

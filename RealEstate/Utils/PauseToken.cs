@@ -1,7 +1,9 @@
 ﻿using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 
@@ -99,5 +101,25 @@ namespace RealEstate.Utils
         }
 
         public event EventHandler<ResultCompletionEventArgs> Completed = delegate { };
-    } 
+    }
+
+    public static class EnumExtension
+    {
+        public static string GetDisplayName(this Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+            if (fi != null)
+            {
+                var attributes = (DisplayAttribute[])fi.GetCustomAttributes(typeof(DisplayAttribute), false);
+
+                return ((attributes.Length > 0) &&
+                        (!String.IsNullOrEmpty(attributes[0].Name)))
+                           ?
+                            attributes[0].Name
+                           : value.ToString();
+            }
+
+            return null;
+        }
+    }
 }
