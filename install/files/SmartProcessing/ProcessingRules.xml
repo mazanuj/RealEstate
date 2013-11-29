@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<rules>
+  <rule verb="Skip" ImportSite="All">
+    <conditions>
+      <equals property="AdvertType" value="Sell" />
+      <contains property="MessageFull" value="куплю" />
+    </conditions>
+  </rule>
+  <rule verb="Skip" ImportSite="Hands">
+    <conditions>
+      <equals property="City" value="Ярославль" />
+      <contains property="MessageFull" value="Ростов-Ярославский" />
+    </conditions>
+  </rule>
+  <rule verb="Skip" ImportSite="Hands">
+    <conditions>
+      <equals property="City" value="Ярославль" />
+      <contains property="MessageFull" value="Кировск" />
+    </conditions>
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="АН" ignorecase="false" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="Агент" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="Риэл" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="недвиж" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="Жилищ" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="Компан" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+</rules>

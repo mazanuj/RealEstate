@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Performance1.psess = Performance1.psess
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstate.Updater", "RealEstate.Updater\RealEstate.Updater.csproj", "{DB9DC03A-511F-4945-BF9C-EE6E7963B3DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{7D89B999-6DD8-43C7-B54C-24B8882CB93D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D89B999-6DD8-43C7-B54C-24B8882CB93D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D89B999-6DD8-43C7-B54C-24B8882CB93D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB9DC03A-511F-4945-BF9C-EE6E7963B3DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB9DC03A-511F-4945-BF9C-EE6E7963B3DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB9DC03A-511F-4945-BF9C-EE6E7963B3DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB9DC03A-511F-4945-BF9C-EE6E7963B3DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
