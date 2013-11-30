@@ -18,6 +18,7 @@ namespace RealEstate.Updater
         {
             InitializeComponent();
             _github = new GithubProxy();
+            _fileManager = new FileManager();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
