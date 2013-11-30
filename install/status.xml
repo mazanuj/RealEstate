@@ -70,7 +70,7 @@
   </FileStatus>
   <FileStatus>
     <Path>map template.html</Path>
-    <Hash>0264FAF3A0D176E83261C339BFEFC48F</Hash>
+    <Hash>FCBD79E2F316341F68F90321E590109B</Hash>
   </FileStatus>
   <FileStatus>
     <Path>Microsoft.Threading.Tasks.dll</Path>
@@ -122,7 +122,11 @@
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe.config</Path>
-    <Hash>0DE1998ED37C1E15B2288E578F212C22</Hash>
+    <Hash>28650625AB9A4B2E02BA1B2B57E40DAC</Hash>
+  </FileStatus>
+  <FileStatus>
+    <Path>RealEstate.Updater.exe</Path>
+    <Hash>59C3B112D49EA3F6752D57ED89613619</Hash>
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>
@@ -157,6 +161,10 @@
     <Hash>370E0695557C0E9FF24C293905E728EF</Hash>
   </FileStatus>
   <FileStatus>
+    <Path>version</Path>
+    <Hash>3ACCDDF64B1DD03ABEB9B0B3E5A7BA44</Hash>
+  </FileStatus>
+  <FileStatus>
     <Path>WPFToolkit.dll</Path>
     <Hash>195ED09E0B4F3B09EA4A3B67A0D3F396</Hash>
   </FileStatus>
@@ -174,7 +182,7 @@
   </FileStatus>
   <FileStatus>
     <Path>SmartProcessing\ProcessingRules.xml</Path>
-    <Hash>6EA065FE90BC7F8C552F2CC4D39CB28D</Hash>
+    <Hash>507A9433C6C659E575BE9943AC7FE9A4</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.bigrams</Path>

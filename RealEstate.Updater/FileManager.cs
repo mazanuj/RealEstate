@@ -35,8 +35,13 @@ namespace RealEstate.Updater
             }
         }
 
+        public string GetCurentVersion()
+        {
+            return File.ReadAllText("version").Trim();
+        }
 
-        private string MD5HashFile(string fn)
+
+        public string MD5HashFile(string fn)
         {
             byte[] hash = MD5.Create().ComputeHash(File.ReadAllBytes(fn));
             return BitConverter.ToString(hash).Replace("-", "");
@@ -54,6 +59,15 @@ namespace RealEstate.Updater
             StreamWriter file = new System.IO.StreamWriter(FileName);
             writer.Serialize(file, status);
             file.Close();
+        }
+
+        public List<FileStatus> Restore(string file)
+        {
+            var serializer = new XmlSerializer(typeof(List<FileStatus>));
+            using (TextReader reader = new StringReader(file))
+            {
+                return (List<FileStatus>)serializer.Deserialize(reader);
+            }
         }
     }
 

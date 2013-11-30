@@ -31,7 +31,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.lCurrent = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.lAviable = new System.Windows.Forms.Label();
             this.prgrsBar = new System.Windows.Forms.ProgressBar();
             this.bUpdate = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -70,14 +70,14 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Доступная версия: ";
             // 
-            // label3
+            // lAviable
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(138, 59);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(13, 13);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "1";
+            this.lAviable.AutoSize = true;
+            this.lAviable.Location = new System.Drawing.Point(138, 59);
+            this.lAviable.Name = "lAviable";
+            this.lAviable.Size = new System.Drawing.Size(13, 13);
+            this.lAviable.TabIndex = 3;
+            this.lAviable.Text = "1";
             // 
             // prgrsBar
             // 
@@ -91,6 +91,7 @@
             // bUpdate
             // 
             this.bUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bUpdate.Enabled = false;
             this.bUpdate.Location = new System.Drawing.Point(391, 27);
             this.bUpdate.Name = "bUpdate";
             this.bUpdate.Size = new System.Drawing.Size(83, 53);
@@ -146,7 +147,7 @@
             // пересоздатьToolStripMenuItem
             // 
             this.пересоздатьToolStripMenuItem.Name = "пересоздатьToolStripMenuItem";
-            this.пересоздатьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.пересоздатьToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.пересоздатьToolStripMenuItem.Text = "Пересоздать";
             this.пересоздатьToolStripMenuItem.Click += new System.EventHandler(this.пересоздатьToolStripMenuItem_Click);
             // 
@@ -158,7 +159,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.bUpdate);
             this.Controls.Add(this.prgrsBar);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.lAviable);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lCurrent);
             this.Controls.Add(this.label1);
@@ -181,7 +182,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lCurrent;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lAviable;
         private System.Windows.Forms.ProgressBar prgrsBar;
         private System.Windows.Forms.Button bUpdate;
         private System.Windows.Forms.GroupBox groupBox1;
