@@ -81,18 +81,18 @@
             // 
             // prgrsBar
             // 
-            this.prgrsBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.prgrsBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.prgrsBar.Location = new System.Drawing.Point(15, 95);
             this.prgrsBar.Name = "prgrsBar";
-            this.prgrsBar.Size = new System.Drawing.Size(459, 23);
+            this.prgrsBar.Size = new System.Drawing.Size(457, 23);
             this.prgrsBar.TabIndex = 4;
             // 
             // bUpdate
             // 
             this.bUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bUpdate.Enabled = false;
-            this.bUpdate.Location = new System.Drawing.Point(391, 27);
+            this.bUpdate.Location = new System.Drawing.Point(389, 27);
             this.bUpdate.Name = "bUpdate";
             this.bUpdate.Size = new System.Drawing.Size(83, 53);
             this.bUpdate.TabIndex = 5;
@@ -102,12 +102,13 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.tbStatus);
             this.groupBox1.Location = new System.Drawing.Point(15, 124);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(459, 126);
+            this.groupBox1.Size = new System.Drawing.Size(457, 126);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Статус";
@@ -123,7 +124,7 @@
             this.tbStatus.Multiline = true;
             this.tbStatus.Name = "tbStatus";
             this.tbStatus.ReadOnly = true;
-            this.tbStatus.Size = new System.Drawing.Size(446, 100);
+            this.tbStatus.Size = new System.Drawing.Size(444, 100);
             this.tbStatus.TabIndex = 0;
             // 
             // menuStrip1
@@ -132,7 +133,7 @@
             this.отчётToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(486, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(484, 24);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -147,15 +148,15 @@
             // пересоздатьToolStripMenuItem
             // 
             this.пересоздатьToolStripMenuItem.Name = "пересоздатьToolStripMenuItem";
-            this.пересоздатьToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
-            this.пересоздатьToolStripMenuItem.Text = "Пересоздать";
+            this.пересоздатьToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.пересоздатьToolStripMenuItem.Text = "Пересоздать отчёт";
             this.пересоздатьToolStripMenuItem.Click += new System.EventHandler(this.пересоздатьToolStripMenuItem_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(486, 262);
+            this.ClientSize = new System.Drawing.Size(484, 262);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.bUpdate);
             this.Controls.Add(this.prgrsBar);
@@ -164,7 +165,7 @@
             this.Controls.Add(this.lCurrent);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.menuStrip1);
-            this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(400, 300);
             this.Name = "MainForm";
             this.Text = "RealEstate обновление";
             this.Load += new System.EventHandler(this.MainForm_Load);

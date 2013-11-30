@@ -27,6 +27,12 @@ namespace RealEstate.Updater
 
         public void DownloadFile(string filename)
         {
+            if (filename.Contains('\\'))
+            {
+                var directories = filename.Remove(filename.LastIndexOf('\\'));
+                Directory.CreateDirectory(directories);
+            }
+
             using (WebClient client = new WebClient())
             {
                 client.DownloadFile("https://raw.github.com/ktflabs/realestate/master/install/files/" + filename, filename);
