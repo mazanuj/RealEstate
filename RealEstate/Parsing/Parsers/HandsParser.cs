@@ -122,7 +122,7 @@ namespace RealEstate.Parsing.Parsers
 
         private DateTime ParseDate(HtmlNode tier)
         {
-            var whenNode = tier.SelectSingleNode(@"p[contains(@class,'add_data')]");
+            var whenNode = tier.SelectSingleNode(@".//p[contains(@class,'adv_data')]");
             if (whenNode != null && !string.IsNullOrEmpty(whenNode.InnerText))
             {
                 try
@@ -131,7 +131,7 @@ namespace RealEstate.Parsing.Parsers
                 }
                 catch (Exception)
                 {
-                    throw new ParsingException("Can't parse date information", "");
+                    throw new ParsingException("Can't parse date information", whenNode.InnerText);
                 }
             }
 
@@ -140,7 +140,7 @@ namespace RealEstate.Parsing.Parsers
 
         private string ParseLinkToFullDescription(HtmlNode tier)
         {
-            var link = tier.SelectSingleNode(@"a[@class='add_pic']");
+            var link = tier.SelectSingleNode(".//a[contains(@class,\"add_title\")]");
             if (link != null && link.Attributes.Contains("href"))
                 return Normalize(link.Attributes["href"].Value);
 
@@ -265,10 +265,10 @@ namespace RealEstate.Parsing.Parsers
                                     advert.AO = parts[1].Replace("административный округ", "").Trim();
                                     break;
                                 case "Продавец":
-                                    advert.Name = parts[1].Trim();
+                                    advert.Name = GetSeller(parts[1]);
                                     break;
                                 case "Контактное лицо":
-                                    advert.Name = parts[1].Trim();
+                                    advert.Name = GetSeller(parts[1]);
                                     break;
                                 default:
                                     break;
@@ -378,15 +378,20 @@ namespace RealEstate.Parsing.Parsers
 
         private string ParseSeller(HtmlDocument page)
         {
-            var phoneNode = page.DocumentNode.SelectSingleNode(".//p[contains(@id,'contact_phones')]");
+            var phoneNode = page.DocumentNode.SelectSingleNode(".//ul[contains(@class,'form_info')]/li/p[2]");
             if (phoneNode != null)
             {
-                var sellerPhone = phoneNode.InnerText;
-                var name = sellerPhone.Trim(new string[] { "X", "-", "Показать телефон", "(", ")", "+", " — ", ",", ";" }).Trim();
-                return name;
-
+                return GetSeller(phoneNode.InnerText);
             }
             return string.Empty;
+        }
+
+        private string GetSeller(string trash)
+        {
+            var i = trash.IndexOf("—");
+            if (i != -1)
+                trash = trash.Substring(0, i);
+            return trash.Trim(new string[] { "X", "-", "Показать телефон", "(", ")", "+", "—", ",", ";", "\r\n" }).Trim();
         }
 
         private void ParseTitle(HtmlDocument page, Advert advert)

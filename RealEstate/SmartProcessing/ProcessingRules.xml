@@ -54,4 +54,34 @@
     </conditions>
     <verb name="RemoveAll" value="Name" />
   </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="Частное объявление" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="ООО" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="ОАО" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="РОССИ" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="Name" value="21" />
+    </conditions>
+    <verb name="RemoveAll" value="Name" />
+  </rule>
 </rules>
