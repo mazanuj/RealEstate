@@ -113,7 +113,7 @@ namespace RealEstate.Commands
                     RealEstateType = RealEstateType.Apartments,
                     Usedtype = Usedtype.All
                 };
-                pars5.Urls.Add(new ParserSourceUrl() { ParserSetting = pars5, Url = "http://www.avito.ru/yaroslavskaya_oblast/kvartiry/prodam?user=1" });
+                pars5.Urls.Add(new ParserSourceUrl() { ParserSetting = pars5, Url = "http://www.avito.ru/yaroslavl/kvartiry/prodam" });
 
                 avito.ParseSettings.Add(pars5);
 
@@ -126,7 +126,7 @@ namespace RealEstate.Commands
                     RealEstateType = RealEstateType.Apartments,
                     Usedtype = Usedtype.All
                 };
-                pars6.Urls.Add(new ParserSourceUrl() { ParserSetting = pars6, Url = "http://www.avito.ru/yaroslavskaya_oblast/kvartiry/prodam?user=1" });
+                pars6.Urls.Add(new ParserSourceUrl() { ParserSetting = pars6, Url = "http://www.avito.ru/yaroslavl/kvartiry/prodam" });
 
                 avito.ParseSettings.Add(pars6);
 
@@ -139,7 +139,7 @@ namespace RealEstate.Commands
                     RealEstateType = RealEstateType.Apartments,
                     Usedtype = Usedtype.All
                 };
-                pars7.Urls.Add(new ParserSourceUrl() { ParserSetting = pars7, Url = "http://www.avito.ru/yaroslavskaya_oblast/kvartiry/prodam?user=1" });
+                pars7.Urls.Add(new ParserSourceUrl() { ParserSetting = pars7, Url = "http://www.avito.ru/yaroslavl/kvartiry/prodam" });
 
                 avito.ParseSettings.Add(pars7);
 
@@ -152,11 +152,13 @@ namespace RealEstate.Commands
                     RealEstateType = RealEstateType.Apartments,
                     Usedtype = Usedtype.All
                 };
-                pars8.Urls.Add(new ParserSourceUrl() { ParserSetting = pars8, Url = "http://www.avito.ru/yaroslavskaya_oblast/kvartiry/prodam?user=1" });
+                pars8.Urls.Add(new ParserSourceUrl() { ParserSetting = pars8, Url = "http://www.avito.ru/yaroslavl/kvartiry/prodam" });
 
                 avito.ParseSettings.Add(pars8);
 
                 _context.SaveChanges();
+
+                Write("Ok");
 
             }
             else

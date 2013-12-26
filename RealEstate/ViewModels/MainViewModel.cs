@@ -47,7 +47,7 @@ namespace RealEstate.ViewModels
             ParsingViewModel parsingViewModel, ParserSettingViewModel parserSettingViewModel,
             AdvertsViewModel advertsViewModel, ExportSettingsViewModel exportSettingsViewModel,
             ExportingManager exportingManager, TestParsingViewModel testParsingViewModel,
-            StatisticsViewModel statViewModel, RulesViewModel rulesView)
+            StatisticsViewModel statViewModel, RulesViewModel rulesView, ExportQueueViewModel exportQueueView)
         {
             _windowManager = windowManager;
             _logManager = logManager;
@@ -70,6 +70,7 @@ namespace RealEstate.ViewModels
             Items.Add(parserSettingViewModel);
             Items.Add(advertsViewModel);
             Items.Add(exportSettingsViewModel);
+            Items.Add(exportQueueView);
             Items.Add(statViewModel);
             Items.Add(rulesView);
 
@@ -197,7 +198,7 @@ namespace RealEstate.ViewModels
 
         private void InitExportQueue(ExportingManager exportingManager)
         {
-            exportingManager.ResoreQueue();
+            exportingManager.RestoreQueue();
         }
 
         protected override void OnInitialize()
