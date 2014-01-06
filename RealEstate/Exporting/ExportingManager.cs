@@ -3,6 +3,7 @@ using RealEstate.Parsing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
@@ -38,16 +39,16 @@ namespace RealEstate.Exporting
             }
         }
 
-        public ObservableQueue<ExportItem> ExportQueue = null;
+        public ObservableCollection<ExportItem> ExportQueue = null;
 
         public void RestoreQueue()
         {
-            ExportQueue = new ObservableQueue<ExportItem>();
+            ExportQueue = new ObservableCollection<ExportItem>();
             foreach (var item in _context.ExportItems.Where(i => !i.IsExported))
             {
                 App.Current.Dispatcher.Invoke((System.Action)(() =>
                 {
-                    ExportQueue.Enqueue(item);
+                    ExportQueue.Add(item);
                 }));
             }
         }
@@ -59,10 +60,48 @@ namespace RealEstate.Exporting
             _context.SaveChanges();
             App.Current.Dispatcher.Invoke((System.Action)(() =>
             {
-                ExportQueue.Enqueue(item);
+                ExportQueue.Add(item);
             }));
         }
 
+        public void Remove(ExportItem item)
+        {
+            App.Current.Dispatcher.Invoke((System.Action)(() =>
+                {
+                    ExportQueue.Remove(item);
+                }));
+            _context.ExportItems.Remove(item);
+
+            _context.SaveChanges();
+        }
+
+        public void Export(ExportItem item)
+        {
+            if (item.Advert.ExportSites != null)
+                foreach (var site in item.Advert.ExportSites)
+                {
+                    var settings = _context.ExportSettings.SingleOrDefault(e => e.ExportSite.Id == site.Id);
+                    if(settings != null)
+                    {
+                        if (settings.UsedtypeValue != item.Advert.UsedtypeValue ||
+                            settings.RealEstateTypeValue != item.Advert.RealEstateTypeValue ||
+                            settings.AdvertTypeValue != item.Advert.AdvertTypeValue)
+                            continue;
+                    }
+
+                    ExportAdvert(item.Advert);
+
+                }
+
+            item.DateOfExport = DateTime.Now;
+            item.IsExported = true;
+            _context.SaveChanges();
+        }
+
+        private void ExportAdvert(Advert advert)
+        {
+
+        }
     }
 
     public enum ExportStatus
@@ -80,40 +119,5 @@ namespace RealEstate.Exporting
         [Required]
         public virtual Advert Advert { get; set; }
         public DateTime DateOfExport { get; set; }
-    }
-
-    public class ObservableQueue<T> : INotifyCollectionChanged, IEnumerable<T>
-    {
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-        private readonly Queue<T> queue = new Queue<T>();
-
-        public void Enqueue(T item)
-        {
-            queue.Enqueue(item);
-            if (CollectionChanged != null)
-                CollectionChanged(this,
-                    new NotifyCollectionChangedEventArgs(
-                        NotifyCollectionChangedAction.Add, item));
-        }
-
-        public T Dequeue()
-        {
-            var item = queue.Dequeue();
-            if (CollectionChanged != null)
-                CollectionChanged(this,
-                    new NotifyCollectionChangedEventArgs(
-                        NotifyCollectionChangedAction.Remove, item));
-            return item;
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return queue.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
     }
 }
