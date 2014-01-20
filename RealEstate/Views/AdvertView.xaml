@@ -107,9 +107,9 @@
                 <StackPanel Grid.Row="15" Grid.ColumnSpan="2" Orientation="Horizontal">
                     <Button Name="OpenUrl" Content="Cсылка" Style="{StaticResource LinkButton}" Margin="6 5 50 5" />
 
-                    <Button Name="Delete" Content="Удалить" Margin="4" />
+                    <Button Name="Delete" Content="Удалить" Margin="4"  />
                     <Button Name="ExportAdvert" Content="Экспортировать" Margin="4" />
-                    <Button Name="Save" Content="Сохранить" Margin="4"/>
+                    <Button Name="Save" Content="Сохранить" Margin="4" />
                 </StackPanel>
 
             </Grid>
@@ -144,7 +144,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <Button Name="DeletePhoto" Content="Удалить" Margin="3" Grid.Column="1" Grid.Row="1" />
+            <Button Name="DeletePhoto" Content="Удалить" Margin="3" Grid.Column="1" Grid.Row="1"  />
 
             <awe:WebControl Grid.Row="2" Grid.ColumnSpan="2"
             Name="webControl" 
@@ -152,7 +152,7 @@
             Margin="5" >
             </awe:WebControl>
 
-            <Button Name="SaveAddress" Content="Сохранить адрес" Margin="3" Grid.Column="1" Grid.Row="4" />
+            <Button Name="SaveAddress" Content="Сохранить адрес" Margin="3" Grid.Column="1" Grid.Row="4"  />
 
         </Grid>
     </Grid>

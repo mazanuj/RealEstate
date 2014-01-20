@@ -19,6 +19,7 @@ using System.Net;
 using RealEstate.Settings;
 using RealEstate.SmartProcessing;
 using System.Collections.ObjectModel;
+using RealEstate.Exporting;
 
 namespace RealEstate.ViewModels
 {
@@ -35,12 +36,13 @@ namespace RealEstate.ViewModels
         private readonly AdvertsManager _advertsManager;
         private readonly ImagesManager _imagesManager;
         private readonly SmartProcessor _smartProcessor;
+        private readonly ExportingManager _exportingManager;
 
         [ImportingConstructor]
         public ParsingViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager,
             CityManager cityManager, ImportManager importManager, ParserSettingManager parserSettingManager,
             ParsingManager parsingManager, AdvertsManager advertsManager, ImagesManager imagesManager,
-            SmartProcessor smartProcessor)
+            SmartProcessor smartProcessor, ExportingManager exportingManager)
         {
             _events = events;
             _taskManager = taskManager;
@@ -52,6 +54,7 @@ namespace RealEstate.ViewModels
             _advertsManager = advertsManager;
             _imagesManager = imagesManager;
             _smartProcessor = smartProcessor;
+            _exportingManager = exportingManager;
             events.Subscribe(this);
             DisplayName = "Главная";
         }
@@ -87,6 +90,16 @@ namespace RealEstate.ViewModels
             }
         }
 
+        private bool _AutoExport = false;
+        public bool AutoExport
+        {
+            get { return _AutoExport; }
+            set
+            {
+                _AutoExport = value;
+                NotifyOfPropertyChange(() => AutoExport);
+            }
+        }
 
         private CityWrap _SelectedCity = null;
         public CityWrap SelectedCity
@@ -228,6 +241,7 @@ namespace RealEstate.ViewModels
                             param.subType = this.Usedtype;
                             param.advertType = this.AdvertType;
                             param.useProxy = UseProxy;
+                            param.autoExport = AutoExport;
                             param.Delay = ImportSites.First(i => i.Site == s).Delay;
                             param.MaxCount = ImportSites.First(i => i.Site == s).Deep;
 
@@ -250,6 +264,7 @@ namespace RealEstate.ViewModels
                     param.subType = this.Usedtype;
                     param.advertType = this.AdvertType;
                     param.useProxy = UseProxy;
+                    param.autoExport = AutoExport;
                     param.Delay = ImportSites.First(i => i.Site == this.ImportSite).Delay;
                     param.MaxCount = ImportSites.First(i => i.Site == this.ImportSite).Deep;
 
@@ -397,6 +412,11 @@ namespace RealEstate.ViewModels
 
                             if (SettingsStore.SaveImages)
                                 _imagesManager.DownloadImages(advert.Images, ct, advert.ImportSite);
+
+                            if (param.autoExport)
+                            {
+                                _exportingManager.AddAdvertToExport(advert);
+                            }
                         }
                         else
                         {
@@ -456,7 +476,7 @@ namespace RealEstate.ViewModels
         public void StopTask(ParsingTask task)
         {
             Task.Factory.StartNew(() =>
-            {                
+            {
                 task.Stop();
                 Thread.Sleep(3000);
                 Tasks.Remove(task);
@@ -481,6 +501,7 @@ namespace RealEstate.ViewModels
         public Usedtype subType;
         public AdvertType advertType;
         public bool useProxy;
+        public bool autoExport;
     }
 
     public class ParsingTask : RealEstateTask

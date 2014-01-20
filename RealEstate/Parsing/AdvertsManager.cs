@@ -20,8 +20,7 @@ namespace RealEstate.Parsing
 
         public void Save(Advert advert, ParserSetting setting)
         {
-            var url = advert.Url;
-            var oldAdvert = _context.Adverts.SingleOrDefault(a => a.Url == url);
+            var oldAdvert = _context.Adverts.SingleOrDefault(a => a.Url == advert.Url);
             if (oldAdvert == null)
             {
                 advert.ExportSites = new List<Exporting.ExportSite>() { setting.ExportSite };

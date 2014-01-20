@@ -196,6 +196,7 @@
     <Compile Include="ViewModels\AdvertsViewModel.cs" />
     <Compile Include="ViewModels\AdvertViewModel.cs" />
     <Compile Include="ViewModels\ConsoleViewModel.cs" />
+    <Compile Include="ViewModels\ExportQueueViewModel.cs" />
     <Compile Include="ViewModels\ExportSettingsViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ParserSettingViewModel.cs" />
@@ -218,6 +219,9 @@
     </Compile>
     <Compile Include="Views\ConsoleView.xaml.cs">
       <DependentUpon>ConsoleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExportQueueView.xaml.cs">
+      <DependentUpon>ExportQueueView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExportSettingsView.xaml.cs">
       <DependentUpon>ExportSettingsView.xaml</DependentUpon>
@@ -279,6 +283,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ConsoleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExportQueueView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

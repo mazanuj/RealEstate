@@ -24,7 +24,8 @@ namespace RealEstate.Db
         static RealEstateContext()
         {
             isOk = false;
-            Database.SetInitializer<RealEstateContext>(new MigrateDatabaseToLatestVersion<RealEstateContext, Configuration>());
+            //Database.SetInitializer<RealEstateContext>(new MigrateDatabaseToLatestVersion<RealEstateContext, Configuration>());
+            Database.SetInitializer<RealEstateContext>(new DropCreateDatabaseIfModelChanges<RealEstateContext>());
         }
 
         public DbSet<Advert> Adverts { get; set; }

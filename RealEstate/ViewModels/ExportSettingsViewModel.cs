@@ -41,7 +41,7 @@ namespace RealEstate.ViewModels
             _exportSiteManager = exportSiteManager;
             _events = events;
             events.Subscribe(this);
-            DisplayName = "Экспорт";
+            DisplayName = "Настройки экспорта";
         }
 
         public void Handle(ToolsOpenEvent message)

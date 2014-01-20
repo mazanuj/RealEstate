@@ -1,8 +1,12 @@
 ﻿using RealEstate.Db;
 using RealEstate.Parsing;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel.Composition;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
@@ -25,30 +29,79 @@ namespace RealEstate.Exporting
             switch (status)
             {
                 case ExportStatus.Unprocessed:
-                    return adverts.Where(a => !_context.ExportItems.Any(e => e.AdvertId == a.Id));
+                    return adverts.Where(a => !_context.ExportItems.Any(e => e.Advert.Id == a.Id));
                 case ExportStatus.Exporting:
-                    return adverts.Where(a => _context.ExportItems.Any(e => !e.IsExported && (e.AdvertId == a.Id)));
+                    return adverts.Where(a => _context.ExportItems.Any(e => !e.IsExported && (e.Advert.Id == a.Id)));
                 case ExportStatus.Exported:
-                    return adverts.Where(a => _context.ExportItems.Any(e => e.IsExported && (e.AdvertId == a.Id)));
+                    return adverts.Where(a => _context.ExportItems.Any(e => e.IsExported && (e.Advert.Id == a.Id)));
                 default:
                     return null;
             }
         }
 
-        private Queue<ExportItem> ExportQueue = null;
+        public ObservableCollection<ExportItem> ExportQueue = null;
 
-        public void ResoreQueue()
+        public void RestoreQueue()
         {
-            ExportQueue = new Queue<ExportItem>(_context.ExportItems.Where(i => !i.IsExported));  
+            ExportQueue = new ObservableCollection<ExportItem>();
+            foreach (var item in _context.ExportItems.Where(i => !i.IsExported))
+            {
+                App.Current.Dispatcher.Invoke((System.Action)(() =>
+                {
+                    ExportQueue.Add(item);
+                }));
+            }
         }
 
         public void AddAdvertToExport(Advert advert)
         {
-            var item = new ExportItem() { AdvertId = advert.Id };
+            var item = new ExportItem() { Advert = advert };
             _context.ExportItems.Add(item);
+            _context.SaveChanges();
+            App.Current.Dispatcher.Invoke((System.Action)(() =>
+            {
+                ExportQueue.Add(item);
+            }));
+        }
+
+        public void Remove(ExportItem item)
+        {
+            App.Current.Dispatcher.Invoke((System.Action)(() =>
+                {
+                    ExportQueue.Remove(item);
+                }));
+            _context.ExportItems.Remove(item);
+
             _context.SaveChanges();
         }
 
+        public void Export(ExportItem item)
+        {
+            if (item.Advert.ExportSites != null)
+                foreach (var site in item.Advert.ExportSites)
+                {
+                    var settings = _context.ExportSettings.SingleOrDefault(e => e.ExportSite.Id == site.Id);
+                    if(settings != null)
+                    {
+                        if (settings.UsedtypeValue != item.Advert.UsedtypeValue ||
+                            settings.RealEstateTypeValue != item.Advert.RealEstateTypeValue ||
+                            settings.AdvertTypeValue != item.Advert.AdvertTypeValue)
+                            continue;
+                    }
+
+                    ExportAdvert(item.Advert);
+
+                }
+
+            item.DateOfExport = DateTime.Now;
+            item.IsExported = true;
+            _context.SaveChanges();
+        }
+
+        private void ExportAdvert(Advert advert)
+        {
+
+        }
     }
 
     public enum ExportStatus
@@ -62,7 +115,9 @@ namespace RealEstate.Exporting
     {
         public int Id { get; set; }
         public bool IsExported { get; set; }
-        public int AdvertId { get; set; }
+
+        [Required]
+        public virtual Advert Advert { get; set; }
         public DateTime DateOfExport { get; set; }
     }
 }

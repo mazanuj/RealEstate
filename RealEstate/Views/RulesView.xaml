@@ -29,12 +29,7 @@
                 <ItemsControl Name="Rules" Margin="5 0">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding ToDisplayString}" />
-                            </Grid>
+                            <TextBlock Margin="10" Text="{Binding ToDisplayString}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
