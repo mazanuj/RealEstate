@@ -77,7 +77,7 @@ namespace RealEstate.SmartProcessing
 
                 FillAddress(advert);
 
-               System.Reflection.PropertyInfo proper;
+                System.Reflection.PropertyInfo proper;
 
                 foreach (var rule in _rulesManager.Rules)
                 {
@@ -150,7 +150,8 @@ namespace RealEstate.SmartProcessing
 
         private void RemoveStreetLabel(Advert advert)
         {
-            advert.Address = advert.Address.Replace("улица", "").Replace("ул.", "").Trim();
+            if (!String.IsNullOrEmpty(advert.Address))
+                advert.Address = advert.Address.Replace("улица", "").Replace("ул.", "").Trim();
         }
 
         private void RemoveAdvertisers(Advert advert)
@@ -246,13 +247,16 @@ namespace RealEstate.SmartProcessing
         {
             if (String.IsNullOrEmpty(advert.Distinct))
             {
-                var parts = oldAddress.Split(',');
-                if (parts.Count() > 0)
+                if (!String.IsNullOrEmpty(oldAddress))
                 {
-                    if (parts[0].Contains("р-н") && parts[0].Split(' ').Count() == 2)
+                    var parts = oldAddress.Split(',');
+                    if (parts.Count() > 0)
                     {
-                        advert.Distinct = parts[0].Replace("р-н", "").Trim();
-                        return;
+                        if (parts[0].Contains("р-н") && parts[0].Split(' ').Count() == 2)
+                        {
+                            advert.Distinct = parts[0].Replace("р-н", "").Trim();
+                            return;
+                        }
                     }
                 }
 

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
@@ -81,7 +82,7 @@ namespace RealEstate.Exporting
                 foreach (var site in item.Advert.ExportSites)
                 {
                     var settings = _context.ExportSettings.SingleOrDefault(e => e.ExportSite.Id == site.Id);
-                    if(settings != null)
+                    if (settings != null)
                     {
                         if (settings.UsedtypeValue != item.Advert.UsedtypeValue ||
                             settings.RealEstateTypeValue != item.Advert.RealEstateTypeValue ||
@@ -100,8 +101,33 @@ namespace RealEstate.Exporting
 
         private void ExportAdvert(Advert advert)
         {
-
+            var cstr = GetConnectionString(advert);
+            if (cstr != null)
+            {
+                using (SqlConnection conn = new SqlConnection(cstr))
+                {
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM whatever WHERE id = 5", conn);
+                    try
+                    {
+                        conn.Open();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+            }
         }
+
+        private string GetConnectionString(Advert advert)
+        {
+            if (advert.City == "Москва" && advert.Usedtype == Usedtype.New)
+                return "Server=88.212.209.125;Database=moskva;Uid=moskva;Pwd=gfdkjdfh;Charset=utf8;Default Command Timeout=300000;";
+            else
+                return null;
+        }
+
+
     }
 
     public enum ExportStatus
