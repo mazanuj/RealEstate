@@ -94,7 +94,7 @@ namespace RealEstate.Parsing
 
     public enum ImportSite
     {
-        [Display(Name="Все")]
+        [Display(Name="Любой")]
         All,
         [Display(Name = "avito.ru")]
         Avito,

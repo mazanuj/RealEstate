@@ -31,8 +31,7 @@
                         <DataTemplate>
                             <Grid Margin="10">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="500" />
-                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding ToDisplayString}" />
                             </Grid>
