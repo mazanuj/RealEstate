@@ -88,5 +88,18 @@ namespace RealEstate.ViewModels
                 Trace.WriteLine(ex, "Error");
             }
         }
+
+        public void ForceExport(ExportItem item)
+        {
+            try
+            {
+                _exportingManager.Export(item);
+            }
+            catch (Exception ex)
+            {
+                _events.Publish("Ошибка экспорта!");
+                Trace.WriteLine(ex, "Error");
+            }
+        }
     }
 }

@@ -61,6 +61,13 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Margin="3 0 0 0" Style="{StaticResource LinkButton}" Content="Принудительный экспорт" cal:Message.Attach="ForceExport($dataContext)" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

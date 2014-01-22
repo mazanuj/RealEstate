@@ -71,7 +71,7 @@
                     <TextBlock Text="Корпус" Margin="0 4" />
                     <TextBox Text="{Binding Advert.HousePart}" Margin="4"/>
                 </StackPanel>
-                <TextBox Text="{Binding Advert.MessageShort}" Grid.Column="0" Grid.Row="10" Margin="4" Grid.ColumnSpan="2"  />
+                <TextBox Text="{Binding Advert.Title}" Grid.Column="0" Grid.Row="10" Margin="4" Grid.ColumnSpan="2"  />
                 <TextBox Text="{Binding Advert.MessageFull}" Grid.Column="0" Grid.Row="11" Margin="4" Grid.ColumnSpan="2"
                          AcceptsReturn="True" TextWrapping="Wrap" Height="150"/>
 

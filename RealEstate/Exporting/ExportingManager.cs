@@ -1,4 +1,5 @@
-﻿using RealEstate.Db;
+﻿using MySql.Data.MySqlClient;
+using RealEstate.Db;
 using RealEstate.Parsing;
 using System;
 using System.Collections;
@@ -7,8 +8,9 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
-using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 namespace RealEstate.Exporting
@@ -78,7 +80,7 @@ namespace RealEstate.Exporting
 
         public void Export(ExportItem item)
         {
-            if (item.Advert.ExportSites != null)
+            if (item.Advert.ExportSites != null && !item.IsExported)
                 foreach (var site in item.Advert.ExportSites)
                 {
                     var settings = _context.ExportSettings.SingleOrDefault(e => e.ExportSite.Id == site.Id);
@@ -90,44 +92,119 @@ namespace RealEstate.Exporting
                             continue;
                     }
 
-                    ExportAdvert(item.Advert);
+                    ExportAdvert(item.Advert, site);
 
                 }
 
             item.DateOfExport = DateTime.Now;
-            item.IsExported = true;
+            //item.IsExported = true;
             _context.SaveChanges();
         }
 
-        private void ExportAdvert(Advert advert)
+        private void ExportAdvert(Advert advert, ExportSite site)
         {
-            var cstr = GetConnectionString(advert);
-            if (cstr != null)
+            // sample Server=88.212.209.125;Database=moskva;Uid=moskva;Pwd=gfdkjdfh;Charset=utf8;Default Command Timeout=300000;
+            if (site != null && !String.IsNullOrEmpty(site.ConnectionString))
             {
-                using (SqlConnection conn = new SqlConnection(cstr))
+                using (MySqlConnection conn = new MySqlConnection(site.ConnectionString))
                 {
-                    SqlCommand cmd = new SqlCommand("SELECT * FROM whatever WHERE id = 5", conn);
+                    var comm = @"INSERT INTO `ntvo3_adsmanager_ads`
+            (`category`,`userid`, `name`, `images`,`ad_zip`, `ad_city`, `ad_phone`, `email`, `ad_kindof`, `ad_headline`,
+             `ad_text`, `ad_state`,`ad_price`,  `date_created`, `date_modified`, `date_recall`,  `expiration_date`, `recall_mail_sent`,
+             `views`, `published`, `metadata_description`, `metadata_keywords`, `ad_metro`, `ad_obs`, `ad_jilaya`,  `ad_kuhnya`,
+             `ad_etag`, `ad_etagei`,  `ad_obshaycena`, `ad_company`,  `ad_srok`, `ad_dom`, `ad_korpus`, `ad_vraionedoma`,
+             `ad_stroenie`, `ad_raion`, `ad_foto`, `ad_logo`,  `hit`, `ad_tarif`, `ad_premium`,  `ad_srokgod`, `ad_jk`,
+             `ad_balans`, `ad_status`,  `ad_zastroy`,  `ad_imya`, `ad_adressofis`,   `ad_telefon`, `ad_site`,`ad_dopinfo`, `ad_dometro`,
+             `ad_sposobdometro`,  `ad_coords`, `ad_rooms`, `ad_mapm`)
+VALUES (
+        0,
+        538,
+        'тахометр',
+        '[]',
+        '" + advert.Street + @"',
+        '" + advert.City + @"',
+        '" + advert.PhoneNumber + @"',
+        '" + advert.Email + @"',
+        '" + advert.GetKindOf() + @"',
+        '" + advert.Title + @"',
+        '" + advert.MessageFull + @"',
+        '" + advert.GetAO() + @"',
+        '" + advert.Price + @"',
+        '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + @"',
+        '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + @"',
+        NULL,
+        '" + DateTime.Now.AddMonths(1).ToString("yyyy-MM-dd HH:mm:ss") + @"',
+        0,
+        0,
+        1,
+        NULL,
+        NULL,
+        '" + advert.MetroStation + @"',
+        '" + advert.AreaFull.ToString("#") + @"',
+        '" + advert.AreaLiving.ToString("#") + @"',
+        '" + advert.AreaKitchen.ToString("#") + @"',
+        '" + advert.Floor + @"',
+        '" + advert.FloorTotal + @"',
+        '" + advert.Price + @"',
+        '',
+        '" + "" + @"', 
+        '" + advert.House + @"',
+        '" + advert.HousePart + @"',
+        '',
+        '',
+        '" + advert.Distinct + @"',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '1',
+        '',
+        '" + advert.Rooms + @"',
+        '10');select last_insert_id();"; //todo year?
+
+                    MySqlCommand intoAds = new MySqlCommand(comm, conn);
                     try
                     {
                         conn.Open();
+                        var id = intoAds.ExecuteScalar();
+
+                        SavePhoto(advert, id);
+                        var comm_to_cat = @"INSERT INTO `ntvo3_adsmanager_adcat` (`adid`,`catid`) VALUES (" + id +",2);";
+
+                        MySqlCommand intoCat = new MySqlCommand(comm_to_cat, conn);
+                        var res = intoCat.ExecuteNonQuery();
+                        if (res == 0)
+                            Trace.WriteLine("Error!: Updated rows count equals 0!");
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        Trace.WriteLine(ex.Message);
                     }
                 }
             }
         }
 
-        private string GetConnectionString(Advert advert)
+        private void SavePhoto(Advert advert, object id)
         {
-            if (advert.City == "Москва" && advert.Usedtype == Usedtype.New)
-                return "Server=88.212.209.125;Database=moskva;Uid=moskva;Pwd=gfdkjdfh;Charset=utf8;Default Command Timeout=300000;";
-            else
-                return null;
+            //ftp://88.212.209.125/www/moskva-novostroyki.ru/images/com_adsmanager/ads/c4f796afb-896x644-243599665-view.jpg
+            //[{"index":1,"image":"c4f796afb-896x644_25_1.jpg","thumbnail":"c4f796afb-896x644_25_1_t.jpg","medium":"c4f796afb-896x644_25_1_m.jpg"}]
+            using (var web = new WebClient())
+            {
+                web.UploadFile(@"ftp://88.212.209.125/www/moskva-novostroyki.ru/images/com_adsmanager/ads/", "");
+            }
         }
-
-
     }
 
     public enum ExportStatus

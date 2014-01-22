@@ -127,6 +127,51 @@ namespace RealEstate.Parsing
             }
         }
 
+        public int GetKindOf()
+        {
+            if (Rooms.Contains('1'))
+                return 1;
+            else if (Rooms.Contains('2'))
+                return 2;
+            else if (Rooms.Contains('3'))
+                return 3;
+            else if (Rooms.Contains('4'))
+                return 4;
+            else if (Rooms.Contains('5'))
+                return 5;
+            else if (Rooms.Contains("студ"))
+                return 6;
+            else
+                return -1;
+        }
+
+        public int GetAO()
+        {
+            if (AO == "СЗАО")
+                return 8;
+            else if (AO == "ЗелАО")
+                return 9;
+            else if (AO == "ЗАО" || AO == "Западный")
+                return 7;
+            else if (AO == "ЮЗАО")
+                return 6;
+            else if (AO == "ЮАО")
+                return 5;
+            else if (AO == "ЮВАО")
+                return 4;
+            else if (AO == "ВАО" || AO == "Восточный")
+                return 3;
+            else if (AO == "СВАО")
+                return 2;
+            else if (AO == "САО" || AO == "Северный")
+                return 1;
+            else if (AO == "ЦАО")
+                return 0;
+            else
+                return -1;
+
+        }
+
     }
 
     public class Image

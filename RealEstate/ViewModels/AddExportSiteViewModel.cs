@@ -63,6 +63,19 @@ namespace RealEstate.ViewModels
             }
         }
 
+        private string _ConectionString = "";
+        [Required(ErrorMessage = "Введите строку подключения к базе")]
+        public string ConnectionString
+        {
+            get { return _ConectionString; }
+            set
+            {
+                _ConectionString = value;
+                NotifyOfPropertyChange(() => ConnectionString);
+                NotifyOfPropertyChange(() => CanCreate);
+            }
+        }
+
         public BindableCollection<CityWrap> Cities
         {
             get
@@ -89,6 +102,7 @@ namespace RealEstate.ViewModels
                 site.DisplayName = TitleCity;
                 site.Url = Url;
                 site.City = SelectedCity.City;
+                site.ConnectionString = ConnectionString;
 
                 _exportSiteManager.Add(site);
 
