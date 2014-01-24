@@ -37,14 +37,14 @@ namespace RealEstate.Commands
                 {
                     City = "Ярославль",
                     DisplayName = "irr.ru",
-                    Url = "http://yaroslavl.irr.ru/"
+                    Database = "http://yaroslavl.irr.ru/"
                 };
 
                 ExportSite avito = new ExportSite()
                 {
                     City = "Ярославль",
                     DisplayName = "avito",
-                    Url = "http://www.avito.ru/"
+                    Database = "http://www.avito.ru/"
                 };
 
                 _context.ExportSites.Add(irr);

@@ -13,6 +13,7 @@ using RealEstate.Db;
 using System.Drawing;
 using System.Drawing.Imaging;
 using RealEstate.Parsing.Parsers;
+using ImageResizer;
 
 namespace RealEstate.Parsing
 {
@@ -85,11 +86,11 @@ namespace RealEstate.Parsing
             int WidthToCrop = 0;
             int HeightToCrop = 0;
 
-            if(site == ImportSite.Avito)
+            if (site == ImportSite.Avito)
                 HeightToCrop = 40;
             else if (site == ImportSite.Hands)
                 HeightToCrop = 55;
-            
+
 
             DownloadImage(imageSource, path, WidthToCrop, HeightToCrop);
         }
@@ -157,6 +158,60 @@ namespace RealEstate.Parsing
             return images;
         }
 
+        public List<List<UploadingPhoto>> PrepareForUpload(ICollection<Image> imagesSource, ImportSite site, string id)
+        {
+            if (imagesSource == null) return null;
+
+            var list = new List<List<UploadingPhoto>>();
+
+            int i = 1;
+            foreach (var imageSource in imagesSource.Take(Settings.SettingsStore.MaxCountOfImages))
+            {
+                Dictionary<string, string> versions = new Dictionary<string, string>();
+                versions.Add("_t", "height=100&format=jpg");
+                versions.Add("_m", "height=200&format=jpg");
+
+                try
+                {
+                    var path = Path.Combine(FolderName, imageSource.LocalName);
+                    DownloadImage(imageSource, path, site);
+                    if (File.Exists(path))
+                    {
+                        var photos = new List<UploadingPhoto>();
+
+                        FileInfo f = new FileInfo(path);
+                        photos.Add(new UploadingPhoto()
+                        {
+                            Type = "image",
+                            LocalPath = path,
+                            FileName = f.Name.Replace(f.Extension, "").Replace('_', '-') + "_" + id + "_" + i + f.Extension
+                        });
+
+                        string basePath = ImageResizer.Util.PathUtils.RemoveExtension(path);
+                        foreach (string suffix in versions.Keys)
+                        {
+                            var p = ImageBuilder.Current.Build(new ImageJob(path, basePath + suffix,
+                                new Instructions(versions[suffix]), false, true));
+                            photos.Add(new UploadingPhoto()
+                                {
+                                    LocalPath = basePath + suffix + "." +p.ResultFileExtension,
+                                    FileName = f.Name.Replace(f.Extension, "").Replace('_', '-') + "_" + id + "_" + i + suffix + f.Extension,
+                                    Type = suffix.Replace("_t", "thumbnail").Replace("_m","medium")
+                                });
+                        }
+                        list.Add(photos);
+                    }
+                    i++;
+                    
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.Message, "Image loading error");
+                }
+            }
+            return list;
+        }
+
         public void DeleteImage(int id)
         {
             var img = _context.Images.SingleOrDefault(i => i.Id == id);
@@ -190,5 +245,12 @@ namespace RealEstate.Parsing
                 }
             }
         }
+    }
+
+    public class UploadingPhoto
+    {
+        public string LocalPath { get; set; }
+        public string FileName { get; set; }
+        public string Type { get; set; }
     }
 }

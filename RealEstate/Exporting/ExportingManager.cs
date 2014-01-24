@@ -12,6 +12,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace RealEstate.Exporting
 {
@@ -19,11 +21,13 @@ namespace RealEstate.Exporting
     public class ExportingManager
     {
         private readonly RealEstateContext _context = null;
+        private readonly ImagesManager _imagesManager = null;
 
         [ImportingConstructor]
-        public ExportingManager(RealEstateContext context)
+        public ExportingManager(RealEstateContext context, ImagesManager images)
         {
             _context = context;
+            _imagesManager = images;
         }
 
 
@@ -103,12 +107,14 @@ namespace RealEstate.Exporting
 
         private void ExportAdvert(Advert advert, ExportSite site)
         {
-            // sample Server=88.212.209.125;Database=moskva;Uid=moskva;Pwd=gfdkjdfh;Charset=utf8;Default Command Timeout=300000;
-            if (site != null && !String.IsNullOrEmpty(site.ConnectionString))
-            {
-                using (MySqlConnection conn = new MySqlConnection(site.ConnectionString))
-                {
-                    var comm = @"INSERT INTO `ntvo3_adsmanager_ads`
+            Task.Factory.StartNew(() =>
+                   {
+                       // sample Server=88.212.209.125;Database=moskva;Uid=moskva;Pwd=gfdkjdfh;Charset=utf8;Default Command Timeout=300000;
+                       if (site != null && !String.IsNullOrEmpty(site.Address))
+                       {
+                           using (MySqlConnection conn = new MySqlConnection("Server=" + site.Address + ";Database=" + site.Database + ";Uid=moskva;Pwd=gfdkjdfh;charset=utf8;"))
+                           {
+                               var comm = @"INSERT INTO `ntvo3_adsmanager_ads`
             (`category`,`userid`, `name`, `images`,`ad_zip`, `ad_city`, `ad_phone`, `email`, `ad_kindof`, `ad_headline`,
              `ad_text`, `ad_state`,`ad_price`,  `date_created`, `date_modified`, `date_recall`,  `expiration_date`, `recall_mail_sent`,
              `views`, `published`, `metadata_description`, `metadata_keywords`, `ad_metro`, `ad_obs`, `ad_jilaya`,  `ad_kuhnya`,
@@ -145,7 +151,7 @@ VALUES (
         '" + advert.AreaKitchen.ToString("#") + @"',
         '" + advert.Floor + @"',
         '" + advert.FloorTotal + @"',
-        '" + advert.Price + @"',
+        '" + (advert.AreaFull == 0 ? "" : ((double)advert.Price / (double)advert.AreaFull).ToString("#")) + @"',
         '',
         '" + "" + @"', 
         '" + advert.House + @"',
@@ -174,36 +180,101 @@ VALUES (
         '" + advert.Rooms + @"',
         '10');select last_insert_id();"; //todo year?
 
-                    MySqlCommand intoAds = new MySqlCommand(comm, conn);
+                               MySqlCommand intoAds = new MySqlCommand(comm, conn);
+                               try
+                               {
+                                   conn.Open();
+                                   var id = intoAds.ExecuteScalar();
+
+                                   var comm_to_cat = @"INSERT INTO `ntvo3_adsmanager_adcat` (`adid`,`catid`) VALUES (" + id + ",2);";
+                                   MySqlCommand intoCat = new MySqlCommand(comm_to_cat, conn);
+                                   var res = intoCat.ExecuteNonQuery();
+                                   if (res == 0)
+                                       Trace.WriteLine("Error!: Updated rows count equals 0!");
+
+                                   var imgs = SavePhotos(advert, site, id);
+                                   var comm_to_update_imgs = @"UPDATE `ntvo3_adsmanager_ads` SET images = '" + imgs + "' WHERE id = " + id;
+                                   MySqlCommand updImgs = new MySqlCommand(comm_to_update_imgs, conn);
+                                   res = updImgs.ExecuteNonQuery();
+                                   if (res == 0)
+                                       Trace.WriteLine("Error!: Updated rows count equals 0!");
+                               }
+                               catch (Exception ex)
+                               {
+                                   Trace.WriteLine(ex.Message);
+                               }
+                           }
+                       }
+                   }, TaskCreationOptions.LongRunning );
+        }
+
+        private string SavePhotos(Advert advert, ExportSite site, object id)
+        {
+            if (!advert.ContainsImages) return "[]";
+            //ftp://88.212.209.125/www/moskva-novostroyki.ru/images/com_adsmanager/ads/c4f796afb-896x644-243599665-view.jpg
+            //[{"index":1,"image":"c4f796afb-896x644_25_1.jpg","thumbnail":"c4f796afb-896x644_25_1_t.jpg","medium":"c4f796afb-896x644_25_1_m.jpg"}]
+            var imgs = _imagesManager.PrepareForUpload(advert.Images, advert.ImportSite, id.ToString());
+            StringBuilder result = new StringBuilder("[");
+            int i = 1;
+            foreach (var photos in imgs)
+            {
+                if (result[result.Length - 1] == '}')
+                    result.Append(", ");
+
+                result.Append("{\"index\":" + i + ", ");
+                foreach (var photo in photos)
+                {
                     try
                     {
-                        conn.Open();
-                        var id = intoAds.ExecuteScalar();
+                        using (var web = new WebClient())
+                        {
+                            var url = @"ftp://" + site.Address + @"/www/" + site.DisplayName + @"/images/com_adsmanager/ads/" + photo.FileName;
+                            UploadFile(url, photo.LocalPath);
+                        }
+                        if (result[result.Length - 1] == '"')
+                            result.Append(", ");
 
-                        SavePhoto(advert, id);
-                        var comm_to_cat = @"INSERT INTO `ntvo3_adsmanager_adcat` (`adid`,`catid`) VALUES (" + id +",2);";
-
-                        MySqlCommand intoCat = new MySqlCommand(comm_to_cat, conn);
-                        var res = intoCat.ExecuteNonQuery();
-                        if (res == 0)
-                            Trace.WriteLine("Error!: Updated rows count equals 0!");
+                        result.Append("\"" + photo.Type + "\": \"" + photo.FileName + "\"");
                     }
                     catch (Exception ex)
                     {
-                        Trace.WriteLine(ex.Message);
+                        Trace.WriteLine(ex.Message, "Failed uploading image");
                     }
                 }
+                result.Append('}');
+                i++;
             }
+            result.Append(']');
+
+            return result.ToString();
         }
 
-        private void SavePhoto(Advert advert, object id)
+        private void UploadFile(string url, string local)
         {
-            //ftp://88.212.209.125/www/moskva-novostroyki.ru/images/com_adsmanager/ads/c4f796afb-896x644-243599665-view.jpg
-            //[{"index":1,"image":"c4f796afb-896x644_25_1.jpg","thumbnail":"c4f796afb-896x644_25_1_t.jpg","medium":"c4f796afb-896x644_25_1_m.jpg"}]
-            using (var web = new WebClient())
+            FtpWebRequest ftpClient = (FtpWebRequest)FtpWebRequest.Create(url);
+            ftpClient.Credentials = new NetworkCredential("proger_1", "Jyd3cZW6");
+            ftpClient.Method = System.Net.WebRequestMethods.Ftp.UploadFile;
+            ftpClient.UseBinary = true;
+            ftpClient.KeepAlive = true;
+            System.IO.FileInfo fi = new System.IO.FileInfo(local);
+            ftpClient.ContentLength = fi.Length;
+            byte[] buffer = new byte[4097];
+            int bytes = 0;
+            int total_bytes = (int)fi.Length;
+            System.IO.FileStream fs = fi.OpenRead();
+            System.IO.Stream rs = ftpClient.GetRequestStream();
+            while (total_bytes > 0)
             {
-                web.UploadFile(@"ftp://88.212.209.125/www/moskva-novostroyki.ru/images/com_adsmanager/ads/", "");
+                bytes = fs.Read(buffer, 0, buffer.Length);
+                rs.Write(buffer, 0, bytes);
+                total_bytes = total_bytes - bytes;
             }
+            //fs.Flush();
+            fs.Close();
+            rs.Close();
+            FtpWebResponse uploadResponse = (FtpWebResponse)ftpClient.GetResponse();
+            Console.WriteLine(uploadResponse.StatusDescription);
+            uploadResponse.Close();
         }
     }
 

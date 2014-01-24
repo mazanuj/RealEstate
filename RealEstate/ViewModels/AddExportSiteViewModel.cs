@@ -38,13 +38,13 @@ namespace RealEstate.ViewModels
 
         private string _Title = "";
         [Required(ErrorMessage = "Введите название сайта")]
-        public string TitleCity
+        public string Name
         {
             get { return _Title; }
             set
             {
                 _Title = value;
-                NotifyOfPropertyChange(() => TitleCity);
+                NotifyOfPropertyChange(() => Name);
                 NotifyOfPropertyChange(() => CanCreate);
             }
         }
@@ -99,10 +99,10 @@ namespace RealEstate.ViewModels
             if (!HasErrors)
             {
                 var site = new ExportSite();
-                site.DisplayName = TitleCity;
-                site.Url = Url;
+                site.DisplayName = Name;
+                site.Database = Url;
                 site.City = SelectedCity.City;
-                site.ConnectionString = ConnectionString;
+                site.Address = ConnectionString;
 
                 _exportSiteManager.Add(site);
 

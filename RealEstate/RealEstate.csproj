@@ -72,6 +72,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net40\HtmlAgilityPack.dll</HintPath>
     </Reference>
+    <Reference Include="ImageResizer">
+      <HintPath>..\packages\ImageResizer.3.4.2\lib\ImageResizer.dll</HintPath>
+    </Reference>
     <Reference Include="KladrApiClient">
       <HintPath>..\packages\KLADR\KladrApiClient.dll</HintPath>
     </Reference>

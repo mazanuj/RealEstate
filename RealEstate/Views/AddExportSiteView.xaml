@@ -16,13 +16,13 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             
-            <TextBlock Grid.Column="0" Grid.Row="0" Margin="3">Название сайта: </TextBlock>
-            <TextBox  Grid.Column="1" Grid.Row="0" Margin="3" Name="TitleCity" />
+            <TextBlock Grid.Column="0" Grid.Row="0" Margin="3">Имя сайта (ftp): </TextBlock>
+            <TextBox  Grid.Column="1" Grid.Row="0" Margin="3" Name="Name" />
 
-            <TextBlock Grid.Column="0" Grid.Row="1" Margin="3">URL:</TextBlock>
+            <TextBlock Grid.Column="0" Grid.Row="1" Margin="3">База данных (mysql):</TextBlock>
             <TextBox Grid.Column="1" Grid.Row="1" Margin="3" Name="Url" />
 
-            <TextBlock Grid.Column="0" Grid.Row="2" Margin="3">Строка подключения:</TextBlock>
+            <TextBlock Grid.Column="0" Grid.Row="2" Margin="3">Адрес сайта (mysql):</TextBlock>
             <TextBox Grid.Column="1" Grid.Row="2" Margin="3" Name="ConnectionString" />
 
             <TextBlock Grid.Column="0" Grid.Row="3" Margin="3">Город:</TextBlock>
