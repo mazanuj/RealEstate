@@ -23,7 +23,15 @@ namespace RealEstate.Parsing
             var oldAdvert = _context.Adverts.SingleOrDefault(a => a.Url == advert.Url);
             if (oldAdvert == null)
             {
-                advert.ExportSites = new List<Exporting.ExportSite>() { setting.ExportSite };
+
+                if (advert.ExportSites != null)
+                {
+                    if(!advert.ExportSites.Any(e => e.Id == setting.ExportSite.Id))
+                        advert.ExportSites.Add(setting.ExportSite);
+                }
+                else
+                    advert.ExportSites = new List<Exporting.ExportSite>() { setting.ExportSite };
+
                 _context.Adverts.Add(advert);
             }
             else
@@ -157,6 +165,16 @@ namespace RealEstate.Parsing
         {
             var dumb = LastParsingNumber;
             _lastParsingNumber++;
+        }
+
+        internal bool IsParsed(string url)
+        {
+            return _context.Adverts.Any(u => u.Url == url);
+        }
+
+        internal Advert GetParsed(string url)
+        {
+            return _context.Adverts.FirstOrDefault(u => u.Url == url);
         }
     }
 

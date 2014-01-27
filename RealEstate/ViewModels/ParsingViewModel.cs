@@ -37,6 +37,7 @@ namespace RealEstate.ViewModels
         private readonly ImagesManager _imagesManager;
         private readonly SmartProcessor _smartProcessor;
         private readonly ExportingManager _exportingManager;
+        private const int MAX_COUNT_PARSED = 30;
 
         [ImportingConstructor]
         public ParsingViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager,
@@ -320,103 +321,126 @@ namespace RealEstate.ViewModels
                 int attempt = 0;
                 Advert last = null;
                 Advert advert = null;
+                bool parsed = false;
+                int prsCount = 0;
 
                 for (int i = 0; i < headers.Count; i++)
                 {
-                    last = advert;
-                    advert = null;
-
-                    attempt = 0;
-                    int blocked = 0;
+                    parsed = _advertsManager.IsParsed(headers[i].Url);
                     DateTime start = DateTime.Now;
 
-                    while (attempt++ < maxattempt)
+                    if (!parsed)
                     {
-                        if (ct.IsCancellationRequested)
-                        { _events.Publish("Отменено"); return; }
-                        if (pt.IsPauseRequested)
-                            pt.WaitUntillPaused();
+                        prsCount = 0;
+                        last = advert;
+                        advert = null;
 
-                        Thread.Sleep(param.Delay * 1000);
+                        attempt = 0;
+                        int blocked = 0;
 
-                        proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
-                        try
+                        while (attempt++ < maxattempt)
                         {
-                            advert = parser.Parse(headers[i], proxy, ct, pt);
-                            break;
-                        }
-                        catch (System.Web.HttpException ex)
-                        {
-                            Trace.WriteLine(ex.Message, "Http error");
-                            _proxyManager.RejectProxy(proxy);
-                        }
-                        catch (System.Net.WebException wex)
-                        {
-                            Trace.WriteLine(wex.Message, "Web error");
-                            _proxyManager.RejectProxy(proxy);
+                            if (ct.IsCancellationRequested)
+                            { _events.Publish("Отменено"); return; }
+                            if (pt.IsPauseRequested)
+                                pt.WaitUntillPaused();
 
-                            if ((HttpWebResponse)wex.Response != null)
+                            Thread.Sleep(param.Delay * 1000);
+
+                            proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
+                            try
                             {
-                                if (((HttpWebResponse)wex.Response).StatusCode == HttpStatusCode.Forbidden)
-                                {
-                                    _proxyManager.RejectProxyFull(proxy);
+                                advert = parser.Parse(headers[i], proxy, ct, pt);
+                                break;
+                            }
+                            catch (System.Web.HttpException ex)
+                            {
+                                Trace.WriteLine(ex.Message, "Http error");
+                                _proxyManager.RejectProxy(proxy);
+                            }
+                            catch (System.Net.WebException wex)
+                            {
+                                Trace.WriteLine(wex.Message, "Web error");
+                                _proxyManager.RejectProxy(proxy);
 
-                                    blocked++;
-                                    if (blocked > maxattempt - 2)
+                                if ((HttpWebResponse)wex.Response != null)
+                                {
+                                    if (((HttpWebResponse)wex.Response).StatusCode == HttpStatusCode.Forbidden)
                                     {
-                                        _events.Publish("Сервер заблокировал доступ. Операция приостановлена");
-                                        return;
+                                        _proxyManager.RejectProxyFull(proxy);
+
+                                        blocked++;
+                                        if (blocked > maxattempt - 2)
+                                        {
+                                            _events.Publish("Сервер заблокировал доступ. Операция приостановлена");
+                                            return;
+                                        }
                                     }
                                 }
-                            }
 
+                            }
+                            catch (System.IO.IOException)
+                            {
+                                Trace.WriteLine("IO error");
+                                _proxyManager.RejectProxy(proxy);
+                            }
+                            catch (BadResponseException)
+                            {
+                                Trace.WriteLine("Bad response from proxy");
+                                _proxyManager.RejectProxy(proxy);
+                            }
+                            catch (ParsingException pex)
+                            {
+                                Trace.WriteLine(pex.Message + ": " + pex.UnrecognizedData, "Unrecognized data");
+                                if (attempt + 1 >= maxattempt)
+                                    break;
+                                else
+                                    attempt = maxattempt - 2;
+                            }
+                            catch (OperationCanceledException)
+                            {
+                                Trace.WriteLine("Canceled");
+                                _events.Publish("Отменено");
+                            }
+                            catch (Exception ex)
+                            {
+                                Trace.WriteLine(ex.ToString(), "Error!");
+                                _events.Publish("Ошибка парсинга!");
+                                return;
+                            }
                         }
-                        catch (System.IO.IOException)
+                    }
+
+                    if (parsed)
+                    {
+                        if (prsCount > MAX_COUNT_PARSED)
                         {
-                            Trace.WriteLine("IO error");
-                            _proxyManager.RejectProxy(proxy);
+                            _events.Publish("Задание завершено. Текущий url уже был обработан");
+                            Trace.WriteLine("Task was stopped. Current url already parsed");
+                            break;
                         }
-                        catch (BadResponseException)
-                        {
-                            Trace.WriteLine("Bad response from proxy");
-                            _proxyManager.RejectProxy(proxy);
-                        }
-                        catch (ParsingException pex)
-                        {
-                            Trace.WriteLine(pex.Message + ": " + pex.UnrecognizedData, "Unrecognized data");
-                            if (attempt + 1 >= maxattempt)
-                                break;
-                            else
-                                attempt = maxattempt - 2;
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            Trace.WriteLine("Canceled");
-                            _events.Publish("Отменено");
-                        }
-                        catch (Exception ex)
-                        {
-                            Trace.WriteLine(ex.ToString(), "Error!");
-                            _events.Publish("Ошибка парсинга!");
-                            return;
-                        }
+                        advert = _advertsManager.GetParsed(headers[i].Url);
+                        prsCount++;
                     }
 
                     task.ParsedCount++;
 
                     if (advert != null)
                     {
-                        advert.ParsingNumber = _advertsManager.LastParsingNumber;
-                        if (advert.ImportSite == Parsing.ImportSite.Hands)
+                        if (!parsed)
                         {
-                            if (last != null && advert != null)
+                            advert.ParsingNumber = _advertsManager.LastParsingNumber;
+                            if (advert.ImportSite == Parsing.ImportSite.Hands)
                             {
-                                if (!String.IsNullOrEmpty(last.Address) && !String.IsNullOrEmpty(advert.Address))
+                                if (last != null && advert != null)
                                 {
-                                    if (last.Street == advert.Street && last.Rooms == advert.Rooms && last.House == advert.House)
+                                    if (!String.IsNullOrEmpty(last.Address) && !String.IsNullOrEmpty(advert.Address))
                                     {
-                                        Trace.WriteLine("Skiped by last has the same address");
-                                        continue;
+                                        if (last.Street == advert.Street && last.Rooms == advert.Rooms && last.House == advert.House)
+                                        {
+                                            Trace.WriteLine("Skiped by last has the same address");
+                                            continue;
+                                        }
                                     }
                                 }
                             }
@@ -439,9 +463,9 @@ namespace RealEstate.ViewModels
                                 }
                             }
 
-                            adverts.Add(advert);
                             if (SettingsStore.LogSuccessAdverts)
                                 Trace.WriteLine(advert.ToString(), "Advert");
+
                             _advertsManager.Save(advert, headers[i].Setting);
 
                             if (SettingsStore.SaveImages)
@@ -471,6 +495,7 @@ namespace RealEstate.ViewModels
 
                         task.Remaining = new TimeSpan(Convert.ToInt64(spans.Average()) * (task.TotalCount - task.ParsedCount));
                     }
+
                 }
 
                 _events.Publish("Завершено");
