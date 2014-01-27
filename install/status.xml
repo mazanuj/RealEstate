@@ -41,6 +41,10 @@
     <Hash>9BD91A2A4DE5918CDDCDCA20E86A7BFB</Hash>
   </FileStatus>
   <FileStatus>
+    <Path>ImageResizer.dll</Path>
+    <Hash>3BB2B8882FC4A07CFC50841778054C26</Hash>
+  </FileStatus>
+  <FileStatus>
     <Path>imports.xml</Path>
     <Hash>C3E185D78DD84938083338384F25944E</Hash>
   </FileStatus>
@@ -114,11 +118,11 @@
   </FileStatus>
   <FileStatus>
     <Path>proxies.txt</Path>
-    <Hash>58E344128E6154169668B3DBE3D9D46A</Hash>
+    <Hash>884ABA1AC4B94AF7F3BCB17B5ADE13CD</Hash>
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>305828B12DFE73B30F03C049839AFB97</Hash>
+    <Hash>724BA59B14A24B3B60FFB2FC9157F048</Hash>
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe.config</Path>
@@ -158,7 +162,7 @@
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
-    <Hash>3ACCDDF64B1DD03ABEB9B0B3E5A7BA44</Hash>
+    <Hash>777D45BBBCDF50D49C42C70AD7ACF5FE</Hash>
   </FileStatus>
   <FileStatus>
     <Path>WPFToolkit.dll</Path>
@@ -178,7 +182,7 @@
   </FileStatus>
   <FileStatus>
     <Path>SmartProcessing\ProcessingRules.xml</Path>
-    <Hash>507A9433C6C659E575BE9943AC7FE9A4</Hash>
+    <Hash>AB4BB835303C8A4122F0B246F70DB3CC</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.bigrams</Path>
