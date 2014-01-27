@@ -258,14 +258,16 @@ namespace RealEstate.ViewModels
             ParserSourceUrls.Remove(url);
         }
 
-        public void AddExportSite()
+        public void EditExportSite()
         {
             try
             {
                 var style = new Dictionary<string, object>();
                 style.Add("style", "VS2012ModalWindowStyle");
+                var window = IoC.Get<EditExportSiteViewModel>();
+                window.Site = SelectedExportSite;
 
-                _windowManager.ShowDialog(IoC.Get<AddExportSiteViewModel>(), settings: style);
+                _windowManager.ShowDialog(window, settings: style);
 
                 NotifyOfPropertyChange(() => ExportSites);
             }
@@ -276,7 +278,25 @@ namespace RealEstate.ViewModels
             }
         }
 
-        public void DeleteExportSite()
+        public void AddExportSite()
+        {
+            try
+            {
+                var style = new Dictionary<string, object>();
+                style.Add("style", "VS2012ModalWindowStyle");
+
+                _windowManager.ShowDialog(IoC.Get<EditExportSiteViewModel>(), settings: style);
+
+                NotifyOfPropertyChange(() => ExportSites);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString(), "Error!");
+                _events.Publish("Ошибка при добавлении");
+            }
+        }
+
+        public void DeleteSite()
         {
             if (SelectedExportSite != null)
             {

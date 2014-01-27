@@ -433,7 +433,20 @@ namespace RealEstate.ViewModels
 
         public void ExportAdvert()
         {
-            _exportingManager.AddAdvertToExport(AdvertOriginal);
+            Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    _exportingManager.AddAdvertToExport(AdvertOriginal);
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.ToString());
+                    _events.Publish("Ошибка");
+                }
+            }, CancellationToken.None,
+                      TaskCreationOptions.None,
+                      TaskScheduler.Default);
         }
     }
 

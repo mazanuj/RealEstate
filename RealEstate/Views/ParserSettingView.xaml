@@ -107,8 +107,8 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" MinWidth="270"/>
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20 10">
@@ -148,7 +148,10 @@
                         <Button Name="SaveSources" HorizontalAlignment="Right" Margin="10" Grid.Row="2" Content="Сохранить" />
                     </Grid>
 
-                    <Button Name="DeleteExportSite" Margin="3" Grid.Column="1" Grid.Row="2" Content="Удалить сайт"/>
+                    <StackPanel Margin="3" Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
+                        <Button Margin="5" Name="DeleteSite" Content="Удалить сайт"/>
+                        <Button Margin="5" Name="EditExportSite" Content="Редактировать сайт"/>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </Grid>

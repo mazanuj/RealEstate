@@ -195,7 +195,7 @@
     <Compile Include="Validation\UrlAttribute.cs" />
     <Compile Include="Validation\ValidatingScreen.cs" />
     <Compile Include="Validation\ValidationGroupAttribute.cs" />
-    <Compile Include="ViewModels\AddExportSiteViewModel.cs" />
+    <Compile Include="ViewModels\EditExportSiteViewModel.cs" />
     <Compile Include="ViewModels\AdvertsViewModel.cs" />
     <Compile Include="ViewModels\AdvertViewModel.cs" />
     <Compile Include="ViewModels\ConsoleViewModel.cs" />
@@ -211,8 +211,8 @@
     <Compile Include="ViewModels\StatisticsViewModel.cs" />
     <Compile Include="ViewModels\StatisticTabViewModel.cs" />
     <Compile Include="ViewModels\TestParsingViewModel.cs" />
-    <Compile Include="Views\AddExportSiteView.xaml.cs">
-      <DependentUpon>AddExportSiteView.xaml</DependentUpon>
+    <Compile Include="Views\EditExportSiteView.xaml.cs">
+      <DependentUpon>EditExportSiteView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AdvertsView.xaml.cs">
       <DependentUpon>AdvertsView.xaml</DependentUpon>
@@ -273,7 +273,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\AddExportSiteView.xaml">
+    <Page Include="Views\EditExportSiteView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

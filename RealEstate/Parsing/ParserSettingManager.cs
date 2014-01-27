@@ -43,19 +43,23 @@ namespace RealEstate.Parsing
 
         }
 
+        object _lock = new object();
         public List<ParserSetting> FindSettings(AdvertType advertType, string city, ImportSite site, ParsePeriod period, RealEstateType type, Usedtype subtype)
         {
-            var set = from s in context.ParserSettings
-                      where
-                        s.AdvertTypeValue == (int)advertType &&
-                        s.ImportSiteValue == (int)site &&
-                        s.ParsePeriodValue == (int)period &&
-                        s.RealEstateTypeValue == (int)type &&
-                        s.UsedtypeValue == (int)subtype &&
-                        (s.ExportSite.City == city || String.IsNullOrEmpty(city))
-                      select s;
+            lock (_lock)
+            {
+                var set = from s in context.ParserSettings
+                          where
+                            s.AdvertTypeValue == (int)advertType &&
+                            s.ImportSiteValue == (int)site &&
+                            s.ParsePeriodValue == (int)period &&
+                            s.RealEstateTypeValue == (int)type &&
+                            s.UsedtypeValue == (int)subtype &&
+                            (s.ExportSite.City == city || String.IsNullOrEmpty(city))
+                          select s;
 
-            return set.ToList();
+                return set.ToList(); 
+            }
         }
 
         public void SaveParserSetting(ParserSetting setting)

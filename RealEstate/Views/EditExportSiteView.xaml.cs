@@ -16,9 +16,9 @@ namespace RealEstate.Views
     /// <summary>
     /// Interaction logic for AddExportSiteView.xaml
     /// </summary>
-    public partial class AddExportSiteView : Window
+    public partial class EditExportSiteView : Window
     {
-        public AddExportSiteView()
+        public EditExportSiteView()
         {
             InitializeComponent();
         }

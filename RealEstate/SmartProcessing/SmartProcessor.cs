@@ -245,6 +245,8 @@ namespace RealEstate.SmartProcessing
 
         private void DetectDistinct(Advert advert, string oldAddress)
         {
+            KladrApi api = new KladrApi();
+
             if (String.IsNullOrEmpty(advert.Distinct))
             {
                 if (!String.IsNullOrEmpty(oldAddress))
@@ -262,14 +264,14 @@ namespace RealEstate.SmartProcessing
 
                 if (!string.IsNullOrEmpty(advert.City) && !string.IsNullOrEmpty(advert.Address))
                 {
-                    KladrApi api = new KladrApi();
                     advert.Distinct = api.GetDistinct(advert.City, advert.Address);
                 }
+            }
 
-                if (advert.Distinct == null)
-                {
-
-                }
+            if (String.IsNullOrEmpty(advert.AO) && !String.IsNullOrEmpty(advert.Distinct))
+            {
+                if(advert.City != null && advert.City.ToLower().Contains("москва"))
+                    advert.AO = api.GetAO(advert.Distinct);
             }
         }
 

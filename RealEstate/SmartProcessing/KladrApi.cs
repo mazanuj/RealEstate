@@ -151,6 +151,25 @@ namespace RealEstate.SmartProcessing
 
         }
 
+        public string GetAO(string distinct)
+        {
+            OKATODriver ok = new OKATODriver();
+
+            var code = ok.GetCodeByDistinct(distinct);
+
+            while (code != null && code.Length > 5)
+            {
+                code = ok.GetParrentCode(code);
+            }
+
+            if (code != null && code.Length == 5)
+            {
+                return ok.GetDistinctByCode(code);
+            }
+            else
+                return null;
+        }
+
         private void fetchedAddress(KladrResponse response)
         {
             _response = response;

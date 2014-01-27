@@ -147,25 +147,25 @@ namespace RealEstate.Parsing
 
         public int GetAO()
         {
-            if (AO == "СЗАО")
+            if (AO == "СЗАО" || AO == "Северо-Западный")
                 return 8;
-            else if (AO == "ЗелАО")
+            else if (AO == "ЗелАО" || AO == "Зеленоградский")
                 return 9;
             else if (AO == "ЗАО" || AO == "Западный")
                 return 7;
-            else if (AO == "ЮЗАО")
+            else if (AO == "ЮЗАО" || AO == "Юго-Западный")
                 return 6;
-            else if (AO == "ЮАО")
+            else if (AO == "ЮАО" || AO == "Южный")
                 return 5;
-            else if (AO == "ЮВАО")
+            else if (AO == "ЮВАО" || AO == "Юго-Восточный")
                 return 4;
             else if (AO == "ВАО" || AO == "Восточный")
                 return 3;
-            else if (AO == "СВАО")
+            else if (AO == "СВАО" || AO == "Северо-Восточный")
                 return 2;
             else if (AO == "САО" || AO == "Северный")
                 return 1;
-            else if (AO == "ЦАО")
+            else if (AO == "ЦАО" || AO == "Центральный")
                 return 0;
             else
                 return -1;

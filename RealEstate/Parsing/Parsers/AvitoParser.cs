@@ -371,8 +371,37 @@ namespace RealEstate.Parsing.Parsers
                                 addr.Remove();
                             }
 
-                            advert.MetroStation = addressBlock.InnerText.TrimEnd(new[] { ',' });
+                            advert.MetroStation = addressBlock.InnerText.Trim().TrimEnd(new[] { ',' }).Trim();
                         }                       
+                    }
+                }
+            }
+            else
+            {
+                addressLabel = full.DocumentNode.SelectSingleNode(@"//div[@class='description_term']/span[text() = 'Город']");
+                if (addressLabel != null)
+                {
+                    var nextBlock = addressLabel.ParentNode.NextSibling;
+                    if (nextBlock != null)
+                    {
+                        var addressBlock = nextBlock.NextSibling;
+                        if (addressBlock != null)
+                        {
+                            var link = addressBlock.SelectSingleNode(@"./a");
+                            if (link != null)
+                                link.Remove();
+
+                            var spans = addressBlock.SelectNodes(@"./span");
+                            if (spans != null)
+                            {
+                                foreach (var span in spans)
+                                {
+                                    span.Remove();
+                                }
+                            }
+
+                            advert.MetroStation = addressBlock.InnerText.Trim().Trim(new[] { ',' }).Trim();
+                        }
                     }
                 }
             }

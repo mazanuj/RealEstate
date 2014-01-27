@@ -47,13 +47,46 @@ namespace RealEstate.OKATO
 
         public string GetDistinctByCode(string code)
         {
+            if (String.IsNullOrEmpty(code))
+                return null;
+
             using (var context = new RealEstateContext())
             {
                return context.Database
                          .SqlQuery<string>(@"
                         SELECT name
                         FROM okato.class_okato
-                        WHERE code = {0};", code.Substring(0, 8)).SingleOrDefault();
+                        WHERE code = {0};", code.Length > 8 ? code.Substring(0, 8) : code).FirstOrDefault();
+            }
+        }
+
+        public string GetCodeByDistinct(string distinct)
+        {
+            if (String.IsNullOrEmpty(distinct))
+                return null;
+
+            using (var context = new RealEstateContext())
+            {
+                return context.Database
+                          .SqlQuery<string>(@"
+                        SELECT code
+                        FROM okato.class_okato
+                        WHERE name = {0};", distinct).FirstOrDefault();
+            }
+        }
+
+        public string GetParrentCode(string code)
+        {
+            if (String.IsNullOrEmpty(code))
+                return null;
+
+            using (var context = new RealEstateContext())
+            {
+                return context.Database
+                          .SqlQuery<string>(@"
+                        SELECT parent_code
+                        FROM okato.class_okato
+                        WHERE code = {0};", code).FirstOrDefault();
             }
         }
 

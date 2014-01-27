@@ -21,13 +21,20 @@ namespace RealEstate.Exporting
             this.context = context;
         }
 
-        public void Add(ExportSite site)
+        public void Save(ExportSite site)
         {
             if (context != null)
             {
-                ExportSites.Add(site);
-                context.ExportSites.Add(site);
-                context.SaveChanges();
+                if (context.ExportSites.Any(e => e.Id == site.Id))
+                {
+                    context.SaveChanges();
+                }
+                else
+                {
+                    ExportSites.Add(site);
+                    context.ExportSites.Add(site);
+                    context.SaveChanges();
+                }
             }
         }
 
