@@ -53,14 +53,21 @@ namespace RealEstate.Exporting
                    IsWaiting = true;
                    while (ExportQueue.Any(i => !i.IsExported))
                    {
-                       var item = ExportQueue.FirstOrDefault();
-                       if (item != null)
+                       try
                        {
+                           var item = ExportQueue.FirstOrDefault();
+                           if (item != null)
+                           {
+                               Export(item);
+                           }
 
-                           Export(item);
+                           Thread.Sleep(Settings.SettingsStore.ExportInterval * 60000);
                        }
-
-                       Thread.Sleep(Settings.SettingsStore.ExportInterval * 60000);
+                       catch (Exception ex)
+                       {
+                           Trace.WriteLine(ex.Message, "Error uploading image");
+                           Thread.Sleep(500);
+                       }
                    }
 
                    IsWaiting = false;
