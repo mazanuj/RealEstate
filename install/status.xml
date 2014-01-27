@@ -54,7 +54,7 @@
   </FileStatus>
   <FileStatus>
     <Path>KTF.Proxy.dll</Path>
-    <Hash>3C39DC8BD99D08FF7EC6E7F14ACB4235</Hash>
+    <Hash>7993C6F2CC9D62074CD936137BB013A0</Hash>
   </FileStatus>
   <FileStatus>
     <Path>libEGL.dll</Path>
@@ -102,7 +102,7 @@
   </FileStatus>
   <FileStatus>
     <Path>NewLastReport.report</Path>
-    <Hash>AC4D9DB934D611393ADFD07923C86EEE</Hash>
+    <Hash>BEDB95F5CEAFC0D29E9DE7C89530656E</Hash>
   </FileStatus>
   <FileStatus>
     <Path>Newtonsoft.Json.dll</Path>
@@ -114,7 +114,7 @@
   </FileStatus>
   <FileStatus>
     <Path>PassLastReport.report</Path>
-    <Hash>0B4A9198D5EF6B16BB4FC446594FD101</Hash>
+    <Hash>CCBA821356ED2D6D5994426A090A672F</Hash>
   </FileStatus>
   <FileStatus>
     <Path>proxies.txt</Path>
@@ -122,7 +122,7 @@
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>724BA59B14A24B3B60FFB2FC9157F048</Hash>
+    <Hash>F4348C9229A6555EC4350000855AB9C9</Hash>
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe.config</Path>
@@ -130,7 +130,7 @@
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>
-    <Hash>AA4DFBB04DF94B2BC8D299D4983A5BA0</Hash>
+    <Hash>173DB7FE504EBB31D9B6E18A11FEB265</Hash>
   </FileStatus>
   <FileStatus>
     <Path>System.Runtime.dll</Path>
@@ -158,7 +158,7 @@
   </FileStatus>
   <FileStatus>
     <Path>UsedLastReport.report</Path>
-    <Hash>370E0695557C0E9FF24C293905E728EF</Hash>
+    <Hash>C36AEB3A755059B604147EFBC757387C</Hash>
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
@@ -186,15 +186,15 @@
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.bigrams</Path>
-    <Hash>F5C0F117A7BD7A60A76E4B4DA9F9AE40</Hash>
+    <Hash>849B155E3F313EE71EC3954DD400AFF6</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.fold</Path>
-    <Hash>339BB00E0F5D6EDCC1919401D1472ABF</Hash>
+    <Hash>7C302624086B306EBBDCED53DD2B185B</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.lm</Path>
-    <Hash>9095F90874775AB67225112B03653057</Hash>
+    <Hash>48BDDBF5F97D239E2461C422CC0C8EE0</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.nn</Path>
@@ -202,7 +202,7 @@
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.params</Path>
-    <Hash>4B2F4D8AA264D923A88D1A384B1B54C1</Hash>
+    <Hash>8B42570B3D149D1C6DC85B7E94417FC3</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.size</Path>
@@ -210,7 +210,7 @@
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.word-freq</Path>
-    <Hash>A9D657B040DB4366E1FBB6C75BB5AE8B</Hash>
+    <Hash>9D05EB491A42681B34661E0C281BBC7E</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.tesseract_cube.nn</Path>
