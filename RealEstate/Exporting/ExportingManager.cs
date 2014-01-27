@@ -23,11 +23,48 @@ namespace RealEstate.Exporting
         private readonly RealEstateContext _context = null;
         private readonly ImagesManager _imagesManager = null;
 
+        public ObservableCollection<ExportItem> ExportQueue = null;
+
+        private static bool IsWaiting = false;
+
         [ImportingConstructor]
         public ExportingManager(RealEstateContext context, ImagesManager images)
         {
             _context = context;
             _imagesManager = images;
+            ExportQueue = new ObservableCollection<ExportItem>();
+            ExportQueue.CollectionChanged += ExportQueue_CollectionChanged;
+        }
+
+        void ExportQueue_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                StartExportLoop();
+            }
+        }
+
+        private void StartExportLoop()
+        {
+            if (IsWaiting) return;
+
+            Task.Factory.StartNew(() =>
+               {
+                   IsWaiting = true;
+                   while (ExportQueue.Any(i => !i.IsExported))
+                   {
+                       var item = ExportQueue.FirstOrDefault();
+                       if (item != null)
+                       {
+
+                           Export(item);
+                       }
+
+                       Thread.Sleep(Settings.SettingsStore.ExportInterval * 60000);
+                   }
+
+                   IsWaiting = false;
+               }, TaskCreationOptions.LongRunning);
         }
 
 
@@ -46,11 +83,8 @@ namespace RealEstate.Exporting
             }
         }
 
-        public ObservableCollection<ExportItem> ExportQueue = null;
-
         public void RestoreQueue()
         {
-            ExportQueue = new ObservableCollection<ExportItem>();
             foreach (var item in _context.ExportItems.Where(i => !i.IsExported))
             {
                 App.Current.Dispatcher.Invoke((System.Action)(() =>
@@ -96,25 +130,29 @@ namespace RealEstate.Exporting
                             continue;
                     }
 
-                    ExportAdvert(item.Advert, site);
+                    ExportAdvert(item.Advert, site, settings);
 
+                    Thread.Sleep(settings.Delay * 60000);
                 }
 
             item.DateOfExport = DateTime.Now;
-            //item.IsExported = true;
+            item.IsExported = true;
             _context.SaveChanges();
+
+            App.Current.Dispatcher.Invoke((System.Action)(() =>
+            {
+                ExportQueue.Remove(item);
+            }));
         }
 
-        private void ExportAdvert(Advert advert, ExportSite site)
+        private void ExportAdvert(Advert advert, ExportSite site, ExportSetting setting)
         {
-            Task.Factory.StartNew(() =>
-                   {
-                       // sample Server=88.212.209.125;Database=moskva;Uid=moskva;Pwd=gfdkjdfh;Charset=utf8;Default Command Timeout=300000;
-                       if (site != null && !String.IsNullOrEmpty(site.Address))
-                       {
-                           using (MySqlConnection conn = new MySqlConnection("Server=" + site.Address + ";Database=" + site.Database + ";Uid=moskva;Pwd=gfdkjdfh;charset=utf8;"))
-                           {
-                               var comm = @"INSERT INTO `ntvo3_adsmanager_ads`
+            // sample Server=88.212.209.125;Database=moskva;Uid=moskva;Pwd=gfdkjdfh;Charset=utf8;Default Command Timeout=300000;
+            if (site != null && !String.IsNullOrEmpty(site.Address))
+            {
+                using (MySqlConnection conn = new MySqlConnection("Server=" + site.Address + ";Database=" + site.Database + ";Uid=moskva;Pwd=gfdkjdfh;charset=utf8;"))
+                {
+                    var comm = @"INSERT INTO `ntvo3_adsmanager_ads`
             (`category`,`userid`, `name`, `images`,`ad_zip`, `ad_city`, `ad_phone`, `email`, `ad_kindof`, `ad_headline`,
              `ad_text`, `ad_state`,`ad_price`,  `date_created`, `date_modified`, `date_recall`,  `expiration_date`, `recall_mail_sent`,
              `views`, `published`, `metadata_description`, `metadata_keywords`, `ad_metro`, `ad_obs`, `ad_jilaya`,  `ad_kuhnya`,
@@ -135,7 +173,7 @@ VALUES (
         '" + advert.Title + @"',
         '" + advert.MessageFull + @"',
         '" + advert.GetAO() + @"',
-        '" + advert.Price + @"',
+        '" + (setting.Margin == 0 ? advert.Price : advert.Price * setting.Margin).ToString("#") + @"',
         '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + @"',
         '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + @"',
         NULL,
@@ -151,7 +189,7 @@ VALUES (
         '" + advert.AreaKitchen.ToString("#") + @"',
         '" + advert.Floor + @"',
         '" + advert.FloorTotal + @"',
-        '" + (advert.AreaFull == 0 ? "" : ((double)advert.Price / (double)advert.AreaFull).ToString("#")) + @"',
+        '" + (advert.AreaFull == 0 ? "" : ((double)(setting.Margin == 0 ? advert.Price : advert.Price * setting.Margin) / (double)advert.AreaFull).ToString("#")) + @"',
         '',
         '" + "" + @"', 
         '" + advert.House + @"',
@@ -180,32 +218,32 @@ VALUES (
         '" + advert.Rooms + @"',
         '10');select last_insert_id();"; //todo year?
 
-                               MySqlCommand intoAds = new MySqlCommand(comm, conn);
-                               try
-                               {
-                                   conn.Open();
-                                   var id = intoAds.ExecuteScalar();
+                    MySqlCommand intoAds = new MySqlCommand(comm, conn);
+                    try
+                    {
+                        conn.Open();
+                        var id = intoAds.ExecuteScalar();
 
-                                   var comm_to_cat = @"INSERT INTO `ntvo3_adsmanager_adcat` (`adid`,`catid`) VALUES (" + id + ",2);";
-                                   MySqlCommand intoCat = new MySqlCommand(comm_to_cat, conn);
-                                   var res = intoCat.ExecuteNonQuery();
-                                   if (res == 0)
-                                       Trace.WriteLine("Error!: Updated rows count equals 0!");
+                        var comm_to_cat = @"INSERT INTO `ntvo3_adsmanager_adcat` (`adid`,`catid`) VALUES (" + id + ",2);";
+                        MySqlCommand intoCat = new MySqlCommand(comm_to_cat, conn);
+                        var res = intoCat.ExecuteNonQuery();
+                        if (res == 0)
+                            Trace.WriteLine("Error!: Updated rows count equals 0!");
 
-                                   var imgs = SavePhotos(advert, site, id);
-                                   var comm_to_update_imgs = @"UPDATE `ntvo3_adsmanager_ads` SET images = '" + imgs + "' WHERE id = " + id;
-                                   MySqlCommand updImgs = new MySqlCommand(comm_to_update_imgs, conn);
-                                   res = updImgs.ExecuteNonQuery();
-                                   if (res == 0)
-                                       Trace.WriteLine("Error!: Updated rows count equals 0!");
-                               }
-                               catch (Exception ex)
-                               {
-                                   Trace.WriteLine(ex.Message);
-                               }
-                           }
-                       }
-                   }, TaskCreationOptions.LongRunning );
+                        var imgs = SavePhotos(advert, site, id);
+                        var comm_to_update_imgs = @"UPDATE `ntvo3_adsmanager_ads` SET images = '" + imgs + "' WHERE id = " + id;
+                        MySqlCommand updImgs = new MySqlCommand(comm_to_update_imgs, conn);
+                        res = updImgs.ExecuteNonQuery();
+                        if (res == 0)
+                            Trace.WriteLine("Error!: Updated rows count equals 0!");
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex.Message);
+                    }
+                }
+            }
+
         }
 
         private string SavePhotos(Advert advert, ExportSite site, object id)

@@ -53,6 +53,7 @@ namespace RealEstate
                 window.Style = (System.Windows.Style)App.Current.Resources[settings["style"]];
             else
                 window.Style = (System.Windows.Style)App.Current.Resources["VS2012WindowStyle"];
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             return window;
         }

@@ -400,7 +400,7 @@ namespace RealEstate.Parsing.Parsers
             if (titleNode != null)
             {
                 var title = titleNode.InnerText;
-                advert.Title = title;
+                advert.Title = Normalize(title).Trim();
             }
             else
                 throw new ParsingException("none header", "");

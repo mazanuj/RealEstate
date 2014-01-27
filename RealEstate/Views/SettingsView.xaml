@@ -57,6 +57,25 @@
                     <Button IsEnabled="{Binding ElementName=NewCityName, Path=HasError}" Name="AddCity" Grid.Row="1" Grid.Column="1" Margin="10" Content="Добавить"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="Экспорт" Style="{StaticResource TabItemPaging}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Margin="8">Задержка экспорта (мин):</TextBlock>
+                    <TextBox Grid.Column="1" Margin="8" Text="{Binding ExportInterval, Mode=TwoWay, Converter={StaticResource intConverter}, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" />
+
+                    <Button Content="Сохранить" Name="SaveExport" Margin="5"
+                            Grid.Row="3" HorizontalAlignment="Right"/>
+                </Grid>
+            </TabItem>
             <TabItem Header="База данных" Style="{StaticResource TabItemPaging}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -64,6 +83,10 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
                     <Button Content="Сохранить" Name="SaveDB" Margin="5"
                             Grid.Row="3" HorizontalAlignment="Right"/>

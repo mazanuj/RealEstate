@@ -360,9 +360,19 @@ namespace RealEstate.Parsing.Parsers
                         {
                             advert.MetroStation = metro.InnerText.TrimEnd(new[] { ',' });
                             metro.Remove();
+                            advert.Address = Normalize(addressBlock.InnerText).TrimEnd(new[] { ',' }).TrimStart(new[] { ',' }).Trim();
                         }
+                        else
+                        {
+                            var addr = addressBlock.SelectSingleNode(@"./span[@itemprop='streetAddress']");
+                            if (addr != null)
+                            {
+                                advert.Address = Normalize(addr.InnerText).TrimEnd(new[] { ',' }).TrimStart(new[] { ',' }).Trim();
+                                addr.Remove();
+                            }
 
-                        advert.Address = Normalize(addressBlock.InnerText).TrimEnd(new[] { ',' }).TrimStart(new[] { ',' }).Trim();
+                            advert.MetroStation = addressBlock.InnerText.TrimEnd(new[] { ',' });
+                        }                       
                     }
                 }
             }

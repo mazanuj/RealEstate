@@ -318,10 +318,14 @@ namespace RealEstate.ViewModels
                 ParserBase parser = ParsersFactory.GetParser(param.site);
 
                 int attempt = 0;
+                Advert last = null;
+                Advert advert = null;
 
                 for (int i = 0; i < headers.Count; i++)
                 {
-                    Advert advert = null;
+                    last = advert;
+                    advert = null;
+
                     attempt = 0;
                     int blocked = 0;
                     DateTime start = DateTime.Now;
@@ -403,8 +407,38 @@ namespace RealEstate.ViewModels
                     if (advert != null)
                     {
                         advert.ParsingNumber = _advertsManager.LastParsingNumber;
+                        if (advert.ImportSite == Parsing.ImportSite.Hands)
+                        {
+                            if (last != null && advert != null)
+                            {
+                                if (!String.IsNullOrEmpty(last.Address) && !String.IsNullOrEmpty(advert.Address))
+                                {
+                                    if (last.Street == advert.Street && last.Rooms == advert.Rooms && last.House == advert.House)
+                                    {
+                                        Trace.WriteLine("Skiped by last has the same address");
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+
                         if (_smartProcessor.Process(advert, param))
                         {
+                            if (advert.ImportSite == Parsing.ImportSite.Hands)
+                            {
+                                if (last != null && advert != null)
+                                {
+                                    if (!String.IsNullOrEmpty(last.Address) && !String.IsNullOrEmpty(advert.Address))
+                                    {
+                                        if (last.Street == advert.Street && last.Rooms == advert.Rooms && last.House == advert.House)
+                                        {
+                                            Trace.WriteLine("Skiped by last has the same address");
+                                            continue;
+                                        }
+                                    }
+                                }
+                            }
+
                             adverts.Add(advert);
                             if (SettingsStore.LogSuccessAdverts)
                                 Trace.WriteLine(advert.ToString(), "Advert");

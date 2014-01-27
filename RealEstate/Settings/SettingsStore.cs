@@ -41,5 +41,10 @@ namespace RealEstate.Settings
         [SectionName("Parsing")]
         [DefaultValue(false)]
         public static bool LogSuccessAdverts { get; set; }
+
+        [Settings]
+        [SectionName("Export")]
+        [DefaultValue(1)]
+        public static int ExportInterval { get; set; }
     }
 }

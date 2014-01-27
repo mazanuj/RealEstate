@@ -93,7 +93,10 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                _exportingManager.Export(item);
+                Task.Factory.StartNew(() =>
+                    {
+                        _exportingManager.Export(item);
+                    }, TaskCreationOptions.LongRunning);
             }
             catch (Exception ex)
             {

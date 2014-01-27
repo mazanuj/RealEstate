@@ -50,6 +50,7 @@ namespace RealEstate.ViewModels
             MaxAttemptCount = SettingsStore.MaxParsingAttemptCount;
             UrlToCheck = SettingsStore.UrlForChecking;
             LogSuccessAdverts = SettingsStore.LogSuccessAdverts;
+            ExportInterval = SettingsStore.ExportInterval;
 
             Task.Factory.StartNew(() =>
             {
@@ -302,7 +303,20 @@ namespace RealEstate.ViewModels
                 _MaxImagesCount = value;
                 NotifyOfPropertyChange(() => MaxImagesCount);
             }
-        }           
+        }
+
+
+        private int _ExportInterval = 1;
+        [Range(0, 60)]
+        public int ExportInterval
+        {
+            get { return _ExportInterval; }
+            set
+            {
+                _ExportInterval = value;
+                NotifyOfPropertyChange(() => ExportInterval);
+            }
+        }     
 
         public async void ClearImages()
         {
@@ -336,6 +350,35 @@ namespace RealEstate.ViewModels
                     {
                         SettingsStore.SaveImages = SaveImages;
                         SettingsStore.MaxCountOfImages = MaxImagesCount;
+
+                        changed = true;
+                    }
+
+                    if (changed)
+                        _settingsManager.Save();
+                });
+
+                Status = "Сохранено";
+
+            }
+            catch (Exception ex)
+            {
+                Status = ERROR_LABEL;
+                Trace.WriteLine(ex.ToString());
+            }
+        }
+
+        public async void SaveExport()
+        {
+            Status = "Сохраняю...";
+            try
+            {
+                await Task.Factory.StartNew(() =>
+                {
+                    bool changed = false;
+                    if (ExportInterval != SettingsStore.ExportInterval)
+                    {
+                        SettingsStore.ExportInterval = ExportInterval;
 
                         changed = true;
                     }
