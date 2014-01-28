@@ -20,80 +20,88 @@ namespace RealEstate.Parsing
 
         public void Save(Advert advert, ParserSetting setting)
         {
-            var oldAdvert = _context.Adverts.SingleOrDefault(a => a.Url == advert.Url);
-            if (oldAdvert == null)
+            lock (_lock)
             {
-
-                if (advert.ExportSites != null)
+                var oldAdvert = _context.Adverts.SingleOrDefault(a => a.Url == advert.Url);
+                if (oldAdvert == null)
                 {
-                    if(!advert.ExportSites.Any(e => e.Id == setting.ExportSite.Id))
-                        advert.ExportSites.Add(setting.ExportSite);
+
+                    if (advert.ExportSites != null)
+                    {
+                        if (!advert.ExportSites.Any(e => e.Id == setting.ExportSite.Id))
+                            advert.ExportSites.Add(setting.ExportSite);
+                    }
+                    else
+                        advert.ExportSites = new List<Exporting.ExportSite>() { setting.ExportSite };
+
+                    _context.Adverts.Add(advert);
                 }
                 else
-                    advert.ExportSites = new List<Exporting.ExportSite>() { setting.ExportSite };
+                {
+                    if (oldAdvert.ExportSites == null)
+                        oldAdvert.ExportSites = new List<Exporting.ExportSite>();
+                    if (!oldAdvert.ExportSites.Contains(setting.ExportSite))
+                        oldAdvert.ExportSites.Add(setting.ExportSite);
 
-                _context.Adverts.Add(advert);
+
+                    oldAdvert.MessageFull = advert.MessageFull;
+                    oldAdvert.Price = advert.Price;
+                    if (!String.IsNullOrEmpty(advert.Distinct))
+                        oldAdvert.PhoneNumber = advert.PhoneNumber;
+
+                    if (oldAdvert.DateSite < advert.DateSite)
+                        oldAdvert.DateSite = advert.DateSite;
+
+                    oldAdvert.DateUpdate = DateTime.Now;
+                    if (!String.IsNullOrEmpty(advert.Distinct))
+                        oldAdvert.Name = advert.Name;
+
+                    if (!String.IsNullOrEmpty(advert.Distinct))
+                        oldAdvert.Title = advert.Title;
+
+                    oldAdvert.ParsingNumber = advert.ParsingNumber;
+
+                    if (!String.IsNullOrEmpty(advert.Distinct))
+                        oldAdvert.Address = advert.Address;
+
+                    if (!String.IsNullOrEmpty(advert.Distinct))
+                        oldAdvert.Distinct = advert.Distinct;
+
+                    if (!String.IsNullOrEmpty(advert.MetroStation))
+                        oldAdvert.MetroStation = advert.MetroStation;
+
+                    if (!String.IsNullOrEmpty(advert.AO))
+                        oldAdvert.AO = advert.AO;
+
+                    if (advert.AreaFull != 0)
+                        oldAdvert.AreaFull = advert.AreaFull;
+
+                    if (advert.AreaKitchen != 0)
+                        oldAdvert.AreaKitchen = advert.AreaKitchen;
+
+                    if (advert.AreaLiving != 0)
+                        oldAdvert.AreaLiving = advert.AreaLiving;
+
+                }
+                _context.SaveChanges();
             }
-            else
-            {
-                if (oldAdvert.ExportSites == null)
-                    oldAdvert.ExportSites = new List<Exporting.ExportSite>();
-                if (!oldAdvert.ExportSites.Contains(setting.ExportSite))
-                    oldAdvert.ExportSites.Add(setting.ExportSite);
-
-
-                oldAdvert.MessageFull = advert.MessageFull;
-                oldAdvert.Price = advert.Price;
-                if (!String.IsNullOrEmpty(advert.Distinct))
-                    oldAdvert.PhoneNumber = advert.PhoneNumber;
-
-                if (oldAdvert.DateSite < advert.DateSite)
-                    oldAdvert.DateSite = advert.DateSite;
-
-                oldAdvert.DateUpdate = DateTime.Now;
-                if (!String.IsNullOrEmpty(advert.Distinct))
-                    oldAdvert.Name = advert.Name;
-
-                if (!String.IsNullOrEmpty(advert.Distinct))
-                    oldAdvert.Title = advert.Title;
-
-                oldAdvert.ParsingNumber = advert.ParsingNumber;
-
-                if (!String.IsNullOrEmpty(advert.Distinct))
-                    oldAdvert.Address = advert.Address;
-
-                if (!String.IsNullOrEmpty(advert.Distinct))
-                    oldAdvert.Distinct = advert.Distinct;
-
-                if (!String.IsNullOrEmpty(advert.MetroStation))
-                    oldAdvert.MetroStation = advert.MetroStation;
-
-                if (!String.IsNullOrEmpty(advert.AO))
-                    oldAdvert.AO = advert.AO;
-
-                if (advert.AreaFull != 0)
-                    oldAdvert.AreaFull = advert.AreaFull;
-
-                if (advert.AreaKitchen != 0)
-                    oldAdvert.AreaKitchen = advert.AreaKitchen;
-
-                if (advert.AreaLiving != 0)
-                    oldAdvert.AreaLiving = advert.AreaLiving;
-
-            }
-
-            _context.SaveChanges();
         }
 
         public void Save(Advert advert)
         {
-            _context.SaveChanges();
+            lock (_lock)
+            {
+                _context.SaveChanges();
+            }
         }
 
         public void Delete(Advert advert)
         {
-            _context.Adverts.Remove(advert);
-            _context.SaveChanges();
+            lock (_lock)
+            {
+                _context.Adverts.Remove(advert);
+                _context.SaveChanges();
+            }
         }
 
         public void DeleteAll()
@@ -131,7 +139,8 @@ namespace RealEstate.Parsing
                         || a.MessageFull == advert.MessageFull)
                         select a;
 
-            return !items.Any(a => a.DateSite > advert.DateSite); //todo search from exported
+            return !items.Any(a => a.DateSite > advert.DateSite); //todo search from exported 
+
         }
 
         private bool IsAdvertUnique(Advert advert, IEnumerable<Advert> adverts)
@@ -172,7 +181,7 @@ namespace RealEstate.Parsing
         {
             lock (_lock)
             {
-                return _context.Adverts.Any(u => u.Url == url); 
+                return _context.Adverts.Any(u => u.Url == url);
             }
         }
 
@@ -180,7 +189,7 @@ namespace RealEstate.Parsing
         {
             lock (_lock)
             {
-                return _context.Adverts.FirstOrDefault(u => u.Url == url); 
+                return _context.Adverts.FirstOrDefault(u => u.Url == url);
             }
         }
     }

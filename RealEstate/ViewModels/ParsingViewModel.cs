@@ -37,7 +37,7 @@ namespace RealEstate.ViewModels
         private readonly ImagesManager _imagesManager;
         private readonly SmartProcessor _smartProcessor;
         private readonly ExportingManager _exportingManager;
-        private const int MAX_COUNT_PARSED = 30;
+        private const int MAX_COUNT_PARSED = 100;
 
         [ImportingConstructor]
         public ParsingViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager,
