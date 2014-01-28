@@ -66,7 +66,7 @@ namespace RealEstate.Exporting
                        catch (Exception ex)
                        {
                            Trace.WriteLine(ex.ToString(), "Error uploading image");
-                           Thread.Sleep(500);
+                           Thread.Sleep(1000);
                        }
                    }
 
@@ -141,7 +141,10 @@ namespace RealEstate.Exporting
 
                     ExportAdvert(item.Advert, site, settings);
 
-                    Thread.Sleep(settings.Delay * 60000);
+                    if (settings != null)
+                    {
+                        Thread.Sleep(settings.Delay * 60000);
+                    }
                 }
 
             item.DateOfExport = DateTime.Now;
