@@ -86,6 +86,7 @@
             this.prgrsBar.Location = new System.Drawing.Point(15, 95);
             this.prgrsBar.Name = "prgrsBar";
             this.prgrsBar.Size = new System.Drawing.Size(457, 23);
+            this.prgrsBar.Step = 1;
             this.prgrsBar.TabIndex = 4;
             // 
             // bUpdate

@@ -167,14 +167,21 @@ namespace RealEstate.Parsing
             _lastParsingNumber++;
         }
 
+        object _lock = new object();
         internal bool IsParsed(string url)
         {
-            return _context.Adverts.Any(u => u.Url == url);
+            lock (_lock)
+            {
+                return _context.Adverts.Any(u => u.Url == url); 
+            }
         }
 
         internal Advert GetParsed(string url)
         {
-            return _context.Adverts.FirstOrDefault(u => u.Url == url);
+            lock (_lock)
+            {
+                return _context.Adverts.FirstOrDefault(u => u.Url == url); 
+            }
         }
     }
 

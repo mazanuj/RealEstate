@@ -65,7 +65,7 @@ namespace RealEstate.Exporting
                        }
                        catch (Exception ex)
                        {
-                           Trace.WriteLine(ex.Message, "Error uploading image");
+                           Trace.WriteLine(ex.ToString(), "Error uploading image");
                            Thread.Sleep(500);
                        }
                    }
@@ -125,6 +125,8 @@ namespace RealEstate.Exporting
 
         public void Export(ExportItem item)
         {
+            if (item == null || item.Advert == null) return;
+
             if (item.Advert.ExportSites != null && !item.IsExported)
                 foreach (var site in item.Advert.ExportSites)
                 {
@@ -180,7 +182,7 @@ VALUES (
         '" + advert.Title + @"',
         '" + advert.MessageFull + @"',
         '" + advert.GetAO() + @"',
-        '" + (setting.Margin == 0 ? advert.Price : advert.Price * setting.Margin).ToString("#") + @"',
+        '" + ((setting == null || setting.Margin == 0) ? advert.Price : advert.Price * setting.Margin).ToString("#") + @"',
         '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + @"',
         '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + @"',
         NULL,
@@ -196,7 +198,7 @@ VALUES (
         '" + advert.AreaKitchen.ToString("#") + @"',
         '" + advert.Floor + @"',
         '" + advert.FloorTotal + @"',
-        '" + (advert.AreaFull == 0 ? "" : ((double)(setting.Margin == 0 ? advert.Price : advert.Price * setting.Margin) / (double)advert.AreaFull).ToString("#")) + @"',
+        '" + (advert.AreaFull == 0 ? "" : ((double)((setting == null || setting.Margin == 0) ? advert.Price : advert.Price * setting.Margin) / (double)advert.AreaFull).ToString("#")) + @"',
         '',
         '" + "" + @"', 
         '" + advert.House + @"',
