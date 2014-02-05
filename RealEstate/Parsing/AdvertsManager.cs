@@ -161,10 +161,13 @@ namespace RealEstate.Parsing
             {
                 if (_lastParsingNumber == -1)
                 {
-                    if (_context.Adverts.FirstOrDefault() == null)
-                        _lastParsingNumber = 0;
-                    else
-                        _lastParsingNumber = _context.Adverts.Max(a => a.ParsingNumber);
+                    using (var context = new RealEstateContext())
+                    {
+                        if (context.Adverts.FirstOrDefault() == null)
+                            _lastParsingNumber = 0;
+                        else
+                            _lastParsingNumber = context.Adverts.Max(a => a.ParsingNumber);
+                    }
                 }
                 return _lastParsingNumber;
             }
@@ -179,10 +182,10 @@ namespace RealEstate.Parsing
         object _lock = new object();
         internal bool IsParsed(string url)
         {
-            lock (_lock)
+            using (var context = new RealEstateContext())
             {
-                return _context.Adverts.Any(u => u.Url == url);
-            }
+                return context.Adverts.Any(u => u.Url == url);
+            }               
         }
 
         internal Advert GetParsed(string url)

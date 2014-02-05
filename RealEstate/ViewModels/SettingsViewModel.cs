@@ -24,16 +24,18 @@ namespace RealEstate.ViewModels
         private readonly SettingsManager _settingsManager;
         private readonly CityManager _cityManager;
         private readonly ImagesManager _imagesManager;
+        private readonly RealEstate.Log.LogManager _logManager;
 
         private const string ERROR_LABEL = "Ошибка";
 
         [ImportingConstructor]
-        public SettingsViewModel(IEventAggregator events, SettingsManager settingsManager, CityManager cityManager, ImagesManager imagesManager)
+        public SettingsViewModel(IEventAggregator events, SettingsManager settingsManager, CityManager cityManager, ImagesManager imagesManager, RealEstate.Log.LogManager logManager)
         {
             _events = events;
             _settingsManager = settingsManager;
             _cityManager = cityManager;
             _imagesManager = imagesManager;
+            _logManager = logManager;
         }
 
         protected override void OnInitialize()
@@ -145,6 +147,26 @@ namespace RealEstate.ViewModels
                     Status = ERROR_LABEL;
                     Trace.WriteLine(ex.ToString());
                 }
+            }
+        }
+
+        public async void ClearLog()
+        {
+            Status = "Очистка...";
+            try
+            {
+                await Task.Factory.StartNew(() =>
+                {
+                    _logManager.ClearLogFile();
+                });
+
+                Status = "Очищено";
+
+            }
+            catch (Exception ex)
+            {
+                Status = ERROR_LABEL;
+                Trace.WriteLine(ex.ToString());
             }
         }
 

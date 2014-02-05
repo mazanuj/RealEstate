@@ -77,6 +77,8 @@ namespace RealEstate.SmartProcessing
 
                 FillAddress(advert);
 
+                DetectYear(advert);
+
                 System.Reflection.PropertyInfo proper;
 
                 foreach (var rule in _rulesManager.Rules)
@@ -126,6 +128,36 @@ namespace RealEstate.SmartProcessing
             {
                 Trace.WriteLine(ex.ToString(), "Error!");
                 return false;
+            }
+        }
+
+        private void DetectYear(Advert advert)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(advert.BuildingYear) || advert.BuildingYear.Length != 2)
+                {
+                    var yearG = Regex.Match(advert.MessageFull, @"20(?<year>\d{2})", RegexOptions.IgnoreCase).Groups["year"];
+
+                    if (yearG != null && yearG.Success && !string.IsNullOrEmpty(yearG.Value))
+                    {
+                        advert.BuildingYear = yearG.Value;
+                    }
+                }
+
+                if (String.IsNullOrEmpty(advert.BuildingQuartal) || advert.BuildingQuartal.Length != 1)
+                {
+                    var kvG = Regex.Match(advert.MessageFull, @"(?<kv>\d)\ ?кв\.?\w*\ ? 20(?<year>\d{2})", RegexOptions.IgnoreCase).Groups["kv"];
+
+                    if (kvG != null && kvG.Success && !string.IsNullOrEmpty(kvG.Value))
+                    {
+                        advert.BuildingQuartal = kvG.Value;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString(), "Error parsing");
             }
         }
 
@@ -344,6 +376,13 @@ namespace RealEstate.SmartProcessing
             {
                 total++;
                 if (!String.IsNullOrEmpty(advert.MetroStation))
+                    current++;
+            }
+
+            if (advert.Usedtype == Usedtype.New)
+            {
+                total++;
+                if (!String.IsNullOrEmpty(advert.BuildingYear))
                     current++;
             }
 

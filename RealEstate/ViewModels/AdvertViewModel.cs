@@ -109,6 +109,8 @@ namespace RealEstate.ViewModels
             Advert.Title = AdvertOriginal.Title;
             Advert.Url = AdvertOriginal.Url;
             Advert.Usedtype = AdvertOriginal.Usedtype;
+            Advert.BuildingQuartal = AdvertOriginal.BuildingQuartal;
+            Advert.BuildingYear = AdvertOriginal.BuildingYear;
         }
 
         private void LoadAdvert()
@@ -197,6 +199,8 @@ namespace RealEstate.ViewModels
                 AdvertOriginal.Title = Advert.Title;
                 AdvertOriginal.Url = Advert.Url;
                 AdvertOriginal.Usedtype = SelectedUsedType.Type;
+                AdvertOriginal.BuildingYear = Advert.BuildingYear;
+                AdvertOriginal.BuildingQuartal = AdvertOriginal.BuildingQuartal;
 
                 SaveImages();
 

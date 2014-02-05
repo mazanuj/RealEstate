@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using RealEstate.Db;
 using RealEstate.Parsing;
+using RealEstate.SmartProcessing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,16 +23,18 @@ namespace RealEstate.Exporting
     {
         private readonly RealEstateContext _context = null;
         private readonly ImagesManager _imagesManager = null;
+        private readonly SmartProcessor _processr = null;
 
         public ObservableCollection<ExportItem> ExportQueue = null;
 
         private static bool IsWaiting = false;
 
         [ImportingConstructor]
-        public ExportingManager(RealEstateContext context, ImagesManager images)
+        public ExportingManager(RealEstateContext context, ImagesManager images, SmartProcessor processor)
         {
             _context = context;
             _imagesManager = images;
+            _processr = processor;
             ExportQueue = new ObservableCollection<ExportItem>();
             ExportQueue.CollectionChanged += ExportQueue_CollectionChanged;
         }
@@ -51,6 +54,9 @@ namespace RealEstate.Exporting
             Task.Factory.StartNew(() =>
                {
                    IsWaiting = true;
+                   int lastFailedExportedId = -1;
+                   int currentId = -1;
+                   int failedCount = 0;
                    while (ExportQueue.Any(i => !i.IsExported))
                    {
                        try
@@ -58,6 +64,7 @@ namespace RealEstate.Exporting
                            var item = ExportQueue.FirstOrDefault();
                            if (item != null)
                            {
+                               currentId = item.Id;
                                Export(item);
                            }
 
@@ -65,6 +72,14 @@ namespace RealEstate.Exporting
                        }
                        catch (Exception ex)
                        {
+                           if (lastFailedExportedId == currentId)
+                               failedCount++;
+                           if (failedCount > 20)
+                           {
+                               Trace.TraceError("Failed to export item more than 20 times. Export stoppped." ,"Export error");
+                               break;
+                           }
+                           lastFailedExportedId = currentId;
                            Trace.WriteLine(ex.ToString(), "Error uploading image");
                            Thread.Sleep(1000);
                        }
@@ -214,7 +229,7 @@ VALUES (
         '',
         '',
         '',
-        '',
+        '" + advert.BuildingYear + @"',
         '',
         '',
         '',

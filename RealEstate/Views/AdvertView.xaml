@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:awe="http://schemas.awesomium.com/winfx"
         xmlns:utils="clr-namespace:RealEstate.Utils"
-        Title="AdvertView" Height="700" Width="800" Closing="Window_Closing">
+        Title="AdvertView" Height="750" Width="800" Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -16,6 +16,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -73,18 +74,24 @@
                     <TextBlock Text="AO" Margin="10 4 0 0" />
                     <TextBox Text="{Binding Advert.AO}" Margin="4"/>
                 </StackPanel>
-                <TextBox Text="{Binding Advert.Title}" Grid.Column="0" Grid.Row="10" Margin="4" Grid.ColumnSpan="2"  />
-                <TextBox Text="{Binding Advert.MessageFull}" Grid.Column="0" Grid.Row="11" Margin="4" Grid.ColumnSpan="2"
+                <StackPanel Orientation="Horizontal" Grid.Row="10" Grid.ColumnSpan="2" >
+                    <TextBlock Text="Год сдачи: " Margin="0 4" />
+                    <TextBox Text="{Binding Advert.BuildingYear}" Margin="4"  />
+                    <TextBlock Text="Квартал" Margin="0 4" />
+                    <TextBox Text="{Binding Advert.BuildingQuartal}" Margin="4"/>
+                </StackPanel>
+                <TextBox Text="{Binding Advert.Title}" Grid.Column="0" Grid.Row="11" Margin="4" Grid.ColumnSpan="2"  />
+                <TextBox Text="{Binding Advert.MessageFull}" Grid.Column="0" Grid.Row="12" Margin="4" Grid.ColumnSpan="2"
                          AcceptsReturn="True" TextWrapping="Wrap" Height="150"/>
 
-                <StackPanel  Grid.Row="12" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <StackPanel  Grid.Row="13" Grid.ColumnSpan="2" Orientation="Horizontal">
                     <TextBlock Text="Категория: " Margin="4" />
                     <ComboBox Margin="4" Name="RealEstateTypes" DisplayMemberPath="Name" />
                     <ComboBox Margin="4" Name="UsedTypes" DisplayMemberPath="Name"  />
                     <ComboBox Margin="4" Name="AdvertTypes" DisplayMemberPath="Name"  />
                 </StackPanel>
 
-                <StackPanel Grid.Row="13" Grid.ColumnSpan="2">
+                <StackPanel Grid.Row="14" Grid.ColumnSpan="2">
                     <TextBlock Text="Экспорт: " Margin="4" />
                     <ScrollViewer>
                         <ItemsControl ItemsSource="{Binding AdvertOriginal.ExportSites}">
@@ -106,7 +113,7 @@
                     </ScrollViewer>
                 </StackPanel>
 
-                <StackPanel Grid.Row="15" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <StackPanel Grid.Row="16" Grid.ColumnSpan="2" Orientation="Horizontal">
                     <Button Name="OpenUrl" Content="Cсылка" Style="{StaticResource LinkButton}" Margin="6 5 50 5" />
 
                     <Button Name="Delete" Content="Удалить" Margin="4"  />

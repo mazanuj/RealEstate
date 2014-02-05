@@ -97,6 +97,9 @@ namespace RealEstate.Parsing
 
         public int ParsingNumber { get; set; }
 
+        public string BuildingYear { get; set; }
+        public string BuildingQuartal { get; set; }
+
         public DateTime DateSite{ get; set; } //+
         public DateTime DateUpdate { get; set; } //+
 
@@ -129,6 +132,9 @@ namespace RealEstate.Parsing
 
         public int GetKindOf()
         {
+            if (String.IsNullOrEmpty(Rooms))
+                return -1;
+
             if (Rooms.Contains('1'))
                 return 1;
             else if (Rooms.Contains('2'))

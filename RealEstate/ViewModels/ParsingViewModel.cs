@@ -326,7 +326,8 @@ namespace RealEstate.ViewModels
 
                 for (int i = 0; i < headers.Count; i++)
                 {
-                    parsed = _advertsManager.IsParsed(headers[i].Url);
+                    parsed = _advertsManager.IsParsed(headers[i].Url); 
+
                     DateTime start = DateTime.Now;
 
                     if (!parsed)
@@ -473,7 +474,11 @@ namespace RealEstate.ViewModels
 
                             if (param.autoExport)
                             {
-                                _exportingManager.AddAdvertToExport(advert);
+                                var cov = _smartProcessor.ComputeCoverage(advert);
+                                if (cov > 0.6)
+                                    _exportingManager.AddAdvertToExport(advert);
+                                else
+                                    Trace.WriteLine("Advert skipped as empty. Coverage = " + cov.ToString("P0"), "Skipped by smart processor");
                             }
                         }
                         else

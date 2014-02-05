@@ -270,6 +270,9 @@ namespace RealEstate.Parsing.Parsers
                                 case "Контактное лицо":
                                     advert.Name = GetSeller(parts[1]);
                                     break;
+                                case "Год постройки/сдачи":
+                                    advert.BuildingYear = Regex.Match(parts[1], @"20(?<year>\d{2})", RegexOptions.IgnoreCase).Groups["year"].Value;
+                                    break;
                                 default:
                                     break;
                             }
