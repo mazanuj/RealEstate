@@ -53,6 +53,7 @@ namespace RealEstate.ViewModels
             UrlToCheck = SettingsStore.UrlForChecking;
             LogSuccessAdverts = SettingsStore.LogSuccessAdverts;
             ExportInterval = SettingsStore.ExportInterval;
+            ExportParsed = SettingsStore.ExportParsed;
 
             Task.Factory.StartNew(() =>
             {
@@ -390,6 +391,17 @@ namespace RealEstate.ViewModels
             }
         }
 
+        private bool _ExportParsed = false;
+        public bool ExportParsed
+        {
+            get { return _ExportParsed; }
+            set
+            {
+                _ExportParsed = value;
+                NotifyOfPropertyChange(() => ExportParsed);
+            }
+        }
+
         public async void SaveExport()
         {
             Status = "Сохраняю...";
@@ -398,9 +410,10 @@ namespace RealEstate.ViewModels
                 await Task.Factory.StartNew(() =>
                 {
                     bool changed = false;
-                    if (ExportInterval != SettingsStore.ExportInterval)
+                    if (ExportInterval != SettingsStore.ExportInterval || ExportParsed != SettingsStore.ExportParsed)
                     {
                         SettingsStore.ExportInterval = ExportInterval;
+                        SettingsStore.ExportParsed = ExportParsed;
 
                         changed = true;
                     }

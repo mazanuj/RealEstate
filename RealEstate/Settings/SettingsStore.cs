@@ -46,5 +46,10 @@ namespace RealEstate.Settings
         [SectionName("Export")]
         [DefaultValue(1)]
         public static int ExportInterval { get; set; }
+
+        [Settings]
+        [SectionName("Export")]
+        [DefaultValue(false)]
+        public static bool ExportParsed { get; set; }
     }
 }

@@ -201,7 +201,8 @@ namespace RealEstate.SmartProcessing
             {
                 YandexMapApi api = new YandexMapApi();
                 var newAddress = api.SearchObject(advert.City + ", " + advert.Address.Replace("ул.", ""));
-                advert.Address = newAddress.ToLower().Trim() == advert.City.ToLower().Trim() ? null : newAddress;
+                if(newAddress != null)
+                    advert.Address = newAddress.ToLower().Trim() == advert.City.ToLower().Trim() ? null : newAddress;
             }
         }
 
