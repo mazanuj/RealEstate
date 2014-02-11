@@ -1,4 +1,5 @@
-﻿using RealEstate.Db;
+﻿using Caliburn.Micro;
+using RealEstate.Db;
 using RealEstate.Exporting;
 using RealEstate.Log;
 using RealEstate.Parsing;
@@ -18,9 +19,9 @@ namespace RealEstate.Commands
         private readonly Dictionary<string, Module> Modules = new Dictionary<string, Module>();
 
         [ImportingConstructor]
-        public CommandsProcessor(AdvertsManager advertsManager, LogManager logManager, RealEstateContext context)
+        public CommandsProcessor(AdvertsManager advertsManager, RealEstate.Log.LogManager logManager, RealEstateContext context, IWindowManager windowManager)
         {
-            Modules.Add("advert", new AdvertsModule(advertsManager));
+            Modules.Add("advert", new AdvertsModule(advertsManager, windowManager));
             Modules.Add("log", new LogModule(logManager));
             Modules.Add("testdata", new TestDataModule(context));
         }
