@@ -65,7 +65,7 @@ namespace RealEstate.Parsing
             set { ImportSiteValue = (int)value; }
         }
 
-        public ExportSite ExportSite {get; set;}
+        public virtual ExportSite ExportSite {get; set;}
         public virtual ICollection<ParserSourceUrl> Urls { get; set; }
 
         public DateTime GetDate()

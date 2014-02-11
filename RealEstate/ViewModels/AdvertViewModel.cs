@@ -35,6 +35,7 @@ namespace RealEstate.ViewModels
 
         public Advert AdvertOriginal { get; set; }
         public Advert Advert { get; set; }
+        public int AdvertId { get; set; }
         private bool MapLoaded;
 
 
@@ -54,6 +55,17 @@ namespace RealEstate.ViewModels
 
         protected override void OnInitialize()
         {
+            if(AdvertOriginal == null)
+            {
+                AdvertOriginal = _context.Adverts.FirstOrDefault(a => a.Id == AdvertId);
+                if(AdvertOriginal == null)
+                {
+                    Trace.WriteLine("Advert" + AdvertId +" not found");
+                    TryClose();
+                    return;
+                }
+            }
+
             CopyAdvert();
 
 
