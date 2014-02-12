@@ -66,8 +66,12 @@ namespace RealEstate.Parsing.Parsers
             }
 
             var myHttpWebResponse = myHttpWebRequest.GetResponse();
-            System.IO.StreamReader sr = new System.IO.StreamReader(myHttpWebResponse.GetResponseStream());
+            var stream = myHttpWebResponse.GetResponseStream();
+            if(stream.CanTimeout)
+                stream.ReadTimeout = SettingsStore.DefaultTimeout * 2;
+            System.IO.StreamReader sr = new System.IO.StreamReader(stream);
             HtmlResult = sr.ReadToEnd();
+            myHttpWebRequest.Abort();
             sr.Close();
 
             return HtmlResult;

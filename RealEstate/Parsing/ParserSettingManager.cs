@@ -12,6 +12,7 @@ namespace RealEstate.Parsing
     public class ParserSettingManager
     {
         private RealEstateContext context;
+        private static object _lock = new object();
 
         [ImportingConstructor]
         public ParserSettingManager(RealEstateContext context)
@@ -21,34 +22,36 @@ namespace RealEstate.Parsing
 
         public ParserSetting Exists(ParserSetting setting)
         {
-            if (setting == null) return null;
+            lock (_lock)
+            {
+                if (setting == null) return null;
 
-            var set = from s in context.ParserSettings
-                      where
-                        s.AdvertTypeValue == (int)setting.AdvertType &&
-                        s.ExportSite.Id == setting.ExportSite.Id &&
-                        s.ImportSiteValue == (int)setting.ImportSite &&
-                        s.ParsePeriodValue == (int)setting.ParsePeriod &&
-                        s.RealEstateTypeValue == (int)setting.RealEstateType &&
-                        s.UsedtypeValue == (int)setting.Usedtype
-                      select s;
+                var set = from s in context.ParserSettings
+                          where
+                            s.AdvertTypeValue == (int)setting.AdvertType &&
+                            s.ExportSite.Id == setting.ExportSite.Id &&
+                            s.ImportSiteValue == (int)setting.ImportSite &&
+                            s.ParsePeriodValue == (int)setting.ParsePeriod &&
+                            s.RealEstateTypeValue == (int)setting.RealEstateType &&
+                            s.UsedtypeValue == (int)setting.Usedtype
+                          select s;
 
-            if (set != null)
-                if (set.Count() > 0)
-                {
-                    return set.First();
-                }
+                if (set != null)
+                    if (set.Count() > 0)
+                    {
+                        return set.First();
+                    }
 
-            return setting;
+                return setting; 
+            }
 
         }
 
-        object _lock = new object();
         public List<ParserSetting> FindSettings(AdvertType advertType, string city, ImportSite site, ParsePeriod period, RealEstateType type, Usedtype subtype)
         {
             lock (_lock)
             {
-                var set = from s in context.ParserSettings
+                var set = from s in context.ParserSettings.Include("Urls")
                           where
                             s.AdvertTypeValue == (int)advertType &&
                             s.ImportSiteValue == (int)site &&

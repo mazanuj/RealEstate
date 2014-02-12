@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -21,10 +22,10 @@ namespace RealEstate.OKATO
             {
                 exists = context.Database
                      .SqlQuery<int>(@"
-                        SELECT COUNT(*)
-                        FROM information_schema.tables 
-                        WHERE table_schema = 'okato' 
-                        AND table_name = 'class_okato';")
+                        IF DB_ID ('okato') IS NOT NULL
+                         select 1;
+                        else
+                         select 0;")
                      .Single() != 0;
             }
 
@@ -37,10 +38,16 @@ namespace RealEstate.OKATO
         {
             Trace.WriteLine("Okato table doesn't exist. Creating...");
 
+
+            string creatingDb = File.ReadAllText(@"OKATO\create.sql");
+            using (var context = new RealEstateContext())
+            {
+                context.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, creatingDb);
+            }
+
             string dump = File.ReadAllText(@"OKATO\dump.sql");
             using (var context = new RealEstateContext())
             {
-                ((IObjectContextAdapter)context).ObjectContext.CommandTimeout = 36000;
                 context.Database.ExecuteSqlCommand(dump);
             }
         }
@@ -54,8 +61,9 @@ namespace RealEstate.OKATO
             {
                return context.Database
                          .SqlQuery<string>(@"
+                        use okato
                         SELECT name
-                        FROM okato.class_okato
+                        FROM class_okato
                         WHERE code = {0};", code.Length > 8 ? code.Substring(0, 8) : code).FirstOrDefault();
             }
         }
@@ -69,8 +77,9 @@ namespace RealEstate.OKATO
             {
                 return context.Database
                           .SqlQuery<string>(@"
+                        use okato
                         SELECT code
-                        FROM okato.class_okato
+                        FROM class_okato
                         WHERE name = {0};", distinct).FirstOrDefault();
             }
         }
@@ -84,8 +93,9 @@ namespace RealEstate.OKATO
             {
                 return context.Database
                           .SqlQuery<string>(@"
+                        use okato
                         SELECT parent_code
-                        FROM okato.class_okato
+                        FROM class_okato
                         WHERE code = {0};", code).FirstOrDefault();
             }
         }

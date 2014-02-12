@@ -36,7 +36,7 @@ namespace RealEstate.Parsing.Parsers
                 while (attempt++ < maxAttemptCount)
                 {
                     token.ThrowIfCancellationRequested();
-                    WebProxy proxy = param.useProxy ? proxyManager.GetNextProxy() : null;
+                    WebProxy proxy = /*param.useProxy  ? proxyManager.GetNextProxy() :*/ null;
                     try
                     {
                         uri = url.Url + ((index != 1) ? ("page" + index) : "") + "/";
@@ -150,7 +150,7 @@ namespace RealEstate.Parsing.Parsers
         public override Advert Parse(AdvertHeader header, System.Net.WebProxy proxy, CancellationToken ct, PauseToken pt)
         {
             Advert advert = new Advert();
-
+            proxy = null;
             try
             {
 

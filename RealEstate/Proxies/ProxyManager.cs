@@ -15,7 +15,7 @@ namespace RealEstate.Proxies
     [Export(typeof(ProxyManager))]
     public class ProxyManager
     {
-        private Object rejectLock = new Object();
+        private Object _lock = new Object();
 
         public List<IProxySourceReader> Readers = new List<IProxySourceReader>();
         private FileStorage storage = new FileStorage();
@@ -41,24 +41,21 @@ namespace RealEstate.Proxies
 
         public WebProxy GetNextProxy()
         {
-            lock (rejectLock)
-            {
-                if (maxIndex == 0) return null;
-                if (index >= maxIndex) index = 0;
-                return Proxies[index++];
-            }
+            if (maxIndex == 0) return null;
+            if (index >= maxIndex) index = 0;
+            return Proxies[index++];
         }
 
         public void RejectProxy(WebProxy proxy)
         {
             if (proxy != null)
             {
-                lock (rejectLock)
+
+                if (this.SuspectedProxies.Contains(proxy))
+                    RejectProxyFull(proxy);
+                else
                 {
-                    if (this.SuspectedProxies.Contains(proxy))
-                        RejectProxyFull(proxy);
-                    else
-                        SuspectedProxies.Add(proxy);
+                    SuspectedProxies.Add(proxy);
                 }
             }
         }
@@ -67,12 +64,9 @@ namespace RealEstate.Proxies
         {
             if (proxy != null)
             {
-                lock (rejectLock)
-                {
-                    this.Proxies.Remove(proxy);
-                    this.SuspectedProxies.Remove(proxy);
-                    this.RejectedProxies.Add(proxy);
-                }
+                this.Proxies.Remove(proxy);
+                this.SuspectedProxies.Remove(proxy);
+                this.RejectedProxies.Add(proxy);
             }
         }
 
@@ -90,7 +84,7 @@ namespace RealEstate.Proxies
             var proxies = storage.LoadFromFile();
             if (proxies != null)
                 Proxies.AddRange(proxies);
-            
+
         }
 
         public void Save()

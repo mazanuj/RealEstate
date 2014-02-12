@@ -28,6 +28,8 @@ namespace RealEstate.Exporting
         public ObservableCollection<ExportItem> ExportQueue = null;
 
         private static bool IsWaiting = false;
+        private static bool IsStarted = false;
+        private static object _lock = new object();
 
         [ImportingConstructor]
         public ExportingManager(RealEstateContext context, ImagesManager images, SmartProcessor processor)
@@ -41,9 +43,12 @@ namespace RealEstate.Exporting
 
         void ExportQueue_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            if (e.Action == NotifyCollectionChangedAction.Add && IsStarted)
             {
-                StartExportLoop();
+                lock (_lock)
+                {
+                    StartExportLoop(); 
+                }
             }
         }
 
@@ -107,18 +112,21 @@ namespace RealEstate.Exporting
 
         public void RestoreQueue()
         {
-            foreach (var item in _context.ExportItems.Where(i => !i.IsExported))
+            foreach (var item in _context.ExportItems.Include("Advert").Where(i => !i.IsExported).ToList())
             {
                 App.Current.Dispatcher.Invoke((System.Action)(() =>
                 {
                     ExportQueue.Add(item);
                 }));
             }
+
+            IsStarted = true;
+            StartExportLoop();
         }
 
         public void AddAdvertToExport(Advert advert)
         {
-            var item = new ExportItem() { Advert = advert };
+            var item = new ExportItem() { Advert = advert, DateOfExport = new DateTime(1991,1,1) };
             _context.ExportItems.Add(item);
             _context.SaveChanges();
             App.Current.Dispatcher.Invoke((System.Action)(() =>
@@ -154,7 +162,10 @@ namespace RealEstate.Exporting
                             continue;
                     }
 
-                    ExportAdvert(item.Advert, site, settings);
+                    if (!_context.ExportItems.Any(e => e.Advert.Id == item.Advert.Id && e.IsExported) || Settings.SettingsStore.ExportParsed)
+                        ExportAdvert(item.Advert, site, settings);
+                    else
+                        Trace.WriteLine("Advert id = " + item.Advert.Id + "is skipped as already exported","Export skipped");
 
                     if (settings != null)
                     {

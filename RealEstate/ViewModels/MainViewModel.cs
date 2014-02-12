@@ -110,16 +110,6 @@ namespace RealEstate.ViewModels
                     {
                         Trace.WriteLine("Database not exist. Creating...");
                         context.Database.CreateIfNotExists();
-                        context.Database.ExecuteSqlCommand("ALTER DATABASE realestatedb CHARACTER SET utf8 COLLATE utf8_general_ci;");
-
-                        context.Database.ExecuteSqlCommand("ALTER TABLE adverts CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
-                        context.Database.ExecuteSqlCommand("ALTER TABLE exportsiteadverts CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
-                        context.Database.ExecuteSqlCommand("ALTER TABLE exportsettings CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
-                        context.Database.ExecuteSqlCommand("ALTER TABLE exportitems CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
-                        context.Database.ExecuteSqlCommand("ALTER TABLE exportsites CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
-                        context.Database.ExecuteSqlCommand("ALTER TABLE images CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
-                        context.Database.ExecuteSqlCommand("ALTER TABLE parsersettings CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
-                        context.Database.ExecuteSqlCommand("ALTER TABLE parsersourceurls CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
                     }
                 }
             }

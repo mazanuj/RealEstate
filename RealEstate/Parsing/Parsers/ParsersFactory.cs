@@ -13,19 +13,16 @@ namespace RealEstate.Parsing.Parsers
 
         public static ParserBase GetParser(ImportSite site)
         {
-            lock (_lock)
+            switch (site)
             {
-                switch (site)
-                {
-                    case ImportSite.Avito:
-                        if (AvitoParser == null) AvitoParser = new AvitoParser();
-                        return AvitoParser;
-                    case ImportSite.Hands:
-                        if (HandsParser == null) HandsParser = new HandsParser();
-                        return HandsParser;
-                    default:
-                        throw new NotImplementedException();
-                }
+                case ImportSite.Avito:
+                    if (AvitoParser == null) AvitoParser = new AvitoParser();
+                    return AvitoParser;
+                case ImportSite.Hands:
+                    if (HandsParser == null) HandsParser = new HandsParser();
+                    return HandsParser;
+                default:
+                    throw new NotImplementedException();
             }
         }
     }

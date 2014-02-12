@@ -11,6 +11,7 @@ namespace RealEstate.Parsing
     public class AdvertsManager
     {
         private readonly RealEstateContext _context = null;
+        private static object _lock = new object();
 
         [ImportingConstructor]
         public AdvertsManager(RealEstateContext context)
@@ -83,25 +84,19 @@ namespace RealEstate.Parsing
                         oldAdvert.AreaLiving = advert.AreaLiving;
 
                 }
-                _context.SaveChanges();
+                _context.SaveChanges(); 
             }
         }
 
         public void Save(Advert advert)
         {
-            lock (_lock)
-            {
-                _context.SaveChanges();
-            }
+            _context.SaveChanges();
         }
 
         public void Delete(Advert advert)
         {
-            lock (_lock)
-            {
-                _context.Adverts.Remove(advert);
-                _context.SaveChanges();
-            }
+            _context.Adverts.Remove(advert);
+            _context.SaveChanges();
         }
 
         public void DeleteAll()
@@ -178,22 +173,17 @@ namespace RealEstate.Parsing
             var dumb = LastParsingNumber;
             _lastParsingNumber++;
         }
-
-        object _lock = new object();
         internal bool IsParsed(string url)
         {
             using (var context = new RealEstateContext())
             {
                 return context.Adverts.Any(u => u.Url == url);
-            }               
+            }
         }
 
         internal Advert GetParsed(string url)
         {
-            lock (_lock)
-            {
-                return _context.Adverts.FirstOrDefault(u => u.Url == url);
-            }
+            return _context.Adverts.FirstOrDefault(u => u.Url == url);
         }
     }
 
