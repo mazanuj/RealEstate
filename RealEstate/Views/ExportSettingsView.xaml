@@ -46,7 +46,7 @@
                             <ItemsControl Name="UsedTypes" Margin="5 0">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <RadioButton  GroupName="usedtype" Content="{Binding Name}" Margin="0 2" IsChecked="{Binding Path=Type, Mode=OneTime, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}" cal:Message.Attach="ChangeSubtype($dataContext)"/>
+                                        <RadioButton  GroupName="usedtype" Content="{Binding Name}" Margin="0 2" IsChecked="{Binding IsChecked }" cal:Message.Attach="ChangeSubtype($dataContext)"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>

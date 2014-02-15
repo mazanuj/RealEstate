@@ -71,7 +71,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Margin="8">Задержка экспорта (мин):</TextBlock>
+                    <TextBlock Margin="8">Задержка экспорта (сек):</TextBlock>
                     <TextBox Grid.Column="1" Margin="8" Text="{Binding ExportInterval, Mode=TwoWay, Converter={StaticResource intConverter}, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" />
 
                     <CheckBox Grid.Row="1" Margin="10" Content="Переэкспортировать объявления" Name="ExportParsed" />

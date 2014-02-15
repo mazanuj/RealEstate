@@ -200,6 +200,7 @@ namespace RealEstate.ViewModels
                                               && (advertSearch ? a.AdvertTypeValue == (int)AdvertType : true)
                                               && (dateSearch ? (a.DateSite <= final && a.DateSite >= start) : true)
                                               && (lastParsing ? a.ParsingNumber == _advertsManager.LastParsingNumber : true)
+                                              orderby a.DateSite descending
                                               select a;
 
                                 var byUnique = _advertsManager.Filter(adverts.ToList(), Unique);

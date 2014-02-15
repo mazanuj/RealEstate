@@ -24,13 +24,13 @@ namespace RealEstate.ViewModels
         private readonly IEventAggregator _events;
         private readonly IWindowManager _windowManager;
         private readonly ExportSiteManager _exportSiteManager;
-        private readonly ExportingManager _exportingManager;
+        public ExportingManager ExportingManager { get; set; }
 
         [ImportingConstructor]
         public ExportQueueViewModel(IEventAggregator events, RealEstateContext context,
             ExportSiteManager exportSiteManager, ExportingManager exportingManager, IWindowManager windowManager)
         {
-            _exportingManager = exportingManager;
+            ExportingManager = exportingManager;
             _exportSiteManager = exportSiteManager;
             _context = context;
             _events = events;
@@ -53,7 +53,7 @@ namespace RealEstate.ViewModels
 
         public ObservableCollection<ExportItem> Items
         {
-            get { return _exportingManager.ExportQueue; }
+            get { return ExportingManager.ExportQueue; }
         }
 
         public void OpenItem(ExportItem item)
@@ -80,7 +80,7 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                _exportingManager.Remove(item);
+                ExportingManager.Remove(item);
             }
             catch (Exception ex)
             {
@@ -95,7 +95,7 @@ namespace RealEstate.ViewModels
             {
                 Task.Factory.StartNew(() =>
                     {
-                        _exportingManager.Export(item);
+                        ExportingManager.Export(item);
                     }, TaskCreationOptions.LongRunning);
             }
             catch (Exception ex)
@@ -103,6 +103,16 @@ namespace RealEstate.ViewModels
                 _events.Publish("Ошибка экспорта!");
                 Trace.WriteLine(ex, "Error");
             }
+        }
+
+        public void Start()
+        {
+            ExportingManager.StartExportLoop();
+        }
+
+        public void Stop()
+        {
+            ExportingManager.Stop();
         }
     }
 }

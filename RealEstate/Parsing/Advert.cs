@@ -130,25 +130,25 @@ namespace RealEstate.Parsing
             }
         }
 
-        public int GetKindOf()
+        public string GetKindOf()
         {
             if (String.IsNullOrEmpty(Rooms))
-                return -1;
+                return "";
 
             if (Rooms.Contains('1'))
-                return 1;
+                return "1";
             else if (Rooms.Contains('2'))
-                return 2;
+                return "2";
             else if (Rooms.Contains('3'))
-                return 3;
+                return "3";
             else if (Rooms.Contains('4'))
-                return 4;
+                return "4";
             else if (Rooms.Contains('5'))
-                return 5;
-            else if (Rooms.Contains("студ"))
-                return 6;
+                return "5";
+            else if (Rooms.Contains("туд"))
+                return "6";
             else
-                return -1;
+                return "";
         }
 
         public int GetAO()

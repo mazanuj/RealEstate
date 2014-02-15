@@ -33,6 +33,10 @@
     <Hash>62E1F72CB281B7402545260326476E2B</Hash>
   </FileStatus>
   <FileStatus>
+    <Path>EntityFramework.SqlServer.dll</Path>
+    <Hash>B4EFC7B67545FB42C49B8DEE82DCFC01</Hash>
+  </FileStatus>
+  <FileStatus>
     <Path>HtmlAgilityPack.dll</Path>
     <Hash>D631F1924D735E079E61E6B46F0BACAD</Hash>
   </FileStatus>
@@ -97,10 +101,6 @@
     <Hash>CE8D7941995432614D07D007437269A1</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>MySql.Data.Entity.dll</Path>
-    <Hash>4CBEC25676AF4E2149B8FD5AF2BED612</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>NewLastReport.report</Path>
     <Hash>BEDB95F5CEAFC0D29E9DE7C89530656E</Hash>
   </FileStatus>
@@ -122,11 +122,15 @@
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>59EE929904BDBADC818C297F7501C1A1</Hash>
+    <Hash>B4CE213C818ED2A6A107CF6FB12980DF</Hash>
+  </FileStatus>
+  <FileStatus>
+    <Path>RealEstate.exe.config</Path>
+    <Hash>4AC90456F266CBB60FBE4CB4AF1D06E9</Hash>
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>
-    <Hash>173DB7FE504EBB31D9B6E18A11FEB265</Hash>
+    <Hash>93BB80D94813E9061554DC967E1B3C0E</Hash>
   </FileStatus>
   <FileStatus>
     <Path>System.Runtime.dll</Path>
@@ -158,7 +162,7 @@
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
-    <Hash>812B7598BBE881CD8E5EFAA29FC2D684</Hash>
+    <Hash>75D011862EF65FFFC11437B37454CE76</Hash>
   </FileStatus>
   <FileStatus>
     <Path>WPFToolkit.dll</Path>
@@ -173,12 +177,16 @@
     <Hash>D0BDAAA0A345BDF592C0E587F5413FC6</Hash>
   </FileStatus>
   <FileStatus>
+    <Path>OKATO\create.sql</Path>
+    <Hash>CCB16340592EB4FF09F3B07001C361E6</Hash>
+  </FileStatus>
+  <FileStatus>
     <Path>OKATO\dump.sql</Path>
-    <Hash>E1092B964D83ACFB5453C6CE4B2A1255</Hash>
+    <Hash>6BC5B0D4EA09B200D442C250EDE1FE5C</Hash>
   </FileStatus>
   <FileStatus>
     <Path>SmartProcessing\ProcessingRules.xml</Path>
-    <Hash>AB4BB835303C8A4122F0B246F70DB3CC</Hash>
+    <Hash>61DBEB28FD562FBD7FA09952EFED5097</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.bigrams</Path>

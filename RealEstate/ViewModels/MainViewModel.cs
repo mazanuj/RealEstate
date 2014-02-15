@@ -47,7 +47,8 @@ namespace RealEstate.ViewModels
             ParsingViewModel parsingViewModel, ParserSettingViewModel parserSettingViewModel,
             AdvertsViewModel advertsViewModel, ExportSettingsViewModel exportSettingsViewModel,
             ExportingManager exportingManager, TestParsingViewModel testParsingViewModel,
-            StatisticsViewModel statViewModel, RulesViewModel rulesView, ExportQueueViewModel exportQueueView)
+            StatisticsViewModel statViewModel, RulesViewModel rulesView, ExportQueueViewModel exportQueueView,
+            PhonesViewModel phonesViewModel, PhonesManager phoneManager)
         {
             _windowManager = windowManager;
             _logManager = logManager;
@@ -73,6 +74,7 @@ namespace RealEstate.ViewModels
             Items.Add(exportQueueView);
             Items.Add(statViewModel);
             Items.Add(rulesView);
+            Items.Add(phonesViewModel);
 
             if (ModeManager.Mode == ReleaseMode.Debug)
                 Items.Add(testParsingViewModel);
@@ -130,6 +132,7 @@ namespace RealEstate.ViewModels
                 InitCity(cityManager);
                 InitImportSites(importManager);
                 InitRules(rulesManager);
+                phoneManager.Restore();
             }
             catch (Exception ex)
             {

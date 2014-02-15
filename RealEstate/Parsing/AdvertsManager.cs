@@ -127,12 +127,12 @@ namespace RealEstate.Parsing
 
         private bool IsAdvertNew(Advert advert, IEnumerable<Advert> adverts)
         {
-            var items = from a in adverts
+            var items = (from a in adverts
                         where a.Id != advert.Id
-                        && ((a.PhoneNumber == advert.PhoneNumber
-                        && a.MessageFull != advert.MessageFull)
+                        && ((a.PhoneNumber == advert.PhoneNumber && a.Address != advert.Address)
+                        || (a.PhoneNumber == advert.PhoneNumber && a.Address == advert.Address && a.Rooms != a.Rooms)
                         || a.MessageFull == advert.MessageFull)
-                        select a;
+                        select a).ToList();
 
             return !items.Any(a => a.DateSite > advert.DateSite); //todo search from exported 
 
@@ -142,7 +142,8 @@ namespace RealEstate.Parsing
         {
             var items = from a in adverts
                         where a.Id != advert.Id
-                        && (a.PhoneNumber == advert.PhoneNumber
+                        && ((a.PhoneNumber == advert.PhoneNumber && a.Address != advert.Address)
+                        || (a.PhoneNumber == advert.PhoneNumber && a.Address == advert.Address && a.Rooms != a.Rooms)
                         || a.MessageFull == advert.MessageFull)
                         select a;
 

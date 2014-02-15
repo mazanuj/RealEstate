@@ -84,4 +84,22 @@
     </conditions>
     <verb name="RemoveAll" value="Name" />
   </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="MessageFull" value="Лот:" />
+    </conditions>
+    <verb name="RemoveAfter" value="MessageFull" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="MessageFull" value="в базе" />
+    </conditions>
+    <verb name="RemoveAfter" value="MessageFull" />
+  </rule>
+  <rule ImportSite="All">
+    <conditions>
+      <contains property="MessageFull" value="Ссылка:" />
+    </conditions>
+    <verb name="RemoveAfter" value="MessageFull" />
+  </rule>
 </rules>

@@ -16,13 +16,21 @@
                 BorderThickness="1 0 1 2" FlowDirection="LeftToRight">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="225" />
+                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="130" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Style="{StaticResource RibbonTitle}">Статус: </TextBlock>
+                        <TextBlock Margin="5" Text="{Binding ExportingManager.StringStatus}" />
+                    </StackPanel>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel Orientation="Vertical">
+                        <Button Margin="5" Content="Старт" Name="Start" IsEnabled="{Binding ExportingManager.IsWaiting, Converter={StaticResource inverseBooleanConverter}}" />
+                        <Button Margin="5" Content="Стоп" Name="Stop" IsEnabled="{Binding ExportingManager.IsWaiting}" />
+                    </StackPanel>
                 </Border>
             </Grid>
         </Border>

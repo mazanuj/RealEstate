@@ -137,7 +137,7 @@ namespace RealEstate.SmartProcessing
             {
                 if (String.IsNullOrEmpty(advert.BuildingYear) || advert.BuildingYear.Length != 2)
                 {
-                    var yearG = Regex.Match(advert.MessageFull, @"20(?<year>\d{2})", RegexOptions.IgnoreCase).Groups["year"];
+                    var yearG = Regex.Match(advert.MessageFull, @"\D20(?<year>\d{2})", RegexOptions.IgnoreCase).Groups["year"];
 
                     if (yearG != null && yearG.Success && !string.IsNullOrEmpty(yearG.Value))
                     {

@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Caliburn.Micro;
+using MySql.Data.MySqlClient;
 using RealEstate.Db;
 using RealEstate.Parsing;
 using RealEstate.SmartProcessing;
@@ -19,24 +20,45 @@ using System.Threading.Tasks;
 namespace RealEstate.Exporting
 {
     [Export(typeof(ExportingManager))]
-    public class ExportingManager
+    public class ExportingManager : PropertyChangedBase
     {
         private readonly RealEstateContext _context = null;
         private readonly ImagesManager _imagesManager = null;
         private readonly SmartProcessor _processr = null;
+        private readonly PhonesManager _phonesManager = null;
 
         public ObservableCollection<ExportItem> ExportQueue = null;
 
-        private static bool IsWaiting = false;
+        private bool _stopped = false;
+
+        private bool _IsWaiting = false;
+        public bool IsWaiting
+        {
+            get { return _IsWaiting; }
+            set
+            {
+                _IsWaiting = value;
+                NotifyOfPropertyChange(() => IsWaiting);
+                NotifyOfPropertyChange(() => StringStatus);
+            }
+        }
+
+        public string StringStatus
+        {
+            get { return IsWaiting ? "Отправка объявлений...." : "Ожидание начала экспорта..."; }
+        }
+
+
         private static bool IsStarted = false;
         private static object _lock = new object();
 
         [ImportingConstructor]
-        public ExportingManager(RealEstateContext context, ImagesManager images, SmartProcessor processor)
+        public ExportingManager(RealEstateContext context, ImagesManager images, SmartProcessor processor, PhonesManager phonesManager)
         {
             _context = context;
             _imagesManager = images;
             _processr = processor;
+            _phonesManager = phonesManager;
             ExportQueue = new ObservableCollection<ExportItem>();
             ExportQueue.CollectionChanged += ExportQueue_CollectionChanged;
         }
@@ -47,14 +69,15 @@ namespace RealEstate.Exporting
             {
                 lock (_lock)
                 {
-                    StartExportLoop(); 
+                    StartExportLoop();
                 }
             }
         }
 
-        private void StartExportLoop()
+        public void StartExportLoop()
         {
             if (IsWaiting) return;
+            _stopped = false;
 
             Task.Factory.StartNew(() =>
                {
@@ -62,7 +85,7 @@ namespace RealEstate.Exporting
                    int lastFailedExportedId = -1;
                    int currentId = -1;
                    int failedCount = 0;
-                   while (ExportQueue.Any(i => !i.IsExported))
+                   while (!_stopped && ExportQueue.Any(i => !i.IsExported))
                    {
                        try
                        {
@@ -73,7 +96,7 @@ namespace RealEstate.Exporting
                                Export(item);
                            }
 
-                           Thread.Sleep(Settings.SettingsStore.ExportInterval * 60000);
+                           Thread.Sleep(Settings.SettingsStore.ExportInterval * 1000);
                        }
                        catch (Exception ex)
                        {
@@ -81,7 +104,7 @@ namespace RealEstate.Exporting
                                failedCount++;
                            if (failedCount > 20)
                            {
-                               Trace.TraceError("Failed to export item more than 20 times. Export stoppped." ,"Export error");
+                               Trace.TraceError("Failed to export item more than 20 times. Export stoppped.", "Export error");
                                break;
                            }
                            lastFailedExportedId = currentId;
@@ -121,12 +144,12 @@ namespace RealEstate.Exporting
             }
 
             IsStarted = true;
-            StartExportLoop();
+            //StartExportLoop();
         }
 
         public void AddAdvertToExport(Advert advert)
         {
-            var item = new ExportItem() { Advert = advert, DateOfExport = new DateTime(1991,1,1) };
+            var item = new ExportItem() { Advert = advert, DateOfExport = new DateTime(1991, 1, 1) };
             _context.ExportItems.Add(item);
             _context.SaveChanges();
             App.Current.Dispatcher.Invoke((System.Action)(() =>
@@ -149,7 +172,7 @@ namespace RealEstate.Exporting
         public void Export(ExportItem item)
         {
             if (item == null || item.Advert == null) return;
-
+            bool isExported = false;
             if (item.Advert.ExportSites != null && !item.IsExported)
                 foreach (var site in item.Advert.ExportSites)
                 {
@@ -162,10 +185,13 @@ namespace RealEstate.Exporting
                             continue;
                     }
 
-                    if (!_context.ExportItems.Any(e => e.Advert.Id == item.Advert.Id && e.IsExported) || Settings.SettingsStore.ExportParsed)
+                    if (!_context.ExportItems.Any(e => e.Advert.Id == item.Advert.Id && e.IsExported && e.Id != item.Id) || Settings.SettingsStore.ExportParsed)
+                    {
                         ExportAdvert(item.Advert, site, settings);
+                        isExported = true;
+                    }
                     else
-                        Trace.WriteLine("Advert id = " + item.Advert.Id + "is skipped as already exported","Export skipped");
+                        Trace.WriteLine("Advert id = " + item.Advert.Id + " is skipped as already exported", "Export skipped");
 
                     if (settings != null)
                     {
@@ -173,9 +199,17 @@ namespace RealEstate.Exporting
                     }
                 }
 
-            item.DateOfExport = DateTime.Now;
-            item.IsExported = true;
-            _context.SaveChanges();
+            if (isExported)
+            {
+                item.DateOfExport = DateTime.Now;
+                item.IsExported = true;
+                _context.SaveChanges();
+            }
+            else
+            {
+                _context.ExportItems.Remove(item);
+                _context.SaveChanges();
+            }
 
             App.Current.Dispatcher.Invoke((System.Action)(() =>
             {
@@ -200,12 +234,12 @@ namespace RealEstate.Exporting
              `ad_sposobdometro`,  `ad_coords`, `ad_rooms`, `ad_mapm`)
 VALUES (
         0,
-        538,
-        'тахометр',
+        NULL,
+        '" + (String.IsNullOrEmpty(advert.Name) ? "Продавец": advert.Name)+ @"',
         '[]',
         '" + advert.Street + @"',
         '" + advert.City + @"',
-        '" + advert.PhoneNumber + @"',
+        '" + (setting == null || !setting.ReplacePhoneNumber || (setting.ReplacePhoneNumber && _phonesManager.GetRandomPhone(site.Id) == null) ? advert.PhoneNumber : _phonesManager.GetRandomPhone(site.Id)) + @"',
         '" + advert.Email + @"',
         '" + advert.GetKindOf() + @"',
         '" + advert.Title + @"',
@@ -229,7 +263,7 @@ VALUES (
         '" + advert.FloorTotal + @"',
         '" + (advert.AreaFull == 0 ? "" : ((double)((setting == null || setting.Margin == 0) ? advert.Price : advert.Price * setting.Margin) / (double)advert.AreaFull).ToString("#")) + @"',
         '',
-        '" + "" + @"', 
+        '" + advert.BuildingQuartal + @"', 
         '" + advert.House + @"',
         '" + advert.HousePart + @"',
         '',
@@ -240,7 +274,7 @@ VALUES (
         '',
         '',
         '',
-        '" + advert.BuildingYear + @"',
+        '" + (String.IsNullOrEmpty(advert.BuildingYear) ? "" : "20" + advert.BuildingYear) + @"',
         '',
         '',
         '',
@@ -278,6 +312,7 @@ VALUES (
                     catch (Exception ex)
                     {
                         Trace.WriteLine(ex.Message);
+                        throw;
                     }
                 }
             }
@@ -351,6 +386,11 @@ VALUES (
             FtpWebResponse uploadResponse = (FtpWebResponse)ftpClient.GetResponse();
             Console.WriteLine(uploadResponse.StatusDescription);
             uploadResponse.Close();
+        }
+
+        public void Stop()
+        {
+            _stopped = true;
         }
     }
 

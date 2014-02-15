@@ -155,6 +155,7 @@
     <Compile Include="Exporting\ExportSetting.cs" />
     <Compile Include="Exporting\ExportSite.cs" />
     <Compile Include="Exporting\ExportSiteManager.cs" />
+    <Compile Include="Exporting\PhonesManager.cs" />
     <Compile Include="Log\LogManager.cs" />
     <Compile Include="Modes\Mode.cs" />
     <Compile Include="OCRs\OCRManager.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ParserSettingViewModel.cs" />
     <Compile Include="ViewModels\ParsingViewModel.cs" />
+    <Compile Include="ViewModels\PhonesViewModel.cs" />
     <Compile Include="ViewModels\ProxiesViewModel.cs" />
     <Compile Include="ViewModels\RulesViewModel.cs" />
     <Compile Include="ViewModels\ScreenWithToogleTools.cs" />
@@ -232,6 +234,9 @@
     </Compile>
     <Compile Include="Views\ParsingView.xaml.cs">
       <DependentUpon>ParsingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhonesView.xaml.cs">
+      <DependentUpon>PhonesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProxiesView.xaml.cs">
       <DependentUpon>ProxiesView.xaml</DependentUpon>
@@ -316,6 +321,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ParsingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PhonesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

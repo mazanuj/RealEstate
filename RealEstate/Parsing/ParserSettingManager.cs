@@ -153,6 +153,7 @@ namespace RealEstate.Parsing
     {
         public Usedtype Type { get; set; }
         public string Name { get; set; }
+        public bool IsChecked { get; set; }
     }
 
     public class AdvertTypeNamed

@@ -67,8 +67,6 @@ namespace RealEstate.ViewModels
             {
                 _RealEstateType = value;
                 NotifyOfPropertyChange(() => RealEstateType);
-
-                Usedtype = Parsing.Usedtype.All;
                 NotifyOfPropertyChange(() => UsedTypes);
             }
         }
@@ -79,7 +77,10 @@ namespace RealEstate.ViewModels
             get
             {
                 _usedTypes.Clear();
-                _usedTypes.AddRange(_parserSettingManager.SubTypes(RealEstateType));
+                var types = _parserSettingManager.SubTypes(RealEstateType);
+                types.First(t => t.Type == Usedtype).IsChecked = true;
+                _usedTypes.AddRange(types);
+
                 return _usedTypes;
             }
         }
@@ -89,7 +90,16 @@ namespace RealEstate.ViewModels
             Usedtype = type.Type;
         }
 
-        public Usedtype Usedtype { get; set; }
+        private Usedtype _Usedtype = Usedtype.All;
+        public Usedtype Usedtype
+        {
+            get { return _Usedtype; }
+            set
+            {
+                _Usedtype = value;
+                NotifyOfPropertyChange(() => Usedtype);
+            }
+        }
 
         private AdvertType _AdvertType = AdvertType.Sell;
         public AdvertType AdvertType
@@ -240,9 +250,9 @@ namespace RealEstate.ViewModels
                         SelectedCity = Cities.SingleOrDefault(c => c.City == setting.City);
                         Delay = setting.Delay;
                         MoneyMargin = setting.Margin;
-                        RealEstateType = setting.RealEstateType;
-                        ReplacePhoneNumber = setting.ReplacePhoneNumber;
                         Usedtype = setting.Usedtype;
+                        RealEstateType = setting.RealEstateType;
+                        ReplacePhoneNumber = setting.ReplacePhoneNumber;                        
                     }
                     else
                     {
@@ -250,9 +260,9 @@ namespace RealEstate.ViewModels
                         SelectedCity = Cities.SingleOrDefault(c => c.City == DefaultCity);
                         Delay = DefaultDelay;
                         MoneyMargin = DefaultMargin;
-                        RealEstateType = DefaultRealEstateType;
-                        ReplacePhoneNumber = DefaultReplacePhone;
                         Usedtype = DefaulUsedtype;
+                        RealEstateType = DefaultRealEstateType;
+                        ReplacePhoneNumber = DefaultReplacePhone;                        
                     }
                 }
             }
