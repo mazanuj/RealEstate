@@ -30,7 +30,7 @@
   </FileStatus>
   <FileStatus>
     <Path>EntityFramework.dll</Path>
-    <Hash>62E1F72CB281B7402545260326476E2B</Hash>
+    <Hash>9795D413272BA3C6D39EE1023494F3AB</Hash>
   </FileStatus>
   <FileStatus>
     <Path>EntityFramework.SqlServer.dll</Path>
@@ -69,14 +69,6 @@
     <Hash>75E2D44FAF73CA61B255FF810822FC9F</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>liblept168.dll</Path>
-    <Hash>259F27067A4C16CD44666FAC1F8DD692</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>libtesseract302.dll</Path>
-    <Hash>79F20ABA563227C4FE8225EFC3B914E8</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>map template.html</Path>
     <Hash>FCBD79E2F316341F68F90321E590109B</Hash>
   </FileStatus>
@@ -98,7 +90,7 @@
   </FileStatus>
   <FileStatus>
     <Path>MySql.Data.dll</Path>
-    <Hash>CE8D7941995432614D07D007437269A1</Hash>
+    <Hash>5CC3F1ECA02737022B2A3BC387F4B287</Hash>
   </FileStatus>
   <FileStatus>
     <Path>NewLastReport.report</Path>
@@ -141,14 +133,6 @@
     <Hash>ABB19BD517C6274551229D3A866CCD36</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>System.Windows.Controls.Input.Toolkit.dll</Path>
-    <Hash>9722713E648F42B57299E9D2CF3D5C1A</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>System.Windows.Controls.Layout.Toolkit.dll</Path>
-    <Hash>22D9D032858972B8EE628FA818AB04DB</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>System.Windows.Interactivity.dll</Path>
     <Hash>3AB57A33A6E3A1476695D5A6E856C06A</Hash>
   </FileStatus>
@@ -163,10 +147,6 @@
   <FileStatus>
     <Path>version</Path>
     <Hash>A7145D355D740865DF1D9DB5E3D5BA30</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>WPFToolkit.dll</Path>
-    <Hash>195ED09E0B4F3B09EA4A3B67A0D3F396</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>
