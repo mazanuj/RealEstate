@@ -15,7 +15,15 @@ namespace RealEstate
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             ModeManager.SetMode(e.Args);
         }
+
+        void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(e.Exception.ToString());
+        }
+
+
     }
 }
