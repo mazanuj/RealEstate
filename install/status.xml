@@ -122,7 +122,7 @@
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>D3DF05E3E2DF2D8A3FD390E37A1AD387</Hash>
+    <Hash>D37114C691963B89A98A3AFFD75F9A9F</Hash>
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe.config</Path>
@@ -162,7 +162,7 @@
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
-    <Hash>7456EE57EA536A24E49FDFB1D56359BF</Hash>
+    <Hash>A7145D355D740865DF1D9DB5E3D5BA30</Hash>
   </FileStatus>
   <FileStatus>
     <Path>WPFToolkit.dll</Path>
