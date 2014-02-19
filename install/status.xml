@@ -114,7 +114,7 @@
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>4FDB324E1471BF33D5F8F557C1546039</Hash>
+    <Hash>10C34E98B59C6E4EE9BEB960657EABE2</Hash>
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>
@@ -142,7 +142,7 @@
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
-    <Hash>3576F9D10C59A69E7C731850CC8B8D7B</Hash>
+    <Hash>633956BEA4E529251C111FD47C8D6C3D</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>
@@ -162,7 +162,7 @@
   </FileStatus>
   <FileStatus>
     <Path>SmartProcessing\ProcessingRules.xml</Path>
-    <Hash>61DBEB28FD562FBD7FA09952EFED5097</Hash>
+    <Hash>E10FE358CDE87EA1232F0A3B301F62A1</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.bigrams</Path>

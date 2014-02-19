@@ -88,18 +88,18 @@
     <conditions>
       <contains property="MessageFull" value="Лот:" />
     </conditions>
-    <verb name="RemoveAfter" value="MessageFull" />
+    <verb name="RemoveAfter" value="MessageFull" value2="Лот:" />
   </rule>
   <rule ImportSite="All">
     <conditions>
-      <contains property="MessageFull" value="в базе" />
+      <contains property="MessageFull" value="№ в базе" />
     </conditions>
-    <verb name="RemoveAfter" value="MessageFull" />
+    <verb name="RemoveAfter" value="MessageFull" value2="№ в базе" />
   </rule>
   <rule ImportSite="All">
     <conditions>
       <contains property="MessageFull" value="Ссылка:" />
     </conditions>
-    <verb name="RemoveAfter" value="MessageFull" />
+    <verb name="RemoveAfter" value="MessageFull" value2="Ссылка:" />
   </rule>
 </rules>

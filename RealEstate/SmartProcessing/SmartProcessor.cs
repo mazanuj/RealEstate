@@ -105,7 +105,7 @@ namespace RealEstate.SmartProcessing
                                 if (proper != null)
                                 {
                                     var value = (string)proper.GetValue(advert, null);
-                                    int i = value.IndexOf(rule.VerbValue);
+                                    int i = value.IndexOf(rule.VerbValue2);
                                     if (i != -1)
                                     {
                                         value = value.Remove(i);
@@ -390,8 +390,8 @@ namespace RealEstate.SmartProcessing
             total++;
             if (!String.IsNullOrEmpty(advert.Address))
                 current++;
-            else
-                current = 0;
+            //else
+            //    current = 0;
 
             return current / total;
         }

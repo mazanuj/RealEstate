@@ -32,11 +32,14 @@ namespace RealEstate.SmartProcessing
 
                     var verb = Verb.None;
                     string verbValue = null;
+                    string verbValue2 = null;
 
                     if (rule.Element("verb") != null)
                     {
                         verb = (Verb)Enum.Parse(typeof(Verb), rule.Element("verb").Attribute("name").Value);
                         verbValue = rule.Element("verb").Attribute("value").Value;
+                        if (rule.Element("verb").Attribute("value2") != null)
+                            verbValue2 = rule.Element("verb").Attribute("value2").Value;
                     }
                     else if (rule.Attribute("verb") != null)
                     {
@@ -52,6 +55,7 @@ namespace RealEstate.SmartProcessing
                     r.Verb = verb;
                     r.Site = site;
                     r.VerbValue = verbValue;
+                    r.VerbValue2 = verbValue2;
 
                     foreach (var condition in rule.Element("conditions").Elements())
                     {
@@ -79,6 +83,7 @@ namespace RealEstate.SmartProcessing
     {
         public Verb Verb { get; set; }
         public string VerbValue { get; set; }
+        public string VerbValue2 { get; set; }
         public List<Condition> Conditions { get; set; }
         public ImportSite Site { get; set; }
         public Rule()
