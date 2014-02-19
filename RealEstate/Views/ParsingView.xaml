@@ -40,7 +40,7 @@
                 <Border Grid.Column="2" Style="{StaticResource RibbonToolBorder}">
                     <Grid Grid.IsSharedSizeScope="True" Name="SitesGrid">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="120" SharedSizeGroup="_site" />
+                            <ColumnDefinition Width="100" SharedSizeGroup="_site" />
                             <ColumnDefinition Width="70" SharedSizeGroup="_delay" />
                             <ColumnDefinition Width="70" SharedSizeGroup="_deep"/>
                         </Grid.ColumnDefinitions>
@@ -115,7 +115,8 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Border Grid.Row="0" Style="{StaticResource RibbonToolBorder}" BorderThickness="0 0 0 1">
                         <CheckBox Name="UseProxy" Content="С прокси" Margin="2" />
@@ -123,7 +124,12 @@
                     <Border Grid.Row="1" Style="{StaticResource RibbonToolBorder}" BorderThickness="0 0 0 1">
                         <CheckBox Name="AutoExport" Content="Авто экспорт" Margin="2" />
                     </Border>
-                    <StackPanel Margin="5 0" Grid.Row="2" Width="100" HorizontalAlignment="Left">
+                    <Border Grid.Row="2" Style="{StaticResource RibbonToolBorder}" BorderThickness="0 0 0 1" Visibility="{Binding AutoExport, Converter={StaticResource bool2VisibilityConverter}}">
+                        <StackPanel Margin="10 0">
+                            <CheckBox Name="OnlyImage" Content="Только с картинками"  />
+                        </StackPanel>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Margin="5 0" Grid.Row="3" HorizontalAlignment="Left">
                         <Button Name="Start" Margin="3" Content="Старт" />
                         <Button Name="Pause" Margin="3" Content="Пауза" />
                         <Button Name="Stop" Margin="3" Content="Стоп" />

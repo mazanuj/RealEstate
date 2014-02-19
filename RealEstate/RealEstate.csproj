@@ -147,7 +147,6 @@
     <Compile Include="Commands\AdvertsModule.cs" />
     <Compile Include="Commands\CommandsProcessor.cs" />
     <Compile Include="Commands\LogModule.cs" />
-    <Compile Include="Commands\TestDataModule.cs" />
     <Compile Include="Converters\Behaviours.cs" />
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Db\RealEstateContext.cs" />

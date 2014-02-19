@@ -23,7 +23,6 @@ namespace RealEstate.Commands
         {
             Modules.Add("advert", new AdvertsModule(advertsManager, windowManager));
             Modules.Add("log", new LogModule(logManager));
-            Modules.Add("testdata", new TestDataModule(context));
         }
 
         private Module LastModule = null;

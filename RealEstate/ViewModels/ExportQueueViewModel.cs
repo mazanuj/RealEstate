@@ -24,17 +24,20 @@ namespace RealEstate.ViewModels
         private readonly IEventAggregator _events;
         private readonly IWindowManager _windowManager;
         private readonly ExportSiteManager _exportSiteManager;
+        private readonly Settings.SettingsManager _settingManager;
         public ExportingManager ExportingManager { get; set; }
 
         [ImportingConstructor]
         public ExportQueueViewModel(IEventAggregator events, RealEstateContext context,
-            ExportSiteManager exportSiteManager, ExportingManager exportingManager, IWindowManager windowManager)
+            ExportSiteManager exportSiteManager, ExportingManager exportingManager, IWindowManager windowManager,
+            Settings.SettingsManager settings)
         {
             ExportingManager = exportingManager;
             _exportSiteManager = exportSiteManager;
             _context = context;
             _events = events;
             _windowManager = windowManager;
+            _settingManager = settings;
             events.Subscribe(this);
             DisplayName = "Очередь экспорта";
         }
@@ -49,6 +52,7 @@ namespace RealEstate.ViewModels
         {
             base.OnActivate();
             if (!RealEstate.Db.RealEstateContext.isOk) return;
+            ExportDelay = Settings.SettingsStore.ExportInterval;
         }
 
         public ObservableCollection<ExportItem> Items
@@ -113,6 +117,41 @@ namespace RealEstate.ViewModels
         public void Stop()
         {
             ExportingManager.Stop();
+        }
+
+        private int _ExportDelay;
+
+        [Required]
+        [Range(0, 100000)]
+        public int ExportDelay
+        {
+            get { return _ExportDelay; }
+            set
+            {
+                _ExportDelay = value;
+                NotifyOfPropertyChange(() => ExportDelay);
+            }
+        }
+
+
+        public void Save()
+        {
+            try
+            {
+                Settings.SettingsStore.ExportInterval = ExportDelay;
+                _settingManager.Save();
+                _events.Publish("Сохранено");
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex);
+                _events.Publish("Ошибка сохранения");
+            }
+        }
+
+        public bool CanSave
+        {
+            get { return !HasErrors; }
         }
     }
 }

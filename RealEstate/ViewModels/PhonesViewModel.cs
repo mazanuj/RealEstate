@@ -34,9 +34,7 @@ namespace RealEstate.ViewModels
 
         protected override void OnActivate()
         {
-            base.OnActivate();
-            NotifyOfPropertyChange(() => SelectedExportSite);
-            NotifyOfPropertyChange(() => SelectedPhone);
+            SelectedExportSite = ExportSites.FirstOrDefault();
         }
 
         public BindableCollection<ExportSite> ExportSites

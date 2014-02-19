@@ -114,11 +114,7 @@
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>D37114C691963B89A98A3AFFD75F9A9F</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>RealEstate.exe.config</Path>
-    <Hash>8E4FD5C8C77FB1AEB8404DA5F69A358F</Hash>
+    <Hash>4FDB324E1471BF33D5F8F557C1546039</Hash>
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>

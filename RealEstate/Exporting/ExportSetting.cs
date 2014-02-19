@@ -13,8 +13,6 @@ namespace RealEstate.Exporting
 
         public ExportSite ExportSite { get; set; }
 
-        public string City { get; set; }
-
         [Column("RealEstateType", TypeName = "int")]
         public int RealEstateTypeValue { get; set; }
         [NotMapped]

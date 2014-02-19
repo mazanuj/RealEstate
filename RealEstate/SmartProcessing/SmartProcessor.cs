@@ -105,8 +105,12 @@ namespace RealEstate.SmartProcessing
                                 if (proper != null)
                                 {
                                     var value = (string)proper.GetValue(advert, null);
-                                    value = value.Remove(value.IndexOf(rule.VerbValue));
-                                    proper.SetValue(advert, value, null);
+                                    int i = value.IndexOf(rule.VerbValue);
+                                    if (i != -1)
+                                    {
+                                        value = value.Remove(i);
+                                        proper.SetValue(advert, value, null);
+                                    }
                                 }
                                 break;
                             case Verb.Cut:
@@ -350,10 +354,6 @@ namespace RealEstate.SmartProcessing
             double current = 0;
 
             total++;
-            if (!String.IsNullOrEmpty(advert.Address))
-                current++;
-
-            total++;
             if (!String.IsNullOrEmpty(advert.Distinct))
                 current++;
 
@@ -386,6 +386,12 @@ namespace RealEstate.SmartProcessing
                 if (!String.IsNullOrEmpty(advert.BuildingYear))
                     current++;
             }
+
+            total++;
+            if (!String.IsNullOrEmpty(advert.Address))
+                current++;
+            else
+                current = 0;
 
             return current / total;
         }

@@ -38,7 +38,7 @@ namespace RealEstate.ViewModels
             _parserSettingManager = parserSettingManager;
 
             events.Subscribe(this);
-            DisplayName = "Настройки проекта";
+            DisplayName = "Настройки импорта";
         }
 
         protected override void OnActivate()
@@ -256,6 +256,7 @@ namespace RealEstate.ViewModels
         public void RemoveUrl(ParserSourceUrl url)
         {
             ParserSourceUrls.Remove(url);
+            SaveSources();
         }
 
         public void EditExportSite()

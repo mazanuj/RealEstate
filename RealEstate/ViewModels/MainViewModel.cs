@@ -67,14 +67,14 @@ namespace RealEstate.ViewModels
             _statusTimer.Elapsed += _statusTimer_Elapsed;
 
             Items.Add(parsingViewModel);
-            Items.Add(proxiesViewModel);
             Items.Add(parserSettingViewModel);
-            Items.Add(advertsViewModel);
             Items.Add(exportSettingsViewModel);
             Items.Add(exportQueueView);
+            Items.Add(advertsViewModel);
+            Items.Add(phonesViewModel);
+            Items.Add(proxiesViewModel);
             Items.Add(statViewModel);
             Items.Add(rulesView);
-            Items.Add(phonesViewModel);
 
             if (ModeManager.Mode == ReleaseMode.Debug)
                 Items.Add(testParsingViewModel);
@@ -101,6 +101,10 @@ namespace RealEstate.ViewModels
                 {
                     if (context.Database.Exists())
                     {
+                        if (!context.Database.CompatibleWithModel(false))
+                        {
+                            context.Database.Initialize(force: true);
+                        }
                         //commented for development
                         if (!context.Database.CompatibleWithModel(false))
                         {

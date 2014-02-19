@@ -195,6 +195,17 @@ namespace RealEstate.ViewModels
             }
         }
 
+        private bool _OnlyImage = false;
+        public bool OnlyImage
+        {
+            get { return _OnlyImage; }
+            set
+            {
+                _OnlyImage = value;
+                NotifyOfPropertyChange(() => OnlyImage);
+            }
+        }
+
         public BindableCollection<ParsingTask> _tasks = new BindableCollection<ParsingTask>();
         public BindableCollection<ParsingTask> Tasks
         {
@@ -245,6 +256,7 @@ namespace RealEstate.ViewModels
                             param.autoExport = AutoExport;
                             param.Delay = ImportSites.First(i => i.Site == s).Delay;
                             param.MaxCount = ImportSites.First(i => i.Site == s).Deep;
+                            param.onlyImage = OnlyImage;
 
                             ParsingTask realTask = new ParsingTask();
                             realTask.Description = _importManager.GetSiteName(s);
@@ -266,6 +278,7 @@ namespace RealEstate.ViewModels
                     param.advertType = this.AdvertType;
                     param.useProxy = UseProxy;
                     param.autoExport = AutoExport;
+                    param.onlyImage = OnlyImage;
                     param.Delay = ImportSites.First(i => i.Site == this.ImportSite).Delay;
                     param.MaxCount = ImportSites.First(i => i.Site == this.ImportSite).Deep;
 
@@ -472,10 +485,10 @@ namespace RealEstate.ViewModels
                             if (SettingsStore.SaveImages)
                                 _imagesManager.DownloadImages(advert.Images, ct, advert.ImportSite);
 
-                            if (param.autoExport)
+                            if (param.autoExport && (SettingsStore.ExportParsed || (!SettingsStore.ExportParsed && !parsed)))
                             {
                                 var cov = _smartProcessor.ComputeCoverage(advert);
-                                if (cov > 0.6)
+                                if (cov > 0.6 && (!OnlyImage || (OnlyImage && advert.ContainsImages)))
                                     _exportingManager.AddAdvertToExport(advert);
                                 else
                                     Trace.WriteLine("Advert skipped as empty. Coverage = " + cov.ToString("P0"), "Skipped by smart processor");
@@ -503,6 +516,7 @@ namespace RealEstate.ViewModels
 
                 }
 
+                task.Progress = 100;
                 _events.Publish("Завершено");
 
             }
@@ -566,6 +580,7 @@ namespace RealEstate.ViewModels
         public AdvertType advertType;
         public bool useProxy;
         public bool autoExport;
+        public bool onlyImage;
     }
 
     public class ParsingTask : RealEstateTask

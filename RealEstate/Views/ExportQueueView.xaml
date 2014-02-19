@@ -16,15 +16,23 @@
                 BorderThickness="1 0 1 2" FlowDirection="LeftToRight">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="320" />
                     <ColumnDefinition Width="130" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock  Style="{StaticResource RibbonTitle}">Статус: </TextBlock>
-                        <TextBlock Margin="5" Text="{Binding ExportingManager.StringStatus}" />
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock  Style="{StaticResource RibbonTitle}">Статус:</TextBlock>
+                            <TextBlock Margin="5" Text="{Binding ExportingManager.StringStatus}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 10">
+                            <TextBlock Margin="8">Задержка экспорта (сек):</TextBlock>
+                            <TextBox Width="35" Grid.Column="1" Margin="8" Text="{Binding ExportDelay, Mode=TwoWay, Converter={StaticResource intConverter}, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" />
+                            <Button Name="Save" Content="Сохранить" Margin="5" />
+                        </StackPanel>
                     </StackPanel>
+
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
                     <StackPanel Orientation="Vertical">
@@ -40,8 +48,25 @@
                       IsReadOnly="True" behaviour:DataGridBehavior.DisplayRowNumber="True"
                       Name="AdvertsTable">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Город" Binding="{Binding Advert.City}" />
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image>
+                                    <Image.Source>
+                                        <MultiBinding Converter="{StaticResource imageFilledConverter}">
+                                            <Binding Path="Advert.ContainsImages" />
+                                            <Binding Path="Advert.ImportSite" />
+                                        </MultiBinding>
+                                    </Image.Source>
+                                </Image>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Дата" Binding="{Binding Advert.DateUpdate}" />
+                    <DataGridTextColumn Header="Город" Binding="{Binding Advert.City}" />
+                    <DataGridTextColumn Header="Адрес" Binding="{Binding Advert.Address}" />
+                    <DataGridTextColumn Header="Комнат" Binding="{Binding Advert.Rooms}" />
+                    <DataGridTextColumn Header="Цена" Binding="{Binding Advert.Price}" />
                     <DataGridTemplateColumn Header="Сайты" >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

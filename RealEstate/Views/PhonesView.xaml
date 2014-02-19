@@ -28,15 +28,18 @@
         </Border>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+
+            <TextBox Name="NewPhone" Grid.Row="0" Grid.Column="0" Margin="10" />
+            <Button Name="AddNew" Grid.Row="0" Grid.Column="1" Margin="10" Content="Добавить"/>
             
-            <ListBox Name="Phones" Grid.Row="0" Grid.ColumnSpan="2" Margin="10 10 10 0">
+            <ListBox Name="Phones" Grid.Row="1" Grid.ColumnSpan="2" Margin="10 10 10 0">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <DockPanel>
@@ -46,8 +49,6 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <TextBox Name="NewPhone" Grid.Row="1" Grid.Column="0" Margin="10" />
-            <Button Name="AddNew" Grid.Row="1" Grid.Column="1" Margin="10" Content="Добавить"/>
         </Grid>
     </Grid>
 </UserControl>

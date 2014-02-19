@@ -128,6 +128,10 @@ namespace RealEstate.ViewModels
             {
                 _selectedCity = value;
                 NotifyOfPropertyChange(() => SelectedCity);
+
+                SelectedExportSite = null;
+                ExportSites.Clear();
+                ExportSites.AddRange(_exportSiteManager.ExportSites.Where(e => e.City == value.City));
             }
         }
 
@@ -168,11 +172,13 @@ namespace RealEstate.ViewModels
             }
         }
 
+
+        BindableCollection<ExportSite> _ExportSites = new BindableCollection<ExportSite>();
         public BindableCollection<ExportSite> ExportSites
         {
             get
             {
-                return _exportSiteManager.ExportSites;
+                return _ExportSites;
             }
         }
 
@@ -217,7 +223,6 @@ namespace RealEstate.ViewModels
                 }
 
                 setting.AdvertType = AdvertType;
-                setting.City = SelectedCity.City;
                 setting.Delay = Delay;
                 setting.ExportSite = SelectedExportSite;
                 setting.Margin = MoneyMargin;
@@ -247,7 +252,6 @@ namespace RealEstate.ViewModels
                     if (setting != null)
                     {
                         AdvertType = setting.AdvertType;
-                        SelectedCity = Cities.SingleOrDefault(c => c.City == setting.City);
                         Delay = setting.Delay;
                         MoneyMargin = setting.Margin;
                         Usedtype = setting.Usedtype;
@@ -256,13 +260,12 @@ namespace RealEstate.ViewModels
                     }
                     else
                     {
+                        ReplacePhoneNumber = DefaultReplacePhone;   
                         AdvertType = DefaultAdvertType;
-                        SelectedCity = Cities.SingleOrDefault(c => c.City == DefaultCity);
                         Delay = DefaultDelay;
                         MoneyMargin = DefaultMargin;
                         Usedtype = DefaulUsedtype;
-                        RealEstateType = DefaultRealEstateType;
-                        ReplacePhoneNumber = DefaultReplacePhone;                        
+                        RealEstateType = DefaultRealEstateType;                                            
                     }
                 }
             }
