@@ -107,14 +107,21 @@ namespace RealEstate.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            var contains = (bool)values[0] ? "" : "-";
-            if ((ImportSite)values[1] == ImportSite.Avito)
+            if (values[0] is bool)
             {
-                return new BitmapImage(new Uri(@"pack://application:,,,/Images/avito" + contains + ".png"));
+                var contains = (bool)values[0] ? "" : "-";
+                if ((ImportSite)values[1] == ImportSite.Avito)
+                {
+                    return new BitmapImage(new Uri(@"pack://application:,,,/Images/avito" + contains + ".png"));
+                }
+                else if ((ImportSite)values[1] == ImportSite.Hands)
+                {
+                    return new BitmapImage(new Uri(@"pack://application:,,,/Images/hands" + contains + ".png"));
+                }
             }
-            else if ((ImportSite)values[1] == ImportSite.Hands)
+            else
             {
-                return new BitmapImage(new Uri(@"pack://application:,,,/Images/hands" + contains + ".png"));
+                System.Diagnostics.Trace.WriteLine(values[0].ToString());
             }
 
             return null;
