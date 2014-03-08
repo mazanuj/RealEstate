@@ -62,12 +62,18 @@ namespace RealEstate.ViewModels
             {
                 if (SelectedExportSite != null)
                 {
+                    _phones.Clear();
+
                     var phones = _phonesManager.PhoneCollections.FirstOrDefault(p => p.SiteId == SelectedExportSite.Id);
+
                     if (phones != null)
                     {
                         phoneCollection = phones;
-                        _phones.Clear();
                         _phones.AddRange(phoneCollection.Numbers);
+                    }
+                    else
+                    {
+                        phoneCollection = null;
                     }
                 }
 
@@ -90,24 +96,34 @@ namespace RealEstate.ViewModels
 
         public void AddNew()
         {
-            if (SelectedExportSite != null)
+            try
             {
-                if (phoneCollection == null)
+                if (SelectedExportSite != null)
                 {
-                    phoneCollection = new PhoneCollection()
+                    if (phoneCollection == null)
                     {
-                        SiteId = SelectedExportSite.Id,
-                        Numbers = new List<string>()
-                    };
+                        phoneCollection = new PhoneCollection()
+                        {
+                            SiteId = SelectedExportSite.Id,
+                            Numbers = new List<string>()
+                        };
 
-                    _phonesManager.PhoneCollections.Add(phoneCollection);
+                        _phonesManager.PhoneCollections.Add(phoneCollection);
+                    }
+
+                    phoneCollection.Numbers.Add(NewPhone);
+
+                    if (Save())
+                    {
+                        _events.Publish("Добавлено");
+                        NewPhone = null;
+                    }
                 }
-                phoneCollection.Numbers.Add(NewPhone);
-                if (Save())
-                {
-                    _events.Publish("Добавлено");
-                    NewPhone = null;
-                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString());
+                _events.Publish("Ошибка!");
             }
         }
 
@@ -166,6 +182,41 @@ namespace RealEstate.ViewModels
         public void Handle(ToolsOpenEvent message)
         {
             IsToolsOpen = message.IsOpen;
+        }
+
+        public void ExportFromFile()
+        {
+            try
+            {
+                Trace.WriteLine("Selected updating from file");
+                var dlg = new Microsoft.Win32.OpenFileDialog();
+                dlg.DefaultExt = ".txt";
+                dlg.Filter = "Text documents (.txt)|*.txt";
+                if (dlg.ShowDialog().Value)
+                {
+                    string filename = dlg.FileName;
+
+                    Trace.WriteLine("Selected file: " + filename);
+
+                    Trace.WriteLine("Loading phones from file...");
+                    _events.Publish("Загрузка телефонов из файла ...");
+
+                    _phonesManager.LoadFromFile(filename, SelectedExportSite);
+                    _events.Publish("Телефоны загружены");
+
+                    NotifyOfPropertyChange(() => Phones);
+
+                }
+                else
+                {
+                    Trace.WriteLine("File not selected");
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString(), "Error:");
+                _events.Publish("Ошибка импорта телефонов");
+            }
         }
     }
 }

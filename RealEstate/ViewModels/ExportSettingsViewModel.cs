@@ -131,7 +131,7 @@ namespace RealEstate.ViewModels
 
                 SelectedExportSite = null;
                 ExportSites.Clear();
-                ExportSites.AddRange(_exportSiteManager.ExportSites.Where(e => e.City == value.City));
+                ExportSites.AddRange(_exportSiteManager.ExportSites.Where(e => e.City == value.City || value.City == "Все"));
             }
         }
 

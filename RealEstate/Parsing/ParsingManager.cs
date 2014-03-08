@@ -27,15 +27,15 @@ namespace RealEstate.Parsing
                 {
                     foreach (var url in setting.Urls)
                     {
-                        if (headers.Count > param.MaxCount) break;
-
-                        ct.ThrowIfCancellationRequested();
-
                         if (pt.IsPauseRequested)
                             pt.WaitUntillPaused();
 
+                        ct.ThrowIfCancellationRequested();
+
                         var hds = parser.LoadHeaders(url, setting.GetDate(), param, maxAttemptCount, proxyManager, ct);
-                        headers.AddRange(hds);                        
+
+                        headers.AddRange(hds);
+
                     }
                 }
             }

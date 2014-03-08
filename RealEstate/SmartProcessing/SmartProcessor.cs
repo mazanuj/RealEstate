@@ -182,6 +182,30 @@ namespace RealEstate.SmartProcessing
                     }
                 }
             }
+
+            string pattern = @"\d+(\.\d+)?/\d+(\.\d+)?/\d+(\.\d+)?";
+            Regex regAreaFull = new Regex(pattern, RegexOptions.IgnoreCase);
+            var mat = regAreaFull.Match(advert.MessageFull);
+            if(mat.Success)
+            {
+                var areas = mat.Value.Split('/');
+                for (int i = 0; i < areas.Length; i++)
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            advert.AreaFull = float.Parse(areas[i]);
+                            break;
+                        case 1:
+                            advert.AreaLiving = float.Parse(areas[i]);
+                            break;
+                        case 2:
+                            advert.AreaKitchen = float.Parse(areas[i]);
+                            break;
+                    }
+                }
+            }
+
         }
 
         private void RemoveStreetLabel(Advert advert)
@@ -201,12 +225,22 @@ namespace RealEstate.SmartProcessing
 
         private void ClarifyAddress(Advert advert)
         {
-            if (!String.IsNullOrEmpty(advert.Address))
+            try
             {
-                YandexMapApi api = new YandexMapApi();
-                var newAddress = api.SearchObject(advert.City + ", " + advert.Address.Replace("ул.", ""));
-                if(newAddress != null)
-                    advert.Address = newAddress.ToLower().Trim() == advert.City.ToLower().Trim() ? null : newAddress;
+                if (!String.IsNullOrEmpty(advert.Address))
+                {
+                    YandexMapApi api = new YandexMapApi();
+                    var searchAdress = advert.Address.Replace("ул.", "");
+                    if (!searchAdress.Contains(advert.City))
+                        searchAdress = advert.City + ", " + searchAdress;
+                    var newAddress = api.SearchObject(searchAdress);
+                    if (newAddress != null)
+                        advert.Address = newAddress.ToLower().Trim() == advert.City.ToLower().Trim() ? null : newAddress;
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine("Unable to clarify address: " + ex.Message);
             }
         }
 

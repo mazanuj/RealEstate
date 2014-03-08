@@ -114,7 +114,7 @@
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>10C34E98B59C6E4EE9BEB960657EABE2</Hash>
+    <Hash>6315E24E8BF7D3AE19D1667A84DA859D</Hash>
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>
@@ -150,7 +150,7 @@
   </FileStatus>
   <FileStatus>
     <Path>City\cities.xml</Path>
-    <Hash>D0BDAAA0A345BDF592C0E587F5413FC6</Hash>
+    <Hash>B175F3D3A041ECE277FAFDD10020FC15</Hash>
   </FileStatus>
   <FileStatus>
     <Path>OKATO\create.sql</Path>

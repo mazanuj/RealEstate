@@ -36,7 +36,7 @@ namespace RealEstate.OCRs
 
                                     using (var page = engine.Process(bmp))
                                     {
-                                        return page.GetText().Trim();
+                                        return page.GetText().Trim().Replace(".", ", ");
                                     }
                                 }
                             }

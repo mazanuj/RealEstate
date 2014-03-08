@@ -158,7 +158,7 @@ namespace RealEstate.Parsing
             return images;
         }
 
-        public List<List<UploadingPhoto>> PrepareForUpload(ICollection<Image> imagesSource, ImportSite site, string id)
+        public List<List<UploadingPhoto>> PrepareForUpload(ICollection<Image> imagesSource, ImportSite site, string id, bool yaroslavl = false)
         {
             if (imagesSource == null) return null;
 
@@ -169,7 +169,8 @@ namespace RealEstate.Parsing
             {
                 Dictionary<string, string> versions = new Dictionary<string, string>();
                 versions.Add("_t", "height=100&format=jpg");
-                versions.Add("_m", "height=200&format=jpg");
+                if(!yaroslavl)
+                    versions.Add("_m", "height=200&format=jpg");
 
                 try
                 {

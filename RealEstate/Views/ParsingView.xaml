@@ -16,17 +16,22 @@
                 BorderThickness="1 0 1 2" FlowDirection="LeftToRight">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="170" />
+                    <ColumnDefinition Width="200" />
                     <ColumnDefinition Width="170" />
                     <ColumnDefinition Width="280" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource RibbonTitle}">Город</TextBlock>
-                        <ComboBox Margin="5 2" Name="Cities" DisplayMemberPath="City"/>
-                    </StackPanel>
+                    <ScrollViewer>
+                        <ItemsControl Name="Cities" Margin="5 2">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsActive}" Content="{Binding City}" cal:Message.Attach="CityChecked($dataContext)"  />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
                     <StackPanel>
@@ -127,6 +132,11 @@
                     <Border Grid.Row="2" Style="{StaticResource RibbonToolBorder}" BorderThickness="0 0 0 1" Visibility="{Binding AutoExport, Converter={StaticResource bool2VisibilityConverter}}">
                         <StackPanel Margin="10 0">
                             <CheckBox Name="OnlyImage" Content="Только с картинками"  />
+                            <StackPanel Margin="2 2" Orientation="Horizontal">
+                                <RadioButton GroupName="unique"  Margin="5 2" Content="Все"  IsChecked="{Binding Path=Unique, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}" />
+                                <RadioButton GroupName="unique"  Margin="5 2"  Content="Новые" IsChecked="{Binding Path=Unique, Converter={StaticResource enumBooleanConverter}, ConverterParameter=New}" />
+                                <RadioButton GroupName="unique"  Margin="5 2" Content="Уникальные" IsChecked="{Binding Path=Unique, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Unique}" />
+                            </StackPanel>
                         </StackPanel>
                     </Border>
                     <StackPanel Orientation="Horizontal" Margin="5 0" Grid.Row="3" HorizontalAlignment="Left">

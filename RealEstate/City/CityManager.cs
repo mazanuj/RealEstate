@@ -54,8 +54,19 @@ namespace RealEstate.City
         }
     }
 
-    public class CityWrap
+    public class CityWrap : PropertyChangedBase
     {
+        private bool _IsActive = false;
+        public bool IsActive
+        {
+            get { return _IsActive; }
+            set
+            {
+                _IsActive = value;
+                NotifyOfPropertyChange(() => IsActive);
+            }
+        }
+
         public string City { get; set; }
         public string AvitoKey { get; set; }
         public string HandsKey { get; set; }

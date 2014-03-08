@@ -68,8 +68,6 @@ namespace RealEstate.ViewModels
 
             ImportSite = Parsing.ImportSite.All; //if change, do on view too
             Usedtype = Parsing.Usedtype.All;
-            SelectedCity = _cityManager.Cities.FirstOrDefault();
-
         }
 
         public void Handle(CriticalErrorEvent message)
@@ -91,6 +89,18 @@ namespace RealEstate.ViewModels
             }
         }
 
+        public void CityChecked(CityWrap city)
+        {
+            if(city.City == "Все")
+            {
+                bool isActive = Cities.First(c => c.City == "Все").IsActive;
+                foreach (var cit in Cities)
+                {
+                    cit.IsActive = isActive;
+                }
+            }
+        }
+
         private bool _AutoExport = false;
         public bool AutoExport
         {
@@ -99,17 +109,6 @@ namespace RealEstate.ViewModels
             {
                 _AutoExport = value;
                 NotifyOfPropertyChange(() => AutoExport);
-            }
-        }
-
-        private CityWrap _SelectedCity = null;
-        public CityWrap SelectedCity
-        {
-            get { return _SelectedCity; }
-            set
-            {
-                _SelectedCity = value;
-                NotifyOfPropertyChange(() => SelectedCity);
             }
         }
 
@@ -206,6 +205,17 @@ namespace RealEstate.ViewModels
             }
         }
 
+        private UniqueEnum _Unique = UniqueEnum.All;
+        public UniqueEnum Unique
+        {
+            get { return _Unique; }
+            set
+            {
+                _Unique = value;
+                NotifyOfPropertyChange(() => Unique);
+            }
+        }
+
         public BindableCollection<ParsingTask> _tasks = new BindableCollection<ParsingTask>();
         public BindableCollection<ParsingTask> Tasks
         {
@@ -236,6 +246,7 @@ namespace RealEstate.ViewModels
             try
             {
                 _advertsManager.IncrementParsingNumber();
+
                 if (this.ImportSite == Parsing.ImportSite.All)
                 {
                     foreach (var site in Enum.GetValues(typeof(ImportSite)))
@@ -246,7 +257,7 @@ namespace RealEstate.ViewModels
                         {
                             TaskParsingParams param = new TaskParsingParams();
 
-                            param.city = SelectedCity.City;
+                            param.cities = Cities.Where(c => c.IsActive).Select(c => c.City);
                             param.period = this.ParsePeriod;
                             param.site = s;
                             param.realType = this.RealEstateType;
@@ -257,6 +268,7 @@ namespace RealEstate.ViewModels
                             param.Delay = ImportSites.First(i => i.Site == s).Delay;
                             param.MaxCount = ImportSites.First(i => i.Site == s).Deep;
                             param.onlyImage = OnlyImage;
+                            param.uniq = Unique;
 
                             ParsingTask realTask = new ParsingTask();
                             realTask.Description = _importManager.GetSiteName(s);
@@ -264,13 +276,14 @@ namespace RealEstate.ViewModels
                             Tasks.Add(realTask);
                             _taskManager.AddTask(realTask);
                         }
+
                     }
                 }
                 else
                 {
                     TaskParsingParams param = new TaskParsingParams();
 
-                    param.city = SelectedCity.City;
+                    param.cities = Cities.Where(c => c.IsActive).Select(s => s.City);
                     param.period = this.ParsePeriod;
                     param.site = this.ImportSite;
                     param.realType = this.RealEstateType;
@@ -281,6 +294,7 @@ namespace RealEstate.ViewModels
                     param.onlyImage = OnlyImage;
                     param.Delay = ImportSites.First(i => i.Site == this.ImportSite).Delay;
                     param.MaxCount = ImportSites.First(i => i.Site == this.ImportSite).Deep;
+                    param.uniq = Unique;
 
                     ParsingTask realTask = new ParsingTask();
                     realTask.Description = _importManager.GetSiteName(param.site);
@@ -305,8 +319,29 @@ namespace RealEstate.ViewModels
                 if (pt.IsPauseRequested)
                     pt.WaitUntillPaused();
 
-                var settings = _parserSettingManager.FindSettings(param.advertType, param.city,
+                var settings = _parserSettingManager.FindSettings(param.advertType, param.cities,
                     param.site, param.period, param.realType, param.subType);
+
+
+                bool any = false;
+                foreach (var setting in settings)
+                {
+                    if (setting.Urls != null)
+                        foreach (var url in setting.Urls.Select(u => u.Url))
+                        {
+                            any = true;
+                        }
+                }
+
+                if (!any)
+                {
+                    task.Stop();
+                    App.Current.Dispatcher.Invoke((System.Action)(() =>
+                   {
+                       Tasks.Remove(task);
+                   }));
+                    return;
+                }
 
                 App.Current.Dispatcher.Invoke((System.Action)(() =>
                     {
@@ -339,7 +374,7 @@ namespace RealEstate.ViewModels
 
                 for (int i = 0; i < headers.Count; i++)
                 {
-                    parsed = _advertsManager.IsParsed(headers[i].Url); 
+                    parsed = _advertsManager.IsParsed(headers[i].Url);
 
                     DateTime start = DateTime.Now;
 
@@ -420,7 +455,6 @@ namespace RealEstate.ViewModels
                             {
                                 Trace.WriteLine(ex.ToString(), "Error!");
                                 _events.Publish("Ошибка парсинга!");
-                                return;
                             }
                         }
                     }
@@ -439,70 +473,90 @@ namespace RealEstate.ViewModels
 
                     task.ParsedCount++;
 
-                    if (advert != null)
+                    try
                     {
-                        if (!parsed)
+                        if (advert != null)
                         {
-                            advert.ParsingNumber = _advertsManager.LastParsingNumber;
-                            if (advert.ImportSite == Parsing.ImportSite.Hands)
+                            if (!parsed)
                             {
-                                if (last != null && advert != null)
+                                advert.ParsingNumber = _advertsManager.LastParsingNumber;
+                                if (advert.ImportSite == Parsing.ImportSite.Hands)
                                 {
-                                    if (!String.IsNullOrEmpty(last.Address) && !String.IsNullOrEmpty(advert.Address))
+                                    if (last != null && advert != null)
                                     {
-                                        if (last.Street == advert.Street && last.Rooms == advert.Rooms && last.House == advert.House)
+                                        if (!String.IsNullOrEmpty(last.Address) && !String.IsNullOrEmpty(advert.Address))
                                         {
-                                            Trace.WriteLine("Skiped by last has the same address");
-                                            continue;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        if (_smartProcessor.Process(advert, param))
-                        {
-                            if (advert.ImportSite == Parsing.ImportSite.Hands)
-                            {
-                                if (last != null && advert != null)
-                                {
-                                    if (!String.IsNullOrEmpty(last.Address) && !String.IsNullOrEmpty(advert.Address))
-                                    {
-                                        if (last.Street == advert.Street && last.Rooms == advert.Rooms && last.House == advert.House)
-                                        {
-                                            Trace.WriteLine("Skiped by last has the same address");
-                                            continue;
+                                            if (last.Street == advert.Street && last.Rooms == advert.Rooms && last.House == advert.House)
+                                            {
+                                                Trace.WriteLine("Skiped by last has the same address");
+                                                continue;
+                                            }
                                         }
                                     }
                                 }
                             }
 
-                            if (SettingsStore.LogSuccessAdverts)
-                                Trace.WriteLine(advert.ToString(), "Advert");
-
-                            _advertsManager.Save(advert, headers[i].Setting);
-
-                            if (SettingsStore.SaveImages)
-                                _imagesManager.DownloadImages(advert.Images, ct, advert.ImportSite);
-
-                            if (param.autoExport && (SettingsStore.ExportParsed || (!SettingsStore.ExportParsed && !parsed)))
+                            if (_smartProcessor.Process(advert, param))
                             {
-                                var cov = _smartProcessor.ComputeCoverage(advert);
-                                if (cov > 0.6 && (!OnlyImage || (OnlyImage && advert.ContainsImages)))
-                                    _exportingManager.AddAdvertToExport(advert);
-                                else
-                                    Trace.WriteLine("Advert skipped as empty. Coverage = " + cov.ToString("P0"), "Skipped by smart processor");
+                                if (advert.ImportSite == Parsing.ImportSite.Hands)
+                                {
+                                    if (last != null && advert != null)
+                                    {
+                                        if (!String.IsNullOrEmpty(last.Address) && !String.IsNullOrEmpty(advert.Address))
+                                        {
+                                            if (last.Street == advert.Street && last.Rooms == advert.Rooms && last.House == advert.House)
+                                            {
+                                                Trace.WriteLine("Skiped by last has the same address");
+                                                continue;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (SettingsStore.LogSuccessAdverts)
+                                    Trace.WriteLine(advert.ToString(), "Advert");
+
+                                _advertsManager.Save(advert, headers[i].Setting);
+
+                                if (CheckUniq(advert, param.uniq))
+                                {
+
+                                    if (SettingsStore.SaveImages)
+                                        _imagesManager.DownloadImages(advert.Images, ct, advert.ImportSite);
+
+                                    if (param.autoExport && (SettingsStore.ExportParsed || (!SettingsStore.ExportParsed && !parsed)))
+                                    {
+                                        var cov = _smartProcessor.ComputeCoverage(advert);
+                                        if (cov > 0.6)
+                                            if ((!param.onlyImage || (param.onlyImage && advert.ContainsImages)))
+                                                _exportingManager.AddAdvertToExport(advert);
+                                            else
+                                                Trace.WriteLine("Advert skipped due the lack of pictures");
+                                        else
+                                            Trace.WriteLine("Advert skipped as empty. Coverage = " + cov.ToString("P0"), "Skipped by smart processor");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                //Trace.TraceInformation("Advert was skipped due smart processor rule");
                             }
                         }
                         else
                         {
-                            //Trace.TraceInformation("Advert was skipped due smart processor rule");
+                            Trace.WriteLine("Advert was skipped", "Warning");
                         }
                     }
-                    else
+                    catch (OperationCanceledException)
                     {
-                        Trace.WriteLine("Advert was skipped", "Warning");
+                        Trace.WriteLine("Operation '" + task.Description + "' has been canceled");
+                        break;
                     }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine("Ошибка:" + ex.Message);
+                    }
+
 
                     if (task.TotalCount > 0)
                     {
@@ -541,6 +595,21 @@ namespace RealEstate.ViewModels
             }
         }
 
+        private bool CheckUniq(Advert advert, UniqueEnum uniqueEnum)
+        {
+            switch (uniqueEnum)
+            {
+                case UniqueEnum.All:
+                    return true;
+                case UniqueEnum.New:
+                    return _advertsManager.IsAdvertNew(advert);
+                case UniqueEnum.Unique:
+                    return _advertsManager.IsAdvertUnique(advert);
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
         public void StartTask(ParsingTask task)
         {
             task.Start();
@@ -570,7 +639,7 @@ namespace RealEstate.ViewModels
 
     public class TaskParsingParams
     {
-        public string city;
+        public IEnumerable<string> cities;
         public int MaxCount;
         public int Delay;
         public ParsePeriod period;
@@ -581,6 +650,7 @@ namespace RealEstate.ViewModels
         public bool useProxy;
         public bool autoExport;
         public bool onlyImage;
+        public UniqueEnum uniq;
     }
 
     public class ParsingTask : RealEstateTask

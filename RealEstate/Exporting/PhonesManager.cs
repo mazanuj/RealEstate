@@ -63,6 +63,30 @@ namespace RealEstate.Exporting
             int i = new Random(DateTime.Now.Millisecond).Next(1, max);
             return col.Numbers[i - 1];
         }
+
+        public void LoadFromFile(string fileName, ExportSite SelectedExportSite)
+        {
+            var file = File.ReadAllText(fileName);
+
+            var phoneCollection = PhoneCollections.FirstOrDefault(e => e.SiteId == SelectedExportSite.Id);
+            if (phoneCollection == null)
+            {
+                phoneCollection = new PhoneCollection()
+                {
+                    SiteId = SelectedExportSite.Id,
+                    Numbers = new List<string>()
+                };
+            }
+
+            phoneCollection.Numbers.Clear();
+
+            foreach (var phone in file.Split('\r'))
+            {
+                phoneCollection.Numbers.Add(phone.Trim().Replace("\n", "").Trim());
+            }
+
+            Save();
+        }
     }
 
     public class PhoneCollection

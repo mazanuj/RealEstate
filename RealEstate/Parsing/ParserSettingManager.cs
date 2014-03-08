@@ -47,18 +47,18 @@ namespace RealEstate.Parsing
 
         }
 
-        public List<ParserSetting> FindSettings(AdvertType advertType, string city, ImportSite site, ParsePeriod period, RealEstateType type, Usedtype subtype)
+        public List<ParserSetting> FindSettings(AdvertType advertType, IEnumerable<string> cities, ImportSite site, ParsePeriod period, RealEstateType type, Usedtype subtype)
         {
             lock (_lock)
             {
                 var set = from s in context.ParserSettings.Include("Urls")
                           where
-                            s.AdvertTypeValue == (int)advertType &&
-                            s.ImportSiteValue == (int)site &&
+                            (s.AdvertTypeValue == (int)advertType || advertType == AdvertType.All) &&
+                            (s.ImportSiteValue == (int)site || site == ImportSite.All) &&
                             s.ParsePeriodValue == (int)period &&
                             s.RealEstateTypeValue == (int)type &&
-                            s.UsedtypeValue == (int)subtype &&
-                            (s.ExportSite.City == city || String.IsNullOrEmpty(city))
+                            (s.UsedtypeValue == (int)subtype || subtype == Usedtype.All) &&
+                            (cities.Contains(s.ExportSite.City) || cities.Contains("Все"))
                           select s;
 
                 return set.ToList(); 

@@ -144,9 +144,9 @@ namespace RealEstate.Parsing
             else if (Rooms.Contains('4'))
                 return "4";
             else if (Rooms.Contains('5'))
-                return "5";
+                return "5+";
             else if (Rooms.Contains("туд"))
-                return "6";
+                return "";
             else
                 return "";
         }

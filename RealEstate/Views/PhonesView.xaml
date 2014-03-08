@@ -16,12 +16,18 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="230" />
+                    <ColumnDefinition Width="230" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
                     <StackPanel>
                         <TextBlock Style="{StaticResource RibbonTitle}">Сайт:</TextBlock>
                         <ComboBox Margin="5 2" Name="ExportSites" DisplayMemberPath="DisplayName"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel>
+                        <Button Name="ExportFromFile" Margin="10" Content="Загрузить из файла" />
                     </StackPanel>
                 </Border>
             </Grid>

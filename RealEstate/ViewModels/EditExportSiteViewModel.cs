@@ -73,7 +73,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private string _ConectionString = "";
+        private string _ConectionString = "88.212.209.125";
         [Required]
         public string Ip
         {

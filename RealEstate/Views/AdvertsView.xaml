@@ -62,6 +62,7 @@
                 <Border Grid.Column="2" Style="{StaticResource RibbonToolBorder}">
                     <StackPanel Margin="0 0 20 0">
                         <TextBlock Style="{StaticResource RibbonTitle}">Выбрать сайт:</TextBlock>
+                        <RadioButton GroupName="site" Content="Любой" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>
                         <RadioButton GroupName="site" Content="avito.ru" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Avito}"/>
                         <RadioButton GroupName="site" Content="irr.ru" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Hands}"/>
                     </StackPanel>

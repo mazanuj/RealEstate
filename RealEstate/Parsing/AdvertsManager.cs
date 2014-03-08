@@ -117,37 +117,50 @@ namespace RealEstate.Parsing
                 case UniqueEnum.All:
                     return adverts;
                 case UniqueEnum.New:
-                    return adverts.Where(a => IsAdvertNew(a, adverts)).AsParallel();
+                    return FilterNew(adverts);
                 case UniqueEnum.Unique:
-                    return adverts.Where(a => IsAdvertUnique(a, adverts)).AsParallel();
+                    return FilterUnique(adverts);
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        private bool IsAdvertNew(Advert advert, IEnumerable<Advert> adverts)
+        private IEnumerable<Advert> FilterNew(IEnumerable<Advert> adverts)
         {
-            var items = (from a in adverts
-                        where a.Id != advert.Id
-                        && ((a.PhoneNumber == advert.PhoneNumber && a.Address != advert.Address)
-                        || (a.PhoneNumber == advert.PhoneNumber && a.Address == advert.Address && a.Rooms != a.Rooms)
-                        || a.MessageFull == advert.MessageFull)
-                        select a).ToList();
+            var result = new List<Advert>();
 
-            return !items.Any(a => a.DateSite > advert.DateSite); //todo search from exported 
+            foreach (var item in adverts)
+            {
+                if (!adverts.Any(a => a.PhoneNumber == item.PhoneNumber && a.MessageFull == item.MessageFull && a.Id != item.Id))
+                    result.Add(item);
+            }
 
+            return result;
         }
 
-        private bool IsAdvertUnique(Advert advert, IEnumerable<Advert> adverts)
+        private IEnumerable<Advert> FilterUnique(IEnumerable<Advert> adverts)
         {
-            var items = from a in adverts
-                        where a.Id != advert.Id
-                        && ((a.PhoneNumber == advert.PhoneNumber && a.Address != advert.Address)
-                        || (a.PhoneNumber == advert.PhoneNumber && a.Address == advert.Address && a.Rooms != a.Rooms)
-                        || a.MessageFull == advert.MessageFull)
-                        select a;
+            var result = new List<Advert>();
 
-            return items.Count() == 0;
+
+            foreach (var item in adverts)
+            {
+                if (!adverts.Any(a => a.PhoneNumber == item.PhoneNumber && a.Id != item.Id))
+                    result.Add(item);
+            }
+
+            return result;
+        }
+
+
+        public bool IsAdvertNew(Advert item)
+        {
+            return !_context.Adverts.Any(a => a.PhoneNumber == item.PhoneNumber && a.MessageFull == item.MessageFull && a.Id != item.Id);
+        }
+
+        public bool IsAdvertUnique(Advert item)
+        {
+            return !_context.Adverts.Any(a => a.PhoneNumber == item.PhoneNumber && a.Id != item.Id);
         }
 
         private int _lastParsingNumber = -1;

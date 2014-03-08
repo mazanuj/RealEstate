@@ -196,7 +196,7 @@ namespace RealEstate.ViewModels
         {
             get
             {
-                return _exportSiteManager.ExportSites.Where(e => String.IsNullOrEmpty(SelectedCity.City) ? true : e.City == SelectedCity.City);
+                return _exportSiteManager.ExportSites.Where(e => SelectedCity.City == "Все" ? true : e.City == SelectedCity.City);
             }
         }
 
