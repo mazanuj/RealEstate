@@ -76,7 +76,7 @@ namespace RealEstate.ViewModels
             Items.Add(statViewModel);
             Items.Add(rulesView);
 
-            if (ModeManager.Mode == ReleaseMode.Debug)
+            //if (ModeManager.Mode == ReleaseMode.Debug)
                 Items.Add(testParsingViewModel);
 
             ActivateItem(parsingViewModel);

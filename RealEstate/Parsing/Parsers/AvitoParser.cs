@@ -371,7 +371,11 @@ namespace RealEstate.Parsing.Parsers
                                 addr.Remove();
                             }
 
-                            advert.MetroStation = addressBlock.InnerText.Trim().TrimEnd(new[] { ',' }).Trim();
+                             var value = addressBlock.InnerText.Trim().TrimEnd(new[] { ',' }).Trim();
+                             if (value.Contains("р-н"))
+                                 advert.Distinct = value.Replace("р-н", "").Trim();
+                             else
+                                 advert.MetroStation = value;
                         }                       
                     }
                 }
