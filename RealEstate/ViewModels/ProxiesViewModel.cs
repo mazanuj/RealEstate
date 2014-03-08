@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using KTF.Proxy;
 using System.Net;
+using System.Timers;
 
 namespace RealEstate.ViewModels
 {
@@ -25,6 +26,9 @@ namespace RealEstate.ViewModels
         private readonly TaskManager _taskManager;
         private readonly ProxyManager _proxyManager;
 
+        private System.Timers.Timer timer = new System.Timers.Timer();
+
+
         [ImportingConstructor]
         public ProxiesViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager)
         {
@@ -33,6 +37,19 @@ namespace RealEstate.ViewModels
             _proxyManager = proxyManager;
             events.Subscribe(this);
             DisplayName = "Прокси";
+
+            timer.Interval = 60 * 1000;
+            timer.AutoReset = true;
+            timer.Elapsed += timer_Elapsed;
+        }
+
+        void timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (_proxyManager.Proxies.Count < 7)
+            {
+                FromNetUpdate = true;
+                Update();
+            }
         }
 
         protected override void OnInitialize()

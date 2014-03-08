@@ -178,7 +178,7 @@ namespace RealEstate.ViewModels
                 var statItems = new List<StatisticItem>();
                 foreach (var city in _cityManager.Cities)
                 {
-                    if (city.City == "") continue;
+                    if (city.City == "Все") continue;
 
                     var c = "";
                     if (site == Parsing.ImportSite.Avito)
@@ -379,6 +379,12 @@ namespace RealEstate.ViewModels
             try
             {
                 var list = _statManager.Restore(UsedFileName);
+
+
+                UsedType.Items.Clear();
+                NewType.Items.Clear();
+                PassType.Items.Clear();
+
                 foreach (var item in list)
                     UsedType.Items.Add(item);
                 list = _statManager.Restore(NewFileName);

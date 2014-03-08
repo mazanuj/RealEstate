@@ -9,6 +9,7 @@ using System.ComponentModel.Composition;
 using System.Net;
 using Caliburn.Micro;
 using System.Diagnostics;
+using System.Timers;
 
 namespace RealEstate.Proxies
 {
