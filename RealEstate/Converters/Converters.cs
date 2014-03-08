@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -107,24 +108,32 @@ namespace RealEstate.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (values[0] is bool)
+            try
             {
-                var contains = (bool)values[0] ? "" : "-";
-                if ((ImportSite)values[1] == ImportSite.Avito)
+                if (values[0] is bool)
                 {
-                    return new BitmapImage(new Uri(@"pack://application:,,,/Images/avito" + contains + ".png"));
+                    var contains = (bool)values[0] ? "" : "-";
+                    if ((ImportSite)values[1] == ImportSite.Avito)
+                    {
+                        return new BitmapImage(new Uri(@"pack://application:,,,/Images/avito" + contains + ".png"));
+                    }
+                    else if ((ImportSite)values[1] == ImportSite.Hands)
+                    {
+                        return new BitmapImage(new Uri(@"pack://application:,,,/Images/hands" + contains + ".png"));
+                    }
                 }
-                else if ((ImportSite)values[1] == ImportSite.Hands)
+                else
                 {
-                    return new BitmapImage(new Uri(@"pack://application:,,,/Images/hands" + contains + ".png"));
+                    System.Diagnostics.Trace.WriteLine(values[0].ToString());
                 }
-            }
-            else
-            {
-                System.Diagnostics.Trace.WriteLine(values[0].ToString());
-            }
 
-            return null;
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString());
+                return null;
+            }
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)

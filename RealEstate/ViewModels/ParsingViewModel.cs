@@ -101,7 +101,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private bool _AutoExport = false;
+        private bool _AutoExport = true;
         public bool AutoExport
         {
             get { return _AutoExport; }
@@ -113,7 +113,7 @@ namespace RealEstate.ViewModels
         }
 
 
-        private ParsePeriod _ParsePeriod = ParsePeriod.Today;
+        private ParsePeriod _ParsePeriod = ParsePeriod.All;
         public ParsePeriod ParsePeriod
         {
             get { return _ParsePeriod; }
@@ -194,7 +194,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private bool _OnlyImage = false;
+        private bool _OnlyImage = true;
         public bool OnlyImage
         {
             get { return _OnlyImage; }

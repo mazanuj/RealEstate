@@ -229,7 +229,7 @@ namespace RealEstate.Parsing.Parsers
                             {
                                 case "янв.": month = 1; break;
                                 case "февр.": month = 2; break;
-                                case "марта": month = 3; break;
+                                case "мар.": month = 3; break;
                                 case "апр.": month = 4; break;
                                 case "мая": month = 5; break;
                                 case "июня": month = 6; break;
