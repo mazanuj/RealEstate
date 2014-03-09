@@ -10,7 +10,8 @@
     <Grid>
         <Canvas HorizontalAlignment="Stretch" Background="White">
             <ToggleButton Width="20" Height="10" Canvas.ZIndex="5" Name="ToogleTools" Style="{StaticResource ExpanderToggleStyle}" Canvas.Top="18" Canvas.Right="15" ToolTip="{Binding ToogleToolsTooltip}"/>
-            <Grid Canvas.ZIndex="3"  Canvas.Top="4" Canvas.Right="130" x:Name="ConsoleWindow" Visibility="{Binding IsConsoleOpen, Converter={StaticResource bool2VisibilityConverter}}"
+
+            <Grid Canvas.ZIndex="4"  Canvas.Top="4" Canvas.Right="130" x:Name="ConsoleWindow" Visibility="{Binding IsConsoleOpen, Converter={StaticResource bool2VisibilityConverter}}"
                   Style="{StaticResource AnimatedVisibleChanging}"
                   MouseDown="Grid_MouseDown" MouseMove="Grid_MouseMove" MouseUp="Grid_MouseUp" Cursor="SizeAll">
                 <Border  Background="#EFEFF2"
@@ -21,6 +22,13 @@
                 <Grid.RenderTransform>
                     <TranslateTransform x:Name="dragTransform"/>
                 </Grid.RenderTransform>
+            </Grid>
+            <Grid Canvas.ZIndex="3"  Canvas.Top="4" Canvas.Right="250" x:Name="BlackWordsWindow" Visibility="{Binding IsViewOpen, Converter={StaticResource bool2VisibilityConverter}}">
+                <Border  Background="#EFEFF2"
+                         BorderBrush="{StaticResource VS2012WindowBorderBrush}"
+                         BorderThickness="1">
+                    <views:BlackListView />
+                </Border>
             </Grid>
             <Grid Canvas.ZIndex="2" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Canvas}}, Path=ActualWidth}"
                   Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Canvas}}, Path=ActualHeight}">
@@ -34,10 +42,22 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="150" />
                     </Grid.ColumnDefinitions>
                     <ToggleButton
             Grid.Column="1"
+            x:Name="IsViewOpen"
+            Margin="0 0 20 0"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Right"                  
+            Padding="6"
+            Style="{StaticResource VS2012WindowStyleTitleBarToogleButton}"
+            shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                        <TextBlock  FontWeight="SemiBold">Badwords</TextBlock>
+                    </ToggleButton>
+                    <ToggleButton
+            Grid.Column="2"
             x:Name="IsConsoleOpen"
             Margin="0 0 20 0"
             VerticalAlignment="Top"
@@ -48,7 +68,7 @@
                         <TextBlock  FontWeight="SemiBold">Консоль</TextBlock>
                     </ToggleButton>
                     <Button
-            Grid.Column="2"
+            Grid.Column="3"
             x:Name="OpenSettings"
             VerticalAlignment="Top"
             HorizontalAlignment="Right"

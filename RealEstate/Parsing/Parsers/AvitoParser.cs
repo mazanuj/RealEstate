@@ -578,6 +578,19 @@ namespace RealEstate.Parsing.Parsers
                     }
                 }
             }
+            else
+            {
+                var onlyOne = full.DocumentNode.SelectSingleNode("//a[@class='j-zoom-gallery-link i-zoom']");
+                if(onlyOne != null)
+                {
+                    var href = onlyOne.Attributes["href"];
+                    if (href != null && href.Value != null)
+                    {
+                        var src = Normalize(href.Value).TrimStart('/');
+                        result.Add(new Image() { URl = "http://" + src });
+                    }
+                }
+            }
 
             return result;
         }

@@ -114,7 +114,7 @@
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>B74A9F69975C7CB3F93AFC2A4B5E29E0</Hash>
+    <Hash>FC3E4C8A790A6214825F6129A7110068</Hash>
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>
@@ -142,7 +142,7 @@
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
-    <Hash>304F15DB8AB1471F844981CC589F53DA</Hash>
+    <Hash>62ABC69FD3FAD42D4DADCA97C5D57105</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>
@@ -153,16 +153,8 @@
     <Hash>B175F3D3A041ECE277FAFDD10020FC15</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>OKATO\create.sql</Path>
-    <Hash>CCB16340592EB4FF09F3B07001C361E6</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>OKATO\dump.sql</Path>
-    <Hash>6BC5B0D4EA09B200D442C250EDE1FE5C</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>SmartProcessing\ProcessingRules.xml</Path>
-    <Hash>E10FE358CDE87EA1232F0A3B301F62A1</Hash>
+    <Hash>C51015FD6B8EC89248AAFE3B83038FC1</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.bigrams</Path>

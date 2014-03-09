@@ -183,7 +183,7 @@ namespace RealEstate.ViewModels
         }
 
 
-        private bool _UseProxy = true;
+        private bool _UseProxy = false;
         public bool UseProxy
         {
             get { return _UseProxy; }
@@ -528,7 +528,7 @@ namespace RealEstate.ViewModels
                                     {
                                         var cov = _smartProcessor.ComputeCoverage(advert);
                                         if (cov > 0.6)
-                                            if ((!param.onlyImage || (param.onlyImage && advert.ContainsImages)))
+                                            if (!param.onlyImage || (param.onlyImage && advert.ContainsImages))
                                                 _exportingManager.AddAdvertToExport(advert);
                                             else
                                                 Trace.WriteLine("Advert skipped due the lack of pictures");

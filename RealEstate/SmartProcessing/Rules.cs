@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using RealEstate.Utils;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace RealEstate.SmartProcessing
 {
@@ -19,63 +21,76 @@ namespace RealEstate.SmartProcessing
 
         public ObservableCollection<Rule> Rules { get; set; }
 
+        public RulesManager()
+        {
+            Rules = new ObservableCollection<Rule>();
+        }
+
         public void Load()
         {
-            ConditionFactory factory = new ConditionFactory();
-
-            XDocument doc = XDocument.Load(FILENAME);
-            foreach (var rule in doc.Root.Elements("rule"))
+            if (File.Exists(FILENAME))
             {
-                try
+                XmlSerializer reader = new XmlSerializer(typeof(List<Rule>));
+                StreamReader file = new System.IO.StreamReader(FILENAME);
+                var list = (List<Rule>)reader.Deserialize(file);
+                foreach (var item in list)
                 {
-                    ImportSite site = (ImportSite)Enum.Parse(typeof(ImportSite), rule.Attribute("ImportSite").Value);
-
-                    var verb = Verb.None;
-                    string verbValue = null;
-                    string verbValue2 = null;
-
-                    if (rule.Element("verb") != null)
-                    {
-                        verb = (Verb)Enum.Parse(typeof(Verb), rule.Element("verb").Attribute("name").Value);
-                        verbValue = rule.Element("verb").Attribute("value").Value;
-                        if (rule.Element("verb").Attribute("value2") != null)
-                            verbValue2 = rule.Element("verb").Attribute("value2").Value;
-                    }
-                    else if (rule.Attribute("verb") != null)
-                    {
-                        verb = (Verb)Enum.Parse(typeof(Verb), rule.Attribute("verb").Value);
-                    }
-                    else
-                    {
-                        Trace.TraceError("Invalid rule. Missing verb: " + rule.ToString());
-                        continue;
-                    }
-
-                    var r = new Rule();
-                    r.Verb = verb;
-                    r.Site = site;
-                    r.VerbValue = verbValue;
-                    r.VerbValue2 = verbValue2;
-
-                    foreach (var condition in rule.Element("conditions").Elements())
-                    {
-                        Condition cond = factory.GetCondition(condition.Name.LocalName);
-                        cond.Parse(condition);
-                        r.Conditions.Add(cond);
-                    }
-
-                    Rules.Add(r);
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError("Invalid rule. {1}: {0}", rule.ToString(), ex.Message);
+                    Rules.Add(item);
                 }
             }
         }
 
-        public RulesManager()
+        public void Save()
         {
-            Rules = new ObservableCollection<Rule>();
+            if (!File.Exists(FILENAME))
+            {
+                var str = File.CreateText(FILENAME);
+                str.Close();
+            }
+
+            var writer = new XmlSerializer(typeof(List<Rule>));
+            StreamWriter file = new System.IO.StreamWriter(FILENAME);
+            writer.Serialize(file, Rules.ToList());
+            file.Close();
+        }
+
+        public void Remove(Rule rule)
+        {
+            Rules.Remove(rule);
+            Save();
+        }
+
+        public void AddBlackListedWord(string word)
+        {
+            var ruleFull = new Rule()
+            {
+                Site = ImportSite.All,
+                Verb = Verb.Cut,
+                Conditions = new List<Condition>()
+                {
+                    new Contains(){IgnoreCase = true, Property = "MessageFull", Value = word}
+                },
+                VerbValue = word,
+                VerbValue2 = "MessageFull"
+
+            };
+
+            var ruleName = new Rule()
+            {
+                Site = ImportSite.All,
+                Verb = Verb.Cut,
+                Conditions = new List<Condition>()
+                {
+                    new Contains(){IgnoreCase = true, Property = "Name", Value = word}
+                },
+                VerbValue = word,
+                VerbValue2 = "Name"
+            };
+
+            Rules.Add(ruleFull);
+            Rules.Add(ruleName);
+
+            Save();
         }
     }
 
@@ -134,10 +149,12 @@ namespace RealEstate.SmartProcessing
         }
     }
 
+    [XmlInclude(typeof(Equals))]
+    [XmlInclude(typeof(Contains))]
     public abstract class Condition
     {
-        protected string Property { get; set; }
-        protected string Value { get; set; }
+        public string Property { get; set; }
+        public string Value { get; set; }
         public abstract bool IsSatisfy(Advert advert);
         public virtual void Parse(XElement element)
         {

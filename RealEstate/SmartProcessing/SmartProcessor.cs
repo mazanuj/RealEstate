@@ -114,7 +114,7 @@ namespace RealEstate.SmartProcessing
                                 }
                                 break;
                             case Verb.Cut:
-                                proper = typeof(Advert).GetProperty(rule.VerbValue);
+                                proper = typeof(Advert).GetProperty(rule.VerbValue2);
                                 if (proper != null)
                                 {
                                     var value = (string)proper.GetValue(advert, null);
@@ -202,6 +202,22 @@ namespace RealEstate.SmartProcessing
                         case 2:
                             advert.AreaKitchen = float.Parse(areas[i]);
                             break;
+                    }
+                }
+            }
+
+            if(advert.AreaKitchen == 0)
+            {
+                var match = Regex.Match(advert.MessageFull, @"кухня\ (?<area>\d+(\.\d+)?)\ ?кв\.?\ ?м");
+                if(match.Success)
+                {
+                    var gr = match.Groups["area"];
+                    if(gr != null)
+                    {
+                        var value = gr.Value;
+                        float area;
+                        if (float.TryParse(value, out area))
+                            advert.AreaKitchen = area;
                     }
                 }
             }

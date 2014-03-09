@@ -21,10 +21,13 @@ namespace RealEstate.ViewModels
     public class RulesViewModel : ValidatingScreen<RulesViewModel>, IHandle<ToolsOpenEvent>
     {
         private readonly RulesManager _rulesManager;
+        private readonly IEventAggregator _events;
+
         [ImportingConstructor]
-        public RulesViewModel(RulesManager manager)
+        public RulesViewModel(RulesManager manager, IEventAggregator events)
         {
             _rulesManager = manager;
+            _events = events;
             DisplayName = "Обработка объявлений";
         }
 
@@ -38,6 +41,18 @@ namespace RealEstate.ViewModels
             IsToolsOpen = message.IsOpen;
         }
 
-
+        public void Remove(Rule rule)
+        {
+            try
+            {
+                _rulesManager.Remove(rule);
+                _events.Publish("Удалено");
+            }
+            catch (Exception ex)
+            {
+                _events.Publish("Ошибка удаления");
+                Trace.WriteLine(ex.ToString());
+            }
+        }
     }
 }

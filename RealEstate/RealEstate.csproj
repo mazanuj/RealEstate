@@ -193,6 +193,7 @@
     <Compile Include="Validation\UrlAttribute.cs" />
     <Compile Include="Validation\ValidatingScreen.cs" />
     <Compile Include="Validation\ValidationGroupAttribute.cs" />
+    <Compile Include="ViewModels\BlackListViewModel.cs" />
     <Compile Include="ViewModels\EditExportSiteViewModel.cs" />
     <Compile Include="ViewModels\AdvertsViewModel.cs" />
     <Compile Include="ViewModels\AdvertViewModel.cs" />
@@ -210,6 +211,9 @@
     <Compile Include="ViewModels\StatisticsViewModel.cs" />
     <Compile Include="ViewModels\StatisticTabViewModel.cs" />
     <Compile Include="ViewModels\TestParsingViewModel.cs" />
+    <Compile Include="Views\BlackListView.xaml.cs">
+      <DependentUpon>BlackListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EditExportSiteView.xaml.cs">
       <DependentUpon>EditExportSiteView.xaml</DependentUpon>
     </Compile>
@@ -274,6 +278,10 @@
     <Page Include="Style\Theme.Colors.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\BlackListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\EditExportSiteView.xaml">
       <SubType>Designer</SubType>

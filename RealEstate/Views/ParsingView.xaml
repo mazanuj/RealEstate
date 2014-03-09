@@ -67,7 +67,7 @@
                                             <ColumnDefinition SharedSizeGroup="_delay" />
                                             <ColumnDefinition SharedSizeGroup="_deep" />
                                         </Grid.ColumnDefinitions>
-                                        <RadioButton Grid.Column="0" GroupName="site" Content="{Binding DisplayName}" Margin="2" cal:Message.Attach="SwitchImportSite($dataContext)" IsChecked="{Binding Path=Site, Mode=OneTime, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}" />
+                                        <RadioButton Grid.Column="0" GroupName="site" Content="{Binding DisplayName}" Margin="2" cal:Message.Attach="SwitchImportSite($dataContext)" IsChecked="{Binding Path=Site, Mode=OneTime, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Avito}" />
                                         <TextBox Name="Delay" Grid.Column="1" Text="{Binding Delay, Mode=TwoWay, Converter={StaticResource intConverter}}" Margin="10 2" />
                                         <TextBox Name="Deep" Grid.Column="2" Text="{Binding Deep, Mode=TwoWay, Converter={StaticResource intConverter}}" Margin="10 2" />
                                     </Grid>

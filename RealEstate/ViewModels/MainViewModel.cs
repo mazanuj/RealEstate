@@ -33,6 +33,7 @@ namespace RealEstate.ViewModels
         private readonly ImportManager _importManager;
         private readonly System.Timers.Timer _statusTimer;
         public ConsoleViewModel ConsoleViewModel;
+        public BlackListViewModel BlackListViewModel;
         public SettingsViewModel SettingsViewModel;
         public ParsingViewModel ParsingViewModel;
         public ParserSettingViewModel ParserSettingViewModel;
@@ -48,7 +49,7 @@ namespace RealEstate.ViewModels
             AdvertsViewModel advertsViewModel, ExportSettingsViewModel exportSettingsViewModel,
             ExportingManager exportingManager, TestParsingViewModel testParsingViewModel,
             StatisticsViewModel statViewModel, RulesViewModel rulesView, ExportQueueViewModel exportQueueView,
-            PhonesViewModel phonesViewModel, PhonesManager phoneManager)
+            PhonesViewModel phonesViewModel, PhonesManager phoneManager, BlackListViewModel blackListViewModel)
         {
             _windowManager = windowManager;
             _logManager = logManager;
@@ -61,6 +62,7 @@ namespace RealEstate.ViewModels
             ParserSettingViewModel = parserSettingViewModel;
             ConsoleViewModel = consoleViewModel;
             AdvertsViewModel = advertsViewModel;
+            BlackListViewModel = blackListViewModel;
 
             _statusTimer = new System.Timers.Timer();
             _statusTimer.Interval = 5000;
@@ -303,6 +305,18 @@ namespace RealEstate.ViewModels
                 isConsoleOpen = value;
                 ConsoleViewModel.IsOpen = value;
                 NotifyOfPropertyChange(() => IsConsoleOpen);
+            }
+        }
+
+        private bool isViewOpen = false;
+        public Boolean IsViewOpen
+        {
+            get { return isViewOpen; }
+            set
+            {
+                isViewOpen = value;
+                BlackListViewModel.IsViewOpen = value;
+                NotifyOfPropertyChange(() => IsViewOpen);
             }
         }
 

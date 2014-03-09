@@ -1,105 +1,219 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<rules>
-  <rule verb="Skip" ImportSite="All">
-    <conditions>
-      <equals property="AdvertType" value="Sell" />
-      <contains property="MessageFull" value="куплю" />
-    </conditions>
-  </rule>
-  <rule verb="Skip" ImportSite="Hands">
-    <conditions>
-      <equals property="City" value="Ярославль" />
-      <contains property="MessageFull" value="Ростов-Ярославский" />
-    </conditions>
-  </rule>
-  <rule verb="Skip" ImportSite="Hands">
-    <conditions>
-      <equals property="City" value="Ярославль" />
-      <contains property="MessageFull" value="Кировск" />
-    </conditions>
-  </rule>
-  <rule ImportSite="All">
-    <conditions>
-      <contains property="Name" value="АН" ignorecase="false" />
-    </conditions>
-    <verb name="RemoveAll" value="Name" />
-  </rule>
-  <rule ImportSite="All">
-    <conditions>
-      <contains property="Name" value="Агент" />
-    </conditions>
-    <verb name="RemoveAll" value="Name" />
-  </rule>
-  <rule ImportSite="All">
-    <conditions>
-      <contains property="Name" value="Риэл" />
-    </conditions>
-    <verb name="RemoveAll" value="Name" />
-  </rule>
-  <rule ImportSite="All">
-    <conditions>
-      <contains property="Name" value="недвиж" />
-    </conditions>
-    <verb name="RemoveAll" value="Name" />
-  </rule>
-  <rule ImportSite="All">
-    <conditions>
-      <contains property="Name" value="Жилищ" />
-    </conditions>
-    <verb name="RemoveAll" value="Name" />
-  </rule>
-  <rule ImportSite="All">
-    <conditions>
-      <contains property="Name" value="Компан" />
-    </conditions>
-    <verb name="RemoveAll" value="Name" />
-  </rule>
-  <rule ImportSite="All">
-    <conditions>
-      <contains property="Name" value="Частное объявление" />
-    </conditions>
-    <verb name="RemoveAll" value="Name" />
-  </rule>
-  <rule ImportSite="All">
-    <conditions>
-      <contains property="Name" value="ООО" />
-    </conditions>
-    <verb name="RemoveAll" value="Name" />
-  </rule>
-  <rule ImportSite="All">
-    <conditions>
-      <contains property="Name" value="ОАО" />
-    </conditions>
-    <verb name="RemoveAll" value="Name" />
-  </rule>
-  <rule ImportSite="All">
-    <conditions>
-      <contains property="Name" value="РОССИ" />
-    </conditions>
-    <verb name="RemoveAll" value="Name" />
-  </rule>
-  <rule ImportSite="All">
-    <conditions>
-      <contains property="Name" value="21" />
-    </conditions>
-    <verb name="RemoveAll" value="Name" />
-  </rule>
-  <rule ImportSite="All">
-    <conditions>
-      <contains property="MessageFull" value="Лот:" />
-    </conditions>
-    <verb name="RemoveAfter" value="MessageFull" value2="Лот:" />
-  </rule>
-  <rule ImportSite="All">
-    <conditions>
-      <contains property="MessageFull" value="№ в базе" />
-    </conditions>
-    <verb name="RemoveAfter" value="MessageFull" value2="№ в базе" />
-  </rule>
-  <rule ImportSite="All">
-    <conditions>
-      <contains property="MessageFull" value="Ссылка:" />
-    </conditions>
-    <verb name="RemoveAfter" value="MessageFull" value2="Ссылка:" />
-  </rule>
-</rules>
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfRule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Rule>
+    <Verb>Skip</Verb>
+    <Conditions>
+      <Condition xsi:type="Equals">
+        <Property>AdvertType</Property>
+        <Value>Sell</Value>
+      </Condition>
+      <Condition xsi:type="Contains">
+        <Property>MessageFull</Property>
+        <Value>куплю</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+  <Rule>
+    <Verb>Skip</Verb>
+    <Conditions>
+      <Condition xsi:type="Equals">
+        <Property>City</Property>
+        <Value>Ярославль</Value>
+      </Condition>
+      <Condition xsi:type="Contains">
+        <Property>MessageFull</Property>
+        <Value>Ростов-Ярославский</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>Hands</Site>
+  </Rule>
+  <Rule>
+    <Verb>Skip</Verb>
+    <Conditions>
+      <Condition xsi:type="Equals">
+        <Property>City</Property>
+        <Value>Ярославль</Value>
+      </Condition>
+      <Condition xsi:type="Contains">
+        <Property>MessageFull</Property>
+        <Value>Кировск</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>Hands</Site>
+  </Rule>
+  <Rule>
+    <Verb>RemoveAll</Verb>
+    <VerbValue>Name</VerbValue>
+    <Conditions>
+      <Condition xsi:type="Contains">
+        <Property>Name</Property>
+        <Value>АН</Value>
+        <IgnoreCase>false</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+  <Rule>
+    <Verb>RemoveAll</Verb>
+    <VerbValue>Name</VerbValue>
+    <Conditions>
+      <Condition xsi:type="Contains">
+        <Property>Name</Property>
+        <Value>Агент</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+  <Rule>
+    <Verb>RemoveAll</Verb>
+    <VerbValue>Name</VerbValue>
+    <Conditions>
+      <Condition xsi:type="Contains">
+        <Property>Name</Property>
+        <Value>Риэл</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+  <Rule>
+    <Verb>RemoveAll</Verb>
+    <VerbValue>Name</VerbValue>
+    <Conditions>
+      <Condition xsi:type="Contains">
+        <Property>Name</Property>
+        <Value>недвиж</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+  <Rule>
+    <Verb>RemoveAll</Verb>
+    <VerbValue>Name</VerbValue>
+    <Conditions>
+      <Condition xsi:type="Contains">
+        <Property>Name</Property>
+        <Value>Жилищ</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+  <Rule>
+    <Verb>RemoveAll</Verb>
+    <VerbValue>Name</VerbValue>
+    <Conditions>
+      <Condition xsi:type="Contains">
+        <Property>Name</Property>
+        <Value>Компан</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+  <Rule>
+    <Verb>RemoveAll</Verb>
+    <VerbValue>Name</VerbValue>
+    <Conditions>
+      <Condition xsi:type="Contains">
+        <Property>Name</Property>
+        <Value>Частное объявление</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+  <Rule>
+    <Verb>RemoveAll</Verb>
+    <VerbValue>Name</VerbValue>
+    <Conditions>
+      <Condition xsi:type="Contains">
+        <Property>Name</Property>
+        <Value>ООО</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+  <Rule>
+    <Verb>RemoveAll</Verb>
+    <VerbValue>Name</VerbValue>
+    <Conditions>
+      <Condition xsi:type="Contains">
+        <Property>Name</Property>
+        <Value>ОАО</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+  <Rule>
+    <Verb>RemoveAll</Verb>
+    <VerbValue>Name</VerbValue>
+    <Conditions>
+      <Condition xsi:type="Contains">
+        <Property>Name</Property>
+        <Value>РОССИ</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+  <Rule>
+    <Verb>RemoveAll</Verb>
+    <VerbValue>Name</VerbValue>
+    <Conditions>
+      <Condition xsi:type="Contains">
+        <Property>Name</Property>
+        <Value>21</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+  <Rule>
+    <Verb>RemoveAfter</Verb>
+    <VerbValue>MessageFull</VerbValue>
+    <VerbValue2>Лот:</VerbValue2>
+    <Conditions>
+      <Condition xsi:type="Contains">
+        <Property>MessageFull</Property>
+        <Value>Лот:</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+  <Rule>
+    <Verb>RemoveAfter</Verb>
+    <VerbValue>MessageFull</VerbValue>
+    <VerbValue2>№ в базе</VerbValue2>
+    <Conditions>
+      <Condition xsi:type="Contains">
+        <Property>MessageFull</Property>
+        <Value>№ в базе</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+  <Rule>
+    <Verb>RemoveAfter</Verb>
+    <VerbValue>MessageFull</VerbValue>
+    <VerbValue2>Ссылка:</VerbValue2>
+    <Conditions>
+      <Condition xsi:type="Contains">
+        <Property>MessageFull</Property>
+        <Value>Ссылка:</Value>
+        <IgnoreCase>true</IgnoreCase>
+      </Condition>
+    </Conditions>
+    <Site>All</Site>
+  </Rule>
+</ArrayOfRule>
