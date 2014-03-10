@@ -467,7 +467,21 @@ namespace RealEstate.ViewModels
                             Trace.WriteLine("Task was stopped. Current url already parsed");
                             break;
                         }
-                        advert = _advertsManager.GetParsed(headers[i].Url);
+
+                        int failed = 0;
+                        while (advert != null && failed < 5)
+                        {
+                            try
+                            {
+                                failed++;
+                                advert = _advertsManager.GetParsed(headers[i].Url);
+                            }
+                            catch (Exception)
+                            {
+                                Thread.Sleep(200);
+                            } 
+                        }
+                        
                         prsCount++;
                     }
 
@@ -531,7 +545,9 @@ namespace RealEstate.ViewModels
                                             if (!param.onlyImage || (param.onlyImage && advert.ContainsImages))
                                                 _exportingManager.AddAdvertToExport(advert);
                                             else
-                                                Trace.WriteLine("Advert skipped due the lack of pictures");
+                                            {
+                                                Trace.WriteLine("Advert ("+ advert.Id +") skipped due the lack of pictures");
+                                            }
                                         else
                                             Trace.WriteLine("Advert skipped as empty. Coverage = " + cov.ToString("P0"), "Skipped by smart processor");
                                     }
