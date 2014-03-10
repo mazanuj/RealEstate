@@ -48,7 +48,7 @@
                       IsReadOnly="True" behaviour:DataGridBehavior.DisplayRowNumber="True"
                       Name="AdvertsTable">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn>
+                    <!--<DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image>
@@ -61,7 +61,7 @@
                                 </Image>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    </DataGridTemplateColumn>-->
                     <DataGridTextColumn Header="Дата" Binding="{Binding Advert.DateUpdate}" />
                     <DataGridTextColumn Header="Город" Binding="{Binding Advert.City}" />
                     <DataGridTextColumn Header="Адрес" Binding="{Binding Advert.Address}" />

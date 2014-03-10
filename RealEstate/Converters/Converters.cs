@@ -110,7 +110,7 @@ namespace RealEstate.Converters
         {
             try
             {
-                if (values[0] is bool)
+                if (DependencyProperty.UnsetValue != values[0])
                 {
                     var contains = (bool)values[0] ? "" : "-";
                     if ((ImportSite)values[1] == ImportSite.Avito)
@@ -124,7 +124,7 @@ namespace RealEstate.Converters
                 }
                 else
                 {
-                    System.Diagnostics.Trace.WriteLine(values[0].ToString());
+                    System.Diagnostics.Trace.WriteLine(values[0].ToString() + " " + values[1].ToString());
                 }
 
                 return null;
