@@ -176,9 +176,18 @@ namespace RealEstate.Exporting
 
         public void Export(ExportItem item)
         {
-            if (item == null || item.Advert == null) return;
+            if (item == null || item.Advert == null)
+            {
+                Trace.WriteLine("Exporting: item == null || item.Advert == null");
+                return;
+            }
+
             bool isExported = false;
+
             if (item.Advert.ExportSites != null && !item.IsExported)
+            {
+                Trace.WriteLine("Exporting: item.Advert.ExportSites.Count = " + item.Advert.ExportSites.Count);
+
                 foreach (var site in item.Advert.ExportSites)
                 {
                     var settings = _context.ExportSettings.SingleOrDefault(e => e.ExportSite.Id == site.Id);
@@ -187,11 +196,16 @@ namespace RealEstate.Exporting
                         if (settings.UsedtypeValue != item.Advert.UsedtypeValue ||
                             settings.RealEstateTypeValue != item.Advert.RealEstateTypeValue ||
                             settings.AdvertTypeValue != item.Advert.AdvertTypeValue)
+                        {
+                            Trace.WriteLine("Exporting: continue");
                             continue;
+                        }
                     }
 
                     if (!_context.ExportItems.Any(e => e.Advert.Id == item.Advert.Id && e.IsExported && e.Id != item.Id) || Settings.SettingsStore.ExportParsed)
                     {
+                        Trace.WriteLine("Exporting: start export item " + item.Advert.Id);
+
                         if (site.Database == "kupi")
                             ExportToYaroslavl(item.Advert, site, settings);
                         else
@@ -211,15 +225,22 @@ namespace RealEstate.Exporting
                         }
                     }
                 }
+            }
+            else
+            {
+                Trace.WriteLine("Exporting: item.Advert.ExportSites != null && !item.IsExported");
+            }
 
             if (isExported)
             {
+                Trace.WriteLine("Exporting: isExported");
                 item.DateOfExport = DateTime.Now;
                 item.IsExported = true;
                 _context.SaveChanges();
             }
             else
             {
+                Trace.WriteLine("Exporting: !isExported");
                 _context.ExportItems.Remove(item);
                 _context.SaveChanges();
             }
@@ -363,6 +384,8 @@ VALUES (
                     }
                 }
             }
+            else
+                Trace.WriteLine("Exporting: site != null && !String.IsNullOrEmpty(site.Address)");
 
         }
 
