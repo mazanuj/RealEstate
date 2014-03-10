@@ -186,26 +186,24 @@ namespace RealEstate.Exporting
 
             if (item.Advert.ExportSites != null && !item.IsExported)
             {
-                Trace.WriteLine("Exporting: item.Advert.ExportSites.Count = " + item.Advert.ExportSites.Count);
+                //Trace.WriteLine("Exporting: item.Advert.ExportSites.Count = " + item.Advert.ExportSites.Count);
 
                 foreach (var site in item.Advert.ExportSites)
                 {
                     var settings = _context.ExportSettings.SingleOrDefault(e => e.ExportSite.Id == site.Id);
                     if (settings != null)
                     {
-                        if (settings.UsedtypeValue != item.Advert.UsedtypeValue ||
-                            settings.RealEstateTypeValue != item.Advert.RealEstateTypeValue ||
-                            settings.AdvertTypeValue != item.Advert.AdvertTypeValue)
+                        if ((settings.UsedtypeValue != item.Advert.UsedtypeValue && settings.Usedtype != Usedtype.All) ||
+                            (settings.RealEstateTypeValue != item.Advert.RealEstateTypeValue && settings.RealEstateType != RealEstateType.All) ||
+                            (settings.AdvertTypeValue != item.Advert.AdvertTypeValue && settings.AdvertType != AdvertType.All))
                         {
-                            Trace.WriteLine("Exporting: continue");
+                            Trace.WriteLine("Exporting: skipped by settings");
                             continue;
                         }
                     }
 
                     if (!_context.ExportItems.Any(e => e.Advert.Id == item.Advert.Id && e.IsExported && e.Id != item.Id) || Settings.SettingsStore.ExportParsed)
                     {
-                        Trace.WriteLine("Exporting: start export item " + item.Advert.Id);
-
                         if (site.Database == "kupi")
                             ExportToYaroslavl(item.Advert, site, settings);
                         else
@@ -233,14 +231,14 @@ namespace RealEstate.Exporting
 
             if (isExported)
             {
-                Trace.WriteLine("Exporting: isExported");
+                //Trace.WriteLine("Exporting: isExported");
                 item.DateOfExport = DateTime.Now;
                 item.IsExported = true;
                 _context.SaveChanges();
             }
             else
             {
-                Trace.WriteLine("Exporting: !isExported");
+                //Trace.WriteLine("Exporting: !isExported");
                 _context.ExportItems.Remove(item);
                 _context.SaveChanges();
             }
