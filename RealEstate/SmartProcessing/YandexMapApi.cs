@@ -9,12 +9,20 @@ namespace RealEstate.SmartProcessing
 {
     public class YandexMapApi
     {
-        public string SearchObject(string Address)
+        public string SearchObject(string Address, out string city)
         {
             string urlXml = "http://geocode-maps.yandex.ru/1.x/?geocode=" + Address + "&results=1";
             WebClient client = new WebClient();
             client.Encoding = new System.Text.UTF8Encoding(false);
             var source = client.DownloadString(urlXml);
+
+
+            city = null;
+            Regex reg = new Regex(@"<LocalityName>(.+)</LocalityName>");
+            var cityMatch = reg.Match(source);
+            if (cityMatch.Success && cityMatch.Groups.Count > 1)
+                city = cityMatch.Groups[1].Value;
+
             Regex r = new Regex("<name xmlns=\"http://www.opengis.net/gml\">(.+)</name>");
             var m = r.Match(source);
             if(m.Success && m.Groups.Count > 1)

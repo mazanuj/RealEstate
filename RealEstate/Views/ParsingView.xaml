@@ -124,7 +124,12 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Border Grid.Row="0" Style="{StaticResource RibbonToolBorder}" BorderThickness="0 0 0 1">
-                        <CheckBox Name="UseProxy" Content="С прокси" Margin="2" />
+                        <StackPanel  Margin="2" Orientation="Horizontal">
+                            <CheckBox Name="UseProxy" Content="С прокси" Margin="2" />
+                            <CheckBox Name="AutoStart" Content="Автостарт" Margin="2 4" />
+                            <TextBox Name="AutoStartValue" Margin="2" Text="{Binding AutoStartValue, Mode=TwoWay, Converter={StaticResource intConverter}}" Visibility="{Binding AutoStart, Converter={StaticResource bool2VisibilityConverter}}" />
+                            <TextBlock Margin="4" Visibility="{Binding AutoStart, Converter={StaticResource bool2VisibilityConverter}}">ч.</TextBlock>
+                        </StackPanel>
                     </Border>
                     <Border Grid.Row="1" Style="{StaticResource RibbonToolBorder}" BorderThickness="0 0 0 1">
                         <CheckBox Name="AutoExport" Content="Авто экспорт" Margin="2" />

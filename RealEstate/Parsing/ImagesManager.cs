@@ -168,9 +168,10 @@ namespace RealEstate.Parsing
             foreach (var imageSource in imagesSource.Take(Settings.SettingsStore.MaxCountOfImages))
             {
                 Dictionary<string, string> versions = new Dictionary<string, string>();
-                versions.Add("_t", "height=100&format=jpg");
+                versions.Add("_i", "height=480&width=640&mode=max&quality=70&format=jpg");
+                versions.Add("_t", "height=100&quality=80&format=jpg");
                 if(!yaroslavl)
-                    versions.Add("_m", "height=200&format=jpg");
+                    versions.Add("_m", "height=200&quality=80&format=jpg");
 
                 try
                 {
@@ -181,12 +182,6 @@ namespace RealEstate.Parsing
                         var photos = new List<UploadingPhoto>();
 
                         FileInfo f = new FileInfo(path);
-                        photos.Add(new UploadingPhoto()
-                        {
-                            Type = "image",
-                            LocalPath = path,
-                            FileName = f.Name.Replace(f.Extension, "").Replace('_', '-') + "_" + id + "_" + i + f.Extension
-                        });
 
                         string basePath = ImageResizer.Util.PathUtils.RemoveExtension(path);
                         foreach (string suffix in versions.Keys)
@@ -196,8 +191,8 @@ namespace RealEstate.Parsing
                             photos.Add(new UploadingPhoto()
                                 {
                                     LocalPath = basePath + suffix + "." +p.ResultFileExtension,
-                                    FileName = f.Name.Replace(f.Extension, "").Replace('_', '-') + "_" + id + "_" + i + suffix + f.Extension,
-                                    Type = suffix.Replace("_t", "thumbnail").Replace("_m","medium")
+                                    FileName = f.Name.Replace(f.Extension, "").Replace('_', '-') + "_" + id + "_" + i + (suffix == "_i" ? "" : suffix) + f.Extension,
+                                    Type = suffix.Replace("_t", "thumbnail").Replace("_m", "medium").Replace("_i", "image")
                                 });
                         }
                         list.Add(photos);

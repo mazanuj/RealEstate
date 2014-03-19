@@ -247,11 +247,21 @@ namespace RealEstate.SmartProcessing
                 {
                     YandexMapApi api = new YandexMapApi();
                     var searchAdress = advert.Address.Replace("ул.", "");
-                    if (!searchAdress.Contains(advert.City))
+                    if (!searchAdress.Contains(advert.City) 
+                        && !searchAdress.ToLower().Contains("г. ")
+                        && !searchAdress.ToLower().Contains("город")
+                        && !searchAdress.ToLower().Contains("пос. ") 
+                        && !searchAdress.ToLower().Contains("поселок")
+                        && !searchAdress.ToLower().Contains("область"))
                         searchAdress = advert.City + ", " + searchAdress;
-                    var newAddress = api.SearchObject(searchAdress);
+                    string newCity;
+                    var newAddress = api.SearchObject(searchAdress, out newCity);
                     if (newAddress != null)
+                    {
                         advert.Address = newAddress.ToLower().Trim() == advert.City.ToLower().Trim() ? null : newAddress;
+                        if (!String.IsNullOrEmpty(newCity))
+                            advert.City = newCity;
+                    }
                 }
             }
             catch (Exception ex)
@@ -352,6 +362,8 @@ namespace RealEstate.SmartProcessing
                 if (!string.IsNullOrEmpty(advert.City) && !string.IsNullOrEmpty(advert.Address))
                 {
                     advert.Distinct = api.GetDistinct(advert.City, advert.Address);
+                    if (advert.City == advert.Distinct)
+                        advert.Distinct = null;
                 }
             }
 

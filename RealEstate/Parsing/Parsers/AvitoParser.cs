@@ -337,6 +337,9 @@ namespace RealEstate.Parsing.Parsers
                 var dist = parts.FirstOrDefault(s => s.Contains("р-н "));
                 if (dist != null)
                     advert.Distinct = Normalize(dist).Trim().Replace("р-н ", "");
+
+                if (advert.City.Contains(","))
+                    advert.City = advert.City.Split(new[] { ',' }).Last().Trim();
             }
         }
 
@@ -404,7 +407,11 @@ namespace RealEstate.Parsing.Parsers
                                 }
                             }
 
-                            advert.MetroStation = addressBlock.InnerText.Trim().Trim(new[] { ',' }).Trim();
+                            var value = addressBlock.InnerText.Trim().TrimEnd(new[] { ',' }).Trim();
+                            if (value.Contains("р-н"))
+                                advert.Distinct = value.Replace("р-н", "").Trim().Trim(new[] { ',' }).Trim();
+                            else
+                                advert.MetroStation = value;
                         }
                     }
                 }
@@ -424,7 +431,7 @@ namespace RealEstate.Parsing.Parsers
             if (block != null)
             {
                 var priceString = block.InnerText.Replace("&nbsp;", "").Replace(" руб.", "");
-                if (priceString.Contains("Не указана"))
+                if (priceString.Contains("Не указана") || priceString.Contains("Договорная"))
                     return 0;
                 long price;
                 if (Int64.TryParse(priceString, out price))

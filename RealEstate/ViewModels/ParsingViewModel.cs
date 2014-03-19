@@ -20,6 +20,8 @@ using RealEstate.Settings;
 using RealEstate.SmartProcessing;
 using System.Collections.ObjectModel;
 using RealEstate.Exporting;
+using System.IO;
+using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.ViewModels
 {
@@ -38,6 +40,8 @@ namespace RealEstate.ViewModels
         private readonly SmartProcessor _smartProcessor;
         private readonly ExportingManager _exportingManager;
         private const int MAX_COUNT_PARSED = 100;
+
+        private System.Timers.Timer autoTimer = new System.Timers.Timer();
 
         [ImportingConstructor]
         public ParsingViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager,
@@ -68,6 +72,14 @@ namespace RealEstate.ViewModels
 
             ImportSite = Parsing.ImportSite.All; //if change, do on view too
             Usedtype = Parsing.Usedtype.All;
+
+            autoTimer.Elapsed += autoTimer_Elapsed;
+            autoTimer.AutoReset = true;
+        }
+
+        private void autoTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            Start(true);
         }
 
         public void Handle(CriticalErrorEvent message)
@@ -205,6 +217,29 @@ namespace RealEstate.ViewModels
             }
         }
 
+        private bool _AutoStart = false;
+        public bool AutoStart
+        {
+            get { return _AutoStart; }
+            set
+            {
+                _AutoStart = value;
+                NotifyOfPropertyChange(() => AutoStart);
+            }
+        }
+
+        private int _AutoStartValue = 12;
+        [Range(1, 2400)]
+        public int AutoStartValue
+        {
+            get { return _AutoStartValue; }
+            set
+            {
+                _AutoStartValue = value;
+                NotifyOfPropertyChange(() => AutoStartValue);
+            }
+        }
+
         private UniqueEnum _Unique = UniqueEnum.All;
         public UniqueEnum Unique
         {
@@ -227,6 +262,8 @@ namespace RealEstate.ViewModels
 
         public void Stop()
         {
+            autoTimer.Stop();
+
             foreach (var task in Tasks)
             {
                 task.Stop();
@@ -241,10 +278,17 @@ namespace RealEstate.ViewModels
             }
         }
 
-        public void Start()
+        public void Start(bool bytimer = false)
         {
             try
             {
+                if(!bytimer && AutoStart && AutoStartValue > 0)
+                {
+                    autoTimer.Interval = 1000 * 3600 * AutoStartValue;
+                    autoTimer.Stop();
+                    autoTimer.Start();
+                }
+
                 _advertsManager.IncrementParsingNumber();
 
                 if (this.ImportSite == Parsing.ImportSite.All)
@@ -401,6 +445,11 @@ namespace RealEstate.ViewModels
                             {
                                 advert = parser.Parse(headers[i], proxy, ct, pt);
                                 break;
+                            }
+                            catch (InvalidDataException iex)
+                            {
+                                Trace.WriteLine(iex.Message, "IO error");
+                                _proxyManager.RejectProxyFull(proxy);
                             }
                             catch (System.Web.HttpException ex)
                             {
@@ -641,8 +690,6 @@ namespace RealEstate.ViewModels
             Task.Factory.StartNew(() =>
             {
                 task.Stop();
-                Thread.Sleep(3000);
-                Tasks.Remove(task);
             });
         }
 
