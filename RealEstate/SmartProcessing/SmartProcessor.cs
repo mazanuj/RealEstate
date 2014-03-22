@@ -167,59 +167,67 @@ namespace RealEstate.SmartProcessing
 
         private void DetectArea(Advert advert)
         {
-            if (advert.AreaFull == 0)
+            try
             {
-                Regex regArea = new Regex(@"пл(\.|ощадь) (?<area>\d+)\ *кв\.?\ *м\.?", RegexOptions.IgnoreCase);
-
-                var m = regArea.Match(advert.MessageFull);
-                if (m.Success && m.Groups["area"].Value != "")
+                if (advert.AreaFull == 0)
                 {
-                    float fullArea;
-                    if (float.TryParse(m.Groups["area"].Value, out fullArea))
+                    Regex regArea = new Regex(@"пл(\.|ощадь) (?<area>\d+)\ *кв\.?\ *м\.?", RegexOptions.IgnoreCase);
+
+                    var m = regArea.Match(advert.MessageFull);
+                    if (m.Success && m.Groups["area"].Value != "")
                     {
-                        advert.AreaFull = fullArea;
-                        return;
+                        float fullArea;
+                        if (float.TryParse(m.Groups["area"].Value, out fullArea))
+                        {
+                            advert.AreaFull = fullArea;
+                            return;
+                        }
+                    }
+                }
+
+                string pattern = @"\d+(\.\d+)?/\d+(\.\d+)?/\d+(\.\d+)?";
+                Regex regAreaFull = new Regex(pattern, RegexOptions.IgnoreCase);
+                var mat = regAreaFull.Match(advert.MessageFull);
+                if (mat.Success)
+                {
+                    var areas = mat.Value.Split('/');
+                    for (int i = 0; i < areas.Length; i++)
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                advert.AreaFull = float.Parse(areas[i]);
+                                break;
+                            case 1:
+                                advert.AreaLiving = float.Parse(areas[i]);
+                                break;
+                            case 2:
+                                advert.AreaKitchen = float.Parse(areas[i]);
+                                break;
+                        }
+                    }
+                }
+
+                if (advert.AreaKitchen == 0)
+                {
+                    var match = Regex.Match(advert.MessageFull, @"кухня\ (?<area>\d+([.,]\d+)?)\ ?кв\.?\ ?м");
+                    if (match.Success)
+                    {
+                        var gr = match.Groups["area"];
+                        if (gr != null)
+                        {
+                            var value = gr.Value;
+                            float area;
+                            if (float.TryParse(value, out area))
+                                advert.AreaKitchen = area;
+                        }
                     }
                 }
             }
-
-            string pattern = @"\d+(\.\d+)?/\d+(\.\d+)?/\d+(\.\d+)?";
-            Regex regAreaFull = new Regex(pattern, RegexOptions.IgnoreCase);
-            var mat = regAreaFull.Match(advert.MessageFull);
-            if(mat.Success)
+            catch (Exception ex)
             {
-                var areas = mat.Value.Split('/');
-                for (int i = 0; i < areas.Length; i++)
-                {
-                    switch (i)
-                    {
-                        case 0:
-                            advert.AreaFull = float.Parse(areas[i]);
-                            break;
-                        case 1:
-                            advert.AreaLiving = float.Parse(areas[i]);
-                            break;
-                        case 2:
-                            advert.AreaKitchen = float.Parse(areas[i]);
-                            break;
-                    }
-                }
-            }
-
-            if(advert.AreaKitchen == 0)
-            {
-                var match = Regex.Match(advert.MessageFull, @"кухня\ (?<area>\d+(\.\d+)?)\ ?кв\.?\ ?м");
-                if(match.Success)
-                {
-                    var gr = match.Groups["area"];
-                    if(gr != null)
-                    {
-                        var value = gr.Value;
-                        float area;
-                        if (float.TryParse(value, out area))
-                            advert.AreaKitchen = area;
-                    }
-                }
+                Trace.WriteLine("Smart processor error: " + ex.Message);
+                Trace.WriteLine("Url:" + advert.Url);
             }
 
         }
@@ -246,11 +254,16 @@ namespace RealEstate.SmartProcessing
                 if (!String.IsNullOrEmpty(advert.Address))
                 {
                     YandexMapApi api = new YandexMapApi();
-                    var searchAdress = advert.Address.Replace("ул.", "");
-                    if (!searchAdress.Contains(advert.City) 
-                        && !searchAdress.ToLower().Contains("г. ")
+                    var searchAdress = advert.Address;
+                    if (!searchAdress.Contains("район") || searchAdress.IndexOf("район") > searchAdress.IndexOf("ул."))
+                        searchAdress = searchAdress.Replace("ул.", "");
+                    searchAdress = searchAdress.Replace("Округ:","");
+
+                    if (!searchAdress.Contains(advert.City)
+                        && !searchAdress.ToLower().Contains("ст.")
+                        && !searchAdress.ToLower().Contains("г.")
                         && !searchAdress.ToLower().Contains("город")
-                        && !searchAdress.ToLower().Contains("пос. ") 
+                        && !searchAdress.ToLower().Contains("пос.") 
                         && !searchAdress.ToLower().Contains("поселок")
                         && !searchAdress.ToLower().Contains("область"))
                         searchAdress = advert.City + ", " + searchAdress;
@@ -273,7 +286,7 @@ namespace RealEstate.SmartProcessing
         private bool TryParseAddress(Advert advert)
         {
             Regex regCity = new Regex(@"кв[\w,\.,\,, \-]*\ в ([\w,\ ,\.]+),");
-            Regex regAddress = new Regex(@"\ на\ +(([\w-]+\.?\ *(?:\w+\.\ +)*[\w-]+)(?:,?\ *д\.?\ *(\d+\w*))?)");
+            Regex regAddress = new Regex(@"\ ул.?\ *((\D[\w-]+\.?\ *(?:\w+\.\ +)*[\w-]+)(?:,?\ *д\.?\ *(\d+\w*))?)");
 
             var message = advert.MessageFull.ToLower();
             var m = regCity.Match(message);
@@ -292,7 +305,7 @@ namespace RealEstate.SmartProcessing
             }
 
             m = regAddress.Match(advert.MessageFull);
-            if (m.Success && m.Groups.Count > 3 && !m.Value.Contains("берег"))
+            if (m.Success && m.Groups.Count > 3 && !m.Value.Contains("берег") && !m.Value.Contains("руках"))
             {
                 advert.Address = m.Groups[1].Value;
             }
@@ -301,7 +314,7 @@ namespace RealEstate.SmartProcessing
 
             if (String.IsNullOrEmpty(advert.Address))
             {
-                Regex rCity1 = new Regex(@"(?<street>ул.\ *(?:\ *\w\.?\-?)*\ *),", RegexOptions.IgnoreCase);
+                Regex rCity1 = new Regex(@"\W(?<street>ул.\ *(?:\ *\w\.?\-?)*\ *),", RegexOptions.IgnoreCase);
 
 
                 m = rCity1.Match(advert.MessageFull);

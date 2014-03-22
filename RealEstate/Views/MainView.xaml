@@ -54,7 +54,7 @@
             Padding="6"
             Style="{StaticResource VS2012WindowStyleTitleBarToogleButton}"
             shell:WindowChrome.IsHitTestVisibleInChrome="True">
-                        <TextBlock  FontWeight="SemiBold">Badwords</TextBlock>
+                        <TextBlock  FontWeight="SemiBold">Черный список</TextBlock>
                     </ToggleButton>
                     <ToggleButton
             Grid.Column="2"

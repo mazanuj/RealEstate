@@ -374,7 +374,7 @@ namespace RealEstate.Parsing.Parsers
                                 addr.Remove();
                             }
 
-                             var value = addressBlock.InnerText.Trim().TrimEnd(new[] { ',' }).Trim();
+                             var value = addressBlock.InnerText.Trim().Trim(new[] { ',' }).Trim();
                              if (value.Contains("р-н"))
                                  advert.Distinct = value.Replace("р-н", "").Trim();
                              else
@@ -407,7 +407,7 @@ namespace RealEstate.Parsing.Parsers
                                 }
                             }
 
-                            var value = addressBlock.InnerText.Trim().TrimEnd(new[] { ',' }).Trim();
+                            var value = addressBlock.InnerText.Trim().Trim(new[] { ',' }).Trim();
                             if (value.Contains("р-н"))
                                 advert.Distinct = value.Replace("р-н", "").Trim().Trim(new[] { ',' }).Trim();
                             else

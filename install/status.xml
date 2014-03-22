@@ -110,11 +110,11 @@
   </FileStatus>
   <FileStatus>
     <Path>proxies.txt</Path>
-    <Hash>0F4CB432C9AB119FA42A9FB2E7FD293B</Hash>
+    <Hash>7053655053EF7B4199065A8913C5C96D</Hash>
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>511A2580D93ADC457115E6073B86C42E</Hash>
+    <Hash>A18E9C2771505426A77B53ACACA27D14</Hash>
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>
@@ -142,7 +142,7 @@
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
-    <Hash>198068B3CDCA651AE033A746F970A50D</Hash>
+    <Hash>54ACB57AFB70110FB7F8E1DE35E176B4</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>
