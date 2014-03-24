@@ -776,6 +776,8 @@ VALUES (
                     case "5":
                     case "4":
                         return "173";
+                    case "99":
+                        return "167";
                     default:
                         return "167";
 
@@ -796,6 +798,8 @@ VALUES (
                     case "5":
                     case "4":
                         return "172";
+                    case "99":
+                        return "1";
                     default:
                         return "1";
 

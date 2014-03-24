@@ -49,10 +49,6 @@
     <Hash>3BB2B8882FC4A07CFC50841778054C26</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>imports.xml</Path>
-    <Hash>38ECA0053F2FAADE16191519DB56DABB</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>KladrApiClient.dll</Path>
     <Hash>2D257B82286BCCF105699495A08834E6</Hash>
   </FileStatus>
@@ -93,10 +89,6 @@
     <Hash>5CC3F1ECA02737022B2A3BC387F4B287</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>NewLastReport.report</Path>
-    <Hash>BEDB95F5CEAFC0D29E9DE7C89530656E</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>Newtonsoft.Json.dll</Path>
     <Hash>1232F5D749700A818908CC163BEFED18</Hash>
   </FileStatus>
@@ -105,16 +97,8 @@
     <Hash>B56F954A761998C5C79176FE34830B9D</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>PassLastReport.report</Path>
-    <Hash>CCBA821356ED2D6D5994426A090A672F</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>proxies.txt</Path>
-    <Hash>7053655053EF7B4199065A8913C5C96D</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>A18E9C2771505426A77B53ACACA27D14</Hash>
+    <Hash>D962141B11892261A22DB5A9329CA38A</Hash>
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>
@@ -137,24 +121,12 @@
     <Hash>AE4D9E3DEF3B74A9EDAC410D131B6DF1</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>UsedLastReport.report</Path>
-    <Hash>C36AEB3A755059B604147EFBC757387C</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>version</Path>
-    <Hash>54ACB57AFB70110FB7F8E1DE35E176B4</Hash>
+    <Hash>5B28EE398DA148313E912A0C08D76BA4</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>
     <Hash>ADFB6D7B61E301761C700652B6FE7CCD</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>City\cities.xml</Path>
-    <Hash>B175F3D3A041ECE277FAFDD10020FC15</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>SmartProcessing\ProcessingRules.xml</Path>
-    <Hash>C51015FD6B8EC89248AAFE3B83038FC1</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.bigrams</Path>

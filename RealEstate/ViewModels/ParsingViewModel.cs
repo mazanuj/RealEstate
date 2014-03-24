@@ -73,13 +73,16 @@ namespace RealEstate.ViewModels
             ImportSite = Parsing.ImportSite.All; //if change, do on view too
             Usedtype = Parsing.Usedtype.All;
 
+            autoTimer.Interval = 1000 * 6 * 1;
             autoTimer.Elapsed += autoTimer_Elapsed;
             autoTimer.AutoReset = true;
+            autoTimer.Start();
         }
 
         private void autoTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            Start(true);
+            if(AutoStart && !Tasks.Any(t => t.IsRunning) && AutoStartValue == DateTime.Now.Hour)
+                Start(true);
         }
 
         public void Handle(CriticalErrorEvent message)
@@ -228,7 +231,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private int _AutoStartValue = 12;
+        private int _AutoStartValue = 0;
         [Range(1, 2400)]
         public int AutoStartValue
         {
@@ -262,8 +265,6 @@ namespace RealEstate.ViewModels
 
         public void Stop()
         {
-            autoTimer.Stop();
-
             foreach (var task in Tasks)
             {
                 task.Stop();
@@ -282,13 +283,6 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                if(!bytimer && AutoStart && AutoStartValue > 0)
-                {
-                    autoTimer.Interval = 1000 * 3600 * AutoStartValue;
-                    autoTimer.Stop();
-                    autoTimer.Start();
-                }
-
                 _advertsManager.IncrementParsingNumber();
 
                 if (this.ImportSite == Parsing.ImportSite.All)

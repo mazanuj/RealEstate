@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -185,7 +186,7 @@ namespace RealEstate.SmartProcessing
                     }
                 }
 
-                string pattern = @"\d+(\.\d+)?/\d+(\.\d+)?/\d+(\.\d+)?";
+                string pattern = @"\d+([.,]\d+)?/\d+([.,]\d+)?/\d+([.,]\d+)?";
                 Regex regAreaFull = new Regex(pattern, RegexOptions.IgnoreCase);
                 var mat = regAreaFull.Match(advert.MessageFull);
                 if (mat.Success)
@@ -196,13 +197,13 @@ namespace RealEstate.SmartProcessing
                         switch (i)
                         {
                             case 0:
-                                advert.AreaFull = float.Parse(areas[i]);
+                                advert.AreaFull = float.Parse(areas[i].Replace(',','.'), CultureInfo.InvariantCulture);
                                 break;
                             case 1:
-                                advert.AreaLiving = float.Parse(areas[i]);
+                                advert.AreaLiving = float.Parse(areas[i].Replace(',', '.'), CultureInfo.InvariantCulture);
                                 break;
                             case 2:
-                                advert.AreaKitchen = float.Parse(areas[i]);
+                                advert.AreaKitchen = float.Parse(areas[i].Replace(',', '.'), CultureInfo.InvariantCulture);
                                 break;
                         }
                     }
