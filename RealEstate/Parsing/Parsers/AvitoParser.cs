@@ -587,14 +587,14 @@ namespace RealEstate.Parsing.Parsers
             }
             else
             {
-                var onlyOne = full.DocumentNode.SelectSingleNode("//a[@class='j-zoom-gallery-link i-zoom']");
-                if(onlyOne != null)
+                var onlyOne = full.DocumentNode.SelectSingleNode("//div[@class='picture-wrapper']//img");
+                if (onlyOne != null)
                 {
-                    var href = onlyOne.Attributes["href"];
-                    if (href != null && href.Value != null)
+                    var src = onlyOne.Attributes["src"];
+                    if (src != null && src.Value != null)
                     {
-                        var src = Normalize(href.Value).TrimStart('/');
-                        result.Add(new Image() { URl = "http://" + src });
+                        var sr = Normalize(src.Value).TrimStart('/');
+                        result.Add(new Image() { URl = "http://" + sr });
                     }
                 }
             }

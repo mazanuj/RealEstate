@@ -38,7 +38,9 @@ namespace RealEstate.Db
 
         public RealEstateContext()
             : base("RealEstateContext")
-        { }
+        {
+            ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 300;
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

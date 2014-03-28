@@ -89,6 +89,8 @@ namespace RealEstate.Parsing
             set { ImportSiteValue = (int)value; }
         }
 
+        public bool IsFromDeveloper { get; set; }
+
         public bool isGold { get; set; }
 
         public bool isUnique { get; set; }
@@ -178,6 +180,13 @@ namespace RealEstate.Parsing
 
         }
 
+        public string GetCategory()
+        {
+            if (IsFromDeveloper)
+                return "1";
+            else
+                return "2";
+        }
     }
 
     public class Image

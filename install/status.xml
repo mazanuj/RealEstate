@@ -98,7 +98,7 @@
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>D962141B11892261A22DB5A9329CA38A</Hash>
+    <Hash>63EFA60FAAB3D1DD48882B423CEE59D4</Hash>
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>
@@ -122,7 +122,7 @@
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
-    <Hash>5B28EE398DA148313E912A0C08D76BA4</Hash>
+    <Hash>BC87D7A6F6E850CE2BC3521F26F38102</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>
@@ -130,15 +130,15 @@
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.bigrams</Path>
-    <Hash>849B155E3F313EE71EC3954DD400AFF6</Hash>
+    <Hash>F5C0F117A7BD7A60A76E4B4DA9F9AE40</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.fold</Path>
-    <Hash>7C302624086B306EBBDCED53DD2B185B</Hash>
+    <Hash>339BB00E0F5D6EDCC1919401D1472ABF</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.lm</Path>
-    <Hash>48BDDBF5F97D239E2461C422CC0C8EE0</Hash>
+    <Hash>9095F90874775AB67225112B03653057</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.nn</Path>
@@ -146,7 +146,7 @@
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.params</Path>
-    <Hash>8B42570B3D149D1C6DC85B7E94417FC3</Hash>
+    <Hash>4B2F4D8AA264D923A88D1A384B1B54C1</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.size</Path>
@@ -154,7 +154,7 @@
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.word-freq</Path>
-    <Hash>9D05EB491A42681B34661E0C281BBC7E</Hash>
+    <Hash>A9D657B040DB4366E1FBB6C75BB5AE8B</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.tesseract_cube.nn</Path>

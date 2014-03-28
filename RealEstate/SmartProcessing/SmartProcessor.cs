@@ -80,6 +80,8 @@ namespace RealEstate.SmartProcessing
 
                 DetectYear(advert);
 
+                DetectDeveloper(advert);
+
                 System.Reflection.PropertyInfo proper;
 
                 foreach (var rule in _rulesManager.Rules)
@@ -133,6 +135,14 @@ namespace RealEstate.SmartProcessing
             {
                 Trace.WriteLine(ex.ToString(), "Error!");
                 return false;
+            }
+        }
+
+        private void DetectDeveloper(Advert advert)
+        {
+            if(!String.IsNullOrEmpty(advert.MessageFull))
+            {
+                advert.IsFromDeveloper = advert.MessageFull.ToLower().Contains("застройщик");
             }
         }
 

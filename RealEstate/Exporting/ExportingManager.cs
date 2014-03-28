@@ -330,7 +330,7 @@ VALUES (
                         conn.Open();
                         var id = intoAds.ExecuteScalar();
 
-                        var comm_to_cat = @"INSERT INTO `ntvo3_adsmanager_adcat` (`adid`,`catid`) VALUES (" + id + ",2);";
+                        var comm_to_cat = @"INSERT INTO `ntvo3_adsmanager_adcat` (`adid`,`catid`) VALUES (" + id + ","+ advert.GetCategory()+");";
                         MySqlCommand intoCat = new MySqlCommand(comm_to_cat, conn);
                         var res = intoCat.ExecuteNonQuery();
                         if (res == 0)
@@ -505,7 +505,7 @@ NOW(),
         private void UploadFile(string url, string local)
         {
             FtpWebRequest ftpClient = (FtpWebRequest)FtpWebRequest.Create(url);
-            ftpClient.Credentials = new NetworkCredential("proger_1", "Jyd3cZW6");
+            ftpClient.Credentials = new NetworkCredential("proger_1", "gnPPE05Z");
             ftpClient.Method = System.Net.WebRequestMethods.Ftp.UploadFile;
             ftpClient.UseBinary = true;
             ftpClient.KeepAlive = true;
@@ -735,7 +735,7 @@ VALUES (
         private void UploadFileYaroslavl(string url, string local)
         {
             FtpWebRequest ftpClient = (FtpWebRequest)FtpWebRequest.Create(url);
-            ftpClient.Credentials = new NetworkCredential("kupi1", "0FsRlqJI");
+            ftpClient.Credentials = new NetworkCredential("kupi1", "gnPPE05Z");
             ftpClient.Method = System.Net.WebRequestMethods.Ftp.UploadFile;
             ftpClient.UseBinary = true;
             ftpClient.KeepAlive = true;
