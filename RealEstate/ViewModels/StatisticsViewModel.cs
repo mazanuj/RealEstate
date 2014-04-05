@@ -32,10 +32,12 @@ namespace RealEstate.ViewModels
         private readonly ImportManager _importManager;
         private readonly ParsingManager _parsingManager;
         private readonly StatisticsManager _statManager;
+        private readonly CityParser _cityParser;
 
         [ImportingConstructor]
         public StatisticsViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager,
-            CityManager cityManager, ImportManager importManager, ParsingManager parsingManager, StatisticsManager stat)
+            CityManager cityManager, ImportManager importManager, ParsingManager parsingManager, StatisticsManager stat,
+            CityParser cityParser)
         {
             _events = events;
             _taskManager = taskManager;
@@ -44,13 +46,18 @@ namespace RealEstate.ViewModels
             _importManager = importManager;
             _parsingManager = parsingManager;
             _statManager = stat;
+            _cityParser = cityParser;
             events.Subscribe(this);
             this.DisplayName = "Статистика";
+
+            NewType = new StatisticTabViewModel(_cityManager, _events);
+            UsedType = new StatisticTabViewModel(_cityManager, _events);
+            PassType = new StatisticTabViewModel(_cityManager, _events);
         }
 
-        StatisticTabViewModel NewType = new StatisticTabViewModel();
-        StatisticTabViewModel UsedType = new StatisticTabViewModel();
-        StatisticTabViewModel PassType = new StatisticTabViewModel();
+        StatisticTabViewModel NewType;
+        StatisticTabViewModel UsedType;
+        StatisticTabViewModel PassType;
 
         protected override void OnInitialize()
         {
@@ -176,9 +183,9 @@ namespace RealEstate.ViewModels
                     pt.WaitUntillPaused();
 
                 var statItems = new List<StatisticItem>();
-                foreach (var city in _cityManager.Cities)
+                foreach (var city in _cityManager.NotSelectedCities)
                 {
-                    if (city.City == "Все") continue;
+                    if (city.City == CityWrap.ALL) continue;
 
                     var c = "";
                     if (site == Parsing.ImportSite.Avito)
@@ -291,17 +298,7 @@ namespace RealEstate.ViewModels
                         Trace.WriteLine(ex.Message, "Stat error!");
                     }
 
-                    task.ParsedCount++;
-
-                    if (task.TotalCount > 0)
-                    {
-                        task.Progress = ((double)task.ParsedCount / (double)task.TotalCount) * 100;
-
-                        DateTime finish = DateTime.Now;
-                        spans.Add((finish - start).Ticks);
-
-                        task.Remaining = new TimeSpan(Convert.ToInt64(spans.Average()) * (task.TotalCount - task.ParsedCount));
-                    }
+                    task.PerformStep(DateTime.Now - start);
                 }
 
                 _events.Publish("Завершено");

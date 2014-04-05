@@ -38,9 +38,10 @@ namespace RealEstate.ViewModels
             events.Subscribe(this);
             DisplayName = "Прокси";
 
-            timer.Interval = 60 * 1000;
+            timer.Interval = 20 * 1000;
             timer.AutoReset = true;
             timer.Elapsed += timer_Elapsed;
+            timer.Start();
         }
 
         void timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -163,7 +164,6 @@ namespace RealEstate.ViewModels
             CanCancelUpdate = true;
             realTask = new RealEstateTask();
             Progress = 0;
-            _proxyManager.Clear();
             NotifyOfPropertyChange(() => CanCheckOut);
 
 
@@ -282,18 +282,25 @@ namespace RealEstate.ViewModels
 
         void proxyChecker_Checked(object sender, WebProxyEventArgs e)
         {
-            if (!CanCancelUpdate) return;
-
-            NotifyOfPropertyChange(() => CanCheckOut);
-
-            if (e.IsSuccess)
-                CheckedProxies.Add(e.WebProxy);
-
-            check++;
-            if (check % 3 == 0)
+            try
             {
-                Progress = ((double)check / total)*100;
-                _events.Publish(String.Format("Проверка прокси... {0:0.#}%", Progress));
+                if (!CanCancelUpdate) return;
+
+                NotifyOfPropertyChange(() => CanCheckOut);
+
+                if (e.IsSuccess)
+                    CheckedProxies.Add(e.WebProxy);
+
+                check++;
+                if (check % 3 == 0)
+                {
+                    Progress = ((double)check / total) * 100;
+                    _events.Publish(String.Format("Проверка прокси... {0:0.#}%", Progress));
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString(), "proxyChecker_Checked");
             }
         }
 

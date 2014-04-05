@@ -22,18 +22,16 @@ namespace RealEstate.ViewModels
     {
         private readonly IEventAggregator _events;
         private readonly SettingsManager _settingsManager;
-        private readonly CityManager _cityManager;
         private readonly ImagesManager _imagesManager;
         private readonly RealEstate.Log.LogManager _logManager;
 
         private const string ERROR_LABEL = "Ошибка";
 
         [ImportingConstructor]
-        public SettingsViewModel(IEventAggregator events, SettingsManager settingsManager, CityManager cityManager, ImagesManager imagesManager, RealEstate.Log.LogManager logManager)
+        public SettingsViewModel(IEventAggregator events, SettingsManager settingsManager, ImagesManager imagesManager, RealEstate.Log.LogManager logManager)
         {
             _events = events;
             _settingsManager = settingsManager;
-            _cityManager = cityManager;
             _imagesManager = imagesManager;
             _logManager = logManager;
         }
@@ -81,73 +79,6 @@ namespace RealEstate.ViewModels
             {
                 _Status = value;
                 NotifyOfPropertyChange(() => Status);
-            }
-        }
-
-        public BindableCollection<CityWrap> Cities
-        {
-            get
-            {
-                return _cityManager.Cities;
-            }
-        }
-
-        private string _NewCityName = "";
-        [Required(ErrorMessage = "Введите название города")]
-        public string NewCityName
-        {
-            get { return _NewCityName; }
-            set
-            {
-                _NewCityName = value;
-                NotifyOfPropertyChange(() => NewCityName);
-            }
-        }
-
-        public async void AddCity()
-        {
-            if (!String.IsNullOrEmpty(NewCityName) && !Cities.Any(c => c.City == NewCityName) )
-            {
-                Status = "Добавляю...";
-                try
-                {
-                    await Task.Factory.StartNew(() =>
-                        {
-                            _cityManager.Cities.Add(new CityWrap() { City = NewCityName });
-                            _cityManager.Save();
-                        });
-
-                    NewCityName = string.Empty;
-                    Status = "Добавлено";
-                }
-                catch (Exception ex)
-                {
-                    Status = ERROR_LABEL;
-                    Trace.WriteLine(ex.ToString());
-                }
-            }
-        }
-
-        public async void RemoveCity(CityWrap city)
-        {
-            if (Cities.IndexOf(city) > 0)
-            {
-                Status = "Удаляю...";
-                try
-                {
-                    await Task.Factory.StartNew(() =>
-                    {
-                        _cityManager.Cities.Remove(city);
-                        _cityManager.Save();
-                    });
-
-                    Status = "Удалено";
-                }
-                catch (Exception ex)
-                {
-                    Status = ERROR_LABEL;
-                    Trace.WriteLine(ex.ToString());
-                }
             }
         }
 

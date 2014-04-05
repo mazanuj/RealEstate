@@ -33,31 +33,6 @@
                             Grid.Row="3" HorizontalAlignment="Right"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Города" Style="{StaticResource TabItemPaging}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <ListBox Name="Cities" Grid.Row="0" Grid.ColumnSpan="2" Margin="10 10 10 0">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <DockPanel>
-                                    <TextBlock Text="{Binding City}" DockPanel.Dock="Left"/>
-                                    <Button Background="WhiteSmoke" Foreground="Black" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Width="15" Height="15" Content="x" Style="{StaticResource CircleButton}" Padding="0 -4 0 0" ToolTip="Удалить" cal:Message.Attach="RemoveCity($dataContext)"/>
-                                </DockPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    <TextBox Name="NewCityName" Grid.Row="1" Grid.Column="0" Margin="10" />
-                    <Button IsEnabled="{Binding ElementName=NewCityName, Path=HasError}" Name="AddCity" Grid.Row="1" Grid.Column="1" Margin="10" Content="Добавить"/>
-                </Grid>
-            </TabItem>
             <TabItem Header="Экспорт" Style="{StaticResource TabItemPaging}">
                 <Grid>
                     <Grid.RowDefinitions>

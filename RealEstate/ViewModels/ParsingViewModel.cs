@@ -401,7 +401,6 @@ namespace RealEstate.ViewModels
                 task.TotalCount = headers.Count;
 
                 List<Advert> adverts = new List<Advert>();
-                List<long> spans = new List<long>();
                 ParserBase parser = ParsersFactory.GetParser(param.site);
 
                 int attempt = 0;
@@ -425,8 +424,9 @@ namespace RealEstate.ViewModels
                         attempt = 0;
                         int blocked = 0;
 
-                        while (attempt++ < maxattempt)
+                        while (attempt < maxattempt)
                         {
+                            attempt++;
                             if (ct.IsCancellationRequested)
                             { _events.Publish("Отменено"); return; }
                             if (pt.IsPauseRequested)
@@ -528,8 +528,6 @@ namespace RealEstate.ViewModels
                         prsCount++;
                     }
 
-                    task.ParsedCount++;
-
                     try
                     {
                         if (advert != null)
@@ -616,17 +614,7 @@ namespace RealEstate.ViewModels
                         Trace.WriteLine("Ошибка:" + ex.Message);
                     }
 
-
-                    if (task.TotalCount > 0)
-                    {
-                        task.Progress = ((double)task.ParsedCount / (double)task.TotalCount) * 100;
-
-                        DateTime finish = DateTime.Now;
-                        spans.Add((finish - start).Ticks);
-
-                        task.Remaining = new TimeSpan(Convert.ToInt64(spans.Average()) * (task.TotalCount - task.ParsedCount));
-                    }
-
+                    task.PerformStep(DateTime.Now - start);
                 }
 
                 task.Progress = 100;
@@ -713,6 +701,7 @@ namespace RealEstate.ViewModels
     public class ParsingTask : RealEstateTask
     {
         private System.Timers.Timer timer;
+        List<long> spans = new List<long>();
 
         private ObservableCollection<string> _SourceUrls = new ObservableCollection<string>();
         public ObservableCollection<string> SourceUrls
@@ -829,6 +818,18 @@ namespace RealEstate.ViewModels
             }
         }
 
+        internal void PerformStep(TimeSpan span)
+        {
+            ParsedCount++;
 
+            if (TotalCount > 0)
+            {
+                Progress = ((double)ParsedCount / (double)TotalCount) * 100;
+
+                spans.Add(span.Ticks);
+
+                Remaining = new TimeSpan(Convert.ToInt64(spans.Skip(Math.Max(0, spans.Count - 30)).Average()) * (TotalCount - ParsedCount));
+            }
+        }
     }
 }

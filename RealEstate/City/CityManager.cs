@@ -15,6 +15,7 @@ namespace RealEstate.City
     {
         private const string FileName = "City\\cities.xml";
         public BindableCollection<CityWrap> Cities = new BindableCollection<CityWrap>();
+        public BindableCollection<CityWrap> NotSelectedCities = new BindableCollection<CityWrap>();
 
         public void Restore()
         {
@@ -22,7 +23,10 @@ namespace RealEstate.City
             {
                 XmlSerializer reader = new XmlSerializer(typeof(List<CityWrap>));
                 StreamReader file = new System.IO.StreamReader(FileName);
-                Cities.AddRange((List<CityWrap>)reader.Deserialize(file));
+                var list = (List<CityWrap>)reader.Deserialize(file);
+                Cities.Add(new CityWrap() { City = "Все", IsSelected = true });
+                Cities.AddRange(list.Where(c => c.IsSelected));
+                NotSelectedCities.AddRange(list.Where(c => c.City != CityWrap.ALL));
             }
             else
             {
@@ -33,8 +37,8 @@ namespace RealEstate.City
         private void RestoreDefaults()
         {
             Trace.WriteLine("Restore default cities");
-            Cities.Add(new CityWrap() { City = "" });
-            Cities.Add(new CityWrap() { City = "Ярославль", AvitoKey = "yaroslavl" });
+
+            Cities.Add(new CityWrap() { City = "Все", IsSelected = true });
 
             Save();
         }
@@ -49,13 +53,15 @@ namespace RealEstate.City
 
             var writer = new XmlSerializer(typeof(List<CityWrap>));
             StreamWriter file = new System.IO.StreamWriter(FileName);
-            writer.Serialize(file, Cities.ToList());
+            writer.Serialize(file, NotSelectedCities.ToList());
             file.Close();
         }
     }
 
     public class CityWrap : PropertyChangedBase
     {
+        public const string ALL = "Все";
+
         private bool _IsActive = false;
         public bool IsActive
         {
@@ -70,5 +76,7 @@ namespace RealEstate.City
         public string City { get; set; }
         public string AvitoKey { get; set; }
         public string HandsKey { get; set; }
+        public bool IsSelected { get; set; }
+        public string Parent { get; set; }
     }
 }

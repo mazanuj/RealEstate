@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="RealEstate.Views.StatisticsView"
+﻿<UserControl x:Class="RealEstate.Views.CitiesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -15,49 +15,20 @@
                 BorderThickness="1 0 1 2" FlowDirection="LeftToRight">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource RibbonTitle}">Проверить на количество:</TextBlock>
-                        <!--<RadioButton GroupName="site" Content="Все" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>-->
-                        <RadioButton GroupName="site" Content="avito.ru" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Avito}"/>
-                        <!--<RadioButton GroupName="site" Content="irr.ru" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Hands}"/>-->
+                <Border Style="{StaticResource RibbonToolBorder}">
+                    <StackPanel Margin="5 0" Grid.Row="2" HorizontalAlignment="Left">
+                        <Button Name="Start" Margin="3" Content="Обновить список городов" />
+                        <Button Name="Pause" Margin="3" Content="Пауза" />
+                        <Button Name="Stop" Margin="3" Content="Стоп" />
                     </StackPanel>
                 </Border>
-                <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Border Grid.Row="0" Style="{StaticResource RibbonToolBorder}" BorderThickness="0 0 0 1">
-                            <CheckBox Name="UseProxy" Content="С прокси" Margin="2" />
-                        </Border>
-                        <Border Grid.Row="1" Style="{StaticResource RibbonToolBorder}" BorderThickness="0 0 0 1">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Задержка:" Margin="2"/>
-                                <TextBox Margin="2" Width="100" Text="{Binding Delay, Mode=TwoWay, Converter={StaticResource intConverter}, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}"/>
-                            </StackPanel>
-                        </Border>
-
-                        <StackPanel Orientation="Horizontal" Margin="5 0" Grid.Row="2" HorizontalAlignment="Left">
-                            <Button Name="Start" Margin="3" Content="Старт" />
-                            <Button Name="Pause" Margin="3" Content="Пауза" />
-                            <Button Name="Stop" Margin="3" Content="Стоп" />
-                        </StackPanel>
-                    </Grid>
-                </Border>
-                <Border Grid.Column="2" Style="{StaticResource RibbonToolBorder}">
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource RibbonTitle}">Отчёт:</TextBlock>
-                        <Button Name="Save" Content="Сохранить" Margin="5" />
-                        <Button Name="RestoreLast" Content="Загрузить" Margin="5"/>
+                <Border Style="{StaticResource RibbonToolBorder}" Grid.Column="1">
+                    <StackPanel Margin="5 0" Grid.Row="2" HorizontalAlignment="Left">
+                        <Button Name="Save" Margin="3" Content="Сохранить" />
                     </StackPanel>
                 </Border>
             </Grid>
@@ -126,31 +97,68 @@
                                     </StackPanel>
                                     <TextBlock FontWeight="Bold" Grid.Column="6">
                                         <TextBlock.Text>
-                                            <MultiBinding StringFormat="Обработано ссылок {0}/{1}">
+                                            <MultiBinding StringFormat="Обновлено регионов {0}/{1}">
                                                 <Binding Path="ParsedCount"/>
                                                 <Binding Path="TotalCount"/>
                                             </MultiBinding>
                                         </TextBlock.Text>
                                     </TextBlock>
                                     <ProgressBar Grid.Row="1" Grid.ColumnSpan="10" Margin="0 1 0 0" Height="3" Value="{Binding Progress}" />
-                                    <Expander Grid.Row="2" Grid.ColumnSpan="10" Margin="0 1 0 0" Header="Источники">
-                                        <Border BorderThickness="1" BorderBrush="WhiteSmoke">
-                                            <ItemsControl ItemsSource="{Binding SourceUrls}">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock Text="{Binding }" Margin="20 5" />
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </Border>
-                                    </Expander>
                                 </Grid>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
-            <TabControl Grid.Row="1"  Margin="4" Padding="4" x:Name="StatItems"/>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBox Margin="2" Name="FullListSearch" />
+                <ListView Name="FullList" Margin="3" HorizontalContentAlignment="Stretch" Grid.Row="1">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding City}" />
+                                <TextBlock Text="{Binding Parent}" Grid.Column="1"/>
+                                <Button Content="Добавить" cal:Message.Attach="AddCity($dataContext)" Grid.Column="2" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <TextBox Margin="2" Name="SelectedListSearch" Grid.Column="1" />
+                <ListView Name="SelectedList" Margin="3" Grid.Column="1" HorizontalContentAlignment="Stretch" Grid.Row="1">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding City}" />
+                                <TextBlock Text="{Binding Parent}" Grid.Column="1"/>
+                                <Button Content="Редактировать" cal:Message.Attach="Edit($dataContext)" Grid.Column="2" />
+                                <Button Content="Удалить" cal:Message.Attach="RemoveCity($dataContext)" Grid.Column="3" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

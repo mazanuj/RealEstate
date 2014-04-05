@@ -31,6 +31,7 @@ namespace RealEstate.ViewModels
         private readonly IEventAggregator _events;
         private readonly Log.LogManager _logManager;
         private readonly ImportManager _importManager;
+        private readonly CityManager _cityManager;
         private readonly System.Timers.Timer _statusTimer;
         public ConsoleViewModel ConsoleViewModel;
         public BlackListViewModel BlackListViewModel;
@@ -49,12 +50,14 @@ namespace RealEstate.ViewModels
             AdvertsViewModel advertsViewModel, ExportSettingsViewModel exportSettingsViewModel,
             ExportingManager exportingManager, TestParsingViewModel testParsingViewModel,
             StatisticsViewModel statViewModel, RulesViewModel rulesView, ExportQueueViewModel exportQueueView,
-            PhonesViewModel phonesViewModel, PhonesManager phoneManager, BlackListViewModel blackListViewModel)
+            PhonesViewModel phonesViewModel, PhonesManager phoneManager, BlackListViewModel blackListViewModel,
+            CitiesViewModel citiesViewModel)
         {
             _windowManager = windowManager;
             _logManager = logManager;
             _importManager = importManager;
             _events = events;
+            _cityManager = cityManager;
 
             events.Subscribe(this);
             SettingsViewModel = settingsViewModel;
@@ -75,6 +78,7 @@ namespace RealEstate.ViewModels
             Items.Add(advertsViewModel);
             Items.Add(phonesViewModel);
             Items.Add(proxiesViewModel);
+            Items.Add(citiesViewModel);
             Items.Add(statViewModel);
             Items.Add(rulesView);
 
@@ -215,6 +219,7 @@ namespace RealEstate.ViewModels
                 try
                 {
                     _importManager.Save();
+                    _cityManager.Save();
                 }
                 catch (Exception ex)
                 {

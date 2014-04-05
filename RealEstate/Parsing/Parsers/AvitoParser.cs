@@ -15,12 +15,132 @@ using RealEstate.Proxies;
 using RealEstate.ViewModels;
 using RealEstate.OCRs;
 using RealEstate.Settings;
+using RealEstate.City;
+using Caliburn.Micro;
+using System.Windows.Threading;
 
 namespace RealEstate.Parsing.Parsers
 {
     public class AvitoParser : ParserBase
     {
         const string ROOT_URl = "http://www.avito.ru/";
+
+        public void UpdateList(CancellationToken ct, PauseToken pt, ProxyManager proxyManager, BindableCollection<CityWrap> fullList, ParsingTask task)
+        {
+            string page = null;
+            int attemt = 0;
+            WebProxy proxy = null;
+            HtmlNodeCollection cityLinks = null;
+
+            while (attemt < SettingsStore.MaxParsingAttemptCount && (page == null || cityLinks == null))
+            {
+                attemt++;
+
+                ct.ThrowIfCancellationRequested();
+
+                proxy = proxyManager.GetNextProxy();
+                try
+                {
+                    page = DownloadPage(ROOT_URl, UserAgents.GetRandomUserAgent(), proxy, ct, false);
+
+                    HtmlDocument doc = new HtmlDocument();
+                    doc.LoadHtml(page);
+
+                    cityLinks = doc.DocumentNode.SelectNodes("//div[contains(@class,'region-titles')]/a");
+                }
+                catch (Exception ex)
+                {
+                    Thread.Sleep(300);
+                    page = null;
+                    Trace.WriteLine(ex.Message, "Web Error!");
+                    proxyManager.RejectProxy(proxy);
+                }
+            }
+
+            if (page == null || cityLinks == null)
+                throw new Exception("Can't load " + ROOT_URl);
+
+            Trace.WriteLine("Region counts: " + cityLinks.Count);
+
+            task.TotalCount = cityLinks.Count;
+
+            foreach (var cityLink in cityLinks)
+            {
+                DateTime start = DateTime.Now;
+
+                ct.ThrowIfCancellationRequested();
+                if (pt.IsPauseRequested) pt.WaitUntillPaused();
+                attemt = 0;
+                page = null;
+
+                while (attemt < SettingsStore.MaxParsingAttemptCount && page == null)
+                {
+                    attemt++;
+
+                    ct.ThrowIfCancellationRequested();
+
+                    proxy = proxyManager.GetNextProxy();
+                    try
+                    {
+                        var url = "http:" + cityLink.Attributes["href"].Value;
+                        if (url != "http:#")
+                        {
+                            //Trace.WriteLine(url);
+                            page = DownloadPage(url, UserAgents.GetRandomUserAgent(), proxy, ct, false);
+                            if (page.Length < 20000 || !page.Contains("avito"))
+                                page = null;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Thread.Sleep(300);
+                        page = null;
+                        Trace.WriteLine(ex.Message, "Web Error!");
+                        proxyManager.RejectProxy(proxy);
+                    }
+                }
+
+                if (String.IsNullOrEmpty(page)) continue;
+
+                HtmlDocument interanlDoc = new HtmlDocument();
+                interanlDoc.LoadHtml(page);
+
+                var links = interanlDoc.DocumentNode.SelectNodes("//div[@data-counter-idx='0']//div[@class='catalog_counts-cl-inner']/ul/li/a");
+                if (links == null)
+                {
+                    AddCityWrap(cityLink, fullList, null);
+                }
+                else
+                {
+                    foreach (var link in links)
+                    {
+                        AddCityWrap(link, fullList, cityLink);
+                    }
+                }
+
+                task.PerformStep(DateTime.Now - start);
+            }
+        }
+
+        private void AddCityWrap(HtmlNode link, BindableCollection<CityWrap> cities, HtmlNode parrent)
+        {
+            var city = new CityWrap();
+            city.City = link.InnerText.Trim();
+
+
+            if (!cities.Any(c => c.City == city.City))
+            {
+                if (parrent != null)
+                    city.Parent = parrent.InnerText.Trim();
+
+                city.AvitoKey = link.Attributes["href"].Value.TrimStart(new[] { '/' }).Trim().Replace("www.avito.ru/", "").Trim();
+
+                App.Current.Dispatcher.Invoke((System.Action)(() =>
+                {
+                    cities.Add(city);
+                }));
+            }
+        }
 
         public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager, CancellationToken token)
         {
@@ -43,9 +163,9 @@ namespace RealEstate.Parsing.Parsers
 
                 string result = null;
 
-
-                while (attempt++ < maxAttemptCount)
+                while (attempt < maxAttemptCount)
                 {
+                    attempt++;
                     token.ThrowIfCancellationRequested();
                     WebProxy proxy = param.useProxy ? proxyManager.GetNextProxy() : null;
 
@@ -72,7 +192,8 @@ namespace RealEstate.Parsing.Parsers
                 if (result == null)
                 {
                     Trace.WriteLine("Can't load headers adverts", "");
-                    if (attempt++ < maxAttemptCount) reAtempt = true;
+                    if (attempt < maxAttemptCount)
+                        reAtempt = true;
                     continue;
                 }
 
@@ -117,14 +238,19 @@ namespace RealEstate.Parsing.Parsers
             List<AdvertHeader> headers = new List<AdvertHeader>();
             bool reAtempt = false;
             int attempt = 0;
+            int notFound = 0;
+            const int MAX_NOTFOUND = 5;
 
             do
             {
                 string result = null;
                 reAtempt = false;
+                notFound = 0;
 
-                while (attempt++ < SettingsStore.MaxParsingAttemptCount)
+                while (attempt < SettingsStore.MaxParsingAttemptCount)
                 {
+                    attempt++;               
+
                     token.ThrowIfCancellationRequested();
 
                     WebProxy proxy = useProxy ? proxyManager.GetNextProxy() : null;
@@ -140,9 +266,32 @@ namespace RealEstate.Parsing.Parsers
                         }
                         break;
                     }
+                    catch (System.Net.WebException wex)
+                    {
+                        Trace.WriteLine(wex.Message, "Web error");
+
+                        if ((HttpWebResponse)wex.Response != null)
+                        {
+                            if (((HttpWebResponse)wex.Response).StatusCode == HttpStatusCode.Forbidden)
+                            {
+                                proxyManager.RejectProxyFull(proxy);
+                                continue;
+                            }
+                            if (((HttpWebResponse)wex.Response).StatusCode == HttpStatusCode.NotFound)
+                            {
+                                notFound++;
+                                if (notFound > MAX_NOTFOUND)
+                                    break;
+                                else
+                                    continue;
+                            }
+                        }
+
+                        proxyManager.RejectProxy(proxy);
+                    }
                     catch (Exception ex)
                     {
-                        Trace.WriteLine(ex.Message, "Web Error!");
+                        Trace.WriteLine(ex.Message, "Error!");
                         proxyManager.RejectProxy(proxy);
                     }
                 }
@@ -150,7 +299,8 @@ namespace RealEstate.Parsing.Parsers
                 if (result == null)
                 {
                     Trace.WriteLine("Can't load headers adverts", "");
-                    if (attempt++ < SettingsStore.MaxParsingAttemptCount) reAtempt = true;
+                    if (attempt < SettingsStore.MaxParsingAttemptCount && notFound < MAX_NOTFOUND) 
+                        reAtempt = true;
                     continue;
                 }
 
@@ -160,12 +310,12 @@ namespace RealEstate.Parsing.Parsers
                 var countNode = page.DocumentNode.SelectSingleNode(@"//span[@class='catalog_breadcrumbs-count']");
                 if (countNode != null)
                 {
-                    return Int32.Parse(Normalize(countNode.InnerText.Replace("&nbsp;","")).Trim().Trim(new char[]{',', ' '}));
+                    return Int32.Parse(Normalize(countNode.InnerText.Replace("&nbsp;", "")).Trim().Trim(new char[] { ',', ' ' }));
                 }
                 else
                 {
                     Trace.WriteLine("Can't find adverts");
-                    if (attempt++ < SettingsStore.MaxParsingAttemptCount) reAtempt = true;
+                    if (attempt < SettingsStore.MaxParsingAttemptCount) reAtempt = true;
                     continue;
                 }
             }
@@ -228,7 +378,7 @@ namespace RealEstate.Parsing.Parsers
                             switch (dateS[1])
                             {
                                 case "янв.": month = 1; break;
-                                case "февр.": month = 2; break;
+                                case "фев.": month = 2; break;
                                 case "мар.": month = 3; break;
                                 case "апр.": month = 4; break;
                                 case "мая": month = 5; break;
@@ -374,12 +524,12 @@ namespace RealEstate.Parsing.Parsers
                                 addr.Remove();
                             }
 
-                             var value = addressBlock.InnerText.Trim().Trim(new[] { ',' }).Trim();
-                             if (value.Contains("р-н"))
-                                 advert.Distinct = value.Replace("р-н", "").Trim();
-                             else
-                                 advert.MetroStation = value;
-                        }                       
+                            var value = addressBlock.InnerText.Trim().Trim(new[] { ',' }).Trim();
+                            if (value.Contains("р-н"))
+                                advert.Distinct = value.Replace("р-н", "").Trim();
+                            else
+                                advert.MetroStation = value;
+                        }
                     }
                 }
             }

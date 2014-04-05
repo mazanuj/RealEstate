@@ -33,8 +33,9 @@ namespace RealEstate.Parsing.Parsers
                 int attempt = 0;
                 string uri = "";
 
-                while (attempt++ < maxAttemptCount)
+                while (attempt < maxAttemptCount)
                 {
+                    attempt++;
                     token.ThrowIfCancellationRequested();
                     WebProxy proxy = /*param.useProxy  ? proxyManager.GetNextProxy() :*/ null;
                     try

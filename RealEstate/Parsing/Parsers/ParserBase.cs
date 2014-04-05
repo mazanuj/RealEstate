@@ -48,7 +48,7 @@ namespace RealEstate.Parsing.Parsers
             HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             myHttpWebRequest.AllowAutoRedirect = true;
             myHttpWebRequest.Proxy = proxy ?? WebRequest.DefaultWebProxy;
-            if(!useCookie) cookie = new CookieContainer();
+            if (!useCookie) cookie = new CookieContainer();
             myHttpWebRequest.CookieContainer = cookie;
             myHttpWebRequest.UserAgent = userAgent;
             myHttpWebRequest.Timeout = SettingsStore.DefaultTimeout;
@@ -67,18 +67,24 @@ namespace RealEstate.Parsing.Parsers
 
             var myHttpWebResponse = myHttpWebRequest.GetResponse();
             var stream = myHttpWebResponse.GetResponseStream();
-            if(stream.CanTimeout)
+            if (stream.CanTimeout)
                 stream.ReadTimeout = SettingsStore.DefaultTimeout * 2;
             System.IO.StreamReader sr = new System.IO.StreamReader(stream);
-            HtmlResult = sr.ReadToEnd();
-            myHttpWebRequest.Abort();
-            sr.Close();
+            var task = sr.ReadToEndAsync();
+            if (task.Wait(SettingsStore.DefaultTimeout))
+            {
+                HtmlResult = task.Result;
+                myHttpWebRequest.Abort();
+                sr.Close();
 
-            return HtmlResult;
+                return HtmlResult;
+            }
+            else
+                throw new TimeoutException();
 
         }
 
-        public byte[] DownloadImage(string url, string userAgent, WebProxy proxy, CancellationToken cs, string referer,  bool isPhone, bool useCookie = false)
+        public byte[] DownloadImage(string url, string userAgent, WebProxy proxy, CancellationToken cs, string referer, bool isPhone, bool useCookie = false)
         {
             HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             myHttpWebRequest.AllowAutoRedirect = true;

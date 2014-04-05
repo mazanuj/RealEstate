@@ -1,0 +1,30 @@
+﻿<Window x:Class="RealEstate.Views.CityWrapView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Height="180" Width="400">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <TextBlock Text="Город" Margin="4" />
+        <TextBox Text="{Binding City.City}" Grid.Column="1" IsReadOnly="True" Margin="4" />
+
+        <TextBlock Text="Область" Grid.Row="1" Margin="4" />
+        <TextBox Text="{Binding City.Parent}" Grid.Column="1" Grid.Row="1" IsReadOnly="True" Margin="4" />
+
+        <TextBlock Text="avito ключ" Grid.Row="2" Margin="4"  />
+        <TextBox Text="{Binding City.AvitoKey}" Grid.Column="1" Grid.Row="2" Margin="4" />
+
+        <TextBlock Text="irr ключ" Grid.Row="3" Margin="4" />
+        <TextBox Text="{Binding City.HandsKey}" Grid.Column="1" Grid.Row="3" Margin="4" />
+
+    </Grid>
+</Window>
