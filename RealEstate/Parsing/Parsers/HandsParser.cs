@@ -148,7 +148,7 @@ namespace RealEstate.Parsing.Parsers
             throw new ParsingException("Can't get link to full description", "");
         }
 
-        public override Advert Parse(AdvertHeader header, System.Net.WebProxy proxy, CancellationToken ct, PauseToken pt)
+        public override Advert Parse(AdvertHeader header, System.Net.WebProxy proxy, CancellationToken ct, PauseToken pt, bool onlyPhone = false)
         {
             Advert advert = new Advert();
             proxy = null;
@@ -160,6 +160,7 @@ namespace RealEstate.Parsing.Parsers
                 advert.DateSite = header.DateSite;
                 advert.Url = header.Url;
                 advert.ImportSite = ImportSite.Hands;
+                advert.AdvertType = AdvertType.Sell;
 
                 string result;
                 result = this.DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct);
@@ -169,21 +170,25 @@ namespace RealEstate.Parsing.Parsers
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
 
+                if (!onlyPhone)
+                {
+                    ParseCategory(advert);
 
-                ParseCategory(advert);
-                ParseTitle(page, advert);
-                ParsePrice(page, advert);
+                    ParseTitle(page, advert);
+                    ParsePrice(page, advert);
 
-                advert.Name = ParseSeller(page);
-                ParseAddress(page, advert);
+                    advert.Name = ParseSeller(page);
+                    ParseAddress(page, advert);
 
-                advert.MetroStation = ParseMetro(page);
+                    advert.MetroStation = ParseMetro(page);
 
-                ParseProperties(page, advert);
+                    ParseProperties(page, advert);
 
-                ParseDescription(page, advert);
+                    ParseDescription(page, advert);
 
-                advert.Images = ParsePhotos(page);
+                    advert.Images = ParsePhotos(page);
+                }
+
                 ParsePhone(page, advert, proxy);
 
                 return advert;

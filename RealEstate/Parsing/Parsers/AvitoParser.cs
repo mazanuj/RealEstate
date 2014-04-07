@@ -814,7 +814,7 @@ namespace RealEstate.Parsing.Parsers
             }
         }
 
-        public override Advert Parse(AdvertHeader header, WebProxy proxy, CancellationToken ct, PauseToken pt)
+        public override Advert Parse(AdvertHeader header, WebProxy proxy, CancellationToken ct, PauseToken pt, bool onlyPhone = false)
         {
             Advert advert = new Advert();
 
@@ -825,29 +825,34 @@ namespace RealEstate.Parsing.Parsers
                 advert.DateSite = header.DateSite;
                 advert.Url = header.Url;
                 advert.ImportSite = ImportSite.Avito;
+                advert.AdvertType = AdvertType.Sell;
 
                 string result;
                 result = this.DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct, true);
                 if (result.Length < 200)
                     throw new BadResponseException();
 
-                Console.WriteLine("Downloaded description");
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
 
-                ParseTitle(page, advert);
 
-                advert.Name = ParseSeller(page);
-                ParseCity(advert, page);
-                ParseAddress(page, advert);
+                if (!onlyPhone)
+                {
+                    ParseTitle(page, advert);
 
-                ParseCategory(page, advert);
+                    advert.Name = ParseSeller(page);
+                    ParseCity(advert, page);
+                    ParseAddress(page, advert);
 
-                advert.MessageFull = ParseDescription(page);
+                    ParseCategory(page, advert);
 
-                advert.Price = ParsePrice(page);
+                    advert.MessageFull = ParseDescription(page);
 
-                advert.Images = ParsePhotos(page);
+                    advert.Price = ParsePrice(page);
+
+                    advert.Images = ParsePhotos(page);
+                }
+
                 ParsePhone(page, advert, proxy);
 
                 return advert;

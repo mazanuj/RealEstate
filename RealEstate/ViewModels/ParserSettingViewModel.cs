@@ -58,18 +58,6 @@ namespace RealEstate.ViewModels
             IsToolsOpen = message.IsOpen;
         }
 
-        private ParsePeriod _ParsePeriod = ParsePeriod.Today;
-        public ParsePeriod ParsePeriod
-        {
-            get { return _ParsePeriod; }
-            set
-            {
-                _ParsePeriod = value;
-                NotifyOfPropertyChange(() => ParsePeriod);
-                FilterValuesChanged();
-            }
-        }
-
         private RealEstateType _RealEstateType = RealEstateType.Apartments;
         public RealEstateType RealEstateType
         {
@@ -168,7 +156,6 @@ namespace RealEstate.ViewModels
                     set.AdvertType = AdvertType;
                     set.ExportSite = SelectedExportSite;
                     set.ImportSite = ImportSite;
-                    set.ParsePeriod = ParsePeriod;
                     set.RealEstateType = RealEstateType;
                     set.Usedtype = Usedtype;
 

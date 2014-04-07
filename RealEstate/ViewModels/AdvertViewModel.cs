@@ -70,7 +70,7 @@ namespace RealEstate.ViewModels
 
 
             if (AdvertOriginal.MessageFullPreview.Length > 60)
-                DisplayName = AdvertOriginal.MessageFullPreview.Substring(0, 60) + "...";
+                DisplayName =  AdvertOriginal.MessageFullPreview.Substring(0, 60) + "...";
             else
                 DisplayName = AdvertOriginal.MessageFullPreview;
             GenerateHtmlFile();
@@ -156,6 +156,8 @@ namespace RealEstate.ViewModels
                 try
                 {
                     var imgs = _imagesManager.GetImages(AdvertOriginal.Images, AdvertOriginal.ImportSite);
+                    if (imgs == null) return;
+
                     for (int i = 0; i < imgs.Count; i++)
                     {
                         imgs[i].Title = (i + 1).ToString();

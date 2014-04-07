@@ -177,7 +177,7 @@ namespace RealEstate.ViewModels
                     final = Final;
                 }
 
-                bool citySearch = SelectedCity.City != Cities.First().City;
+                bool citySearch = SelectedCity.City != CityWrap.ALL;
                 bool importSearch = ImportSite != Parsing.ImportSite.All;
                 bool realSearch = RealEstateType != Parsing.RealEstateType.All;
                 bool usedSearch = Usedtype != Parsing.Usedtype.All;

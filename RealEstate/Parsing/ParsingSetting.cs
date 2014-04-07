@@ -47,15 +47,6 @@ namespace RealEstate.Parsing
             set { AdvertTypeValue = (int)value; }
         }
 
-        [Column("ParsePeriod", TypeName = "int")]
-        public int ParsePeriodValue { get; set; }
-        [NotMapped]
-        public ParsePeriod ParsePeriod
-        {
-            get { return (ParsePeriod)ParsePeriodValue; }
-            set { ParsePeriodValue = (int)value; }
-        }
-
         [Column("ImportSite", TypeName = "int")]
         public int ImportSiteValue { get; set; }
         [NotMapped]
@@ -67,12 +58,7 @@ namespace RealEstate.Parsing
 
         public virtual ExportSite ExportSite {get; set;}
         public virtual ICollection<ParserSourceUrl> Urls { get; set; }
-
-        public DateTime GetDate()
-        {
-            return GetDate(this.ParsePeriod);
-        }
-
+      
         public static DateTime GetDate(ParsePeriod period)
         {
             switch (period)

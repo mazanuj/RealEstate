@@ -22,7 +22,7 @@ namespace RealEstate.Parsing.Parsers
 
         public abstract int GetTotalCount(string sourceUrl, ProxyManager proxyManager, bool useProxy, CancellationToken token);
 
-        public abstract Advert Parse(AdvertHeader header, WebProxy proxy, CancellationToken ct, PauseToken pt);
+        public abstract Advert Parse(AdvertHeader header, WebProxy proxy, CancellationToken ct, PauseToken pt, bool onlyPhone = false);
 
         protected CookieContainer cookie = new CookieContainer();
 

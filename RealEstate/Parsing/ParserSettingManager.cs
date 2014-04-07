@@ -31,7 +31,6 @@ namespace RealEstate.Parsing
                             s.AdvertTypeValue == (int)setting.AdvertType &&
                             s.ExportSite.Id == setting.ExportSite.Id &&
                             s.ImportSiteValue == (int)setting.ImportSite &&
-                            s.ParsePeriodValue == (int)setting.ParsePeriod &&
                             s.RealEstateTypeValue == (int)setting.RealEstateType &&
                             s.UsedtypeValue == (int)setting.Usedtype
                           select s;
@@ -47,7 +46,7 @@ namespace RealEstate.Parsing
 
         }
 
-        public List<ParserSetting> FindSettings(AdvertType advertType, IEnumerable<string> cities, ImportSite site, ParsePeriod period, RealEstateType type, Usedtype subtype)
+        public List<ParserSetting> FindSettings(AdvertType advertType, IEnumerable<string> cities, ImportSite site, RealEstateType type, Usedtype subtype)
         {
             lock (_lock)
             {
@@ -55,7 +54,6 @@ namespace RealEstate.Parsing
                           where
                             (s.AdvertTypeValue == (int)advertType || advertType == AdvertType.All) &&
                             (s.ImportSiteValue == (int)site || site == ImportSite.All) &&
-                            s.ParsePeriodValue == (int)period &&
                             s.RealEstateTypeValue == (int)type &&
                             (s.UsedtypeValue == (int)subtype || subtype == Usedtype.All) &&
                             (cities.Contains(s.ExportSite.City) || cities.Contains("Все"))
@@ -74,6 +72,14 @@ namespace RealEstate.Parsing
 
                 setting.ExportSite.ParseSettings.Add(setting);
                 context.SaveChanges();
+            }
+        }
+
+        public void DeleteAll()
+        {
+            foreach (var url in context.ParserSourceUrls.ToList())
+            {
+                context.ParserSourceUrls.Remove(url);
             }
         }
 

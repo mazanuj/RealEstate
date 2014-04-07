@@ -16,7 +16,6 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="170" />
-                    <ColumnDefinition Width="170" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
@@ -28,22 +27,13 @@
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource RibbonTitle}">Период:</TextBlock>
-                        <RadioButton GroupName="period" Content="За сегодня" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Today}"/>
-                        <RadioButton GroupName="period" Content="За сегодня и вчера" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Yesterday}"/>
-                        <RadioButton GroupName="period" Content="За неделю" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Week}"/>
-                        <RadioButton GroupName="period" Content="За всё время" Margin="5 2" IsChecked="{Binding Path=ParsePeriod, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}"/>
-                    </StackPanel>
-                </Border>
-                <Border Grid.Column="2" Style="{StaticResource RibbonToolBorder}">
                     <StackPanel Margin="0 0 20 0">
                         <TextBlock Style="{StaticResource RibbonTitle}">Выбрать сайт:</TextBlock>
                         <RadioButton GroupName="site" Content="avito.ru" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Avito}"/>
                         <RadioButton GroupName="site" Content="irr.ru" Margin="5 2" IsChecked="{Binding Path=ImportSite, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Hands}"/>
                     </StackPanel>
                 </Border>
-                <Border Grid.Column="3" Style="{StaticResource RibbonToolBorder}">
+                <Border Grid.Column="2" Style="{StaticResource RibbonToolBorder}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150" />

@@ -19,10 +19,13 @@ namespace RealEstate.Commands
         private readonly Dictionary<string, Module> Modules = new Dictionary<string, Module>();
 
         [ImportingConstructor]
-        public CommandsProcessor(AdvertsManager advertsManager, RealEstate.Log.LogManager logManager, RealEstateContext context, IWindowManager windowManager)
+        public CommandsProcessor(AdvertsManager advertsManager, RealEstate.Log.LogManager logManager, 
+            RealEstateContext context, IWindowManager windowManager,
+            ParserSettingManager parserSourceManager)
         {
             Modules.Add("advert", new AdvertsModule(advertsManager, windowManager));
             Modules.Add("log", new LogModule(logManager));
+            Modules.Add("urls", new ImportModule(parserSourceManager));
         }
 
         private Module LastModule = null;

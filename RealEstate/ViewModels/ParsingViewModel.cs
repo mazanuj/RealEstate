@@ -70,7 +70,7 @@ namespace RealEstate.ViewModels
 
             if (!RealEstate.Db.RealEstateContext.isOk) return;
 
-            ImportSite = Parsing.ImportSite.All; //if change, do on view too
+            ImportSite = Parsing.ImportSite.Avito; //if change, do on view too
             Usedtype = Parsing.Usedtype.All;
 
             autoTimer.Interval = 1000 * 6 * 1;
@@ -81,7 +81,7 @@ namespace RealEstate.ViewModels
 
         private void autoTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if(AutoStart && !Tasks.Any(t => t.IsRunning) && AutoStartValue == DateTime.Now.Hour)
+            if (AutoStart && !Tasks.Any(t => t.IsRunning) && AutoStartValue == DateTime.Now.Hour)
                 Start(true);
         }
 
@@ -106,7 +106,7 @@ namespace RealEstate.ViewModels
 
         public void CityChecked(CityWrap city)
         {
-            if(city.City == "Все")
+            if (city.City == "Все")
             {
                 bool isActive = Cities.First(c => c.City == "Все").IsActive;
                 foreach (var cit in Cities)
@@ -124,6 +124,23 @@ namespace RealEstate.ViewModels
             {
                 _AutoExport = value;
                 NotifyOfPropertyChange(() => AutoExport);
+            }
+        }
+
+        private bool _PhoneImport = false;
+        public bool PhoneImport
+        {
+            get { return _PhoneImport; }
+            set
+            {
+                _PhoneImport = value;
+                NotifyOfPropertyChange(() => PhoneImport);
+
+                if(PhoneImport)
+                {
+                    AutoExport = false;
+                    UseProxy = true;
+                }
             }
         }
 
@@ -307,6 +324,7 @@ namespace RealEstate.ViewModels
                             param.MaxCount = ImportSites.First(i => i.Site == s).Deep;
                             param.onlyImage = OnlyImage;
                             param.uniq = Unique;
+                            param.phoneImport = PhoneImport;
 
                             ParsingTask realTask = new ParsingTask();
                             realTask.Description = _importManager.GetSiteName(s);
@@ -333,6 +351,7 @@ namespace RealEstate.ViewModels
                     param.Delay = ImportSites.First(i => i.Site == this.ImportSite).Delay;
                     param.MaxCount = ImportSites.First(i => i.Site == this.ImportSite).Deep;
                     param.uniq = Unique;
+                    param.phoneImport = PhoneImport;
 
                     ParsingTask realTask = new ParsingTask();
                     realTask.Description = _importManager.GetSiteName(param.site);
@@ -358,7 +377,7 @@ namespace RealEstate.ViewModels
                     pt.WaitUntillPaused();
 
                 var settings = _parserSettingManager.FindSettings(param.advertType, param.cities,
-                    param.site, param.period, param.realType, param.subType);
+                    param.site, param.realType, param.subType);
 
 
                 bool any = false;
@@ -411,7 +430,7 @@ namespace RealEstate.ViewModels
 
                 for (int i = 0; i < headers.Count; i++)
                 {
-                    parsed = _advertsManager.IsParsed(headers[i].Url);
+                    parsed = !param.phoneImport && _advertsManager.IsParsed(headers[i].Url);
 
                     DateTime start = DateTime.Now;
 
@@ -437,7 +456,7 @@ namespace RealEstate.ViewModels
                             proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
                             try
                             {
-                                advert = parser.Parse(headers[i], proxy, ct, pt);
+                                advert = parser.Parse(headers[i], proxy, ct, pt, param.phoneImport);
                                 break;
                             }
                             catch (InvalidDataException iex)
@@ -501,8 +520,7 @@ namespace RealEstate.ViewModels
                             }
                         }
                     }
-
-                    if (parsed)
+                    else
                     {
                         if (prsCount > MAX_COUNT_PARSED)
                         {
@@ -522,9 +540,9 @@ namespace RealEstate.ViewModels
                             catch (Exception)
                             {
                                 Thread.Sleep(200);
-                            } 
+                            }
                         }
-                        
+
                         prsCount++;
                     }
 
@@ -532,9 +550,13 @@ namespace RealEstate.ViewModels
                     {
                         if (advert != null)
                         {
-                            if (!parsed)
+                            if (!parsed || param.phoneImport)
                             {
                                 advert.ParsingNumber = _advertsManager.LastParsingNumber;
+                            }
+
+                            if (!parsed && !param.phoneImport)
+                            {
                                 if (advert.ImportSite == Parsing.ImportSite.Hands)
                                 {
                                     if (last != null && advert != null)
@@ -551,9 +573,13 @@ namespace RealEstate.ViewModels
                                 }
                             }
 
-                            if (_smartProcessor.Process(advert, param))
+                            var advertIsOk = param.phoneImport;
+                            if(!param.phoneImport)
+                                advertIsOk = _smartProcessor.Process(advert, param);
+
+                            if (advertIsOk)
                             {
-                                if (advert.ImportSite == Parsing.ImportSite.Hands)
+                                if (!param.phoneImport && advert.ImportSite == Parsing.ImportSite.Hands)
                                 {
                                     if (last != null && advert != null)
                                     {
@@ -571,9 +597,9 @@ namespace RealEstate.ViewModels
                                 if (SettingsStore.LogSuccessAdverts)
                                     Trace.WriteLine(advert.ToString(), "Advert");
 
-                                _advertsManager.Save(advert, headers[i].Setting);
+                                _advertsManager.Save(advert, headers[i].Setting, param.phoneImport);
 
-                                if (CheckUniq(advert, param.uniq))
+                                if (!param.phoneImport && CheckUniq(advert, param.uniq))
                                 {
 
                                     if (SettingsStore.SaveImages)
@@ -587,7 +613,7 @@ namespace RealEstate.ViewModels
                                                 _exportingManager.AddAdvertToExport(advert);
                                             else
                                             {
-                                                Trace.WriteLine("Advert ("+ advert.Id +") skipped due the lack of pictures");
+                                                Trace.WriteLine("Advert (" + advert.Id + ") skipped due the lack of pictures");
                                             }
                                         else
                                             Trace.WriteLine("Advert skipped as empty. Coverage = " + cov.ToString("P0"), "Skipped by smart processor");
@@ -692,6 +718,7 @@ namespace RealEstate.ViewModels
         public RealEstateType realType;
         public Usedtype subType;
         public AdvertType advertType;
+        public bool phoneImport;
         public bool useProxy;
         public bool autoExport;
         public bool onlyImage;

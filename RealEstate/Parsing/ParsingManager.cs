@@ -32,7 +32,7 @@ namespace RealEstate.Parsing
 
                         ct.ThrowIfCancellationRequested();
 
-                        var hds = parser.LoadHeaders(url, setting.GetDate(), param, maxAttemptCount, proxyManager, ct);
+                        var hds = parser.LoadHeaders(url, ParserSetting.GetDate(param.period), param, maxAttemptCount, proxyManager, ct);
 
                         headers.AddRange(hds);
 

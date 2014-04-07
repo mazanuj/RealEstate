@@ -128,7 +128,7 @@ namespace RealEstate.Parsing
         {
             get
             {
-               return MessageFull.Replace("\n"," ") + "...";
+                return MessageFull != null ? MessageFull.Replace("\n"," ") + "..." : "";
             }
         }
 

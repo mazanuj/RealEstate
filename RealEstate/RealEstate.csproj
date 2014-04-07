@@ -147,6 +147,7 @@
     <Compile Include="City\CityParser.cs" />
     <Compile Include="Commands\AdvertsModule.cs" />
     <Compile Include="Commands\CommandsProcessor.cs" />
+    <Compile Include="Commands\ImportModule.cs" />
     <Compile Include="Commands\LogModule.cs" />
     <Compile Include="Converters\Behaviours.cs" />
     <Compile Include="Converters\Converters.cs" />

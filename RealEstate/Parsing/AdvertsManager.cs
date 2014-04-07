@@ -19,21 +19,25 @@ namespace RealEstate.Parsing
             this._context = context;
         }
 
-        public void Save(Advert advert, ParserSetting setting)
+        public void Save(Advert advert, ParserSetting setting, bool onlyPhone)
         {
             lock (_lock)
             {
-                var oldAdvert = _context.Adverts.SingleOrDefault(a => a.Url == advert.Url);
-                if (oldAdvert == null)
+                var oldAdvert = _context.Adverts.FirstOrDefault(a => a.Url == advert.Url);
+                if (oldAdvert == null || onlyPhone)
                 {
-
-                    if (advert.ExportSites != null)
+                    if (!onlyPhone)
                     {
-                        if (!advert.ExportSites.Any(e => e.Id == setting.ExportSite.Id))
-                            advert.ExportSites.Add(setting.ExportSite);
+                        if (advert.ExportSites != null)
+                        {
+                            if (!advert.ExportSites.Any(e => e.Id == setting.ExportSite.Id))
+                                advert.ExportSites.Add(setting.ExportSite);
+                        }
+                        else
+                            advert.ExportSites = new List<Exporting.ExportSite>() { setting.ExportSite };
                     }
                     else
-                        advert.ExportSites = new List<Exporting.ExportSite>() { setting.ExportSite };
+                        advert.ExportSites = null;
 
                     _context.Adverts.Add(advert);
                 }
