@@ -152,6 +152,11 @@
     <Compile Include="Converters\Behaviours.cs" />
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Db\RealEstateContext.cs" />
+    <Compile Include="Exporting\Exporters\ExporterFactory.cs" />
+    <Compile Include="Exporting\Exporters\KupiYaroslavlExporter.cs" />
+    <Compile Include="Exporting\Exporters\MoskvaExporter.cs" />
+    <Compile Include="Exporting\Exporters\ExporterBase.cs" />
+    <Compile Include="Exporting\Exporters\NovoYaroslavlExporter.cs" />
     <Compile Include="Exporting\ExportingManager.cs" />
     <Compile Include="Exporting\ExportSetting.cs" />
     <Compile Include="Exporting\ExportSite.cs" />

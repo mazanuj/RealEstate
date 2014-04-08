@@ -1,10 +1,15 @@
 ﻿<Window x:Class="RealEstate.Views.EditExportSiteView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Редактировние" Height="220" Width="500">
+        Title="Редактировние" Height="350" Width="500">
     <Grid Background="White">
         <Grid Margin="10">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -15,20 +20,35 @@
                 <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Grid.Row="0" Margin="3">Название:</TextBlock>
+            <TextBox  Grid.Column="1" Grid.Row="0" Margin="3" Name="Title" />
+
+            <TextBlock Grid.Column="0" Grid.Row="1" Margin="3">Папка ftp: </TextBlock>
+            <TextBox  Grid.Column="1" Grid.Row="1" Margin="3" Name="FtpFolder" />
+
+            <TextBlock Grid.Column="0" Grid.Row="2" Margin="3">Юзер ftp:</TextBlock>
+            <TextBox Grid.Column="1" Grid.Row="2" Margin="3" Name="FtpUserName" />
             
-            <TextBlock Grid.Column="0" Grid.Row="0" Margin="3">Имя папки для фото: </TextBlock>
-            <TextBox  Grid.Column="1" Grid.Row="0" Margin="3" Name="FtpName" />
+            <TextBlock Grid.Column="0" Grid.Row="3" Margin="3">Пароль ftp:</TextBlock>
+            <TextBox Grid.Column="1" Grid.Row="3" Margin="3" Name="FtpPassword" />
 
-            <TextBlock Grid.Column="0" Grid.Row="1" Margin="3">Имя БД:</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="1" Margin="3" Name="DataBase" />
+            <TextBlock Grid.Column="0" Grid.Row="4" Margin="3">База данных:</TextBlock>
+            <TextBox  Grid.Column="1" Grid.Row="4" Margin="3" Name="DataBase" />
 
-            <TextBlock Grid.Column="0" Grid.Row="2" Margin="3">IP сайта:</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="2" Margin="3" Name="Ip" IsEnabled="False" />
+            <TextBlock Grid.Column="0" Grid.Row="5" Margin="3">Юзер бд:</TextBlock>
+            <TextBox Grid.Column="1" Grid.Row="5" Margin="3" Name="DataBaseUserName" />
 
-            <TextBlock Grid.Column="0" Grid.Row="3" Margin="3">Город:</TextBlock>
-            <ComboBox Grid.Column="1" Grid.Row="3" Margin="3" Name="Cities" DisplayMemberPath="City"/>
+            <TextBlock Grid.Column="0" Grid.Row="6" Margin="3">Пароль бд:</TextBlock>
+            <TextBox Grid.Column="1" Grid.Row="6" Margin="3" Name="DataBasePassword" />
 
-            <Button Name="Save" Grid.Row="4" Grid.ColumnSpan="2" Content="Сохранить" Margin="5" 
+            <TextBlock Grid.Column="0" Grid.Row="7" Margin="3">IP сайта:</TextBlock>
+            <TextBox Grid.Column="1" Grid.Row="7" Margin="3" Name="Ip" IsEnabled="False" />
+
+            <TextBlock Grid.Column="0" Grid.Row="8" Margin="3">Город:</TextBlock>
+            <ComboBox Grid.Column="1" Grid.Row="8" Margin="3" Name="Cities" DisplayMemberPath="City"/>
+
+            <Button Name="Save" Grid.Row="9" Grid.ColumnSpan="2" Content="Сохранить" Margin="5" 
                     VerticalAlignment="Bottom" HorizontalAlignment="Right" />
         </Grid>
     </Grid>

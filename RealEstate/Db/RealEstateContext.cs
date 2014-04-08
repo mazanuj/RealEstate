@@ -13,9 +13,12 @@ using RealEstate.Exporting;
 using RealEstate.Parsing;
 using System.ComponentModel.Composition;
 using RealEstate.Migrations;
+using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace RealEstate.Db
 {
+
     [Export(typeof(RealEstateContext))]
     public class RealEstateContext : DbContext
     {
@@ -25,12 +28,12 @@ namespace RealEstate.Db
         {
             isOk = false;
             Database.SetInitializer<RealEstateContext>(new MigrateDatabaseToLatestVersion<RealEstateContext, Configuration>());
-            //Database.SetInitializer<RealEstateContext>(new DropCreateDatabaseIfModelChanges<RealEstateContext>());
+            //Database.SetInitializer<RealEstateContext>(new DropCreateDatabaseAlways<RealEstateContext>());
         }
 
         public DbSet<Advert> Adverts { get; set; }
         public DbSet<ParserSetting> ParserSettings { get; set; }
-        public DbSet<ParserSourceUrl> ParserSourceUrls { get; set; }
+        public DbSet<ParserSourceUrl> SourceUrls { get; set; }
         public DbSet<ExportSite> ExportSites { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<ExportSetting> ExportSettings { get; set; }
@@ -39,7 +42,6 @@ namespace RealEstate.Db
         public RealEstateContext()
             : base("RealEstateContext")
         {
-            ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 300;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

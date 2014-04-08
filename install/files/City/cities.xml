@@ -1,0 +1,4167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfCityWrap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Москва</City>
+    <AvitoKey>moskva</AvitoKey>
+    <IsSelected>true</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Санкт-Петербург</City>
+    <AvitoKey>sankt-peterburg</AvitoKey>
+    <IsSelected>false</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Волгоград</City>
+    <AvitoKey>volgograd</AvitoKey>
+    <IsSelected>false</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Екатеринбург</City>
+    <AvitoKey>ekaterinburg</AvitoKey>
+    <IsSelected>false</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Казань</City>
+    <AvitoKey>kazan</AvitoKey>
+    <IsSelected>false</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Краснодар</City>
+    <AvitoKey>krasnodar</AvitoKey>
+    <IsSelected>false</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Нижний Новгород</City>
+    <AvitoKey>nizhniy_novgorod</AvitoKey>
+    <IsSelected>false</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Пермь</City>
+    <AvitoKey>perm</AvitoKey>
+    <IsSelected>false</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ростов-на-Дону</City>
+    <AvitoKey>rostov-na-donu</AvitoKey>
+    <IsSelected>false</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Самара</City>
+    <AvitoKey>samara</AvitoKey>
+    <IsSelected>false</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Уфа</City>
+    <AvitoKey>ufa</AvitoKey>
+    <IsSelected>false</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Челябинск</City>
+    <AvitoKey>chelyabinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Архангельск</City>
+    <AvitoKey>arhangelsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Архангельская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Вельск</City>
+    <AvitoKey>velsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Архангельская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Коряжма</City>
+    <AvitoKey>koryazhma</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Архангельская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Котлас</City>
+    <AvitoKey>kotlas</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Архангельская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Мирный</City>
+    <AvitoKey>arhangelskaya_oblast_mirnyy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Архангельская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Новодвинск</City>
+    <AvitoKey>novodvinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Архангельская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Няндома</City>
+    <AvitoKey>nyandoma</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Архангельская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Онега</City>
+    <AvitoKey>onega</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Архангельская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Плесецк</City>
+    <AvitoKey>plesetsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Архангельская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Северодвинск</City>
+    <AvitoKey>severodvinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Архангельская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Астрахань</City>
+    <AvitoKey>astrahan</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Астраханская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ахтубинск</City>
+    <AvitoKey>ahtubinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Астраханская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Володарский</City>
+    <AvitoKey>volodarskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Астраханская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Знаменск</City>
+    <AvitoKey>astrahanskaya_oblast_znamensk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Астраханская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Икряное</City>
+    <AvitoKey>ikryanoe</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Астраханская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Камызяк</City>
+    <AvitoKey>kamyzyak</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Астраханская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Красный Яр</City>
+    <AvitoKey>astrahanskaya_oblast_krasnyy_yar</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Астраханская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Лиман</City>
+    <AvitoKey>liman</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Астраханская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Нариманов</City>
+    <AvitoKey>narimanov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Астраханская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Харабали</City>
+    <AvitoKey>harabali</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Астраханская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Белебей</City>
+    <AvitoKey>belebey</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Башкортостан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Белорецк</City>
+    <AvitoKey>beloretsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Башкортостан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Бирск</City>
+    <AvitoKey>birsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Башкортостан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Благовещенск</City>
+    <AvitoKey>bashkortostan_blagoveschensk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Башкортостан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Дюртюли</City>
+    <AvitoKey>dyurtyuli</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Башкортостан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ишимбай</City>
+    <AvitoKey>ishimbay</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Башкортостан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кумертау</City>
+    <AvitoKey>kumertau</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Башкортостан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Мелеуз</City>
+    <AvitoKey>meleuz</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Башкортостан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Нефтекамск</City>
+    <AvitoKey>neftekamsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Башкортостан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Октябрьский</City>
+    <AvitoKey>bashkortostan_oktyabrskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Башкортостан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Салават</City>
+    <AvitoKey>salavat</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Башкортостан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сибай</City>
+    <AvitoKey>sibay</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Башкортостан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Стерлитамак</City>
+    <AvitoKey>sterlitamak</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Башкортостан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Туймазы</City>
+    <AvitoKey>tuymazy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Башкортостан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Белгород</City>
+    <AvitoKey>belgorod</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Белгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Алексеевка</City>
+    <AvitoKey>belgorodskaya_oblast_alekseevka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Белгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Борисовка</City>
+    <AvitoKey>borisovka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Белгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Валуйки</City>
+    <AvitoKey>valuyki</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Белгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Губкин</City>
+    <AvitoKey>gubkin</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Белгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Короча</City>
+    <AvitoKey>korocha</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Белгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Новый Оскол</City>
+    <AvitoKey>novyy_oskol</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Белгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Старый Оскол</City>
+    <AvitoKey>staryy_oskol</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Белгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Строитель</City>
+    <AvitoKey>belgorodskaya_oblast_stroitel</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Белгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Шебекино</City>
+    <AvitoKey>shebekino</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Белгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Брянск</City>
+    <AvitoKey>bryansk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Брянская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Дятьково</City>
+    <AvitoKey>dyatkovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Брянская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Жуковка</City>
+    <AvitoKey>zhukovka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Брянская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Карачев</City>
+    <AvitoKey>karachev</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Брянская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Клинцы</City>
+    <AvitoKey>klintsy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Брянская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Навля</City>
+    <AvitoKey>navlya</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Брянская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Новозыбков</City>
+    <AvitoKey>novozybkov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Брянская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Почеп</City>
+    <AvitoKey>pochep</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Брянская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Трубчевск</City>
+    <AvitoKey>trubchevsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Брянская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Унеча</City>
+    <AvitoKey>unecha</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Брянская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Владимир</City>
+    <AvitoKey>vladimir</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Владимирская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Александров</City>
+    <AvitoKey>aleksandrov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Владимирская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Вязники</City>
+    <AvitoKey>vyazniki</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Владимирская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Гусь-Хрустальный</City>
+    <AvitoKey>gus-hrustalnyy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Владимирская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Киржач</City>
+    <AvitoKey>kirzhach</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Владимирская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ковров</City>
+    <AvitoKey>kovrov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Владимирская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кольчугино</City>
+    <AvitoKey>kolchugino</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Владимирская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Муром</City>
+    <AvitoKey>murom</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Владимирская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Петушки</City>
+    <AvitoKey>petushki</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Владимирская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Суздаль</City>
+    <AvitoKey>suzdal</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Владимирская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Волжский</City>
+    <AvitoKey>volgogradskaya_oblast_volzhskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Волгоградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Городище</City>
+    <AvitoKey>volgogradskaya_oblast_gorodische</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Волгоградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Жирновск</City>
+    <AvitoKey>zhirnovsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Волгоградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Калач-на-Дону</City>
+    <AvitoKey>kalach-na-donu</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Волгоградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Камышин</City>
+    <AvitoKey>kamyshin</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Волгоградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Михайловка</City>
+    <AvitoKey>volgogradskaya_oblast_mihaylovka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Волгоградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Средняя Ахтуба</City>
+    <AvitoKey>srednyaya_ahtuba</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Волгоградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Урюпинск</City>
+    <AvitoKey>uryupinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Волгоградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Фролово</City>
+    <AvitoKey>frolovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Волгоградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Вологда</City>
+    <AvitoKey>vologda</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Вологодская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Бабаево</City>
+    <AvitoKey>babaevo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Вологодская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Великий Устюг</City>
+    <AvitoKey>velikiy_ustyug</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Вологодская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Грязовец</City>
+    <AvitoKey>gryazovets</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Вологодская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кириллов</City>
+    <AvitoKey>kirillov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Вологодская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сокол</City>
+    <AvitoKey>vologodskaya_oblast_sokol</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Вологодская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тотьма</City>
+    <AvitoKey>totma</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Вологодская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Устюжна</City>
+    <AvitoKey>ustyuzhna</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Вологодская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Череповец</City>
+    <AvitoKey>cherepovets</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Вологодская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Шексна</City>
+    <AvitoKey>sheksna</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Вологодская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Воронеж</City>
+    <AvitoKey>voronezh</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Воронежская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Бобров</City>
+    <AvitoKey>bobrov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Воронежская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Борисоглебск</City>
+    <AvitoKey>borisoglebsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Воронежская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Калач</City>
+    <AvitoKey>kalach</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Воронежская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Лиски</City>
+    <AvitoKey>liski</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Воронежская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Новая Усмань</City>
+    <AvitoKey>novaya_usman</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Воронежская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Острогожск</City>
+    <AvitoKey>ostrogozhsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Воронежская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Павловск</City>
+    <AvitoKey>voronezhskaya_oblast_pavlovsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Воронежская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Россошь</City>
+    <AvitoKey>rossosh</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Воронежская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Семилуки</City>
+    <AvitoKey>semiluki</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Воронежская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Махачкала</City>
+    <AvitoKey>mahachkala</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Дагестан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Буйнакск</City>
+    <AvitoKey>buynaksk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Дагестан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Дагестанские Огни</City>
+    <AvitoKey>dagestanskie_ogni</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Дагестан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Дербент</City>
+    <AvitoKey>derbent</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Дагестан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Избербаш</City>
+    <AvitoKey>izberbash</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Дагестан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Каспийск</City>
+    <AvitoKey>kaspiysk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Дагестан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кизилюрт</City>
+    <AvitoKey>kizilyurt</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Дагестан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кизляр</City>
+    <AvitoKey>dagestan_kizlyar</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Дагестан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Леваши</City>
+    <AvitoKey>levashi</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Дагестан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Хасавюрт</City>
+    <AvitoKey>hasavyurt</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Дагестан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Иваново</City>
+    <AvitoKey>ivanovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ивановская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Вичуга</City>
+    <AvitoKey>vichuga</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ивановская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кинешма</City>
+    <AvitoKey>kineshma</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ивановская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кохма</City>
+    <AvitoKey>kohma</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ивановская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Приволжск</City>
+    <AvitoKey>privolzhsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ивановская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Родники</City>
+    <AvitoKey>ivanovskaya_oblast_rodniki</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ивановская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тейково</City>
+    <AvitoKey>teykovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ивановская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Фурманов</City>
+    <AvitoKey>furmanov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ивановская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Шуя</City>
+    <AvitoKey>ivanovskaya_oblast_shuya</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ивановская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Юрьевец</City>
+    <AvitoKey>ivanovskaya_oblast_yurevets</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ивановская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Калининград</City>
+    <AvitoKey>kaliningrad</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калининградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Балтийск</City>
+    <AvitoKey>baltiysk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калининградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Гвардейск</City>
+    <AvitoKey>gvardeysk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калининградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Гурьевск</City>
+    <AvitoKey>kaliningradskaya_oblast_gurevsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калининградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Гусев</City>
+    <AvitoKey>gusev</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калининградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Зеленоградск</City>
+    <AvitoKey>zelenogradsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калининградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Светлогорск</City>
+    <AvitoKey>svetlogorsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калининградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Светлый</City>
+    <AvitoKey>kaliningradskaya_oblast_svetlyy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калининградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Советск</City>
+    <AvitoKey>kaliningradskaya_oblast_sovetsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калининградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Черняховск</City>
+    <AvitoKey>chernyahovsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калининградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Калуга</City>
+    <AvitoKey>kaluga</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калужская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Балабаново</City>
+    <AvitoKey>balabanovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калужская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Белоусово</City>
+    <AvitoKey>belousovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калужская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Боровск</City>
+    <AvitoKey>borovsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калужская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Жуков</City>
+    <AvitoKey>zhukov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калужская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Киров</City>
+    <AvitoKey>kaluzhskaya_oblast_kirov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калужская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кондрово</City>
+    <AvitoKey>kondrovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калужская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Людиново</City>
+    <AvitoKey>lyudinovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калужская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Малоярославец</City>
+    <AvitoKey>maloyaroslavets</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калужская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Обнинск</City>
+    <AvitoKey>obninsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Калужская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Петрозаводск</City>
+    <AvitoKey>petrozavodsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карелия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Беломорск</City>
+    <AvitoKey>belomorsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карелия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кемь</City>
+    <AvitoKey>kem</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карелия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кондопога</City>
+    <AvitoKey>kondopoga</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карелия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Костомукша</City>
+    <AvitoKey>kostomuksha</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карелия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Лахденпохья</City>
+    <AvitoKey>lahdenpohya</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карелия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Медвежьегорск</City>
+    <AvitoKey>medvezhegorsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карелия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Олонец</City>
+    <AvitoKey>olonets</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карелия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сегежа</City>
+    <AvitoKey>segezha</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карелия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сортавала</City>
+    <AvitoKey>sortavala</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карелия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Вятские Поляны</City>
+    <AvitoKey>vyatskie_polyany</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кировская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кирово-Чепецк</City>
+    <AvitoKey>kirovo-chepetsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кировская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Котельнич</City>
+    <AvitoKey>kotelnich</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кировская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Малмыж</City>
+    <AvitoKey>malmyzh</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кировская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Омутнинск</City>
+    <AvitoKey>omutninsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кировская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Слободской</City>
+    <AvitoKey>slobodskoy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кировская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Уржум</City>
+    <AvitoKey>urzhum</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кировская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Яранск</City>
+    <AvitoKey>yaransk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кировская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сыктывкар</City>
+    <AvitoKey>syktyvkar</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Коми</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Воркута</City>
+    <AvitoKey>vorkuta</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Коми</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Вуктыл</City>
+    <AvitoKey>vuktyl</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Коми</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Емва</City>
+    <AvitoKey>emva</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Коми</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Инта</City>
+    <AvitoKey>inta</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Коми</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Микунь</City>
+    <AvitoKey>mikun</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Коми</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Печора</City>
+    <AvitoKey>pechora</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Коми</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сосногорск</City>
+    <AvitoKey>sosnogorsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Коми</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Усинск</City>
+    <AvitoKey>usinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Коми</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ухта</City>
+    <AvitoKey>uhta</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Коми</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кострома</City>
+    <AvitoKey>kostroma</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Костромская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Буй</City>
+    <AvitoKey>buy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Костромская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Волгореченск</City>
+    <AvitoKey>volgorechensk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Костромская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Галич</City>
+    <AvitoKey>galich</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Костромская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Красное-на-Волге</City>
+    <AvitoKey>krasnoe-na-volge</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Костромская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Макарьев</City>
+    <AvitoKey>makarev</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Костромская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Мантурово</City>
+    <AvitoKey>manturovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Костромская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Нерехта</City>
+    <AvitoKey>nerehta</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Костромская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Нея</City>
+    <AvitoKey>neya</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Костромская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Шарья</City>
+    <AvitoKey>sharya</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Костромская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Абинск</City>
+    <AvitoKey>abinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Анапа</City>
+    <AvitoKey>anapa</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Армавир</City>
+    <AvitoKey>armavir</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Белореченск</City>
+    <AvitoKey>belorechensk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Геленджик</City>
+    <AvitoKey>gelendzhik</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Горячий Ключ</City>
+    <AvitoKey>goryachiy_klyuch</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Гулькевичи</City>
+    <AvitoKey>gulkevichi</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ейск</City>
+    <AvitoKey>eysk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кропоткин</City>
+    <AvitoKey>kropotkin</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Крымск</City>
+    <AvitoKey>krymsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Лабинск</City>
+    <AvitoKey>labinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Новороссийск</City>
+    <AvitoKey>novorossiysk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Славянск-на-Кубани</City>
+    <AvitoKey>slavyansk-na-kubani</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сочи</City>
+    <AvitoKey>sochi</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Темрюк</City>
+    <AvitoKey>temryuk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тимашевск</City>
+    <AvitoKey>timashevsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тихорецк</City>
+    <AvitoKey>tihoretsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Туапсе</City>
+    <AvitoKey>tuapse</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Усть-Лабинск</City>
+    <AvitoKey>ust-labinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Краснодарский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Курган</City>
+    <AvitoKey>kurgan</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курганская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Далматово</City>
+    <AvitoKey>dalmatovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курганская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Каргаполье</City>
+    <AvitoKey>kargapole</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курганская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Катайск</City>
+    <AvitoKey>kataysk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курганская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кетово</City>
+    <AvitoKey>ketovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курганская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Куртамыш</City>
+    <AvitoKey>kurtamysh</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курганская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Петухово</City>
+    <AvitoKey>petuhovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курганская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Шадринск</City>
+    <AvitoKey>shadrinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курганская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Шумиха</City>
+    <AvitoKey>shumiha</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курганская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Щучье</City>
+    <AvitoKey>schuche</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курганская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Курск</City>
+    <AvitoKey>kursk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Глушково</City>
+    <AvitoKey>glushkovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Железногорск</City>
+    <AvitoKey>kurskaya_oblast_zheleznogorsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Курчатов</City>
+    <AvitoKey>kurchatov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Льгов</City>
+    <AvitoKey>lgov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Обоянь</City>
+    <AvitoKey>oboyan</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Рыльск</City>
+    <AvitoKey>rylsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Суджа</City>
+    <AvitoKey>sudzha</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Фатеж</City>
+    <AvitoKey>fatezh</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Щигры</City>
+    <AvitoKey>schigry</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Курская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Волосово</City>
+    <AvitoKey>volosovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Волхов</City>
+    <AvitoKey>volhov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Всеволожск</City>
+    <AvitoKey>vsevolozhsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Выборг</City>
+    <AvitoKey>vyborg</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Вырица</City>
+    <AvitoKey>vyritsa</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Гатчина</City>
+    <AvitoKey>gatchina</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кингисепп</City>
+    <AvitoKey>kingisepp</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кириши</City>
+    <AvitoKey>kirishi</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кировск</City>
+    <AvitoKey>leningradskaya_oblast_kirovsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Коммунар</City>
+    <AvitoKey>leningradskaya_oblast_kommunar</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Луга</City>
+    <AvitoKey>luga</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Никольское</City>
+    <AvitoKey>leningradskaya_oblast_nikolskoe</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Отрадное</City>
+    <AvitoKey>leningradskaya_oblast_otradnoe</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Приозерск</City>
+    <AvitoKey>priozersk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Рощино</City>
+    <AvitoKey>leningradskaya_oblast_roschino</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сертолово</City>
+    <AvitoKey>sertolovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сланцы</City>
+    <AvitoKey>slantsy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сосновый Бор</City>
+    <AvitoKey>leningradskaya_oblast_sosnovyy_bor</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тихвин</City>
+    <AvitoKey>tihvin</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тосно</City>
+    <AvitoKey>tosno</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ленинградская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Липецк</City>
+    <AvitoKey>lipetsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Липецкая обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Грязи</City>
+    <AvitoKey>gryazi</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Липецкая обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Данков</City>
+    <AvitoKey>dankov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Липецкая обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Доброе</City>
+    <AvitoKey>dobroe</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Липецкая обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Елец</City>
+    <AvitoKey>elets</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Липецкая обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Задонск</City>
+    <AvitoKey>zadonsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Липецкая обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Лебедянь</City>
+    <AvitoKey>lebedyan</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Липецкая обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тербуны</City>
+    <AvitoKey>terbuny</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Липецкая обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Усмань</City>
+    <AvitoKey>usman</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Липецкая обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Чаплыгин</City>
+    <AvitoKey>chaplygin</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Липецкая обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Йошкар-Ола</City>
+    <AvitoKey>yoshkar-ola</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Марий Эл</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Волжск</City>
+    <AvitoKey>volzhsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Марий Эл</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Звенигово</City>
+    <AvitoKey>zvenigovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Марий Эл</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Козьмодемьянск</City>
+    <AvitoKey>kozmodemyansk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Марий Эл</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Красногорский</City>
+    <AvitoKey>mariy_el_krasnogorskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Марий Эл</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Медведево</City>
+    <AvitoKey>medvedevo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Марий Эл</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Морки</City>
+    <AvitoKey>morki</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Марий Эл</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Параньга</City>
+    <AvitoKey>paranga</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Марий Эл</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сернур</City>
+    <AvitoKey>sernur</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Марий Эл</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Советский</City>
+    <AvitoKey>mariy_el_sovetskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Марий Эл</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Саранск</City>
+    <AvitoKey>saransk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мордовия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ардатов</City>
+    <AvitoKey>mordoviya_ardatov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мордовия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Зубова Поляна</City>
+    <AvitoKey>zubova_polyana</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мордовия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кемля</City>
+    <AvitoKey>kemlya</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мордовия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ковылкино</City>
+    <AvitoKey>kovylkino</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мордовия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Комсомольский</City>
+    <AvitoKey>mordoviya_komsomolskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мордовия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Краснослободск</City>
+    <AvitoKey>mordoviya_krasnoslobodsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мордовия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Рузаевка</City>
+    <AvitoKey>ruzaevka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мордовия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Торбеево</City>
+    <AvitoKey>torbeevo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мордовия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Чамзинка</City>
+    <AvitoKey>chamzinka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мордовия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Балашиха</City>
+    <AvitoKey>balashiha</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Воскресенск</City>
+    <AvitoKey>voskresensk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Дмитров</City>
+    <AvitoKey>dmitrov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Домодедово</City>
+    <AvitoKey>domodedovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Железнодорожный</City>
+    <AvitoKey>moskovskaya_oblast_zheleznodorozhnyy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Клин</City>
+    <AvitoKey>klin</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Коломна</City>
+    <AvitoKey>kolomna</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Королев</City>
+    <AvitoKey>korolev</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Люберцы</City>
+    <AvitoKey>lyubertsy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Мытищи</City>
+    <AvitoKey>mytischi</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Наро-Фоминск</City>
+    <AvitoKey>naro-fominsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ногинск</City>
+    <AvitoKey>noginsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Одинцово</City>
+    <AvitoKey>odintsovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Орехово-Зуево</City>
+    <AvitoKey>orehovo-zuevo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Подольск</City>
+    <AvitoKey>podolsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Пушкино</City>
+    <AvitoKey>pushkino</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Раменское</City>
+    <AvitoKey>ramenskoe</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сергиев Посад</City>
+    <AvitoKey>sergiev_posad</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Серпухов</City>
+    <AvitoKey>serpuhov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Солнечногорск</City>
+    <AvitoKey>solnechnogorsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Химки</City>
+    <AvitoKey>himki</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Чехов</City>
+    <AvitoKey>moskovskaya_oblast_chehov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Щёлково</City>
+    <AvitoKey>schelkovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Электросталь</City>
+    <AvitoKey>elektrostal</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Московская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Мурманск</City>
+    <AvitoKey>murmansk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мурманская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Апатиты</City>
+    <AvitoKey>apatity</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мурманская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Заполярный</City>
+    <AvitoKey>murmanskaya_oblast_zapolyarnyy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мурманская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кандалакша</City>
+    <AvitoKey>kandalaksha</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мурманская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Мончегорск</City>
+    <AvitoKey>monchegorsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мурманская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Мурмаши</City>
+    <AvitoKey>murmashi</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мурманская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Оленегорск</City>
+    <AvitoKey>olenegorsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мурманская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Полярный</City>
+    <AvitoKey>polyarnyy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мурманская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Североморск</City>
+    <AvitoKey>severomorsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Мурманская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Арзамас</City>
+    <AvitoKey>arzamas</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Нижегородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Балахна</City>
+    <AvitoKey>balahna</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Нижегородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Богородск</City>
+    <AvitoKey>bogorodsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Нижегородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Бор</City>
+    <AvitoKey>bor</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Нижегородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Выкса</City>
+    <AvitoKey>vyksa</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Нижегородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Городец</City>
+    <AvitoKey>gorodets</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Нижегородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Дзержинск</City>
+    <AvitoKey>dzerzhinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Нижегородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Заволжье</City>
+    <AvitoKey>zavolzhe</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Нижегородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кстово</City>
+    <AvitoKey>kstovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Нижегородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кулебаки</City>
+    <AvitoKey>kulebaki</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Нижегородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Лысково</City>
+    <AvitoKey>lyskovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Нижегородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Павлово</City>
+    <AvitoKey>nizhegorodskaya_oblast_pavlovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Нижегородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Саров</City>
+    <AvitoKey>sarov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Нижегородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Семенов</City>
+    <AvitoKey>semenov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Нижегородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Великий Новгород</City>
+    <AvitoKey>velikiy_novgorod</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Новгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Боровичи</City>
+    <AvitoKey>borovichi</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Новгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Валдай</City>
+    <AvitoKey>valday</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Новгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Демянск</City>
+    <AvitoKey>demyansk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Новгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Малая Вишера</City>
+    <AvitoKey>malaya_vishera</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Новгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Окуловка</City>
+    <AvitoKey>okulovka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Новгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Пестово</City>
+    <AvitoKey>pestovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Новгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сольцы</City>
+    <AvitoKey>soltsy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Новгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Старая Русса</City>
+    <AvitoKey>staraya_russa</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Новгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Чудово</City>
+    <AvitoKey>chudovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Новгородская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Оренбург</City>
+    <AvitoKey>orenburg</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Оренбургская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Абдулино</City>
+    <AvitoKey>abdulino</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Оренбургская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Бугуруслан</City>
+    <AvitoKey>buguruslan</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Оренбургская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Бузулук</City>
+    <AvitoKey>buzuluk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Оренбургская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кувандык</City>
+    <AvitoKey>kuvandyk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Оренбургская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Новотроицк</City>
+    <AvitoKey>novotroitsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Оренбургская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Орск</City>
+    <AvitoKey>orsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Оренбургская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Саракташ</City>
+    <AvitoKey>saraktash</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Оренбургская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Соль-Илецк</City>
+    <AvitoKey>sol-iletsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Оренбургская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сорочинск</City>
+    <AvitoKey>sorochinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Оренбургская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Орел</City>
+    <AvitoKey>orel</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Орловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Болхов</City>
+    <AvitoKey>bolhov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Орловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Верховье</City>
+    <AvitoKey>verhove</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Орловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Змиевка</City>
+    <AvitoKey>zmievka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Орловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кромы</City>
+    <AvitoKey>kromy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Орловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ливны</City>
+    <AvitoKey>livny</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Орловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Мценск</City>
+    <AvitoKey>mtsensk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Орловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Нарышкино</City>
+    <AvitoKey>naryshkino</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Орловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Хомутово</City>
+    <AvitoKey>orlovskaya_oblast_homutovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Орловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Хотынец</City>
+    <AvitoKey>hotynets</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Орловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Пенза</City>
+    <AvitoKey>penza</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пензенская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Башмаково</City>
+    <AvitoKey>bashmakovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пензенская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Заречный</City>
+    <AvitoKey>penzenskaya_oblast_zarechnyy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пензенская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Земетчино</City>
+    <AvitoKey>zemetchino</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пензенская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Каменка</City>
+    <AvitoKey>penzenskaya_oblast_kamenka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пензенская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кузнецк</City>
+    <AvitoKey>kuznetsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пензенская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Нижний Ломов</City>
+    <AvitoKey>nizhniy_lomov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пензенская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Никольск</City>
+    <AvitoKey>penzenskaya_oblast_nikolsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пензенская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сердобск</City>
+    <AvitoKey>serdobsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пензенская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Березники</City>
+    <AvitoKey>berezniki</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пермский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Краснокамск</City>
+    <AvitoKey>krasnokamsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пермский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кудымкар</City>
+    <AvitoKey>permskiy_kray_kudymkar</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пермский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кунгур</City>
+    <AvitoKey>kungur</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пермский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Лысьва</City>
+    <AvitoKey>lysva</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пермский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Соликамск</City>
+    <AvitoKey>solikamsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пермский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Чайковский</City>
+    <AvitoKey>chaykovskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пермский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Чернушка</City>
+    <AvitoKey>chernushka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пермский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Чусовой</City>
+    <AvitoKey>chusovoy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Пермский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Псков</City>
+    <AvitoKey>pskov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Псковская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Великие Луки</City>
+    <AvitoKey>velikie_luki</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Псковская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Гдов</City>
+    <AvitoKey>gdov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Псковская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Невель</City>
+    <AvitoKey>nevel</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Псковская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Опочка</City>
+    <AvitoKey>opochka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Псковская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Остров</City>
+    <AvitoKey>ostrov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Псковская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Печоры</City>
+    <AvitoKey>pechory</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Псковская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Порхов</City>
+    <AvitoKey>porhov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Псковская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Пушкинские Горы</City>
+    <AvitoKey>pushkinskie_gory</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Псковская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Себеж</City>
+    <AvitoKey>sebezh</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Псковская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Азов</City>
+    <AvitoKey>azov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Аксай</City>
+    <AvitoKey>rostovskaya_oblast_aksay</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Батайск</City>
+    <AvitoKey>bataysk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Белая Калитва</City>
+    <AvitoKey>belaya_kalitva</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Волгодонск</City>
+    <AvitoKey>volgodonsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Гуково</City>
+    <AvitoKey>gukovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Зерноград</City>
+    <AvitoKey>zernograd</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Каменск-Шахтинский</City>
+    <AvitoKey>kamensk-shahtinskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Миллерово</City>
+    <AvitoKey>millerovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Новочеркасск</City>
+    <AvitoKey>novocherkassk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Новошахтинск</City>
+    <AvitoKey>novoshahtinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сальск</City>
+    <AvitoKey>salsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Семикаракорск</City>
+    <AvitoKey>semikarakorsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Таганрог</City>
+    <AvitoKey>taganrog</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Шахты</City>
+    <AvitoKey>shahty</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ростовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Рязань</City>
+    <AvitoKey>ryazan</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Рязанская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Касимов</City>
+    <AvitoKey>kasimov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Рязанская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Михайлов</City>
+    <AvitoKey>mihaylov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Рязанская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Рыбное</City>
+    <AvitoKey>rybnoe</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Рязанская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ряжск</City>
+    <AvitoKey>ryazhsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Рязанская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сасово</City>
+    <AvitoKey>sasovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Рязанская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Скопин</City>
+    <AvitoKey>skopin</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Рязанская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Спас-Клепики</City>
+    <AvitoKey>spas-klepiki</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Рязанская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Спасск-Рязанский</City>
+    <AvitoKey>spassk-ryazanskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Рязанская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Шилово</City>
+    <AvitoKey>ryazanskaya_oblast_shilovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Рязанская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Безенчук</City>
+    <AvitoKey>bezenchuk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Самарская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Жигулевск</City>
+    <AvitoKey>zhigulevsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Самарская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кинель</City>
+    <AvitoKey>kinel</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Самарская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Новокуйбышевск</City>
+    <AvitoKey>novokuybyshevsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Самарская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Отрадный</City>
+    <AvitoKey>otradnyy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Самарская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Похвистнево</City>
+    <AvitoKey>pohvistnevo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Самарская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сызрань</City>
+    <AvitoKey>syzran</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Самарская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тольятти</City>
+    <AvitoKey>tolyatti</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Самарская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Чапаевск</City>
+    <AvitoKey>chapaevsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Самарская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Саратов</City>
+    <AvitoKey>saratov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Саратовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Аткарск</City>
+    <AvitoKey>atkarsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Саратовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Балаково</City>
+    <AvitoKey>balakovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Саратовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Балашов</City>
+    <AvitoKey>balashov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Саратовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Вольск</City>
+    <AvitoKey>volsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Саратовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Маркс</City>
+    <AvitoKey>marks</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Саратовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Петровск</City>
+    <AvitoKey>petrovsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Саратовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Пугачев</City>
+    <AvitoKey>pugachev</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Саратовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ртищево</City>
+    <AvitoKey>rtischevo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Саратовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Энгельс</City>
+    <AvitoKey>engels</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Саратовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Асбест</City>
+    <AvitoKey>asbest</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Свердловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Березовский</City>
+    <AvitoKey>sverdlovskaya_oblast_berezovskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Свердловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Верхняя Пышма</City>
+    <AvitoKey>verhnyaya_pyshma</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Свердловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Каменск-Уральский</City>
+    <AvitoKey>kamensk-uralskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Свердловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Краснотурьинск</City>
+    <AvitoKey>krasnoturinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Свердловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Нижний Тагил</City>
+    <AvitoKey>nizhniy_tagil</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Свердловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Новоуральск</City>
+    <AvitoKey>novouralsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Свердловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Первоуральск</City>
+    <AvitoKey>pervouralsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Свердловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ревда</City>
+    <AvitoKey>sverdlovskaya_oblast_revda</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Свердловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Серов</City>
+    <AvitoKey>serov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Свердловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сысерть</City>
+    <AvitoKey>sysert</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Свердловская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Смоленск</City>
+    <AvitoKey>smolensk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Смоленская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Верхнеднепровский</City>
+    <AvitoKey>verhnedneprovskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Смоленская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Вязьма</City>
+    <AvitoKey>vyazma</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Смоленская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Гагарин</City>
+    <AvitoKey>gagarin</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Смоленская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Десногорск</City>
+    <AvitoKey>desnogorsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Смоленская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Дорогобуж</City>
+    <AvitoKey>dorogobuzh</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Смоленская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Починок</City>
+    <AvitoKey>pochinok</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Смоленская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Рославль</City>
+    <AvitoKey>roslavl</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Смоленская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сафоново</City>
+    <AvitoKey>smolenskaya_oblast_safonovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Смоленская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ярцево</City>
+    <AvitoKey>yartsevo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Смоленская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ставрополь</City>
+    <AvitoKey>stavropol</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ставропольский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Будённовск</City>
+    <AvitoKey>budennovsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ставропольский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Георгиевск</City>
+    <AvitoKey>georgievsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ставропольский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ессентуки</City>
+    <AvitoKey>essentuki</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ставропольский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Железноводск</City>
+    <AvitoKey>zheleznovodsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ставропольский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Изобильный</City>
+    <AvitoKey>izobilnyy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ставропольский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кисловодск</City>
+    <AvitoKey>kislovodsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ставропольский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Минеральные Воды</City>
+    <AvitoKey>mineralnye_vody</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ставропольский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Михайловск</City>
+    <AvitoKey>stavropolskiy_kray_mihaylovsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ставропольский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Невинномысск</City>
+    <AvitoKey>nevinnomyssk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ставропольский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Пятигорск</City>
+    <AvitoKey>pyatigorsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ставропольский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Светлоград</City>
+    <AvitoKey>svetlograd</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ставропольский край</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тамбов</City>
+    <AvitoKey>tambov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тамбовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Жердевка</City>
+    <AvitoKey>zherdevka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тамбовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Инжавино</City>
+    <AvitoKey>inzhavino</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тамбовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кирсанов</City>
+    <AvitoKey>kirsanov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тамбовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Котовск</City>
+    <AvitoKey>kotovsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тамбовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Мичуринск</City>
+    <AvitoKey>michurinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тамбовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Моршанск</City>
+    <AvitoKey>morshansk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тамбовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Первомайский</City>
+    <AvitoKey>tambovskaya_oblast_pervomayskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тамбовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Рассказово</City>
+    <AvitoKey>rasskazovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тамбовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Уварово</City>
+    <AvitoKey>uvarovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тамбовская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Азнакаево</City>
+    <AvitoKey>aznakaevo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Татарстан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Альметьевск</City>
+    <AvitoKey>almetevsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Татарстан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Бугульма</City>
+    <AvitoKey>bugulma</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Татарстан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Буинск</City>
+    <AvitoKey>buinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Татарстан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Елабуга</City>
+    <AvitoKey>elabuga</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Татарстан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Заинск</City>
+    <AvitoKey>zainsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Татарстан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Зеленодольск</City>
+    <AvitoKey>zelenodolsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Татарстан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Лениногорск</City>
+    <AvitoKey>leninogorsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Татарстан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Набережные Челны</City>
+    <AvitoKey>naberezhnye_chelny</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Татарстан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Нижнекамск</City>
+    <AvitoKey>nizhnekamsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Татарстан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Чистополь</City>
+    <AvitoKey>chistopol</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Татарстан</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тверь</City>
+    <AvitoKey>tver</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тверская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Бологое</City>
+    <AvitoKey>bologoe</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тверская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Вышний Волочек</City>
+    <AvitoKey>vyshniy_volochek</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тверская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Калязин</City>
+    <AvitoKey>kalyazin</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тверская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кашин</City>
+    <AvitoKey>kashin</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тверская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кимры</City>
+    <AvitoKey>kimry</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тверская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Конаково</City>
+    <AvitoKey>konakovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тверская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Осташков</City>
+    <AvitoKey>ostashkov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тверская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ржев</City>
+    <AvitoKey>rzhev</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тверская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Торжок</City>
+    <AvitoKey>torzhok</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тверская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тула</City>
+    <AvitoKey>tula</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тульская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Алексин</City>
+    <AvitoKey>aleksin</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тульская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Богородицк</City>
+    <AvitoKey>bogoroditsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тульская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Донской</City>
+    <AvitoKey>tulskaya_oblast_donskoy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тульская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ефремов</City>
+    <AvitoKey>efremov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тульская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Заокский</City>
+    <AvitoKey>zaokskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тульская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кимовск</City>
+    <AvitoKey>kimovsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тульская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Новомосковск</City>
+    <AvitoKey>novomoskovsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тульская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Узловая</City>
+    <AvitoKey>uzlovaya</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тульская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Щекино</City>
+    <AvitoKey>schekino</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Тульская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ижевск</City>
+    <AvitoKey>izhevsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Удмуртия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Балезино</City>
+    <AvitoKey>balezino</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Удмуртия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Воткинск</City>
+    <AvitoKey>votkinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Удмуртия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Глазов</City>
+    <AvitoKey>glazov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Удмуртия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Игра</City>
+    <AvitoKey>igra</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Удмуртия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Камбарка</City>
+    <AvitoKey>kambarka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Удмуртия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кез</City>
+    <AvitoKey>kez</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Удмуртия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Можга</City>
+    <AvitoKey>mozhga</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Удмуртия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сарапул</City>
+    <AvitoKey>sarapul</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Удмуртия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ува</City>
+    <AvitoKey>uva</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Удмуртия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ульяновск</City>
+    <AvitoKey>ulyanovsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ульяновская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Барыш</City>
+    <AvitoKey>barysh</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ульяновская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Димитровград</City>
+    <AvitoKey>dimitrovgrad</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ульяновская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Инза</City>
+    <AvitoKey>inza</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ульяновская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Карсун</City>
+    <AvitoKey>karsun</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ульяновская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кузоватово</City>
+    <AvitoKey>kuzovatovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ульяновская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Новоспасское</City>
+    <AvitoKey>novospasskoe</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ульяновская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Новоульяновск</City>
+    <AvitoKey>novoulyanovsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ульяновская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сенгилей</City>
+    <AvitoKey>sengiley</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ульяновская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Чердаклы</City>
+    <AvitoKey>cherdakly</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ульяновская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Златоуст</City>
+    <AvitoKey>zlatoust</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Челябинская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Копейск</City>
+    <AvitoKey>kopeysk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Челябинская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Коркино</City>
+    <AvitoKey>korkino</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Челябинская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Магнитогорск</City>
+    <AvitoKey>magnitogorsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Челябинская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Миасс</City>
+    <AvitoKey>miass</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Челябинская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Сатка</City>
+    <AvitoKey>satka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Челябинская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Троицк</City>
+    <AvitoKey>chelyabinskaya_oblast_troitsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Челябинская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Чебаркуль</City>
+    <AvitoKey>chebarkul</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Челябинская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Южноуральск</City>
+    <AvitoKey>yuzhnouralsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Челябинская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Чебоксары</City>
+    <AvitoKey>cheboksary</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чувашия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Алатырь</City>
+    <AvitoKey>alatyr</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чувашия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Батырево</City>
+    <AvitoKey>batyrevo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чувашия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Вурнары</City>
+    <AvitoKey>vurnary</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чувашия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Канаш</City>
+    <AvitoKey>kanash</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чувашия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Мариинский Посад</City>
+    <AvitoKey>mariinskiy_posad</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чувашия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Новочебоксарск</City>
+    <AvitoKey>novocheboksarsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чувашия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Цивильск</City>
+    <AvitoKey>tsivilsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чувашия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Шумерля</City>
+    <AvitoKey>shumerlya</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чувашия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ядрин</City>
+    <AvitoKey>yadrin</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чувашия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>true</IsActive>
+    <City>Ярославль</City>
+    <AvitoKey>yaroslavl</AvitoKey>
+    <IsSelected>true</IsSelected>
+    <Parent>Ярославская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Гаврилов-Ям</City>
+    <AvitoKey>gavrilov-yam</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ярославская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Данилов</City>
+    <AvitoKey>danilov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ярославская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Мышкин</City>
+    <AvitoKey>myshkin</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ярославская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Некрасовское</City>
+    <AvitoKey>nekrasovskoe</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ярославская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Переславль-Залесский</City>
+    <AvitoKey>pereslavl-zalesskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ярославская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ростов</City>
+    <AvitoKey>rostov</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ярославская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Рыбинск</City>
+    <AvitoKey>rybinsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ярославская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тутаев</City>
+    <AvitoKey>tutaev</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ярославская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Углич</City>
+    <AvitoKey>uglich</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Ярославская обл.</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Майкоп</City>
+    <AvitoKey>maykop</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Адыгея</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Адыгейск</City>
+    <AvitoKey>adygeysk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Адыгея</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Гиагинская</City>
+    <AvitoKey>giaginskaya</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Адыгея</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Дондуковская</City>
+    <AvitoKey>dondukovskaya</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Адыгея</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Каменномостский</City>
+    <AvitoKey>kamennomostskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Адыгея</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Красногвардейское</City>
+    <AvitoKey>adygeya_krasnogvardeyskoe</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Адыгея</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тахтамукай</City>
+    <AvitoKey>tahtamukay</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Адыгея</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тульский</City>
+    <AvitoKey>tulskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Адыгея</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Энем</City>
+    <AvitoKey>enem</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Адыгея</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Яблоновский</City>
+    <AvitoKey>yablonovskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Адыгея</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ингушетия</City>
+    <AvitoKey>ingushetiya</AvitoKey>
+    <IsSelected>false</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Нальчик</City>
+    <AvitoKey>nalchik</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кабардино-Балкария</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Баксан</City>
+    <AvitoKey>baksan</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кабардино-Балкария</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Залукокоаже</City>
+    <AvitoKey>zalukokoazhe</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кабардино-Балкария</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Майский</City>
+    <AvitoKey>kabardino_balkariya_mayskiy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кабардино-Балкария</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Нарткала</City>
+    <AvitoKey>nartkala</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кабардино-Балкария</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Прохладный</City>
+    <AvitoKey>prohladnyy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кабардино-Балкария</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Терек</City>
+    <AvitoKey>terek</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кабардино-Балкария</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Тырныауз</City>
+    <AvitoKey>tyrnyauz</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кабардино-Балкария</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Чегем</City>
+    <AvitoKey>chegem</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кабардино-Балкария</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Шалушка</City>
+    <AvitoKey>shalushka</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Кабардино-Балкария</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Калмыкия</City>
+    <AvitoKey>kalmykiya</AvitoKey>
+    <IsSelected>false</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Черкесск</City>
+    <AvitoKey>cherkessk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карачаево-Черкесия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Зеленчукская</City>
+    <AvitoKey>zelenchukskaya</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карачаево-Черкесия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Карачаевск</City>
+    <AvitoKey>karachaevsk</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карачаево-Черкесия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Кардоникская</City>
+    <AvitoKey>kardonikskaya</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карачаево-Черкесия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Курджиново</City>
+    <AvitoKey>kurdzhinovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карачаево-Черкесия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Преградная</City>
+    <AvitoKey>pregradnaya</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карачаево-Черкесия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Теберда</City>
+    <AvitoKey>teberda</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карачаево-Черкесия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Усть-Джегута</City>
+    <AvitoKey>ust-dzheguta</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карачаево-Черкесия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Учкекен</City>
+    <AvitoKey>uchkeken</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карачаево-Черкесия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Эркин-Шахар</City>
+    <AvitoKey>erkin-shahar</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Карачаево-Черкесия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ненецкий АО</City>
+    <AvitoKey>nenetskiy_ao</AvitoKey>
+    <IsSelected>false</IsSelected>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Владикавказ</City>
+    <AvitoKey>vladikavkaz</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Северная Осетия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Алагир</City>
+    <AvitoKey>alagir</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Северная Осетия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ардон</City>
+    <AvitoKey>ardon</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Северная Осетия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Архонская</City>
+    <AvitoKey>arhonskaya</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Северная Осетия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Беслан</City>
+    <AvitoKey>beslan</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Северная Осетия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Дигора</City>
+    <AvitoKey>digora</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Северная Осетия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Заводской</City>
+    <AvitoKey>severnaya_osetiya_zavodskoy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Северная Осетия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Моздок</City>
+    <AvitoKey>mozdok</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Северная Осетия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Октябрьское</City>
+    <AvitoKey>severnaya_osetiya_oktyabrskoe</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Северная Осетия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Эльхотово</City>
+    <AvitoKey>elhotovo</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Северная Осетия</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Грозный</City>
+    <AvitoKey>groznyy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чеченская республика</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Автуры</City>
+    <AvitoKey>avtury</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чеченская республика</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Аргун</City>
+    <AvitoKey>argun</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чеченская республика</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ачхой-Мартан</City>
+    <AvitoKey>achhoy-martan</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чеченская республика</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Гойты</City>
+    <AvitoKey>goyty</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чеченская республика</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Гудермес</City>
+    <AvitoKey>gudermes</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чеченская республика</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Курчалой</City>
+    <AvitoKey>kurchaloy</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чеченская республика</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Ойсхара</City>
+    <AvitoKey>oyshara</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чеченская республика</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Урус-Мартан</City>
+    <AvitoKey>urus-martan</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чеченская республика</Parent>
+  </CityWrap>
+  <CityWrap>
+    <IsActive>false</IsActive>
+    <City>Шали</City>
+    <AvitoKey>shali</AvitoKey>
+    <IsSelected>false</IsSelected>
+    <Parent>Чеченская республика</Parent>
+  </CityWrap>
+</ArrayOfCityWrap>

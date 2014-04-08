@@ -49,6 +49,10 @@
     <Hash>3BB2B8882FC4A07CFC50841778054C26</Hash>
   </FileStatus>
   <FileStatus>
+    <Path>imports.xml</Path>
+    <Hash>3C8F0390C9D15371154DB14511F76092</Hash>
+  </FileStatus>
+  <FileStatus>
     <Path>KladrApiClient.dll</Path>
     <Hash>2D257B82286BCCF105699495A08834E6</Hash>
   </FileStatus>
@@ -89,6 +93,10 @@
     <Hash>5CC3F1ECA02737022B2A3BC387F4B287</Hash>
   </FileStatus>
   <FileStatus>
+    <Path>NewLastReport.report</Path>
+    <Hash>204FF58A3DF2787C5C4B73BFC6D13E6D</Hash>
+  </FileStatus>
+  <FileStatus>
     <Path>Newtonsoft.Json.dll</Path>
     <Hash>1232F5D749700A818908CC163BEFED18</Hash>
   </FileStatus>
@@ -97,12 +105,20 @@
     <Hash>B56F954A761998C5C79176FE34830B9D</Hash>
   </FileStatus>
   <FileStatus>
+    <Path>PassLastReport.report</Path>
+    <Hash>870DF2667F17CBE6064F9B561D832F3B</Hash>
+  </FileStatus>
+  <FileStatus>
+    <Path>proxies.txt</Path>
+    <Hash>0DA487D3220213B256D36C050582E1BB</Hash>
+  </FileStatus>
+  <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>63EFA60FAAB3D1DD48882B423CEE59D4</Hash>
+    <Hash>1C5449BB099201D05158AD5B4D44A673</Hash>
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>
-    <Hash>93BB80D94813E9061554DC967E1B3C0E</Hash>
+    <Hash>DD7E93D646319F8F936960C49BE84D51</Hash>
   </FileStatus>
   <FileStatus>
     <Path>System.Runtime.dll</Path>
@@ -121,24 +137,32 @@
     <Hash>AE4D9E3DEF3B74A9EDAC410D131B6DF1</Hash>
   </FileStatus>
   <FileStatus>
+    <Path>UsedLastReport.report</Path>
+    <Hash>BE7C768894140DF09010B6DBAA3F6127</Hash>
+  </FileStatus>
+  <FileStatus>
     <Path>version</Path>
-    <Hash>BC87D7A6F6E850CE2BC3521F26F38102</Hash>
+    <Hash>F82208CB1A0EAC11D8D5726958CE9104</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>
     <Hash>ADFB6D7B61E301761C700652B6FE7CCD</Hash>
   </FileStatus>
   <FileStatus>
+    <Path>City\cities.xml</Path>
+    <Hash>34A0B509CF3B37FFFB36DCC88C23267A</Hash>
+  </FileStatus>
+  <FileStatus>
     <Path>tessdata\eng.cube.bigrams</Path>
-    <Hash>F5C0F117A7BD7A60A76E4B4DA9F9AE40</Hash>
+    <Hash>849B155E3F313EE71EC3954DD400AFF6</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.fold</Path>
-    <Hash>339BB00E0F5D6EDCC1919401D1472ABF</Hash>
+    <Hash>7C302624086B306EBBDCED53DD2B185B</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.lm</Path>
-    <Hash>9095F90874775AB67225112B03653057</Hash>
+    <Hash>48BDDBF5F97D239E2461C422CC0C8EE0</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.nn</Path>
@@ -146,7 +170,7 @@
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.params</Path>
-    <Hash>4B2F4D8AA264D923A88D1A384B1B54C1</Hash>
+    <Hash>8B42570B3D149D1C6DC85B7E94417FC3</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.size</Path>
@@ -154,7 +178,7 @@
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.cube.word-freq</Path>
-    <Hash>A9D657B040DB4366E1FBB6C75BB5AE8B</Hash>
+    <Hash>9D05EB491A42681B34661E0C281BBC7E</Hash>
   </FileStatus>
   <FileStatus>
     <Path>tessdata\eng.tesseract_cube.nn</Path>

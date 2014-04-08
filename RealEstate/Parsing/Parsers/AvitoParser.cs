@@ -25,6 +25,52 @@ namespace RealEstate.Parsing.Parsers
     {
         const string ROOT_URl = "http://www.avito.ru/";
 
+        public static string GenerateUrl(CityWrap city, RealEstateType real, AdvertType advert, Usedtype used)
+        {
+            string realUrl = null;
+            string advertUrl = null;
+            string usedUrl = null;
+
+            switch (real)
+            {
+                case RealEstateType.Apartments:
+                    realUrl = "kvartiry";
+                    break;
+                case RealEstateType.House:
+                    break;
+            }
+
+            switch (advert)
+            {
+                case AdvertType.All:
+                    break;
+                case AdvertType.Buy:
+                    break;
+                case AdvertType.Sell:
+                    advertUrl = "prodam";
+                    break;
+                case AdvertType.Rent:
+                    break;
+                case AdvertType.Pass:
+                    break;
+            }
+
+            switch (used)
+            {
+                case Usedtype.All:
+                    break;
+                case Usedtype.New:
+                    usedUrl = "novostroyka";
+                    break;
+                case Usedtype.Used:
+                    usedUrl = "vtorichka";
+                    break;
+            }
+
+
+            return ROOT_URl + (city.AvitoKey + "/" + realUrl + "/" + advertUrl + "/" + usedUrl + "/").Replace("//","/");
+        }
+
         public void UpdateList(CancellationToken ct, PauseToken pt, ProxyManager proxyManager, BindableCollection<CityWrap> fullList, ParsingTask task)
         {
             string page = null;

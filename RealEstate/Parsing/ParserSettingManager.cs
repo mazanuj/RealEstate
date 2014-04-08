@@ -77,9 +77,9 @@ namespace RealEstate.Parsing
 
         public void DeleteAll()
         {
-            foreach (var url in context.ParserSourceUrls.ToList())
+            foreach (var url in context.SourceUrls.ToList())
             {
-                context.ParserSourceUrls.Remove(url);
+                context.SourceUrls.Remove(url);
             }
         }
 
@@ -87,7 +87,7 @@ namespace RealEstate.Parsing
         {
             foreach (var url in urls)
             {
-                var oldUrl = (from u in context.ParserSourceUrls
+                var oldUrl = (from u in context.SourceUrls
                               where u.Id == url.Id
                               select u).FirstOrDefault();
 
@@ -97,7 +97,7 @@ namespace RealEstate.Parsing
                 }
                 else
                 {
-                    context.ParserSourceUrls.Add(url);
+                    context.SourceUrls.Add(url);
                 }
             }
 
@@ -107,7 +107,7 @@ namespace RealEstate.Parsing
 
                 foreach (var url in forDeleting)
                 {
-                    context.ParserSourceUrls.Remove(url);
+                    context.SourceUrls.Remove(url);
                 }
             }
 

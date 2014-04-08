@@ -12,6 +12,7 @@ using System.Windows;
 using RealEstate.City;
 using RealEstate.Exporting;
 using System.Diagnostics;
+using RealEstate.Parsing.Parsers;
 
 namespace RealEstate.ViewModels
 {
@@ -288,7 +289,7 @@ namespace RealEstate.ViewModels
         {
             if (SelectedExportSite != null)
             {
-                if (MessageBox.Show(String.Format("Точно удалить настройки для сайта {0}?", SelectedExportSite.DisplayName), "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                if (MessageBox.Show(String.Format("Точно удалить настройки для сайта {0}?", SelectedExportSite.Title), "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
                     try
                     {
@@ -315,6 +316,16 @@ namespace RealEstate.ViewModels
         public bool ExportSiteIsAviable
         {
             get { return SelectedExportSite != null; }
+        }
+
+        public void GenerateUrl()
+        {
+            if(SelectedExportSite != null && ImportSite == Parsing.ImportSite.Avito && SelectedCity.City != CityWrap.ALL)
+            {
+                var str = AvitoParser.GenerateUrl(SelectedCity, RealEstateType, AdvertType, Usedtype);
+                if (!String.IsNullOrEmpty(str))
+                    ParserSourceUrls.Add(new ParserSourceUrl() { ParserSetting = SelectedParserSetting, Url = str });
+            }
         }
 
     }

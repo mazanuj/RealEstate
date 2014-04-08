@@ -9,9 +9,14 @@ namespace RealEstate.Exporting
     public class ExportSite
     {
         public int Id { get; set; }
-        public string DisplayName { get; set; }
+        public string Title { get; set; }
+        public string FtpFolder { get; set; }
+        public string FtpUserName { get; set; }
+        public string FtpPassword { get; set; }
         public string Database {get;set;}
-        public string Address { get; set; }
+        public string DatabaseUserName { get; set; }
+        public string DatabasePassword { get; set; }
+        public string Ip { get; set; }
         public string City { get; set; }
 
         public virtual ICollection<ParserSetting> ParseSettings { get; set; }

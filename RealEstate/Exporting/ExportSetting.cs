@@ -1,6 +1,7 @@
 ﻿using RealEstate.Parsing;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace RealEstate.Exporting
     {
         public int Id { get; set; }
 
+        [Required]
         public ExportSite ExportSite { get; set; }
 
         [Column("RealEstateType", TypeName = "int")]
