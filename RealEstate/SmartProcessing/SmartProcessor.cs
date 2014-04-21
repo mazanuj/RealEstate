@@ -286,6 +286,8 @@ namespace RealEstate.SmartProcessing
                         if (!String.IsNullOrEmpty(newCity))
                             advert.City = newCity;
                     }
+
+                    GetHouseByRegex(advert);
                 }
             }
             catch (Exception ex)
@@ -294,7 +296,26 @@ namespace RealEstate.SmartProcessing
             }
         }
 
-        //private bool TryDetectBy
+       private void GetHouseByRegex(Advert advert)
+       {
+           if(advert.ImportSite == ImportSite.Avito)
+           {
+               Regex regHouse = new Regex(@"д\ ?\.\ ?\d+");
+               var m = regHouse.Match(advert.Address);
+               if (m.Success && m.Groups["house"].Value != "")
+               {
+                   advert.House = m.Groups["house"].Value;
+               }
+               else
+               {
+                   m = regHouse.Match(advert.MessageFull);
+                   if(m.Success && m.Groups["house"].Value != "")
+                   {
+                       advert.House = m.Groups["house"].Value;
+                   }
+               }
+           }
+       }
 
         private bool TryParseAddress(Advert advert)
         {
@@ -496,7 +517,8 @@ namespace RealEstate.SmartProcessing
                     var m = r.Match(parts[1]);
                     if (m.Success)
                     {
-                        advert.House = m.Groups["house"].Value;
+                        if(String.IsNullOrEmpty(advert.House))
+                            advert.House = m.Groups["house"].Value;
                         advert.HousePart = m.Groups["housepart"].Value;
                     }
                 }
