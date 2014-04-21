@@ -173,7 +173,8 @@ namespace RealEstate.SmartProcessing
             if (prop != null)
             {
                 var value = prop.GetValue(advert, null);
-                return value.ToString() == Value;
+                if(value != null )
+                    return value.ToString() == Value;
             }
 
             return false;
@@ -194,7 +195,7 @@ namespace RealEstate.SmartProcessing
             if (prop != null)
             {
                 var value = prop.GetValue(advert, null);
-                if (value is string)
+                if (value != null && value is string)
                 {
                     if (IgnoreCase)
                         return (value as string).ToLower().Contains(Value.ToLower());

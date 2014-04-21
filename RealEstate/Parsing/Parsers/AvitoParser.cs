@@ -848,7 +848,7 @@ namespace RealEstate.Parsing.Parsers
                 }
                 catch (Exception)
                 {
-                    Trace.Write("Error during downloading image!");
+                    Trace.Write("Error during downloadin gphone image!");
                     throw;
                 }
 

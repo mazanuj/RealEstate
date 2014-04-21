@@ -183,6 +183,7 @@ namespace RealEstate.Exporting
             if (item == null || item.Advert == null)
             {
                 Trace.WriteLine("Exporting: item == null || item.Advert == null");
+                item.IsExported = true;
                 return;
             }
 

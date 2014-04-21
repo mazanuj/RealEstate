@@ -294,6 +294,8 @@ namespace RealEstate.SmartProcessing
             }
         }
 
+        //private bool TryDetectBy
+
         private bool TryParseAddress(Advert advert)
         {
             Regex regCity = new Regex(@"кв[\w,\.,\,, \-]*\ в ([\w,\ ,\.]+),");

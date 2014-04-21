@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace RealEstate.ViewModels
 {

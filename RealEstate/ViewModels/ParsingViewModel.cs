@@ -73,7 +73,7 @@ namespace RealEstate.ViewModels
             ImportSite = Parsing.ImportSite.Avito; //if change, do on view too
             Usedtype = Parsing.Usedtype.All;
 
-            autoTimer.Interval = 1000 * 6 * 1;
+            autoTimer.Interval = 1000 * 60 * 1;
             autoTimer.Elapsed += autoTimer_Elapsed;
             autoTimer.AutoReset = true;
             autoTimer.Start();
@@ -82,7 +82,15 @@ namespace RealEstate.ViewModels
         private void autoTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             if (AutoStart && !Tasks.Any(t => t.IsRunning) && AutoStartValue == DateTime.Now.Hour)
+            {
+                _events.Publish("Автостарт парсинга по таймеру...");
                 Start(true);
+            }
+            else if(AutoStart && DateTime.Now.Hour > AutoStopValue)
+            {
+                Stop();
+                _events.Publish("Автостоп парсинга.");
+            }
         }
 
         public void Handle(CriticalErrorEvent message)
@@ -257,6 +265,18 @@ namespace RealEstate.ViewModels
             {
                 _AutoStartValue = value;
                 NotifyOfPropertyChange(() => AutoStartValue);
+            }
+        }
+
+        private int _AutoStopValue = 6;
+        [Range(1, 2400)]
+        public int AutoStopValue
+        {
+            get { return _AutoStopValue; }
+            set
+            {
+                _AutoStopValue = value;
+                NotifyOfPropertyChange(() => AutoStopValue);
             }
         }
 
