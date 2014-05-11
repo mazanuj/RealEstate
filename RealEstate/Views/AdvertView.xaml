@@ -104,7 +104,7 @@
                                             <ColumnDefinition Width="22" />
                                             <ColumnDefinition Width="20" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock HorizontalAlignment="Right" Grid.Column="1" Margin="10 3" Text="{Binding DisplayName}" />
+                                        <TextBlock HorizontalAlignment="Right" Grid.Column="1" Margin="10 3" Text="{Binding Title}" />
                                         <Rectangle Grid.Column="2" Fill="Green" Width="18" Height="18" Margin="3" />
                                     </Grid>
                                 </DataTemplate>

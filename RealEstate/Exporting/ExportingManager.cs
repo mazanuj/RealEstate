@@ -113,11 +113,11 @@ namespace RealEstate.Exporting
                                failedCount++;
                            if (failedCount > 5)
                            {
-                               Trace.TraceError("Failed to export item more than 20 times. Export stoppped.", "Export error");
+                               Trace.TraceError("Failed to export item more than 5 times. Export stoppped.", "Export error");
                                break;
                            }
                            lastFailedExportedId = currentId;
-                           Trace.WriteLine(ex.ToString(), "Error uploading image");
+                           Trace.WriteLine(ex.ToString(), "Error when exporting");
                            Thread.Sleep(1000);
                        }
                    }

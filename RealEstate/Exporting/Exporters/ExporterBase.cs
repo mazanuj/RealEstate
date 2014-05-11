@@ -2,6 +2,7 @@
 using RealEstate.Parsing;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -39,6 +40,14 @@ namespace RealEstate.Exporting.Exporters
             FtpWebResponse uploadResponse = (FtpWebResponse)ftpClient.GetResponse();
             Console.WriteLine(uploadResponse.StatusDescription);
             uploadResponse.Close();
+        }
+
+        public DataSet SelectRows(DataSet dataset, MySqlCommand selectCommand)
+        {
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            adapter.SelectCommand = selectCommand;
+            adapter.Fill(dataset);
+            return dataset;
         }
     }
 }

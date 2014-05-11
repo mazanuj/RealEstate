@@ -49,7 +49,7 @@ namespace RealEstate.ViewModels
             if (_proxyManager.Proxies.Count < 7)
             {
                 FromNetUpdate = true;
-                Update();
+                Update(false);
             }
         }
 
@@ -158,13 +158,16 @@ namespace RealEstate.ViewModels
 
         RealEstateTask realTask = null;
 
-        public void Update()
+        public void Update(bool clearAll = true)
         {
             IsUpdating = true;
             CanCancelUpdate = true;
             realTask = new RealEstateTask();
             Progress = 0;
             NotifyOfPropertyChange(() => CanCheckOut);
+
+            if (clearAll)
+                _proxyManager.Clear();
 
 
             if (FromNetUpdate)

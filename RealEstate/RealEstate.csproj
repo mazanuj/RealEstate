@@ -194,6 +194,7 @@
     <Compile Include="Style\VS2012WindowStyle.cs" />
     <Compile Include="TaskManagers\TaskManager.cs" />
     <Compile Include="TaskManagers\RealEstateTask.cs" />
+    <Compile Include="Utils\Mail.cs" />
     <Compile Include="Utils\PauseToken.cs" />
     <Compile Include="Validation\EmailValidator.cs" />
     <Compile Include="Validation\IValidationControl.cs" />

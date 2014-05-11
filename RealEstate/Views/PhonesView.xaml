@@ -22,7 +22,7 @@
                 <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
                     <StackPanel>
                         <TextBlock Style="{StaticResource RibbonTitle}">Сайт:</TextBlock>
-                        <ComboBox Margin="5 2" Name="ExportSites" DisplayMemberPath="DisplayName"/>
+                        <ComboBox Margin="5 2" Name="ExportSites" DisplayMemberPath="Title"/>
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">

@@ -6,7 +6,7 @@
              xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
              xmlns:my="clr-namespace:RealEstate.Parsing;assembly=RealEstate"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="1300">
+             d:DesignHeight="400" d:DesignWidth="1360">
     <Grid Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -126,9 +126,13 @@
                     <Border Grid.Row="0" Style="{StaticResource RibbonToolBorder}" BorderThickness="0 0 0 1">
                         <StackPanel  Margin="2" Orientation="Horizontal">
                             <CheckBox Name="UseProxy" Content="С прокси" Margin="2" />
-                            <CheckBox Name="AutoStart" Content="Автостарт в " Margin="2 4" />
-                            <TextBox Name="AutoStartValue" Margin="2" Text="{Binding AutoStartValue, Mode=TwoWay, Converter={StaticResource intConverter}}" Visibility="{Binding AutoStart, Converter={StaticResource bool2VisibilityConverter}}" />
-                            <TextBlock Margin="4" Visibility="{Binding AutoStart, Converter={StaticResource bool2VisibilityConverter}}">ч.</TextBlock>
+                            <CheckBox Name="AutoStart" Content="Автостарт c " Margin="2 4" />
+                            <StackPanel Orientation="Horizontal" Visibility="{Binding AutoStart, Converter={StaticResource bool2VisibilityConverter}}">
+                                <TextBox Name="AutoStartValue" Margin="2" Text="{Binding AutoStartValue, Mode=TwoWay, Converter={StaticResource intConverter}}" />
+                                <TextBlock Margin="4" > до </TextBlock>
+                                <TextBox Name="AutoStopValue" Margin="2" Text="{Binding AutoStopValue, Mode=TwoWay, Converter={StaticResource intConverter}}" />
+                                <TextBlock Margin="4" >ч.</TextBlock>
+                            </StackPanel>
                         </StackPanel>
                     </Border>
                     <Border Grid.Row="1" Style="{StaticResource RibbonToolBorder}" BorderThickness="0 0 0 1">

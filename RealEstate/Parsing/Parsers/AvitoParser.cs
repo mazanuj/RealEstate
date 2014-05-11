@@ -463,7 +463,7 @@ namespace RealEstate.Parsing.Parsers
 
         private void ParseTitle(HtmlDocument full, Advert advert)
         {
-            var header = full.DocumentNode.SelectSingleNode(@".//h1[contains(@class,'item_title') or contains(@class,'item_title item_title-large')]");
+            var header = full.DocumentNode.SelectSingleNode(@".//h1[contains(@class,'item_title') or contains(@class,'item_title item_title-large') or contains(@class,'h1')]");
             if (header != null)
             {
                 var title = Normalize(header.InnerText);
@@ -623,7 +623,7 @@ namespace RealEstate.Parsing.Parsers
 
         private Int64 ParsePrice(HtmlDocument full)
         {
-            var block = full.DocumentNode.SelectSingleNode(@".//span[contains(@class,'p_i_price t-item-price')]/strong");
+            var block = full.DocumentNode.SelectSingleNode(@".//span[contains(@class,'p_i_price t-item-price')]/span");
             if (block != null)
             {
                 var priceString = block.InnerText.Replace("&nbsp;", "").Replace(" руб.", "");

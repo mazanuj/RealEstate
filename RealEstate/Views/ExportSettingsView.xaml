@@ -34,7 +34,7 @@
                             <ItemsControl Name="ExportSites">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <RadioButton  GroupName="export" Content="{Binding DisplayName}" Margin="3" cal:Message.Attach="ChangeExportSite($dataContext)"/>
+                                        <RadioButton  GroupName="export" Content="{Binding Title}" Margin="3" cal:Message.Attach="ChangeExportSite($dataContext)"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>

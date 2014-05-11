@@ -76,6 +76,8 @@ namespace RealEstate.SmartProcessing
 
                 DetectArea(advert);
 
+                DetectFloors(advert);
+
                 FillAddress(advert);
 
                 DetectYear(advert);
@@ -135,6 +137,33 @@ namespace RealEstate.SmartProcessing
             {
                 Trace.WriteLine(ex.ToString(), "Error!");
                 return false;
+            }
+        }
+
+        private void DetectFloors(Advert advert)
+        {
+            try
+            {
+                if (advert.FloorTotal == 0)
+                {
+                    var match = Regex.Match(advert.MessageFull, @"(?<floors>\d+)(\-ти\ )?этажном");
+                    if (match.Success)
+                    {
+                        var gr = match.Groups["floors"];
+                        if (gr != null)
+                        {
+                            var value = gr.Value;
+                            short floors;
+                            if (short.TryParse(value, out floors))
+                                advert.FloorTotal = floors;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine("Error detecting floors");
+                Trace.WriteLine(ex.ToString());
             }
         }
 
@@ -293,6 +322,7 @@ namespace RealEstate.SmartProcessing
             catch (Exception ex)
             {
                 Trace.WriteLine("Unable to clarify address: " + ex.Message);
+                Trace.WriteLine(ex);
             }
         }
 
