@@ -238,7 +238,7 @@ VALUES (
         {
             if (!String.IsNullOrEmpty(advert.PhoneNumber) && !String.IsNullOrEmpty(advert.Name))
             {
-                var comm_to_select = @"SELECT `id` FROM `jos_users` where username = '" + MySqlHelper.EscapeString(advert.PhoneNumber) + "' LIMIT 1;";
+                var comm_to_select = @"SELECT `id` FROM `j17_users` where username = '" + MySqlHelper.EscapeString(advert.PhoneNumber) + "' LIMIT 1;";
                 MySqlCommand selectUser = new MySqlCommand(comm_to_select, conn);
                 var res = selectUser.ExecuteScalar();
                 if (res != null && res != DBNull.Value)
@@ -250,7 +250,7 @@ VALUES (
                 }
                 else
                 {
-                    var comm = @"INSERT INTO `jos_users`
+                    var comm = @"INSERT INTO `j17_users`
                         (   `name`,
                             `username`,
                             `email`,

@@ -444,9 +444,7 @@ namespace RealEstate.ViewModels
                     Trace.WriteLine(ex.ToString());
                     _events.Publish("Ошибка");
                 }
-            }, CancellationToken.None,
-                      TaskCreationOptions.None,
-                      TaskScheduler.Default);
+            }, TaskCreationOptions.LongRunning);
         }
 
         public void ExportAdvert()
@@ -462,9 +460,7 @@ namespace RealEstate.ViewModels
                     Trace.WriteLine(ex.ToString());
                     _events.Publish("Ошибка");
                 }
-            }, CancellationToken.None,
-                      TaskCreationOptions.None,
-                      TaskScheduler.Default);
+            }, TaskCreationOptions.LongRunning);
         }
     }
 
