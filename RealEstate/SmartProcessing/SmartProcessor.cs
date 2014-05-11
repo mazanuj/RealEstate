@@ -331,19 +331,25 @@ namespace RealEstate.SmartProcessing
            if(advert.ImportSite == ImportSite.Avito)
            {
                Regex regHouse = new Regex(@"д\ ?\.\ ?\d+");
-               var m = regHouse.Match(advert.Address);
-               if (m.Success && m.Groups["house"].Value != "")
-               {
-                   advert.House = m.Groups["house"].Value;
+               if (!String.IsNullOrEmpty(advert.Address))
+               {                 
+                   var m = regHouse.Match(advert.Address);
+                   if (m.Success && m.Groups["house"].Value != "")
+                   {
+                       advert.House = m.Groups["house"].Value;
+                       return;
+                   }
                }
-               else
+
+               if (!String.IsNullOrEmpty(advert.MessageFull))
                {
-                   m = regHouse.Match(advert.MessageFull);
-                   if(m.Success && m.Groups["house"].Value != "")
+                   var m = regHouse.Match(advert.MessageFull);
+                   if (m.Success && m.Groups["house"].Value != "")
                    {
                        advert.House = m.Groups["house"].Value;
                    }
                }
+               
            }
        }
 
