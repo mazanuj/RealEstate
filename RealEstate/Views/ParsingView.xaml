@@ -23,15 +23,24 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
-                    <ScrollViewer>
-                        <ItemsControl Name="Cities" Margin="5 2">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsActive}" Content="{Binding City}" cal:Message.Attach="CityChecked($dataContext)"  />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <ScrollViewer>
+                            <ItemsControl Name="Cities" Margin="5 2">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsActive}" Content="{Binding City}" cal:Message.Attach="CityChecked($dataContext)"  />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                        
+                        <TextBlock Grid.Row="1" Margin="5 2" Text="{Binding TotalCheckedCities, StringFormat='Всего выбрано: {0}'}"/>
+                    </Grid>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
                     <StackPanel>

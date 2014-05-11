@@ -122,6 +122,13 @@ namespace RealEstate.ViewModels
                     cit.IsActive = isActive;
                 }
             }
+
+            NotifyOfPropertyChange(() => TotalCheckedCities);
+        }
+
+        public int TotalCheckedCities
+        {
+            get { return Cities.Count(c => c.IsActive); }
         }
 
         private bool _AutoExport = true;
