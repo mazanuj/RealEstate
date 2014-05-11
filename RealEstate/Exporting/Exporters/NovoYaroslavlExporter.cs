@@ -255,14 +255,18 @@ VALUES (
                             `username`,
                             `email`,
                             `block`,
+                            `usertype`,
                             `registerDate`,
+                            `gid`,
                             `params`)
                         VALUES (
                         '" + MySqlHelper.EscapeString(advert.Name) + @"',
                         '" + MySqlHelper.EscapeString(advert.PhoneNumber) + @"',
                         '" + MySqlHelper.EscapeString(String.IsNullOrEmpty(advert.Email) ? MailUtils.GenerateRandomEmail() : advert.Email) + @"',
                         0,
+                        'Registered',
                         NOW(),
+                        18,
                         '{}'); select last_insert_id();";
                     MySqlCommand insertUser = new MySqlCommand(comm, conn);
                     var user = insertUser.ExecuteScalar();
