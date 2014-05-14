@@ -26,88 +26,95 @@ namespace RealEstate.Parsing.Parsers
 
             do
             {
-                oldCount = headers.Count;
-                index++;
-
-                string result = null;
-                int attempt = 0;
-                string uri = "";
-                WebProxy proxy = null;
-
-                while (attempt < maxAttemptCount)
+                try
                 {
-                    attempt++;
-                    token.ThrowIfCancellationRequested();
-                    proxy = /*param.useProxy  ? proxyManager.GetNextProxy() :*/ null;
-                    try
-                    {
-                        uri = url + ((index != 1) ? ("page" + index) : "") + "/";
-                        var referer = url + ((index - 1 != 1) ? ("page" + (index - 1)) : "");
-                        Trace.WriteLine("Downloading " + uri);
+                    oldCount = headers.Count;
+                    index++;
 
-                        result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, true);
-                        if (result.Length < 200 || !result.Contains("квартир"))
+                    string result = null;
+                    int attempt = 0;
+                    string uri = "";
+                    WebProxy proxy = null;
+
+                    while (attempt < maxAttemptCount)
+                    {
+                        attempt++;
+                        token.ThrowIfCancellationRequested();
+                        proxy = /*param.useProxy  ? proxyManager.GetNextProxy() :*/ null;
+                        try
                         {
-                            proxyManager.RejectProxyFull(proxy);
-                            throw new BadResponseException();
-                        }
+                            uri = url + ((index != 1) ? ("page" + index) : "") + "/";
+                            var referer = url + ((index - 1 != 1) ? ("page" + (index - 1)) : "");
+                            Trace.WriteLine("Downloading " + uri);
 
-                        break;
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine(ex.Message, "Web Error!");
-                        proxyManager.RejectProxy(proxy);
-                    }
-                }
-
-                if (result == null) throw new ParsingException("Can't load headers adverts", "");
-
-                proxyManager.SuccessProxy(proxy);
-
-                HtmlDocument page = new HtmlDocument();
-                page.LoadHtml(result);
-
-                //if (page.DocumentNode.SelectSingleNode(@"//div[contains(@class,'adds_cont clear')]") != null)
-                //    break;
-
-                var tiers = page.DocumentNode.SelectNodes(@"//div[@data-position and @data-item-id]");
-                if (tiers == null)
-                {
-                    Trace.TraceInformation(url);
-                    throw new ParsingException("Can't find headers adverts", "");
-                }
-
-                if (index == 1)
-                {
-                    maxIndex = GetMaxIndex(page);
-                }
-
-                //Trace.TraceInformation("--------URLs-------------");
-                //Trace.TraceInformation("!! " + uri);                
-
-                foreach (HtmlNode tier in tiers)
-                {
-                    try
-                    {
-                        var link = ParseLinkToFullDescription(tier);
-                        var date = ParseDate(tier);
-
-                        if (date > toDate)
-                        {
-                            //Trace.TraceInformation(link);
-                            headers.Add(new AdvertHeader()
+                            result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, true);
+                            if (result.Length < 200 || !result.Contains("квартир"))
                             {
-                                DateSite = date,
-                                Url = link,
-                                SourceUrl = url
-                            });
+                                proxyManager.RejectProxyFull(proxy);
+                                throw new BadResponseException();
+                            }
+
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.WriteLine(ex.Message, "Web Error!");
+                            proxyManager.RejectProxy(proxy);
                         }
                     }
-                    catch (Exception ex)
+
+                    if (result == null) throw new ParsingException("Can't load headers adverts", "");
+
+                    proxyManager.SuccessProxy(proxy);
+
+                    HtmlDocument page = new HtmlDocument();
+                    page.LoadHtml(result);
+
+                    //if (page.DocumentNode.SelectSingleNode(@"//div[contains(@class,'adds_cont clear')]") != null)
+                    //    break;
+
+                    var tiers = page.DocumentNode.SelectNodes(@"//div[@data-position and @data-item-id]");
+                    if (tiers == null)
                     {
-                        Trace.WriteLine(ex);
+                        Trace.TraceInformation(url);
+                        throw new ParsingException("Can't find headers adverts", "");
                     }
+
+                    if (index == 1)
+                    {
+                        maxIndex = GetMaxIndex(page);
+                    }
+
+                    //Trace.TraceInformation("--------URLs-------------");
+                    //Trace.TraceInformation("!! " + uri);                
+
+                    foreach (HtmlNode tier in tiers)
+                    {
+                        try
+                        {
+                            var link = ParseLinkToFullDescription(tier);
+                            var date = ParseDate(tier);
+
+                            if (date > toDate)
+                            {
+                                //Trace.TraceInformation(link);
+                                headers.Add(new AdvertHeader()
+                                {
+                                    DateSite = date,
+                                    Url = link,
+                                    SourceUrl = url
+                                });
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.WriteLine(ex);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex);
                 }
 
                 //Trace.TraceInformation("----------------------");
