@@ -220,7 +220,12 @@ namespace RealEstate.ViewModels
         {
             var str = Clipboard.GetText();
             if (!String.IsNullOrEmpty(str))
-                ParserSourceUrls.Add(new ParserSourceUrl() { ParserSetting = SelectedParserSetting, Url = str });
+            {
+                foreach (var st in str.Split(new []{'\r'}))
+                {
+                    ParserSourceUrls.Add(new ParserSourceUrl() { ParserSetting = SelectedParserSetting, Url = st.Trim() });
+                }
+            }
         }
 
         public void SaveSources()

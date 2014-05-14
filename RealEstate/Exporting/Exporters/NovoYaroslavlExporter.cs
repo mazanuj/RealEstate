@@ -112,7 +112,7 @@ VALUES (
         '" + DateTime.Now.AddMonths(1).ToString("yyyy-MM-dd HH:mm:ss") + @"',
         0,
         0,
-        0,
+        1,
         '" + advert.AreaFull.ToString("#") + @"',
         '" + advert.AreaLiving.ToString("#") + @"',
         '" + advert.AreaKitchen.ToString("#") + @"',

@@ -200,6 +200,8 @@ namespace RealEstate.Parsing.Parsers
             bool reAtempt = false;
             int attempt = 0;
             string uri = null;
+            bool pagingNotFound = false;
+            int notfoundCount = 0;
 
             do
             {
@@ -210,8 +212,8 @@ namespace RealEstate.Parsing.Parsers
                     attempt = 0;
                 }
 
+                notfoundCount = 0;
                 reAtempt = false;
-
                 string result = null;
                 WebProxy proxy = null;
 
@@ -237,6 +239,15 @@ namespace RealEstate.Parsing.Parsers
                     catch (Exception ex)
                     {
                         Trace.WriteLine(ex.Message, "Web Error!");
+                        if (ex.ToString().Contains("404"))
+                        {
+                            notfoundCount++;
+                            if (pagingNotFound || notfoundCount > 5)
+                            {
+                                Trace.WriteLine("Avito.LoadHeader - notfoundCount > 5 || pagingNotFound && 404", "Info");
+                                return headers;
+                            }
+                        }
                         proxyManager.RejectProxy(proxy);
                     }
                 }
@@ -287,6 +298,7 @@ namespace RealEstate.Parsing.Parsers
                     else
                     {
                         Trace.WriteLine("Paging not found","Warning");
+                        pagingNotFound = true;
                     }
                 }
                 else
