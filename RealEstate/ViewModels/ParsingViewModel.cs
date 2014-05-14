@@ -464,15 +464,15 @@ namespace RealEstate.ViewModels
 
                 List<Advert> adverts = new List<Advert>();
 
-                //headers.AsParallel()
-                //    .WithCancellation(ct).WithDegreeOfParallelism(3)
-                //    .WithExecutionMode(ParallelExecutionMode.ForceParallelism)
-                //    .ForAll((header) =>
-                foreach(var header in headers)
+                headers.AsParallel()
+                    .WithCancellation(ct).WithDegreeOfParallelism(SettingsStore.ThreadsCount < 0 ? 1 : SettingsStore.ThreadsCount)
+                    .WithExecutionMode(ParallelExecutionMode.ForceParallelism)
+                    .ForAll((header) =>
+                //foreach(var header in headers)
                 {
                     ParseHeaderInternal(param, ref ct, pt, task, exportSitesId, maxattempt, proxy, header, parser);
                 }
-                //);
+                );
 
                 task.Progress = 100;
                 _events.Publish("Завершено");

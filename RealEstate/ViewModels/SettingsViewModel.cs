@@ -52,6 +52,8 @@ namespace RealEstate.ViewModels
             LogSuccessAdverts = SettingsStore.LogSuccessAdverts;
             ExportInterval = SettingsStore.ExportInterval;
             ExportParsed = SettingsStore.ExportParsed;
+            ThreadsCount = SettingsStore.ThreadsCount;
+            DefaultTimeout = SettingsStore.DefaultTimeout;
 
             Task.Factory.StartNew(() =>
             {
@@ -186,6 +188,19 @@ namespace RealEstate.ViewModels
                 NotifyOfPropertyChange(() => DefaultTimeout);
             }
         }
+
+        private int _ThreadsCount = 4;
+        [Required]
+        [Range(1, 20)]
+        public int ThreadsCount
+        {
+            get { return _ThreadsCount; }
+            set
+            {
+                _ThreadsCount = value;
+                NotifyOfPropertyChange(() => ThreadsCount);
+            }
+        }
                     
                     
 
@@ -198,12 +213,14 @@ namespace RealEstate.ViewModels
                 {
                     bool changed = false;
                     if (MaxAttemptCount != SettingsStore.MaxParsingAttemptCount || UrlToCheck != SettingsStore.UrlForChecking
-                        || LogSuccessAdverts != SettingsStore.LogSuccessAdverts || DefaultTimeout != SettingsStore.DefaultTimeout)
+                        || LogSuccessAdverts != SettingsStore.LogSuccessAdverts || DefaultTimeout != SettingsStore.DefaultTimeout
+                        || ThreadsCount != SettingsStore.ThreadsCount)
                     {
                         SettingsStore.MaxParsingAttemptCount = MaxAttemptCount;
                         SettingsStore.UrlForChecking = UrlToCheck;
                         SettingsStore.LogSuccessAdverts = LogSuccessAdverts;
                         SettingsStore.DefaultTimeout = DefaultTimeout;
+                        SettingsStore.ThreadsCount = ThreadsCount;
 
                         changed = true;
                     }

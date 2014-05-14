@@ -39,6 +39,11 @@ namespace RealEstate.Settings
 
         [Settings]
         [SectionName("Parsing")]
+        [DefaultValue(4)]
+        public static int ThreadsCount { get; set; }
+
+        [Settings]
+        [SectionName("Parsing")]
         [DefaultValue(false)]
         public static bool LogSuccessAdverts { get; set; }
 

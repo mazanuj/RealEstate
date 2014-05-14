@@ -78,6 +78,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -98,8 +99,11 @@
                     <TextBlock  Grid.Row="3" Margin="8">Таймаут запроса:</TextBlock>
                     <TextBox Grid.Row="3" Grid.Column="1" Margin="8" Text="{Binding DefaultTimeout, Mode=TwoWay, Converter={StaticResource intConverter}, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" />
 
+                    <TextBlock  Grid.Row="4" Margin="8">Число потоков:</TextBlock>
+                    <TextBox Grid.Row="4" Grid.Column="1" Margin="8" Text="{Binding ThreadsCount, Mode=TwoWay, Converter={StaticResource intConverter}, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" />
+
                     <Button Grid.Column="1" Content="Сохранить" Name="SaveParsing" Margin="5"
-                            Grid.Row="5" HorizontalAlignment="Right"/>
+                            Grid.Row="6" HorizontalAlignment="Right"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Изображения" Style="{StaticResource TabItemPaging}">
