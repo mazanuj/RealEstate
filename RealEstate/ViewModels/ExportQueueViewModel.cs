@@ -111,7 +111,7 @@ namespace RealEstate.ViewModels
 
         public void Start()
         {
-            ExportingManager.StartExportLoop();
+            ExportingManager.StartExportLoop(true);
         }
 
         public void Stop()

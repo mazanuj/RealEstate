@@ -18,7 +18,7 @@ namespace RealEstate.Parsing.Parsers
 {
     public abstract class ParserBase
     {
-        public abstract List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager, CancellationToken token);
+        public abstract List<AdvertHeader> LoadHeaders(string url,  DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager, CancellationToken token);
 
         public abstract int GetTotalCount(string sourceUrl, ProxyManager proxyManager, bool useProxy, CancellationToken token);
 

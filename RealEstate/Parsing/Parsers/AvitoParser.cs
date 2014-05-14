@@ -106,6 +106,8 @@ namespace RealEstate.Parsing.Parsers
             if (page == null || cityLinks == null)
                 throw new Exception("Can't load " + ROOT_URl);
 
+            proxyManager.SuccessProxy(proxy);
+
             Trace.WriteLine("Region counts: " + cityLinks.Count);
 
             task.TotalCount = cityLinks.Count;
@@ -148,6 +150,8 @@ namespace RealEstate.Parsing.Parsers
 
                 if (String.IsNullOrEmpty(page)) continue;
 
+                proxyManager.SuccessProxy(proxy);
+
                 HtmlDocument interanlDoc = new HtmlDocument();
                 interanlDoc.LoadHtml(page);
 
@@ -188,13 +192,14 @@ namespace RealEstate.Parsing.Parsers
             }
         }
 
-        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager, CancellationToken token)
+        public override List<AdvertHeader> LoadHeaders(string url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager, CancellationToken token)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             int oldCount = -1;
             int index = 0;
             bool reAtempt = false;
             int attempt = 0;
+            string uri = null;
 
             do
             {
@@ -208,21 +213,22 @@ namespace RealEstate.Parsing.Parsers
                 reAtempt = false;
 
                 string result = null;
+                WebProxy proxy = null;
 
                 while (attempt < maxAttemptCount)
                 {
                     attempt++;
                     token.ThrowIfCancellationRequested();
-                    WebProxy proxy = param.useProxy ? proxyManager.GetNextProxy() : null;
+                    proxy = param.useProxy ? proxyManager.GetNextProxy() : null;
 
                     try
                     {
-                        string uri = url.Url + (url.Url.Contains('?') ? '&' : '?') + "p=" + index;
+                        uri = url + (url.Contains('?') ? '&' : '?') + "p=" + index;
                         Trace.WriteLine("Downloading " + uri);
                         result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, token);
                         if (result.Length < 200 || !result.Contains("квартир"))
                         {
-                            proxyManager.RejectProxyFull(proxy);
+                            proxyManager.RejectProxy(proxy);
                             throw new BadResponseException();
                         }
                         break;
@@ -243,6 +249,8 @@ namespace RealEstate.Parsing.Parsers
                     continue;
                 }
 
+                proxyManager.SuccessProxy(proxy);
+
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
 
@@ -262,8 +270,23 @@ namespace RealEstate.Parsing.Parsers
                             {
                                 DateSite = date,
                                 Url = link,
-                                Setting = url.ParserSetting
+                                SourceUrl = url
                             });
+                    }
+
+                    var paginator = page.DocumentNode.SelectSingleNode(@"//div[contains(@class,'b-paginator clearfix j-pages')]");
+                    if(paginator != null)
+                    {
+                        var lastButton = page.DocumentNode.SelectSingleNode(@"//div[contains(@class,'b-paginator')]/a[contains(@class,'last')]");
+                        if (lastButton == null)
+                        {
+                            Trace.WriteLine("Last page of adverts: " + uri);
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        Trace.WriteLine("Paging not found","Warning");
                     }
                 }
                 else
@@ -292,6 +315,7 @@ namespace RealEstate.Parsing.Parsers
                 string result = null;
                 reAtempt = false;
                 notFound = 0;
+                WebProxy proxy = null;
 
                 while (attempt < SettingsStore.MaxParsingAttemptCount)
                 {
@@ -299,7 +323,7 @@ namespace RealEstate.Parsing.Parsers
 
                     token.ThrowIfCancellationRequested();
 
-                    WebProxy proxy = useProxy ? proxyManager.GetNextProxy() : null;
+                    proxy = useProxy ? proxyManager.GetNextProxy() : null;
 
                     try
                     {
@@ -349,6 +373,8 @@ namespace RealEstate.Parsing.Parsers
                         reAtempt = true;
                     continue;
                 }
+
+                proxyManager.SuccessProxy(proxy);
 
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
@@ -517,7 +543,7 @@ namespace RealEstate.Parsing.Parsers
             var cityLabel = full.GetElementbyId("map");
             if (cityLabel != null)
             {
-                var city = cityLabel.ChildNodes.Where(span => span.Attributes["class"] != null && span.Attributes["class"].Value == "c-1"); //todo check this
+                var city = cityLabel.ChildNodes.Where(span => span.Attributes["class"] != null && span.Attributes["class"].Value == "c-1");
                 if (city != null)
                     advert.City = Normalize(String.Join(", ", city.Select(c => c.InnerText))).TrimEnd(new[] { ',', ' ' });
 
@@ -827,7 +853,7 @@ namespace RealEstate.Parsing.Parsers
                     if (k % 3 == 0)
                         pkey += mixed[k];
 
-                return string.Format(@"http://www.avito.ru/items/phone/{0}?pkey={1}", itemUrl, pkey);
+                return string.Format(@"http://www.avito.ru/items/phone/{0}?pkey={1}", itemId, pkey);
             }
 
             return null;
@@ -848,7 +874,8 @@ namespace RealEstate.Parsing.Parsers
                 }
                 catch (Exception)
                 {
-                    Trace.Write("Error during downloadin gphone image!");
+                    Trace.Write("Error during downloading phone image!");
+                    Trace.Write("phoneUrl: " + phoneUrl);
                     throw;
                 }
 

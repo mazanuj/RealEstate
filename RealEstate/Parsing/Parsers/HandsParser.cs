@@ -17,7 +17,7 @@ namespace RealEstate.Parsing.Parsers
 {
     public class HandsParser : ParserBase
     {
-        public override List<AdvertHeader> LoadHeaders(ParserSourceUrl url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager, CancellationToken token)
+        public override List<AdvertHeader> LoadHeaders(string url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager, CancellationToken token)
         {
             List<AdvertHeader> headers = new List<AdvertHeader>();
             int oldCount = -1;
@@ -32,16 +32,17 @@ namespace RealEstate.Parsing.Parsers
                 string result = null;
                 int attempt = 0;
                 string uri = "";
+                WebProxy proxy = null;
 
                 while (attempt < maxAttemptCount)
                 {
                     attempt++;
                     token.ThrowIfCancellationRequested();
-                    WebProxy proxy = /*param.useProxy  ? proxyManager.GetNextProxy() :*/ null;
+                    proxy = /*param.useProxy  ? proxyManager.GetNextProxy() :*/ null;
                     try
                     {
-                        uri = url.Url + ((index != 1) ? ("page" + index) : "") + "/";
-                        var referer = url.Url + ((index - 1 != 1) ? ("page" + (index - 1)) : "");
+                        uri = url + ((index != 1) ? ("page" + index) : "") + "/";
+                        var referer = url + ((index - 1 != 1) ? ("page" + (index - 1)) : "");
                         Trace.WriteLine("Downloading " + uri);
 
                         result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, true);
@@ -62,6 +63,8 @@ namespace RealEstate.Parsing.Parsers
 
                 if (result == null) throw new ParsingException("Can't load headers adverts", "");
 
+                proxyManager.SuccessProxy(proxy);
+
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
 
@@ -71,7 +74,7 @@ namespace RealEstate.Parsing.Parsers
                 var tiers = page.DocumentNode.SelectNodes(@"//div[@data-position and @data-item-id]");
                 if (tiers == null)
                 {
-                    Trace.TraceInformation(url.Url);
+                    Trace.TraceInformation(url);
                     throw new ParsingException("Can't find headers adverts", "");
                 }
 
@@ -95,7 +98,7 @@ namespace RealEstate.Parsing.Parsers
                         {
                             DateSite = date,
                             Url = link,
-                            Setting = url.ParserSetting
+                            SourceUrl = url
                         });
                     }
                 }
@@ -285,7 +288,7 @@ namespace RealEstate.Parsing.Parsers
                         }
                         catch (Exception)
                         {
-                            Trace.WriteLine("Unrecoginzed data: " + parts[1], "Parsing error");
+                            Trace.WriteLine("Unrecoginzed data: " + parts[0] + " : " + parts[1], "Parsing error");
                         }
                     }
                 }

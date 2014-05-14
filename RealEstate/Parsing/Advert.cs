@@ -11,7 +11,7 @@ namespace RealEstate.Parsing
     {
         public string Url { get; set; }
         public DateTime DateSite { get; set; }
-        public ParserSetting Setting { get; set; }
+        public string SourceUrl { get; set; }
     }
 
     public class Advert

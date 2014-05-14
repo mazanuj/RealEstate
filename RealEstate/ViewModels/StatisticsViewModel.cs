@@ -30,13 +30,12 @@ namespace RealEstate.ViewModels
         private readonly ProxyManager _proxyManager;
         private readonly CityManager _cityManager;
         private readonly ImportManager _importManager;
-        private readonly ParsingManager _parsingManager;
         private readonly StatisticsManager _statManager;
         private readonly CityParser _cityParser;
 
         [ImportingConstructor]
         public StatisticsViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager,
-            CityManager cityManager, ImportManager importManager, ParsingManager parsingManager, StatisticsManager stat,
+            CityManager cityManager, ImportManager importManager,  StatisticsManager stat,
             CityParser cityParser)
         {
             _events = events;
@@ -44,7 +43,6 @@ namespace RealEstate.ViewModels
             _proxyManager = proxyManager;
             _cityManager = cityManager;
             _importManager = importManager;
-            _parsingManager = parsingManager;
             _statManager = stat;
             _cityParser = cityParser;
             events.Subscribe(this);

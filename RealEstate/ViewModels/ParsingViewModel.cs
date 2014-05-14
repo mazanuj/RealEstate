@@ -34,19 +34,17 @@ namespace RealEstate.ViewModels
         private readonly CityManager _cityManager;
         private readonly ImportManager _importManager;
         private readonly ParserSettingManager _parserSettingManager;
-        private readonly ParsingManager _parsingManager;
         private readonly AdvertsManager _advertsManager;
         private readonly ImagesManager _imagesManager;
         private readonly SmartProcessor _smartProcessor;
         private readonly ExportingManager _exportingManager;
-        private const int MAX_COUNT_PARSED = 100;
 
         private System.Timers.Timer autoTimer = new System.Timers.Timer();
 
         [ImportingConstructor]
         public ParsingViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager,
             CityManager cityManager, ImportManager importManager, ParserSettingManager parserSettingManager,
-            ParsingManager parsingManager, AdvertsManager advertsManager, ImagesManager imagesManager,
+            AdvertsManager advertsManager, ImagesManager imagesManager,
             SmartProcessor smartProcessor, ExportingManager exportingManager)
         {
             _events = events;
@@ -55,7 +53,6 @@ namespace RealEstate.ViewModels
             _cityManager = cityManager;
             _importManager = importManager;
             _parserSettingManager = parserSettingManager;
-            _parsingManager = parsingManager;
             _advertsManager = advertsManager;
             _imagesManager = imagesManager;
             _smartProcessor = smartProcessor;
@@ -86,7 +83,7 @@ namespace RealEstate.ViewModels
                 _events.Publish("Автостарт парсинга по таймеру...");
                 Start(true);
             }
-            else if(AutoStart && DateTime.Now.Hour > AutoStopValue)
+            else if (AutoStart && DateTime.Now.Hour > AutoStopValue)
             {
                 Stop();
                 _events.Publish("Автостоп парсинга.");
@@ -151,7 +148,7 @@ namespace RealEstate.ViewModels
                 _PhoneImport = value;
                 NotifyOfPropertyChange(() => PhoneImport);
 
-                if(PhoneImport)
+                if (PhoneImport)
                 {
                     AutoExport = false;
                     UseProxy = true;
@@ -406,282 +403,93 @@ namespace RealEstate.ViewModels
                 var settings = _parserSettingManager.FindSettings(param.advertType, param.cities,
                     param.site, param.realType, param.subType);
 
-
-                bool any = false;
-                foreach (var setting in settings)
-                {
-                    if (setting.Urls != null)
-                        foreach (var url in setting.Urls.Select(u => u.Url))
-                        {
-                            any = true;
-                        }
-                }
-
-                if (!any)
+                if (!settings.Any(s => s.Urls.Any()))
                 {
                     task.Stop();
                     App.Current.Dispatcher.Invoke((System.Action)(() =>
-                   {
-                       Tasks.Remove(task);
-                   }));
+                       {
+                           Tasks.Remove(task);
+                       }));
                     return;
+                }
+
+                var urls = new List<string>();
+                var exportSitesId = new List<KeyValuePair<string, int>>();
+
+                foreach (var setting in settings)
+                {
+                    if (setting.Urls != null)
+                    {
+                        foreach (var Url in setting.Urls)
+                        {
+                            var url = Url.Url;
+                            if (!urls.Contains(url))
+                            {
+                                urls.Add(url);
+                            }
+
+                            exportSitesId.Add(new KeyValuePair<string, int>(url, Url.ParserSetting.ExportSite.Id));
+                        }
+                    }
                 }
 
                 App.Current.Dispatcher.Invoke((System.Action)(() =>
                     {
-                        foreach (var setting in settings)
+                        foreach (var item in urls)
                         {
-                            if (setting.Urls != null)
-                                foreach (var url in setting.Urls.Select(u => u.Url))
-                                {
-                                    task.SourceUrls.Add(url);
-                                }
+                            task.SourceUrls.Add(item);
                         }
                     }));
 
                 int maxattempt = SettingsStore.MaxParsingAttemptCount;
 
                 WebProxy proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
-                var headers = _parsingManager.LoadHeaders(param, settings, ct, pt, maxattempt, _proxyManager);
+
+                List<AdvertHeader> headers = new List<AdvertHeader>();
+                ParserBase parser = ParsersFactory.GetParser(param.site);
+
+                urls.AsParallel().ForAll((url) =>
+                {
+                    if (pt.IsPauseRequested)
+                        pt.WaitUntillPaused();
+
+                    ct.ThrowIfCancellationRequested();
+
+                    var hds = parser.LoadHeaders(url, ParserSetting.GetDate(param.period), param, maxattempt * 2, _proxyManager, ct);
+
+                    headers.AddRange(hds);
+                });
 
                 task.TotalCount = headers.Count;
 
                 List<Advert> adverts = new List<Advert>();
-                ParserBase parser = ParsersFactory.GetParser(param.site);
 
-                int attempt = 0;
-                Advert last = null;
-                Advert advert = null;
-                bool parsed = false;
-                int prsCount = 0;
-
-                for (int i = 0; i < headers.Count; i++)
+                //headers.AsParallel()
+                //    .WithCancellation(ct).WithDegreeOfParallelism(3)
+                //    .WithExecutionMode(ParallelExecutionMode.ForceParallelism)
+                //    .ForAll((header) =>
+                foreach(var header in headers)
                 {
-                    parsed = !param.phoneImport && _advertsManager.IsParsed(headers[i].Url);
-
-                    DateTime start = DateTime.Now;
-
-                    if (!parsed)
-                    {
-                        prsCount = 0;
-                        last = advert;
-                        advert = null;
-
-                        attempt = 0;
-                        int blocked = 0;
-
-                        while (attempt < maxattempt)
-                        {
-                            attempt++;
-                            if (ct.IsCancellationRequested)
-                            { _events.Publish("Отменено"); return; }
-                            if (pt.IsPauseRequested)
-                                pt.WaitUntillPaused();
-
-                            Thread.Sleep(param.Delay * 1000);
-
-                            proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
-                            try
-                            {
-                                advert = parser.Parse(headers[i], proxy, ct, pt, param.phoneImport);
-                                break;
-                            }
-                            catch (InvalidDataException iex)
-                            {
-                                Trace.WriteLine(iex.Message, "IO error");
-                                _proxyManager.RejectProxyFull(proxy);
-                            }
-                            catch (System.Web.HttpException ex)
-                            {
-                                Trace.WriteLine(ex.Message, "Http error");
-                                _proxyManager.RejectProxy(proxy);
-                            }
-                            catch (System.Net.WebException wex)
-                            {
-                                Trace.WriteLine(wex.Message, "Web error");
-                                _proxyManager.RejectProxy(proxy);
-
-                                if ((HttpWebResponse)wex.Response != null)
-                                {
-                                    if (((HttpWebResponse)wex.Response).StatusCode == HttpStatusCode.Forbidden)
-                                    {
-                                        _proxyManager.RejectProxyFull(proxy);
-
-                                        blocked++;
-                                        if (blocked > maxattempt - 2)
-                                        {
-                                            _events.Publish("Сервер заблокировал доступ. Операция приостановлена");
-                                            return;
-                                        }
-                                    }
-                                }
-
-                            }
-                            catch (System.IO.IOException)
-                            {
-                                Trace.WriteLine("IO error");
-                                _proxyManager.RejectProxy(proxy);
-                            }
-                            catch (BadResponseException)
-                            {
-                                Trace.WriteLine("Bad response from proxy");
-                                _proxyManager.RejectProxy(proxy);
-                            }
-                            catch (ParsingException pex)
-                            {
-                                Trace.WriteLine(pex.Message + ": " + pex.UnrecognizedData, "Unrecognized data");
-                                if (attempt + 1 >= maxattempt)
-                                    break;
-                                else
-                                    attempt = maxattempt - 2;
-                            }
-                            catch (OperationCanceledException)
-                            {
-                                Trace.WriteLine("Canceled");
-                                _events.Publish("Отменено");
-                            }
-                            catch (Exception ex)
-                            {
-                                Trace.WriteLine(ex.ToString(), "Error!");
-                                _events.Publish("Ошибка парсинга!");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (prsCount > MAX_COUNT_PARSED)
-                        {
-                            _events.Publish("Задание завершено. Текущий url уже был обработан");
-                            Trace.WriteLine("Task was stopped. Current url already parsed");
-                            break;
-                        }
-
-                        int failed = 0;
-                        while (advert != null && failed < 5)
-                        {
-                            try
-                            {
-                                failed++;
-                                advert = _advertsManager.GetParsed(headers[i].Url);
-                            }
-                            catch (Exception)
-                            {
-                                Thread.Sleep(200);
-                            }
-                        }
-
-                        prsCount++;
-                    }
-
-                    try
-                    {
-                        if (advert != null)
-                        {
-                            if (!parsed || param.phoneImport)
-                            {
-                                advert.ParsingNumber = _advertsManager.LastParsingNumber;
-                            }
-
-                            if (!parsed && !param.phoneImport)
-                            {
-                                if (advert.ImportSite == Parsing.ImportSite.Hands)
-                                {
-                                    if (last != null && advert != null)
-                                    {
-                                        if (!String.IsNullOrEmpty(last.Address) && !String.IsNullOrEmpty(advert.Address))
-                                        {
-                                            if (last.Street == advert.Street && last.Rooms == advert.Rooms && last.House == advert.House)
-                                            {
-                                                Trace.WriteLine("Skiped by last has the same address");
-                                                continue;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            var advertIsOk = param.phoneImport;
-                            if(!param.phoneImport)
-                                advertIsOk = _smartProcessor.Process(advert, param);
-
-                            if (advertIsOk)
-                            {
-                                if (!param.phoneImport && advert.ImportSite == Parsing.ImportSite.Hands)
-                                {
-                                    if (last != null && advert != null)
-                                    {
-                                        if (!String.IsNullOrEmpty(last.Address) && !String.IsNullOrEmpty(advert.Address))
-                                        {
-                                            if (last.Street == advert.Street && last.Rooms == advert.Rooms && last.House == advert.House)
-                                            {
-                                                Trace.WriteLine("Skiped by last has the same address");
-                                                continue;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if (SettingsStore.LogSuccessAdverts)
-                                    Trace.WriteLine(advert.ToString(), "Advert");
-
-                                _advertsManager.Save(advert, headers[i].Setting, param.phoneImport);
-
-                                if (!param.phoneImport && CheckUniq(advert, param.uniq))
-                                {
-
-                                    if (SettingsStore.SaveImages)
-                                        _imagesManager.DownloadImages(advert.Images, ct, advert.ImportSite);
-
-                                    if (param.autoExport && (SettingsStore.ExportParsed || (!SettingsStore.ExportParsed && !parsed)))
-                                    {
-                                        var cov = _smartProcessor.ComputeCoverage(advert);
-                                        if (cov > 0.6)
-                                            if (!param.onlyImage || (param.onlyImage && advert.ContainsImages))
-                                                _exportingManager.AddAdvertToExport(advert);
-                                            else
-                                            {
-                                                Trace.WriteLine("Advert (" + advert.Id + ") skipped due the lack of pictures");
-                                            }
-                                        else
-                                            Trace.WriteLine("Advert skipped as empty. Coverage = " + cov.ToString("P0"), "Skipped by smart processor");
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                //Trace.TraceInformation("Advert was skipped due smart processor rule");
-                            }
-                        }
-                        else
-                        {
-                            Trace.WriteLine("Advert was skipped", "Warning");
-                        }
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        Trace.WriteLine("Operation '" + task.Description + "' has been canceled");
-                        break;
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine("Ошибка:" + ex.Message);
-                    }
-
-                    task.PerformStep(DateTime.Now - start);
+                    ParseHeaderInternal(param, ref ct, pt, task, exportSitesId, maxattempt, proxy, header, parser);
                 }
+                //);
 
                 task.Progress = 100;
                 _events.Publish("Завершено");
 
             }
+            catch (AggregateException aex)
+            {
+                if (aex.InnerExceptions[0] is OperationCanceledException)
+                {
+                    Trace.WriteLine("Operation '" + task.Description + "' has been canceled");
+                    _events.Publish("Парсинг отменён");
+                }
+            }
             catch (OperationCanceledException)
             {
                 Trace.WriteLine("Operation '" + task.Description + "' has been canceled");
-            }
-            catch (ParsingException pex)
-            {
-                Trace.WriteLine(pex.Message, "Error!");
-                _events.Publish("Ошибка загрузки объявлений");
+                _events.Publish("Парсинг отменён");
             }
             catch (Exception ex)
             {
@@ -693,6 +501,199 @@ namespace RealEstate.ViewModels
                 task.Stop();
                 Trace.WriteLine("Task has been closed", "Info");
             }
+        }
+
+        private void ParseHeaderInternal(TaskParsingParams param, ref CancellationToken ct, PauseToken pt, ParsingTask task, List<KeyValuePair<string, int>> exportSitesId, int maxattempt, WebProxy proxy, AdvertHeader header, ParserBase parser)
+        {
+
+            bool parsed = !param.phoneImport && _advertsManager.IsParsed(header.Url);
+
+            DateTime start = DateTime.Now;
+            var attempt = 0;
+            Advert advert = null;
+
+            if (!parsed)
+            {
+                while (attempt < maxattempt)
+                {
+                    attempt++;
+                    ct.ThrowIfCancellationRequested();
+                    if (pt.IsPauseRequested)
+                        pt.WaitUntillPaused();
+
+                    Thread.Sleep(param.Delay * 1000);
+
+                    proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
+                    try
+                    {
+                        advert = parser.Parse(header, proxy, ct, pt, param.phoneImport);
+                        _proxyManager.SuccessProxy(proxy);
+                        break;
+                    }
+                    catch (TimeoutException tix)
+                    {
+                        Trace.WriteLine(tix.Message, "Web error");
+                        _proxyManager.RejectProxy(proxy);
+                    }
+                    catch (InvalidDataException iex)
+                    {
+                        Trace.WriteLine(iex.Message, "IO error");
+                        _proxyManager.RejectProxyFull(proxy);
+                    }
+                    catch (System.Web.HttpException ex)
+                    {
+                        Trace.WriteLine(ex.Message, "Http error");
+                        _proxyManager.RejectProxy(proxy);
+                    }
+                    catch (System.Net.WebException wex)
+                    {
+                        Trace.WriteLine(wex.Message, "Web error");
+                        _proxyManager.RejectProxy(proxy);
+
+                        if ((HttpWebResponse)wex.Response != null)
+                        {
+                            if (((HttpWebResponse)wex.Response).StatusCode == HttpStatusCode.Forbidden)
+                            {
+                                _proxyManager.RejectProxyFull(proxy);
+                            }
+                        }
+                    }
+                    catch (System.IO.IOException)
+                    {
+                        Trace.WriteLine("IO error");
+                        _proxyManager.RejectProxy(proxy);
+                    }
+                    catch (BadResponseException)
+                    {
+                        Trace.WriteLine("Bad response from proxy");
+                        _proxyManager.RejectProxy(proxy);
+                    }
+                    catch (ParsingException pex)
+                    {
+                        Trace.WriteLine(pex.Message + ": " + pex.UnrecognizedData, "Unrecognized data");
+                        if (attempt + 1 >= maxattempt)
+                            break;
+                        else
+                            attempt = maxattempt - 2;
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        Trace.WriteLine("Canceled");
+                        throw;
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex.ToString(), "Error!");
+                        _events.Publish("Ошибка парсинга!");
+                    }
+                }
+            }
+            else
+            {
+                int failed = 0;
+                while (failed < 5)
+                {
+                    try
+                    {
+                        failed++;
+                        advert = _advertsManager.GetParsed(header.Url);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex.Message, "Get parsed");
+                        Thread.Sleep(200);
+                    }
+                }
+            }
+
+            try
+            {
+                if (advert != null)
+                {
+                    if (!parsed || param.phoneImport)
+                    {
+                        advert.ParsingNumber = _advertsManager.LastParsingNumber;
+                    }
+
+                    var advertIsOk = param.phoneImport;
+                    if (!parsed && !param.phoneImport)
+                        advertIsOk = _smartProcessor.Process(advert, param);
+
+                    if (advertIsOk || parsed)
+                    {
+                        if (SettingsStore.LogSuccessAdverts)
+                            Trace.WriteLine(advert, "Advert");
+
+                        var ids = exportSitesId.Where(e => e.Key == header.SourceUrl).Select(e => e.Value).ToArray();
+                        _advertsManager.Save(advert, ids, param.phoneImport);
+
+                        bool checkUniq = false;
+                        int failedUniq = 0;
+
+                        while (failedUniq < 5)
+                        {
+                            try
+                            {
+                                failedUniq++;
+                                checkUniq = CheckUniq(advert, param.uniq);
+                                break;
+                            }
+                            catch (Exception ex)
+                            {
+                                if (failedUniq == 5)
+                                    throw;
+                                else
+                                {
+                                    Trace.WriteLine(ex);
+                                    Thread.Sleep(200);
+                                }
+                            }
+                        }
+
+                        if (!param.phoneImport && checkUniq)
+                        {
+
+                            if (SettingsStore.SaveImages)
+                                _imagesManager.DownloadImages(advert.Images, ct, advert.ImportSite);
+
+                            if (param.autoExport)
+                            {
+                                var cov = _smartProcessor.ComputeCoverage(advert);
+                                if (cov > 0.6)
+                                    if (!param.onlyImage || (param.onlyImage && advert.ContainsImages))
+                                    {
+                                        _exportingManager.AddAdvertToExport(advert);
+                                    }
+                                    else
+                                    {
+                                        Trace.WriteLine("Advert (" + advert.Id + ") skipped due the lack of pictures");
+                                    }
+                                else
+                                    Trace.WriteLine("Advert skipped as empty. Coverage = " + cov.ToString("P0"), "Skipped by smart processor");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //Trace.TraceInformation("Advert was skipped due smart processor rule");
+                    }
+                }
+                else
+                {
+                    Trace.WriteLine("Advert was skipped", "Warning");
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine("Error:" + ex.ToString());
+            }
+
+            task.PerformStep(DateTime.Now - start);
         }
 
         private bool CheckUniq(Advert advert, UniqueEnum uniqueEnum)

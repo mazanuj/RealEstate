@@ -22,6 +22,7 @@ namespace RealEstate.ViewModels
     [Export(typeof(ProxiesViewModel))]
     public class ProxiesViewModel : ValidatingScreen<ProxiesViewModel>, IHandle<ToolsOpenEvent>, IHandle<CriticalErrorEvent>
     {
+        const int MIN_PROXIES = 4;
         private readonly IEventAggregator _events;
         private readonly TaskManager _taskManager;
         private readonly ProxyManager _proxyManager;
@@ -46,10 +47,10 @@ namespace RealEstate.ViewModels
 
         void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (_proxyManager.Proxies.Count < 7)
+            if (!IsUpdating && _proxyManager.Proxies.Count < MIN_PROXIES)
             {
                 FromNetUpdate = true;
-                Update(false);
+                UpdateInternal(false);
             }
         }
 
@@ -102,21 +103,15 @@ namespace RealEstate.ViewModels
             get { return _SourceReaders; }
         }
 
-        public BindableCollection<WebProxy> CheckedProxies
+        public BindableCollection<StatProxy> CheckedProxies
         {
             get { return _proxyManager.Proxies; }
         }
 
-        public BindableCollection<WebProxy> RejectedProxies
+        public BindableCollection<StatProxy> RejectedProxies
         {
             get { return _proxyManager.RejectedProxies; }
         }
-
-        public BindableCollection<WebProxy> SuspectedProxies
-        {
-            get { return _proxyManager.SuspectedProxies; }
-        }
-
         
         private IProxySourceReader _SelectedSourceReader = null;
         public IProxySourceReader SelectedSourceReader
@@ -158,7 +153,12 @@ namespace RealEstate.ViewModels
 
         RealEstateTask realTask = null;
 
-        public void Update(bool clearAll = true)
+        public void Update()
+        {
+            UpdateInternal(true);
+        }
+
+        private void UpdateInternal(bool clean)
         {
             IsUpdating = true;
             CanCancelUpdate = true;
@@ -166,8 +166,10 @@ namespace RealEstate.ViewModels
             Progress = 0;
             NotifyOfPropertyChange(() => CanCheckOut);
 
-            if (clearAll)
+            if (clean)
+            {
                 _proxyManager.Clear();
+            }
 
 
             if (FromNetUpdate)
@@ -176,7 +178,7 @@ namespace RealEstate.ViewModels
                 _taskManager.AddTask(realTask);
             }
             else if (FromFileUpdate)
-            {                
+            {
                 realTask.Task = new Task(UpdateFromFile);
                 _taskManager.AddTask(realTask);
             }
@@ -203,7 +205,7 @@ namespace RealEstate.ViewModels
 
                     var proxies = storage.LoadFromFile();
 
-                    CheckedProxies.AddRange(proxies);
+                    _proxyManager.Load(proxies, true);
 
                     Trace.WriteLine("Proxies proxies. Total count: " + proxies.Count());
 
@@ -292,7 +294,9 @@ namespace RealEstate.ViewModels
                 NotifyOfPropertyChange(() => CanCheckOut);
 
                 if (e.IsSuccess)
-                    CheckedProxies.Add(e.WebProxy);
+                {
+                    _proxyManager.Add(e.WebProxy);
+                }
 
                 check++;
                 if (check % 3 == 0)
@@ -352,7 +356,7 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                var proxies = CheckedProxies.ToList();
+                var proxies = CheckedProxies.Select(p => p.Proxy).ToList();
 
                 _proxyManager.Clear();
                 total = proxies.Count;

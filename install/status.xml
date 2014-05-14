@@ -69,6 +69,10 @@
     <Hash>75E2D44FAF73CA61B255FF810822FC9F</Hash>
   </FileStatus>
   <FileStatus>
+    <Path>log.txt</Path>
+    <Hash>D41D8CD98F00B204E9800998ECF8427E</Hash>
+  </FileStatus>
+  <FileStatus>
     <Path>map template.html</Path>
     <Hash>FCBD79E2F316341F68F90321E590109B</Hash>
   </FileStatus>
@@ -110,11 +114,11 @@
   </FileStatus>
   <FileStatus>
     <Path>proxies.txt</Path>
-    <Hash>1274BE328BE22FDE43DC75ECF582CD01</Hash>
+    <Hash>0841404C4D3DF795CE1D17A52CAE3BC4</Hash>
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>8136886379985362D94D76F0A02BBDC2</Hash>
+    <Hash>1C75AE3AC83C1F2A3DCB97454BE29A8A</Hash>
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>
@@ -142,7 +146,7 @@
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
-    <Hash>B7EDC78B6E3FC389E91877A99A568480</Hash>
+    <Hash>D1BD83A33F1A841AB7FDA32449746CC4</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>

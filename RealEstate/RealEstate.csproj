@@ -174,7 +174,6 @@
     <Compile Include="Parsing\ParserSettingManager.cs" />
     <Compile Include="Parsing\Parsers\ParsersFactory.cs" />
     <Compile Include="Parsing\Parsers\ParsingException.cs" />
-    <Compile Include="Parsing\ParsingManager.cs" />
     <Compile Include="Parsing\ParsingSetting.cs" />
     <Compile Include="Parsing\Advert.cs" />
     <Compile Include="Parsing\ImagesManager.cs" />
@@ -183,6 +182,7 @@
     <Compile Include="Parsing\Parsers\ParserBase.cs" />
     <Compile Include="Parsing\UserAgents.cs" />
     <Compile Include="Proxies\ProxyManager.cs" />
+    <Compile Include="Proxies\StatProxy.cs" />
     <Compile Include="Settings\SettingsStore.cs" />
     <Compile Include="Settings\SettingsArtibutes.cs" />
     <Compile Include="Settings\SettingsManager.cs" />

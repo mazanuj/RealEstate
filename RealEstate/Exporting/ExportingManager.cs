@@ -73,15 +73,16 @@ namespace RealEstate.Exporting
             {
                 lock (_lock)
                 {
-                    StartExportLoop();
+                    StartExportLoop(false);
                 }
             }
         }
 
-        public void StartExportLoop()
+        public void StartExportLoop(bool manual)
         {
             if (IsWaiting) return;
-            _stopped = false;
+            if(manual)
+                _stopped = false;
 
             Task.Factory.StartNew(() =>
                {
@@ -158,9 +159,16 @@ namespace RealEstate.Exporting
 
         public void AddAdvertToExport(Advert advert)
         {
+            if(ExportQueue.Any(e => e.Advert.Id == advert.Id && !e.IsExported))
+            {
+                Trace.WriteLine("Advert id = " + advert.Id + " already in the export queue");
+                return;
+            }
+
             var item = new ExportItem() { Advert = advert, DateOfExport = new DateTime(1991, 1, 1) };
             _context.ExportItems.Add(item);
             _context.SaveChanges();
+
             App.Current.Dispatcher.Invoke((System.Action)(() =>
             {
                 ExportQueue.Add(item);
@@ -211,6 +219,8 @@ namespace RealEstate.Exporting
                     {
                         var exporter = _factory.GetExporter(site.Database);
                         exporter.ExportAdvert(item.Advert, site, settings);
+
+                        Trace.WriteLine("Advert id = " + item.Advert.Id + " is exported succesfully");
    
                         isExported = true;
                     }

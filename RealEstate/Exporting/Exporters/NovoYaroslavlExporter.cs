@@ -167,7 +167,7 @@ VALUES (
                 {
                     var id = intoAds.ExecuteScalar();
 
-                    Trace.WriteLine("Exporeted id = " + id);
+                    //Trace.WriteLine("Exporeted id = " + id);
 
                     var comm_to_cat = @"INSERT INTO `j17_adsmanager_adcat` (`adid`,`catid`) VALUES (" + id + ", " + GetCategoryForNovoYaroslavl(advert, conn) + ");";
                     MySqlCommand intoCat = new MySqlCommand(comm_to_cat, conn);

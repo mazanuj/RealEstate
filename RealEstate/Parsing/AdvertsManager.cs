@@ -1,7 +1,9 @@
 ﻿using RealEstate.Db;
+using RealEstate.Exporting;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -19,75 +21,57 @@ namespace RealEstate.Parsing
             this._context = context;
         }
 
-        public void Save(Advert advert, ParserSetting setting, bool onlyPhone)
+        public void Save(Advert advert, int[] exportSiteIds, bool onlyPhone)
         {
+            if(advert == null)
+            {
+                Trace.WriteLine("Saving null advert", "Code error");
+                return;
+            }
+
             lock (_lock)
             {
                 var oldAdvert = _context.Adverts.FirstOrDefault(a => a.Url == advert.Url);
+                var exportSites = _context.ExportSites.Where(e => exportSiteIds.Contains(e.Id)).ToList();
+
+
                 if (oldAdvert == null || onlyPhone)
                 {
                     if (!onlyPhone)
                     {
                         if (advert.ExportSites != null)
                         {
-                            if (!advert.ExportSites.Any(e => e.Id == setting.ExportSite.Id))
-                                advert.ExportSites.Add(setting.ExportSite);
+                            foreach (var item in exportSites)
+                            {
+                                advert.ExportSites.Add(item);
+                            }
                         }
                         else
-                            advert.ExportSites = new List<Exporting.ExportSite>() { setting.ExportSite };
+                            advert.ExportSites = exportSites;
                     }
                     else
+                    {
                         advert.ExportSites = null;
+                    }
 
                     _context.Adverts.Add(advert);
                 }
                 else
                 {
-                    if (oldAdvert.ExportSites == null)
-                        oldAdvert.ExportSites = new List<Exporting.ExportSite>();
-                    if (!oldAdvert.ExportSites.Contains(setting.ExportSite))
-                        oldAdvert.ExportSites.Add(setting.ExportSite);
-
-
-                    oldAdvert.MessageFull = advert.MessageFull;
-                    oldAdvert.Price = advert.Price;
-                    if (!String.IsNullOrEmpty(advert.Distinct))
-                        oldAdvert.PhoneNumber = advert.PhoneNumber;
-
-                    if (oldAdvert.DateSite < advert.DateSite)
-                        oldAdvert.DateSite = advert.DateSite;
-
-                    oldAdvert.DateUpdate = DateTime.Now;
-                    if (!String.IsNullOrEmpty(advert.Distinct))
-                        oldAdvert.Name = advert.Name;
-
-                    if (!String.IsNullOrEmpty(advert.Distinct))
-                        oldAdvert.Title = advert.Title;
-
                     oldAdvert.ParsingNumber = advert.ParsingNumber;
 
-                    if (!String.IsNullOrEmpty(advert.Distinct))
-                        oldAdvert.Address = advert.Address;
-
-                    if (!String.IsNullOrEmpty(advert.Distinct))
-                        oldAdvert.Distinct = advert.Distinct;
-
-                    if (!String.IsNullOrEmpty(advert.MetroStation))
-                        oldAdvert.MetroStation = advert.MetroStation;
-
-                    if (!String.IsNullOrEmpty(advert.AO))
-                        oldAdvert.AO = advert.AO;
-
-                    if (advert.AreaFull != 0)
-                        oldAdvert.AreaFull = advert.AreaFull;
-
-                    if (advert.AreaKitchen != 0)
-                        oldAdvert.AreaKitchen = advert.AreaKitchen;
-
-                    if (advert.AreaLiving != 0)
-                        oldAdvert.AreaLiving = advert.AreaLiving;
-
+                    if (oldAdvert.ExportSites != null)
+                    {
+                        foreach (var item in exportSites)
+                        {
+                            if (!oldAdvert.ExportSites.Any(e => e.Id == item.Id))
+                                oldAdvert.ExportSites.Add(item);
+                        }
+                    }
+                    else
+                        oldAdvert.ExportSites = exportSites;
                 }
+
                 _context.SaveChanges(); 
             }
         }

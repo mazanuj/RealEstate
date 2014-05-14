@@ -36,27 +36,50 @@ namespace RealEstate.Proxies
             index = new Random().Next(maxIndex);
         }
 
-        public BindableCollection<WebProxy> Proxies = new BindableCollection<WebProxy>();
-        public BindableCollection<WebProxy> SuspectedProxies = new BindableCollection<WebProxy>();
-        public BindableCollection<WebProxy> RejectedProxies = new BindableCollection<WebProxy>();
+        public BindableCollection<StatProxy> Proxies = new BindableCollection<StatProxy>();
+        public BindableCollection<StatProxy> RejectedProxies = new BindableCollection<StatProxy>();
 
         public WebProxy GetNextProxy()
         {
-            if (maxIndex == 0) return null;
-            if (index >= maxIndex) index = 0;
-            return Proxies[index++];
+            lock (_lock)
+            {
+                if (maxIndex == 0) return null;
+                index++;
+                if (index >= maxIndex) index = 0;
+                return Proxies[index].Proxy;
+            }
+        }
+
+        public void SuccessProxy(WebProxy proxy)
+        {
+            lock (_lock)
+            {
+                if (proxy != null)
+                {
+                    var stat = Proxies.FirstOrDefault(p => p.Proxy == proxy);
+                    if (stat != null)
+                    {
+                        stat.Failed--;
+                    }
+                }
+            }
         }
 
         public void RejectProxy(WebProxy proxy)
         {
-            if (proxy != null)
+            lock (_lock)
             {
-
-                if (this.SuspectedProxies.Contains(proxy))
-                    RejectProxyFull(proxy);
-                else
+                if (proxy != null)
                 {
-                    SuspectedProxies.Add(proxy);
+                    var stat = Proxies.FirstOrDefault(p => p.Proxy == proxy);
+                    if (stat != null)
+                    {
+                        stat.Failed++;
+                        if (!stat.IsGood)
+                        {
+                            RejectProxyFull(stat.Proxy);
+                        }
+                    }
                 }
             }
         }
@@ -65,9 +88,13 @@ namespace RealEstate.Proxies
         {
             if (proxy != null)
             {
-                this.Proxies.Remove(proxy);
-                this.SuspectedProxies.Remove(proxy);
-                this.RejectedProxies.Add(proxy);
+                var stat = Proxies.FirstOrDefault(p => p.Proxy == proxy);
+                if (stat != null)
+                {
+                    stat.SetFailed();
+                    Proxies.Remove(stat);
+                    RejectedProxies.Add(stat);
+                }
             }
         }
 
@@ -75,7 +102,6 @@ namespace RealEstate.Proxies
         {
             Proxies.Clear();
             RejectedProxies.Clear();
-            SuspectedProxies.Clear();
             maxIndex = 0;
         }
 
@@ -83,14 +109,30 @@ namespace RealEstate.Proxies
         {
             Proxies.Clear();
             var proxies = storage.LoadFromFile();
-            if (proxies != null)
-                Proxies.AddRange(proxies);
+            Load(proxies);
+        }
 
+        public void Load(IEnumerable<WebProxy> proxies, bool clean = false)
+        {
+            if (clean)
+            {
+                Proxies.Clear();
+            }
+
+            if (proxies != null)
+            {
+                Proxies.AddRange(proxies.Select(p => new StatProxy(p)));
+            }
+        }
+
+        public void Add(WebProxy proxy)
+        {
+            Proxies.Add(new StatProxy(proxy));
         }
 
         public void Save()
         {
-            storage.SaveToFile(Proxies);
+            storage.SaveToFile(Proxies.Select(p => p.Proxy));
         }
     }
 }
