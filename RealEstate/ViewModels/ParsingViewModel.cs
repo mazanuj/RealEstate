@@ -485,6 +485,10 @@ namespace RealEstate.ViewModels
                     Trace.WriteLine("Operation '" + task.Description + "' has been canceled");
                     _events.Publish("Парсинг отменён");
                 }
+                else
+                {
+                    Trace.WriteLine(aex.InnerException, "Error");
+                }
             }
             catch (OperationCanceledException)
             {

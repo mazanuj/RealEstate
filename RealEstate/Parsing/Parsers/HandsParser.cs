@@ -88,18 +88,25 @@ namespace RealEstate.Parsing.Parsers
 
                 foreach (HtmlNode tier in tiers)
                 {
-                    var link = ParseLinkToFullDescription(tier);
-                    var date = ParseDate(tier);
-
-                    if (date > toDate)
+                    try
                     {
-                        //Trace.TraceInformation(link);
-                        headers.Add(new AdvertHeader()
+                        var link = ParseLinkToFullDescription(tier);
+                        var date = ParseDate(tier);
+
+                        if (date > toDate)
                         {
-                            DateSite = date,
-                            Url = link,
-                            SourceUrl = url
-                        });
+                            //Trace.TraceInformation(link);
+                            headers.Add(new AdvertHeader()
+                            {
+                                DateSite = date,
+                                Url = link,
+                                SourceUrl = url
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex);
                     }
                 }
 
