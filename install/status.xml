@@ -49,10 +49,6 @@
     <Hash>3BB2B8882FC4A07CFC50841778054C26</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>imports.xml</Path>
-    <Hash>3C8F0390C9D15371154DB14511F76092</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>KladrApiClient.dll</Path>
     <Hash>2D257B82286BCCF105699495A08834E6</Hash>
   </FileStatus>
@@ -67,10 +63,6 @@
   <FileStatus>
     <Path>libGLESv2.dll</Path>
     <Hash>75E2D44FAF73CA61B255FF810822FC9F</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>log.txt</Path>
-    <Hash>D41D8CD98F00B204E9800998ECF8427E</Hash>
   </FileStatus>
   <FileStatus>
     <Path>map template.html</Path>
@@ -113,12 +105,8 @@
     <Hash>870DF2667F17CBE6064F9B561D832F3B</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>proxies.txt</Path>
-    <Hash>0841404C4D3DF795CE1D17A52CAE3BC4</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>A8BA38352188CE8E16B36CC00B1316B3</Hash>
+    <Hash>22F13C178B913224952FAE36C2C9B5C2</Hash>
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>
@@ -146,7 +134,7 @@
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
-    <Hash>D1BD83A33F1A841AB7FDA32449746CC4</Hash>
+    <Hash>47354877541923135499C38A6606138A</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>
