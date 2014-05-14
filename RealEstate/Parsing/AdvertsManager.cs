@@ -37,6 +37,11 @@ namespace RealEstate.Parsing
 
                 if (oldAdvert == null || onlyPhone)
                 {
+                    Trace.WriteLine("Creating");
+
+                    _context.Adverts.Add(advert);
+                    _context.SaveChanges(); 
+
                     if (advert.ExportSites == null)
                         advert.ExportSites = new List<ExportSite>();
 
@@ -45,11 +50,11 @@ namespace RealEstate.Parsing
                         if (!advert.ExportSites.Any(e => e.Id == item.Id))
                             advert.ExportSites.Add(item);
                     }
-
-                    _context.Adverts.Add(advert);
                 }
                 else
                 {
+                    Trace.WriteLine("Editing");
+
                     oldAdvert.ParsingNumber = advert.ParsingNumber;
 
                     if (oldAdvert.ExportSites == null)
