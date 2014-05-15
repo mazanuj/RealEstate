@@ -30,11 +30,11 @@
   </FileStatus>
   <FileStatus>
     <Path>EntityFramework.dll</Path>
-    <Hash>9795D413272BA3C6D39EE1023494F3AB</Hash>
+    <Hash>4E1C565CFDB933BF996290FC996CC198</Hash>
   </FileStatus>
   <FileStatus>
     <Path>EntityFramework.SqlServer.dll</Path>
-    <Hash>B4EFC7B67545FB42C49B8DEE82DCFC01</Hash>
+    <Hash>C0BB7AE19AE356B09B5EA2B4B5320B34</Hash>
   </FileStatus>
   <FileStatus>
     <Path>HtmlAgilityPack.dll</Path>
@@ -106,7 +106,7 @@
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>9D06638DD130384267AC577D99338014</Hash>
+    <Hash>D7D6751D870465E522AACEFF314D0DE4</Hash>
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>
@@ -134,7 +134,7 @@
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
-    <Hash>5D36C29483386600EA4BF8921A417A46</Hash>
+    <Hash>08207D752D8A566368D1FD97B6142FA3</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>

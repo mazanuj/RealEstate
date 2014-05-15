@@ -518,7 +518,7 @@ namespace RealEstate.SmartProcessing
             if (advert.AreaFull != 0)
                 current++;
 
-            if (advert.City.ToLower() == "москва")
+            if (advert.City != null && advert.City.ToLower() == "москва")
             {
                 total++;
                 if (!String.IsNullOrEmpty(advert.MetroStation))

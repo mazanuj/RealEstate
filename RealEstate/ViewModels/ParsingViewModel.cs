@@ -630,7 +630,24 @@ namespace RealEstate.ViewModels
                             Trace.WriteLine(advert, "Advert");
 
                         var ids = exportSitesId.Where(e => e.Key == header.SourceUrl).Select(e => e.Value).ToArray();
-                        _advertsManager.Save(advert, ids, param.phoneImport);
+
+                        int failed = 0;
+                        while (failed < 5)
+                        {
+                            try
+                            {
+                                failed++;
+                                _advertsManager.Save(advert, ids, param.phoneImport);
+                                break;
+                            }
+                            catch (Exception ex)
+                            {
+                                if (failed == 5)
+                                    throw;
+                                Trace.WriteLine(ex.Message, "Saving adverts error");
+                                Thread.Sleep(200);
+                            }
+                        }
 
                         bool checkUniq = false;
                         int failedUniq = 0;
@@ -667,7 +684,29 @@ namespace RealEstate.ViewModels
                                 if (cov > 0.6)
                                     if (!param.onlyImage || (param.onlyImage && advert.ContainsImages))
                                     {
-                                        _exportingManager.AddAdvertToExport(advert);
+                                        int failedInsert = 0;
+                                        while (failedInsert < 5)
+                                        {
+                                            failedInsert++;
+                                            try
+                                            {
+                                                lock (_exportingManager)
+                                                {
+                                                    _exportingManager.AddAdvertToExport(advert.Id);
+                                                }
+                                                break;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                if (failedInsert == 5)
+                                                    throw;
+                                                else
+                                                {
+                                                    Trace.WriteLine(ex.Message);
+                                                    Thread.Sleep(200);
+                                                }
+                                            }
+                                        }
                                     }
                                     else
                                     {

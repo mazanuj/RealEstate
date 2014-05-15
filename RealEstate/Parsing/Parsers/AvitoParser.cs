@@ -228,7 +228,7 @@ namespace RealEstate.Parsing.Parsers
                         uri = url + (url.Contains('?') ? '&' : '?') + "p=" + index;
                         Trace.WriteLine("Downloading " + uri);
                         result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, token);
-                        if (result.Length < 200 || !result.Contains("квартир"))
+                        if (result.Length < 200 || !result.Contains("AVITO.ru"))
                         {
                             proxyManager.RejectProxy(proxy);
                             throw new BadResponseException();
@@ -341,7 +341,7 @@ namespace RealEstate.Parsing.Parsers
                     {
                         Trace.WriteLine("Downloading " + sourceUrl);
                         result = this.DownloadPage(sourceUrl, UserAgents.GetRandomUserAgent(), proxy, token);
-                        if (result.Length < 200 || !result.Contains("квартир"))
+                        if (result.Length < 200 || !result.Contains("AVITO.ru"))
                         {
                             proxyManager.RejectProxyFull(proxy);
                             throw new BadResponseException();

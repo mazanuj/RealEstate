@@ -25,7 +25,6 @@ namespace RealEstate.Exporting
         public ExportSite()
         {
             ParseSettings = new List<ParserSetting>();
-            Adverts = new List<Advert>();
         }
     }
 }

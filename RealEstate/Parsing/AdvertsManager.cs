@@ -31,43 +31,46 @@ namespace RealEstate.Parsing
 
             lock (_lock)
             {
-                var oldAdvert = _context.Adverts.FirstOrDefault(a => a.Url == advert.Url);
-                var exportSites = _context.ExportSites.Where(e => exportSiteIds.Contains(e.Id));
-
-
-                if (oldAdvert == null || onlyPhone)
+                using (var context = new RealEstateContext())
                 {
-                    Trace.WriteLine("Creating");
+                    var oldAdvert = context.Adverts.FirstOrDefault(a => a.Url == advert.Url);
+                    var exportSites = context.ExportSites.Where(e => exportSiteIds.Contains(e.Id));
 
-                    _context.Adverts.Add(advert);
-                    _context.SaveChanges(); 
 
-                    if (advert.ExportSites == null)
-                        advert.ExportSites = new List<ExportSite>();
-
-                    foreach (var item in exportSites)
+                    if (oldAdvert == null || onlyPhone)
                     {
-                        if (!advert.ExportSites.Any(e => e.Id == item.Id))
-                            advert.ExportSites.Add(item);
+                        Trace.WriteLine("Creating");
+
+                        context.Adverts.Add(advert);
+                        context.SaveChanges();
+
+                        if (advert.ExportSites == null)
+                            advert.ExportSites = new List<ExportSite>();
+
+                        foreach (var item in exportSites)
+                        {
+                            if (!advert.ExportSites.Any(e => e.Id == item.Id))
+                                advert.ExportSites.Add(item);
+                        }
                     }
-                }
-                else
-                {
-                    Trace.WriteLine("Editing");
-
-                    oldAdvert.ParsingNumber = advert.ParsingNumber;
-
-                    if (oldAdvert.ExportSites == null)
-                        oldAdvert.ExportSites = new List<ExportSite>();
-
-                    foreach (var item in exportSites)
+                    else
                     {
-                        if (!oldAdvert.ExportSites.Any(e => e.Id == item.Id))
-                            oldAdvert.ExportSites.Add(item);
-                    }
-                }
+                        Trace.WriteLine("Editing");
 
-                _context.SaveChanges(); 
+                        oldAdvert.ParsingNumber = advert.ParsingNumber;
+
+                        if (oldAdvert.ExportSites == null)
+                            oldAdvert.ExportSites = new List<ExportSite>();
+
+                        foreach (var item in exportSites)
+                        {
+                            if (!oldAdvert.ExportSites.Any(e => e.Id == item.Id))
+                                oldAdvert.ExportSites.Add(item);
+                        }
+                    }
+
+                    context.SaveChanges();  
+                }
             }
         }
 

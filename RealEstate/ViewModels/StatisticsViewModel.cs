@@ -242,7 +242,7 @@ namespace RealEstate.ViewModels
                 List<long> spans = new List<long>();
 
 
-                foreach (var item in statItems)
+                statItems.AsParallel().WithDegreeOfParallelism(SettingsStore.ThreadsCount).WithCancellation(ct).ForAll((item) =>
                 {
                     DateTime start = DateTime.Now;
                     try
@@ -289,7 +289,7 @@ namespace RealEstate.ViewModels
                     catch (OperationCanceledException)
                     {
                         task.Remaining = new TimeSpan();
-                        break;
+                        return;
                     }
                     catch (Exception ex)
                     {
@@ -297,7 +297,7 @@ namespace RealEstate.ViewModels
                     }
 
                     task.PerformStep(DateTime.Now - start);
-                }
+                });
 
                 _events.Publish("Завершено");
             }

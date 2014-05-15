@@ -10,7 +10,7 @@ namespace RealEstate.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = true;
+            //AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(RealEstate.Db.RealEstateContext context)

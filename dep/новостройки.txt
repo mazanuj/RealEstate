@@ -1,0 +1,10 @@
+http://yaroslavl.irr.ru/real-estate/apartments-sale/new/search/rooms=1/currency=RUR/object_type=flat/
+http://yaroslavl.irr.ru/real-estate/apartments-sale/new/search/rooms=2/currency=RUR/object_type=flat/
+http://yaroslavl.irr.ru/real-estate/apartments-sale/new/search/rooms=3/currency=RUR/object_type=flat/
+http://yaroslavl.irr.ru/real-estate/apartments-sale/new/search/rooms=4/currency=RUR/object_type=flat/
+http://yaroslavl.irr.ru/real-estate/apartments-sale/new/search/rooms=100/currency=RUR/object_type=flat/
+
+
+
+
+

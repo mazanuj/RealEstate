@@ -453,7 +453,7 @@ namespace RealEstate.ViewModels
             {
                 try
                 {
-                    _exportingManager.AddAdvertToExport(AdvertOriginal);
+                    _exportingManager.AddAdvertToExport(AdvertOriginal.Id);
                 }
                 catch (Exception ex)
                 {

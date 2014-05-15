@@ -157,22 +157,28 @@ namespace RealEstate.Exporting
             //StartExportLoop();
         }
 
-        public void AddAdvertToExport(Advert advert)
+        public void AddAdvertToExport(int advertId)
         {
-            if(ExportQueue.Any(e => e.Advert.Id == advert.Id && !e.IsExported))
+            using (var context = new RealEstateContext())
             {
-                Trace.WriteLine("Advert id = " + advert.Id + " already in the export queue");
-                return;
+                var advert = context.Adverts.Find(advertId);
+                if (advert == null) { Trace.WriteLine("advert is null (AddAdvertToExport)", "Code error"); return; }
+
+                if (ExportQueue.Any(e => e.Advert.Id == advert.Id && !e.IsExported))
+                {
+                    Trace.WriteLine("Advert id = " + advert.Id + " already in the export queue");
+                    return;
+                }
+
+                var item = new ExportItem() { Advert = advert, DateOfExport = new DateTime(1991, 1, 1) };
+                context.ExportItems.Add(item);
+                context.SaveChanges();
+
+                App.Current.Dispatcher.Invoke((System.Action)(() =>
+                {
+                    ExportQueue.Add(item);
+                }));
             }
-
-            var item = new ExportItem() { Advert = advert, DateOfExport = new DateTime(1991, 1, 1) };
-            _context.ExportItems.Add(item);
-            _context.SaveChanges();
-
-            App.Current.Dispatcher.Invoke((System.Action)(() =>
-            {
-                ExportQueue.Add(item);
-            }));
         }
 
         public void Remove(ExportItem item)

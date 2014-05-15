@@ -48,7 +48,7 @@ namespace RealEstate.Parsing.Parsers
                             Trace.WriteLine("Downloading " + uri);
 
                             result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, true);
-                            if (result.Length < 200 || !result.Contains("квартир"))
+                            if (result.Length < 200 || !result.Contains("варти"))
                             {
                                 proxyManager.RejectProxyFull(proxy);
                                 throw new BadResponseException();
