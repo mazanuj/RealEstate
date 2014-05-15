@@ -448,7 +448,7 @@ namespace RealEstate.ViewModels
                 List<AdvertHeader> headers = new List<AdvertHeader>();
                 ParserBase parser = ParsersFactory.GetParser(param.site);
 
-                urls.AsParallel().ForAll((url) =>
+                urls.AsParallel().WithDegreeOfParallelism(SettingsStore.ThreadsCount).WithCancellation(ct).ForAll((url) =>
                 {
                     if (pt.IsPauseRequested)
                         pt.WaitUntillPaused();
@@ -926,7 +926,7 @@ namespace RealEstate.ViewModels
 
                 spans.Add(span.Ticks);
 
-                Remaining = new TimeSpan(Convert.ToInt64(spans.Skip(Math.Max(0, spans.Count - 30)).Average()) * (TotalCount - ParsedCount));
+                Remaining = new TimeSpan(Convert.ToInt64(spans.Skip(Math.Max(0, spans.Count - 100)).Average()) * (TotalCount - ParsedCount));
             }
         }
     }

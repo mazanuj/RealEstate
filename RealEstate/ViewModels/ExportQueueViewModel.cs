@@ -64,6 +64,8 @@ namespace RealEstate.ViewModels
         {
             Task.Factory.StartNew(() =>
             {
+                Trace.WriteLine("Open item:" + item.Advert.Id);
+
                 try
                 {
                     var style = new Dictionary<string, object>();
@@ -105,6 +107,23 @@ namespace RealEstate.ViewModels
             catch (Exception ex)
             {
                 _events.Publish("Ошибка экспорта!");
+                Trace.WriteLine(ex, "Error");
+            }
+        }
+
+        public void ClearAll()
+        {
+
+            try
+            {
+                while(Items.Any())
+                {
+                    ExportingManager.Remove(Items.First());
+                }
+            }
+            catch (Exception ex)
+            {
+                _events.Publish("Ошибка удаления!");
                 Trace.WriteLine(ex, "Error");
             }
         }
