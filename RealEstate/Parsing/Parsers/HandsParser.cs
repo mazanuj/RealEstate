@@ -73,7 +73,7 @@ namespace RealEstate.Parsing.Parsers
                     //if (page.DocumentNode.SelectSingleNode(@"//div[contains(@class,'adds_cont clear')]") != null)
                     //    break;
 
-                    var tiers = page.DocumentNode.SelectNodes(@"//div[@data-position and @data-item-id]");
+                    var tiers = page.DocumentNode.SelectNodes(@"//div[(@data-position and @data-item-id) or (@class='add_head')] ");
                     if (tiers == null)
                     {
                         Trace.TraceInformation(url);
@@ -92,6 +92,12 @@ namespace RealEstate.Parsing.Parsers
                     {
                         try
                         {
+                            if(tier.InnerText.Contains("ближайших регионов"))
+                            {
+                                Trace.WriteLine("Irr headline detected!");
+                                break;
+                            }
+
                             var link = ParseLinkToFullDescription(tier);
                             var date = ParseDate(tier);
 
@@ -135,7 +141,7 @@ namespace RealEstate.Parsing.Parsers
                     throw new ParsingException("can't parse max index!", maxNode.InnerText);
             }
             else
-                throw new ParsingException("can't find max index!", "");
+                return 0;
         }
 
         private DateTime ParseDate(HtmlNode tier)
