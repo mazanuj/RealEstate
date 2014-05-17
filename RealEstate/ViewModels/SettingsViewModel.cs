@@ -191,7 +191,7 @@ namespace RealEstate.ViewModels
 
         private int _ThreadsCount = 4;
         [Required]
-        [Range(1, 20)]
+        [Range(1, 7)]
         public int ThreadsCount
         {
             get { return _ThreadsCount; }
