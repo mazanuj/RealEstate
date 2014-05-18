@@ -30,6 +30,7 @@ namespace RealEstate.Exporting
         private readonly ExporterFactory _factory;
 
         public ObservableCollection<ExportItem> ExportQueue = null;
+        public Dictionary<int, DateTime> _lastExported = new Dictionary<int, DateTime>();
 
         private bool _stopped = false;
 
@@ -94,18 +95,26 @@ namespace RealEstate.Exporting
                    {
                        try
                        {
-                           var item = ExportQueue.FirstOrDefault();
+                           var item = ExportQueue.FirstOrDefault(c => 
+                               c.Advert.ExportSites != null 
+                               && c.Advert.ExportSites.Any()
+                               && (!_lastExported.ContainsKey(c.Advert.ExportSites.First().Id)
+                               || _lastExported[c.Advert.ExportSites.First().Id] < DateTime.Now));
                            if (item != null)
                            {
-                               currentId = item.Id;
-                               Export(item);
-                           }
+                               {
+                                   currentId = item.Id;
+                                   Export(item);
 
-                           int count = 0;
-                           while (!_stopped && count < 10)
-                           {
-                               count++;
-                               Thread.Sleep(Settings.SettingsStore.ExportInterval * 100);
+                                   if (item.IsExported)
+                                   {
+                                       var lastId = item.Advert.ExportSites.First().Id;
+                                       if (_lastExported.ContainsKey(lastId))
+                                           _lastExported[lastId] = DateTime.Now.AddSeconds(Settings.SettingsStore.ExportInterval);
+                                       else
+                                           _lastExported.Add(lastId, DateTime.Now.AddSeconds(Settings.SettingsStore.ExportInterval));
+                                   }
+                               }
                            }
                        }
                        catch (Exception ex)
@@ -120,8 +129,9 @@ namespace RealEstate.Exporting
                            }
                            lastFailedExportedId = currentId;
                            Trace.WriteLine(ex.ToString(), "Error when exporting");
-                           Thread.Sleep(1000);
                        }
+
+                       Thread.Sleep(1000);
                    }
 
                    IsWaiting = false;
@@ -168,6 +178,12 @@ namespace RealEstate.Exporting
             if (ExportQueue.Any(e => e.Advert.Id == advert.Id && !e.IsExported))
             {
                 Trace.WriteLine("Advert id = " + advert.Id + " already in the export queue");
+                return;
+            }
+
+            if (_context.ExportItems.Any(e => e.Advert.Id == advert.Id && e.IsExported) && !Settings.SettingsStore.ExportParsed)
+            {
+                Trace.WriteLine("Advert id = " + advertId + " is already exported");
                 return;
             }
 
