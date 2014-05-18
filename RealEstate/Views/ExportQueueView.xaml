@@ -69,6 +69,7 @@
                     </DataGridTemplateColumn>-->
                     <DataGridTextColumn Header="Дата" Binding="{Binding Advert.DateUpdate}" />
                     <DataGridTextColumn Header="Город" Binding="{Binding Advert.City}" />
+                    <DataGridTextColumn Header="Район" Binding="{Binding Advert.Distinct}" />
                     <DataGridTextColumn Header="Адрес" Binding="{Binding Advert.Address}" />
                     <DataGridTextColumn Header="Комнат" Binding="{Binding Advert.Rooms}" />
                     <DataGridTextColumn Header="Цена" Binding="{Binding Advert.Price}" />
