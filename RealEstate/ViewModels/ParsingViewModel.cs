@@ -479,6 +479,8 @@ namespace RealEstate.ViewModels
 
                 task.Progress = 100;
                 _events.Publish("Завершено");
+                if (task.Progress > 99)
+                    App.NotifyIcon.ShowBalloonTip("Готово", "Парсинг " + task.Description + " завершен", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
 
             }
             catch (AggregateException aex)
@@ -491,6 +493,7 @@ namespace RealEstate.ViewModels
                 else
                 {
                     Trace.WriteLine(aex.InnerException, "Error");
+                    App.NotifyIcon.ShowBalloonTip("Ошибка парсинга", "Парсинг " + task.Description + " остановлен", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
                 }
             }
             catch (OperationCanceledException)
@@ -502,13 +505,11 @@ namespace RealEstate.ViewModels
             {
                 Trace.WriteLine(ex.ToString(), "Error!");
                 _events.Publish("Ошибка обработки объявлений");
+                App.NotifyIcon.ShowBalloonTip("Ошибка парсинга", "Парсинг " + task.Description + " остановлен", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
             }
             finally
             {
                 task.Stop();
-                if(task.Progress > 99)
-                    App.NotifyIcon.ShowBalloonTip("Готово", "Парсинг " + task.Description + " завершен", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
-
                 Trace.WriteLine("Task has been closed", "Info");
             }
         }
