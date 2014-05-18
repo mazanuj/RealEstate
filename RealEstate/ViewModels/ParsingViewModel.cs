@@ -81,11 +81,13 @@ namespace RealEstate.ViewModels
             if (AutoStart && !Tasks.Any(t => t.IsRunning) && AutoStartValue == DateTime.Now.Hour)
             {
                 _events.Publish("Автостарт парсинга по таймеру...");
+                App.NotifyIcon.ShowBalloonTip("Автопарсинг начат", "Автопарсинг начат согласно установленному времени", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
                 Start(true);
             }
             else if (AutoStart && DateTime.Now.Hour > AutoStopValue)
             {
                 Stop();
+                App.NotifyIcon.ShowBalloonTip("Автопарсинг остановлен", "Автопарсинг остановлен согласно установленному времени", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
                 _events.Publish("Автостоп парсинга.");
             }
         }
@@ -388,6 +390,7 @@ namespace RealEstate.ViewModels
             {
                 Trace.WriteLine(ex.ToString(), "Error!");
                 _events.Publish("Ошибка запуска парсинга!");
+                MessageBox.Show("Ошибка запуска парсинга!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -503,6 +506,9 @@ namespace RealEstate.ViewModels
             finally
             {
                 task.Stop();
+                if(task.Progress > 99)
+                    App.NotifyIcon.ShowBalloonTip("Готово", "Парсинг " + task.Description + " завершен", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
+
                 Trace.WriteLine("Task has been closed", "Info");
             }
         }

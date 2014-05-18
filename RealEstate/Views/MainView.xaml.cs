@@ -27,6 +27,8 @@ namespace RealEstate.Views
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Loader.IsFormLoaded = true;
+
+            App.NotifyIcon = MyNotifyIcon;
         }
 
         Point m_start;

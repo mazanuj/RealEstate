@@ -37,6 +37,10 @@
     <Hash>C0BB7AE19AE356B09B5EA2B4B5320B34</Hash>
   </FileStatus>
   <FileStatus>
+    <Path>Hardcodet.Wpf.TaskbarNotification.dll</Path>
+    <Hash>6057F6A8D8317EA96ACE570628339CFE</Hash>
+  </FileStatus>
+  <FileStatus>
     <Path>HtmlAgilityPack.dll</Path>
     <Hash>D631F1924D735E079E61E6B46F0BACAD</Hash>
   </FileStatus>
@@ -134,7 +138,7 @@
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
-    <Hash>9DB531902DADDABDDB83B22E9629F0AD</Hash>
+    <Hash>1A18DA63CBBFB49CB9616E6BFD35F662</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>

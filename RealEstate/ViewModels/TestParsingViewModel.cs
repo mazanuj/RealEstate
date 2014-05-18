@@ -76,7 +76,7 @@ namespace RealEstate.ViewModels
                     else if (Url.Contains("avito.ru"))
                         site = ImportSite.Avito;
                     else
-                        Summary = "Ошибка. Неизвестный источник объхявлений";
+                        Summary = "Ошибка. Неизвестный источник объявлений";
 
                     if (site != ImportSite.All)
                     {

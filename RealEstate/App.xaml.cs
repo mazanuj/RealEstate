@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using System.IO;
+using Hardcodet.Wpf.TaskbarNotification;
 
 namespace RealEstate
 {
@@ -31,6 +32,6 @@ namespace RealEstate
             File.WriteAllText("Dispatcher log.txt", e.Exception.ToString());
         }
 
-
+        public static TaskbarIcon NotifyIcon;
     }
 }

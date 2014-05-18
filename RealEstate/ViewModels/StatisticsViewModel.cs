@@ -299,6 +299,7 @@ namespace RealEstate.ViewModels
                     task.PerformStep(DateTime.Now - start);
                 });
 
+                App.NotifyIcon.ShowBalloonTip("Готово", "Парсинг статистики завершён", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
                 _events.Publish("Завершено");
             }
             catch (Exception ex)

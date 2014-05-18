@@ -39,7 +39,7 @@ namespace RealEstate.Parsing
 
                     if (oldAdvert == null || onlyPhone)
                     {
-                        Trace.WriteLine("Creating");
+                        //Trace.WriteLine("Creating");
 
                         context.Adverts.Add(advert);
                         context.SaveChanges();
@@ -55,7 +55,7 @@ namespace RealEstate.Parsing
                     }
                     else
                     {
-                        Trace.WriteLine("Editing");
+                        //Trace.WriteLine("Editing");
 
                         oldAdvert.ParsingNumber = advert.ParsingNumber;
 

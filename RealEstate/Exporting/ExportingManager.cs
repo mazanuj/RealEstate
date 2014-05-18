@@ -115,6 +115,7 @@ namespace RealEstate.Exporting
                            if (failedCount > 5)
                            {
                                Trace.TraceError("Failed to export item more than 5 times. Export stoppped.", "Export error");
+                               App.NotifyIcon.ShowBalloonTip("Экспорт остановлен", "Число неудачных попыток экспортирования превысило 5 раз", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error);
                                break;
                            }
                            lastFailedExportedId = currentId;
