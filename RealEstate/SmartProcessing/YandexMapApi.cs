@@ -11,7 +11,7 @@ namespace RealEstate.SmartProcessing
     {
         public string SearchObject(string Address, out string city)
         {
-            string urlXml = "http://geocode-maps.yandex.ru/1.x/?geocode=" + Address + "&results=1";
+            string urlXml = "http://geocode-maps.yandex.ru/1.x/?geocode=" + Address + "&results=5";
             WebClient client = new WebClient();
             client.Encoding = new System.Text.UTF8Encoding(false);
             var source = client.DownloadString(urlXml);
@@ -23,11 +23,17 @@ namespace RealEstate.SmartProcessing
             if (cityMatch.Success && cityMatch.Groups.Count > 1)
                 city = cityMatch.Groups[1].Value;
 
+            if (!String.IsNullOrEmpty(city))
+                city = city.Replace("поселок городского типа", "").Trim();
+
             Regex r = new Regex("<name xmlns=\"http://www.opengis.net/gml\">(.+)</name>");
             var m = r.Match(source);
             if(m.Success && m.Groups.Count > 1)
             {
-                return m.Groups[1].Value;
+                var result = m.Groups[1].Value;;
+                if (!String.IsNullOrEmpty(result))
+                    result = city.Replace("поселок городского типа", "").Trim();
+                return result;
             }
 
             return null;

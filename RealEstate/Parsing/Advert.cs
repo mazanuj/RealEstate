@@ -106,6 +106,11 @@ namespace RealEstate.Parsing
         public DateTime DateSite { get; set; } //+
         public DateTime DateUpdate { get; set; } //+
 
+        public bool IsYaroslavl
+        {
+            get { return City == "Ярославль"; }
+        }
+
         public bool ContainsImages
         {
             get { return Images != null && Images.Count > 0; }

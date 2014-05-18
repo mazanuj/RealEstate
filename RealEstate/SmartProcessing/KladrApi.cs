@@ -59,7 +59,7 @@ namespace RealEstate.SmartProcessing
 
             var parts = address.Split(' ').Where(s => !s.Contains("просп")
                 && !s.Contains("шосс") && !s.Contains("улиц")
-                && !s.Contains("тракт") && !s.Contains("проезд") && !s.Contains("переул"));
+                && !s.Contains("тракт") && !s.Contains("проезд") && !s.Contains("переул")).ToList();
 
             var max = parts.Max(s => s.Length);
             address = parts.First().Trim(new char[] { ',', '.' }).Trim();

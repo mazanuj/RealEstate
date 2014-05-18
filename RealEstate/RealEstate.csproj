@@ -190,6 +190,7 @@
     <Compile Include="Settings\SettingsStore.cs" />
     <Compile Include="Settings\SettingsArtibutes.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="SmartProcessing\AddressDataBase.cs" />
     <Compile Include="SmartProcessing\KladrApi.cs" />
     <Compile Include="SmartProcessing\Rules.cs" />
     <Compile Include="SmartProcessing\SmartProcessor.cs" />

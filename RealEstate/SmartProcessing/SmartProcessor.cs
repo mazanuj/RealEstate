@@ -317,6 +317,8 @@ namespace RealEstate.SmartProcessing
                     }
 
                     GetHouseByRegex(advert);
+
+                    AddressDataBase.ProcessAddress(advert);
                 }
             }
             catch (Exception ex)
@@ -330,7 +332,7 @@ namespace RealEstate.SmartProcessing
        {
            if(advert.ImportSite == ImportSite.Avito)
            {
-               Regex regHouse = new Regex(@"д\ ?\.\ ?\d+");
+               Regex regHouse = new Regex(@"д\W*(?<house>\d+)");
                if (!String.IsNullOrEmpty(advert.Address))
                {                 
                    var m = regHouse.Match(advert.Address);
