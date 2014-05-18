@@ -68,7 +68,7 @@ namespace RealEstate.Parsing.Parsers
             }
 
 
-            return ROOT_URl + (city.AvitoKey + "/" + realUrl + "/" + advertUrl + "/" + usedUrl + "/").Replace("//","/");
+            return ROOT_URl + (city.AvitoKey + "/" + realUrl + "/" + advertUrl + "/" + usedUrl + "/").Replace("//", "/");
         }
 
         public void UpdateList(CancellationToken ct, PauseToken pt, ProxyManager proxyManager, BindableCollection<CityWrap> fullList, ParsingTask task)
@@ -112,64 +112,75 @@ namespace RealEstate.Parsing.Parsers
 
             task.TotalCount = cityLinks.Count;
 
-            foreach (var cityLink in cityLinks)
+            cityLinks.AsParallel().WithDegreeOfParallelism(SettingsStore.ThreadsCount).WithCancellation(ct).ForAll((cityLink) =>
             {
-                DateTime start = DateTime.Now;
-
-                ct.ThrowIfCancellationRequested();
-                if (pt.IsPauseRequested) pt.WaitUntillPaused();
-                attemt = 0;
-                page = null;
-
-                while (attemt < SettingsStore.MaxParsingAttemptCount && page == null)
+                //foreach (var cityLink in cityLinks)
+                try
                 {
-                    attemt++;
+                    DateTime start = DateTime.Now;
 
                     ct.ThrowIfCancellationRequested();
+                    if (pt.IsPauseRequested) pt.WaitUntillPaused();
+                    attemt = 0;
+                    page = null;
 
-                    proxy = proxyManager.GetNextProxy();
-                    try
+                    while (attemt < SettingsStore.MaxParsingAttemptCount && page == null)
                     {
-                        var url = "http:" + cityLink.Attributes["href"].Value;
-                        if (url != "http:#")
+                        attemt++;
+
+                        ct.ThrowIfCancellationRequested();
+
+                        proxy = proxyManager.GetNextProxy();
+                        try
                         {
-                            //Trace.WriteLine(url);
-                            page = DownloadPage(url, UserAgents.GetRandomUserAgent(), proxy, ct, false);
-                            if (page.Length < 20000 || !page.Contains("avito"))
-                                page = null;
+                            var url = "http:" + cityLink.Attributes["href"].Value;
+                            if (url != "http:#")
+                            {
+                                //Trace.WriteLine(url);
+                                page = DownloadPage(url, UserAgents.GetRandomUserAgent(), proxy, ct, false);
+                                if (page.Length < 20000 || !page.Contains("avito"))
+                                    page = null;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Thread.Sleep(300);
+                            page = null;
+                            Trace.WriteLine(ex.Message, "Web Error!");
+                            proxyManager.RejectProxy(proxy);
                         }
                     }
-                    catch (Exception ex)
+
+                    if (!String.IsNullOrEmpty(page))
                     {
-                        Thread.Sleep(300);
-                        page = null;
-                        Trace.WriteLine(ex.Message, "Web Error!");
-                        proxyManager.RejectProxy(proxy);
+
+                        proxyManager.SuccessProxy(proxy);
+
+                        HtmlDocument interanlDoc = new HtmlDocument();
+                        interanlDoc.LoadHtml(page);
+
+                        var links = interanlDoc.DocumentNode.SelectNodes("//div[@data-counter-idx='0']//div[@class='catalog_counts-cl-inner']/ul/li/a");
+                        if (links == null)
+                        {
+                            AddCityWrap(cityLink, fullList, null);
+                        }
+                        else
+                        {
+                            foreach (var link in links)
+                            {
+                                AddCityWrap(link, fullList, cityLink);
+                            }
+                        }
                     }
+
+                    task.PerformStep(DateTime.Now - start);
                 }
-
-                if (String.IsNullOrEmpty(page)) continue;
-
-                proxyManager.SuccessProxy(proxy);
-
-                HtmlDocument interanlDoc = new HtmlDocument();
-                interanlDoc.LoadHtml(page);
-
-                var links = interanlDoc.DocumentNode.SelectNodes("//div[@data-counter-idx='0']//div[@class='catalog_counts-cl-inner']/ul/li/a");
-                if (links == null)
+                catch (Exception ex)
                 {
-                    AddCityWrap(cityLink, fullList, null);
+                    Trace.WriteLine("Cities parsing error");
+                    Trace.WriteLine(ex);
                 }
-                else
-                {
-                    foreach (var link in links)
-                    {
-                        AddCityWrap(link, fullList, cityLink);
-                    }
-                }
-
-                task.PerformStep(DateTime.Now - start);
-            }
+            });
         }
 
         private void AddCityWrap(HtmlNode link, BindableCollection<CityWrap> cities, HtmlNode parrent)
@@ -286,7 +297,7 @@ namespace RealEstate.Parsing.Parsers
                     }
 
                     var paginator = page.DocumentNode.SelectSingleNode(@"//div[contains(@class,'b-paginator clearfix j-pages')]");
-                    if(paginator != null)
+                    if (paginator != null)
                     {
                         var lastButton = page.DocumentNode.SelectSingleNode(@"//div[contains(@class,'b-paginator')]/a[contains(@class,'last')]");
                         if (lastButton == null)
@@ -297,7 +308,7 @@ namespace RealEstate.Parsing.Parsers
                     }
                     else
                     {
-                        Trace.WriteLine("Paging not found","Warning");
+                        Trace.WriteLine("Paging not found", "Warning");
                         pagingNotFound = true;
                     }
                 }
@@ -331,7 +342,7 @@ namespace RealEstate.Parsing.Parsers
 
                 while (attempt < SettingsStore.MaxParsingAttemptCount)
                 {
-                    attempt++;               
+                    attempt++;
 
                     token.ThrowIfCancellationRequested();
 
@@ -381,7 +392,7 @@ namespace RealEstate.Parsing.Parsers
                 if (result == null)
                 {
                     Trace.WriteLine("Can't load headers adverts", "");
-                    if (attempt < SettingsStore.MaxParsingAttemptCount && notFound < MAX_NOTFOUND) 
+                    if (attempt < SettingsStore.MaxParsingAttemptCount && notFound < MAX_NOTFOUND)
                         reAtempt = true;
                     continue;
                 }
@@ -408,17 +419,21 @@ namespace RealEstate.Parsing.Parsers
             throw new ParsingException("Can't find total count", "");
         }
 
-        private string ParseSeller(HtmlDocument full)
+        private void ParseSeller(Advert advert, HtmlDocument full)
         {
             var seller = full.GetElementbyId("seller");
             if (seller != null)
             {
                 var strong = seller.SelectSingleNode(@".//strong");
                 if (strong != null)
-                    return Normalize(strong.InnerText);
-            }
+                    advert.Name = Normalize(strong.InnerText);
 
-            throw new ParsingException("Can't get seller", "");
+                advert.IsFromAgency = seller.InnerText.Contains("агент");
+            }
+            else
+            {
+                throw new ParsingException("Can't get seller", "");
+            }
         }
 
         private string ParseLinkToFullDescription(HtmlNode tier)
@@ -925,7 +940,7 @@ namespace RealEstate.Parsing.Parsers
                 {
                     ParseTitle(page, advert);
 
-                    advert.Name = ParseSeller(page);
+                    ParseSeller(advert, page);
                     ParseCity(advert, page);
                     ParseAddress(page, advert);
 

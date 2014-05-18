@@ -82,7 +82,7 @@ namespace RealEstate.SmartProcessing
 
                 DetectYear(advert);
 
-                DetectDeveloper(advert);
+                DetectCategory(advert);
 
                 System.Reflection.PropertyInfo proper;
 
@@ -167,7 +167,7 @@ namespace RealEstate.SmartProcessing
             }
         }
 
-        private void DetectDeveloper(Advert advert)
+        private void DetectCategory(Advert advert)
         {
             if(!String.IsNullOrEmpty(advert.MessageFull))
             {

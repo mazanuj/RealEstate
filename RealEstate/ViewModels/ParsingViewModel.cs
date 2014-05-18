@@ -675,8 +675,22 @@ namespace RealEstate.ViewModels
                         if (!param.phoneImport && checkUniq)
                         {
 
-                            if (SettingsStore.SaveImages)
-                                _imagesManager.DownloadImages(advert.Images, ct, advert.ImportSite);
+                            int failedImg = 0;
+                            while (failedImg < 5)
+                            {
+                                try
+                                {
+                                    failedImg++;
+                                    if (SettingsStore.SaveImages)
+                                        _imagesManager.DownloadImages(advert.Images, ct, advert.ImportSite);
+                                    break;
+                                }
+                                catch (Exception ex)
+                                {
+                                    Trace.WriteLine(ex.Message, "DownloadImages");
+                                    Thread.Sleep(200);
+                                }
+                            }
 
                             if (param.autoExport)
                             {

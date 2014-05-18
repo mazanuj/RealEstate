@@ -27,6 +27,7 @@ namespace RealEstate.Log
         {
             Trace.Listeners.Remove(TraceListenerName);
             text = new TextWriterTraceListener(_fileName, TraceListenerName);
+            text.TraceOutputOptions |= TraceOptions.DateTime;
             Trace.AutoFlush = true;
             Trace.Listeners.Add(text);
             Trace.WriteLine(String.Format("Start write log to file '{0}' at {1}", _fileName, DateTime.Now));

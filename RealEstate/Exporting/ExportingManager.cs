@@ -172,7 +172,22 @@ namespace RealEstate.Exporting
 
             var item = new ExportItem() { Advert = advert, DateOfExport = new DateTime(1991, 1, 1) };
             _context.ExportItems.Add(item);
-            _context.SaveChanges();
+
+            int failed = 0;
+            while (failed < 5)
+            {
+                try
+                {
+                    failed++;
+                    _context.SaveChanges();
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.Message, "AddAdvertToExport");
+                    Thread.Sleep(200);
+                }
+            }
 
             App.Current.Dispatcher.Invoke((System.Action)(() =>
             {

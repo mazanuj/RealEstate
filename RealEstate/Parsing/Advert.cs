@@ -41,7 +41,7 @@ namespace RealEstate.Parsing
         public string MetroStation { get; set; } //+
         public string AO { get; set; }
 
-        public string MessageShort {get;set;}
+        public string MessageShort { get; set; }
         public string MessageFull { get; set; } //+
 
         public string Rooms { get; set; } //+
@@ -90,6 +90,7 @@ namespace RealEstate.Parsing
         }
 
         public bool IsFromDeveloper { get; set; }
+        public bool IsFromAgency { get; set; }
 
         public bool isGold { get; set; }
 
@@ -102,7 +103,7 @@ namespace RealEstate.Parsing
         public string BuildingYear { get; set; }
         public string BuildingQuartal { get; set; }
 
-        public DateTime DateSite{ get; set; } //+
+        public DateTime DateSite { get; set; } //+
         public DateTime DateUpdate { get; set; } //+
 
         public bool ContainsImages
@@ -118,17 +119,17 @@ namespace RealEstate.Parsing
             return String.Format(
                 "Rooms: '{0}', Area: '{1:#.0#}', Floor: '{2}', Floor total: '{3}', Seller: '{4}', "
               + "City: '{5}' , Adress: '{6}', Date: '{7:m}', AdverType: '{8}', UsedType: '{9}',Price: '{10}',"
-              + "Phone: '{11}', RealEstateType: '{12}'", 
-                this.Rooms, this.AreaFull, this.Floor, this.FloorTotal, this.Name, 
-                this.City, this.Address, this.DateSite, this.AdvertType, this.Usedtype ,
-                this.Price, this.PhoneNumber, this.RealEstateType );
+              + "Phone: '{11}', RealEstateType: '{12}'",
+                this.Rooms, this.AreaFull, this.Floor, this.FloorTotal, this.Name,
+                this.City, this.Address, this.DateSite, this.AdvertType, this.Usedtype,
+                this.Price, this.PhoneNumber, this.RealEstateType);
         }
 
         public string MessageFullPreview
         {
             get
             {
-                return MessageFull != null ? MessageFull.Replace("\n"," ") + "..." : "";
+                return MessageFull != null ? MessageFull.Replace("\n", " ") + "..." : "";
             }
         }
 
@@ -182,7 +183,9 @@ namespace RealEstate.Parsing
 
         public string GetCategory()
         {
-            if (IsFromDeveloper)
+            if (IsFromAgency)
+                return "9";
+            else if (IsFromDeveloper)
                 return "1";
             else
                 return "2";
@@ -192,7 +195,7 @@ namespace RealEstate.Parsing
     public class Image
     {
         public int Id { get; set; }
-        public string URl {get;set;}
+        public string URl { get; set; }
 
         [NotMapped]
         public string LocalName

@@ -70,9 +70,9 @@ namespace RealEstate.ViewModels
 
 
             if (AdvertOriginal.MessageFullPreview.Length > 60)
-                DisplayName =  AdvertOriginal.MessageFullPreview.Substring(0, 60) + "...";
+                DisplayName = Advert.Id + ": " + AdvertOriginal.MessageFullPreview.Substring(0, 60) + "...";
             else
-                DisplayName = AdvertOriginal.MessageFullPreview;
+                DisplayName = Advert.Id + ": " + AdvertOriginal.MessageFullPreview;
             GenerateHtmlFile();
             LoadImages();
 

@@ -279,7 +279,7 @@ VALUES (
 
         private string GetCategoryForNovoYaroslavl(Advert advert, MySqlConnection conn)
         {
-            if (advert.Usedtype == Usedtype.New)
+            if (advert.Usedtype == Usedtype.New && !String.IsNullOrEmpty(advert.Distinct))
             {
                 var comm_to_select = @"SELECT `id` FROM `j17_adsmanager_categories` where name like '%" + MySqlHelper.EscapeString(advert.Distinct) + "%' LIMIT 1;";
                 MySqlCommand selectDistinct = new MySqlCommand(comm_to_select, conn);

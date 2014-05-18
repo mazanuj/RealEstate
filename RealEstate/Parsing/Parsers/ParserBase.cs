@@ -93,7 +93,7 @@ namespace RealEstate.Parsing.Parsers
             myHttpWebRequest.CookieContainer = cookie;
             myHttpWebRequest.UserAgent = userAgent;
             myHttpWebRequest.Referer = referer;
-            myHttpWebRequest.Timeout = isPhone ? SettingsStore.DefaultTimeout : 60000;
+            myHttpWebRequest.Timeout = isPhone ? SettingsStore.DefaultTimeout : 20000;
             myHttpWebRequest.KeepAlive = true;
 
             if (cs.IsCancellationRequested)
