@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 	<head><title>Карта</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -12,6 +12,7 @@
 	function init () {
 		var myGeocoder = ymaps.geocode('%FULLADDRESS%');
 		myGeocoder.then(function (res) {
+		    document.getElementById('loading').style.display = 'none';
 			myMap = new ymaps.Map('map', {center: res.geoObjects.get(0).geometry.getCoordinates(),zoom: 12});
 			myMap.controls.add('smallZoomControl').add('searchControl');
 			var nearest = res.geoObjects.get(0);
@@ -56,6 +57,9 @@
 	</script>
 	</head>
 	<body>
+        <div id="loading">
+            Загрузка...
+        </div>
 		<div id="map" style="width:360px; height:265px; margin: 0;"></div>
 	</body>
 </html>
