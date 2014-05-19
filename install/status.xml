@@ -113,10 +113,6 @@
     <Hash>5B8EF444CBE51F24F31E6ABA5D530E01</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>settings.ini</Path>
-    <Hash>577D39B96E92804B8B724B8E255325A4</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>System.Runtime.dll</Path>
     <Hash>2FA2FDFA8BBB84B36648FF3B28022A6C</Hash>
   </FileStatus>
@@ -138,7 +134,7 @@
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
-    <Hash>E9AA2CEBDB28A919E34609630508C269</Hash>
+    <Hash>12A43319E7DB5C6F85C503CDFC9EA34D</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>
