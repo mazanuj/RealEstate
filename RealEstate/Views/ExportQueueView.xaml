@@ -79,7 +79,7 @@
                                 <ItemsControl ItemsSource="{Binding Advert.ExportSites}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Margin="5" Text="{Binding DisplayName}"></TextBlock>
+                                            <TextBlock Margin="5" Text="{Binding Title}"></TextBlock>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
@@ -90,6 +90,13 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Margin="3 0 0 0" Style="{StaticResource LinkButton}" Content="Показать" cal:Message.Attach="OpenItem($dataContext)" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Margin="3 0 0 0" Style="{StaticResource LinkButton}" Content="Ссылка" cal:Message.Attach="OpenUrl($dataContext)" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

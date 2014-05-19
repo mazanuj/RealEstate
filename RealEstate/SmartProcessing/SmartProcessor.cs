@@ -448,7 +448,7 @@ namespace RealEstate.SmartProcessing
                 return true;
             }
 
-            Regex regHouse2 = new Regex(@"\w{3}\W*(?<house>\d+)(\s*/\s*(?<housepart>\d+))?");
+            Regex regHouse2 = new Regex(@"\w{3}\W*(?<house>\d+)(\s*/\s*(?<housepart>\d+))?(?!.*\w)");
             if (!String.IsNullOrEmpty(advert.Address))
             {
                 m = regHouse2.Match(advert.Address);

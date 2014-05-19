@@ -95,6 +95,27 @@ namespace RealEstate.ViewModels
             }
         }
 
+        public void OpenUrl(ExportItem item)
+        {
+            if(item != null && item.Advert != null)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    try
+                    {
+                        Process.Start(item.Advert.Url);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex.ToString());
+                        _events.Publish("Ошибка");
+                    }
+                }, CancellationToken.None,
+                      TaskCreationOptions.None,
+                      TaskScheduler.Default);
+            }
+        }
+
         public void ForceExport(ExportItem item)
         {
             try
