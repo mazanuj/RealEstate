@@ -95,11 +95,17 @@ namespace RealEstate.Exporting
                    {
                        try
                        {
-                           var item = ExportQueue.FirstOrDefault(c => 
-                               c.Advert.ExportSites != null 
-                               && c.Advert.ExportSites.Any()
-                               && (!_lastExported.ContainsKey(c.Advert.ExportSites.First().Id)
-                               || _lastExported[c.Advert.ExportSites.First().Id] < DateTime.Now));
+                           ExportItem item = null;
+                           lock (ExportQueue)
+                           {
+                               item = ExportQueue.FirstOrDefault(c =>
+                                   c.Advert.ExportSites != null
+                                   && c.Advert.ExportSites.Any()
+                                   && c.Advert.ExportSites.FirstOrDefault() != null
+                                   && (!_lastExported.ContainsKey(c.Advert.ExportSites.First().Id)
+                                   || _lastExported[c.Advert.ExportSites.First().Id] < DateTime.Now));
+                           }
+
                            if (item != null)
                            {
                                {
@@ -173,7 +179,10 @@ namespace RealEstate.Exporting
             var advert = _context.Adverts.Find(advertId);
             if (advert == null) { Trace.WriteLine("advert is null (AddAdvertToExport)", "Code error"); return; }
 
-            ExportQueue.Remove(null);
+            lock (ExportQueue)
+            {
+                ExportQueue.Remove(null);
+            }
 
             if (ExportQueue.Any(e => e.Advert.Id == advert.Id && !e.IsExported))
             {
@@ -206,10 +215,13 @@ namespace RealEstate.Exporting
                 }
             }
 
-            App.Current.Dispatcher.Invoke((System.Action)(() =>
+            lock (ExportQueue)
             {
-                ExportQueue.Add(item);
-            }));
+                App.Current.Dispatcher.Invoke((System.Action)(() =>
+                {
+                    ExportQueue.Add(item);
+                }));
+            }
         }
 
         public void Remove(ExportItem item)
