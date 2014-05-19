@@ -56,6 +56,7 @@ namespace RealEstate.ViewModels
                 if (!String.IsNullOrEmpty(Text))
                 {
                     _rulesManager.AddBlackListedWord(Text);
+                    Text = null;
 
                     _events.Publish("Добавлено");
                 }

@@ -64,6 +64,12 @@ namespace RealEstate.SmartProcessing
             var max = parts.Max(s => s.Length);
             address = parts.First().Trim(new char[] { ',', '.' }).Trim();
 
+            var addrParts = address.Split('.');
+            if(addrParts.Count() > 0)
+            {
+                address = addrParts.Max(c => c);
+            }
+
             Regex r = new Regex(@"\d+");
             var number = parts.FirstOrDefault(p => r.IsMatch(p)) ?? "1";
 

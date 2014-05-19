@@ -58,9 +58,12 @@ namespace RealEstate.SmartProcessing
 
                 var oldAddress = advert.Address;
 
-                ClarifyAddress(advert);
+                if (!TryParseAddress(advert))
+                    ClarifyAddress(advert);
 
                 DetectDistinct(advert, oldAddress);
+
+                RemoveDistinct(advert, ref oldAddress);
 
                 if (String.IsNullOrEmpty(advert.Address))
                 {
@@ -70,15 +73,17 @@ namespace RealEstate.SmartProcessing
                     advert.Address = advert.Address ?? oldAddress;
                 }
 
+
                 RemoveStreetLabel(advert);
+                FillAddress(advert);
+                if (String.IsNullOrEmpty(advert.Street) || String.IsNullOrEmpty(advert.House))
+                    GetAdressByRegex(advert);
 
                 DetectPrice(advert);
 
                 DetectArea(advert);
 
                 DetectFloors(advert);
-
-                FillAddress(advert);
 
                 DetectYear(advert);
 
@@ -140,6 +145,18 @@ namespace RealEstate.SmartProcessing
             }
         }
 
+        private void RemoveDistinct(Advert advert, ref string oldAdress)
+        {
+            if (!String.IsNullOrEmpty(advert.Address) && !String.IsNullOrEmpty(advert.Distinct))
+            {
+                advert.Address = advert.Address.Replace(advert.Distinct, "").TrimStart(new[] { ',' }).Trim();
+            }
+            else if (!String.IsNullOrEmpty(oldAdress) && !String.IsNullOrEmpty(advert.Distinct))
+            {
+                oldAdress = oldAdress.Replace(advert.Distinct, "").TrimStart(new[] { ',' }).Trim();
+            }
+        }
+
         private void DetectFloors(Advert advert)
         {
             try
@@ -169,7 +186,7 @@ namespace RealEstate.SmartProcessing
 
         private void DetectCategory(Advert advert)
         {
-            if(!String.IsNullOrEmpty(advert.MessageFull))
+            if (!String.IsNullOrEmpty(advert.MessageFull))
             {
                 advert.IsFromDeveloper = advert.MessageFull.ToLower().Contains("застройщик");
             }
@@ -225,7 +242,7 @@ namespace RealEstate.SmartProcessing
                     }
                 }
 
-                string pattern = @"\d+([.,]\d+)?/\d+([.,]\d+)?/\d+([.,]\d+)?";
+                string pattern = @"\d+([.,]\d+)?\s*/\s*\d+([.,]\d+)?\s*/\s*\d+([.,]\d+)?";
                 Regex regAreaFull = new Regex(pattern, RegexOptions.IgnoreCase);
                 var mat = regAreaFull.Match(advert.MessageFull);
                 if (mat.Success)
@@ -236,7 +253,7 @@ namespace RealEstate.SmartProcessing
                         switch (i)
                         {
                             case 0:
-                                advert.AreaFull = float.Parse(areas[i].Replace(',','.'), CultureInfo.InvariantCulture);
+                                advert.AreaFull = float.Parse(areas[i].Replace(',', '.'), CultureInfo.InvariantCulture);
                                 break;
                             case 1:
                                 advert.AreaLiving = float.Parse(areas[i].Replace(',', '.'), CultureInfo.InvariantCulture);
@@ -275,7 +292,7 @@ namespace RealEstate.SmartProcessing
         private void RemoveStreetLabel(Advert advert)
         {
             if (!String.IsNullOrEmpty(advert.Address))
-                advert.Address = advert.Address.Replace("улица", "").Replace("ул.", "").Trim();
+                advert.Address = advert.Address.Replace("улица", "").Replace("ул.", "").Replace(" ул,", "").Replace(" ул ", "").Trim();
         }
 
         private void RemoveAdvertisers(Advert advert)
@@ -297,13 +314,13 @@ namespace RealEstate.SmartProcessing
                     var searchAdress = advert.Address;
                     if (!searchAdress.Contains("район") || searchAdress.IndexOf("район") > searchAdress.IndexOf("ул."))
                         searchAdress = searchAdress.Replace("ул.", "");
-                    searchAdress = searchAdress.Replace("Округ:","");
+                    searchAdress = searchAdress.Replace("Округ:", "");
 
                     if (!searchAdress.Contains(advert.City)
                         && !searchAdress.ToLower().Contains("ст.")
                         && !searchAdress.ToLower().Contains("г.")
                         && !searchAdress.ToLower().Contains("город")
-                        && !searchAdress.ToLower().Contains("пос.") 
+                        && !searchAdress.ToLower().Contains("пос.")
                         && !searchAdress.ToLower().Contains("поселок")
                         && !searchAdress.ToLower().Contains("область"))
                         searchAdress = advert.City + ", " + searchAdress;
@@ -316,8 +333,6 @@ namespace RealEstate.SmartProcessing
                             advert.City = newCity;
                     }
 
-                    GetHouseByRegex(advert);
-
                     AddressDataBase.ProcessAddress(advert);
                 }
             }
@@ -328,32 +343,37 @@ namespace RealEstate.SmartProcessing
             }
         }
 
-       private void GetHouseByRegex(Advert advert)
-       {
-           if(advert.ImportSite == ImportSite.Avito)
-           {
-               Regex regHouse = new Regex(@"д\W*(?<house>\d+)");
-               if (!String.IsNullOrEmpty(advert.Address))
-               {                 
-                   var m = regHouse.Match(advert.Address);
-                   if (m.Success && m.Groups["house"].Value != "")
-                   {
-                       advert.House = m.Groups["house"].Value;
-                       return;
-                   }
-               }
+        private void GetAdressByRegex(Advert advert)
+        {
+            if (advert.ImportSite == ImportSite.Avito)
+            {
+                Regex regHouse = new Regex(@"д\W*(?<house>\d+)");
+                if (!String.IsNullOrEmpty(advert.Address))
+                {
+                    var m = regHouse.Match(advert.Address);
+                    if (m.Success && m.Groups["house"].Value != "")
+                    {
+                        if (String.IsNullOrEmpty(advert.House))
+                            advert.House = m.Groups["house"].Value;
+                        if (String.IsNullOrEmpty(advert.Street))
+                            advert.Street = advert.Address.Replace(m.Value, "").Trim().Trim(new[] { ',' }).Trim();
+                        return;
+                    }
+                }
 
-               if (!String.IsNullOrEmpty(advert.MessageFull))
-               {
-                   var m = regHouse.Match(advert.MessageFull);
-                   if (m.Success && m.Groups["house"].Value != "")
-                   {
-                       advert.House = m.Groups["house"].Value;
-                   }
-               }
-               
-           }
-       }
+
+                if (!String.IsNullOrEmpty(advert.MessageFull))
+                {
+                    var m = regHouse.Match(advert.MessageFull);
+                    if (m.Success && m.Groups["house"].Value != "")
+                    {
+                        if (String.IsNullOrEmpty(advert.House))
+                            advert.House = m.Groups["house"].Value;
+                    }
+                }
+
+            }
+        }
 
         private bool TryParseAddress(Advert advert)
         {
@@ -384,19 +404,16 @@ namespace RealEstate.SmartProcessing
 
             string street = null;
 
-            if (String.IsNullOrEmpty(advert.Address))
+            Regex rCity1 = new Regex(@"\W(?<street>ул.\ *(?:\ *\w\.?\-?)*\ *),", RegexOptions.IgnoreCase);
+
+
+            m = rCity1.Match(advert.MessageFull);
+
+            if (m.Success && m.Groups["street"].Value != "")
             {
-                Regex rCity1 = new Regex(@"\W(?<street>ул.\ *(?:\ *\w\.?\-?)*\ *),", RegexOptions.IgnoreCase);
-
-
-                m = rCity1.Match(advert.MessageFull);
-
-                if (m.Success && m.Groups["street"].Value != "")
-                {
-                    street = m.Groups["street"].Value;
-                }
-
+                street = m.Groups["street"].Value;
             }
+
 
             if (String.IsNullOrEmpty(advert.Address))
             {
@@ -417,12 +434,39 @@ namespace RealEstate.SmartProcessing
                 {
                     house = ", " + m.Groups["house"].Value.Replace('/', 'к');
                 }
-
+                else
+                {
+                    rHouse = new Regex(street.Replace(" ", @"\ ").Replace(".", @"\.").Replace(",", @"\,") + @"\ *\,\ *(?<house>\d+)", RegexOptions.IgnoreCase);
+                    m = rHouse.Match(advert.MessageFull);
+                    if (m.Success && m.Groups["house"].Value != "")
+                    {
+                        house = ", " + m.Groups["house"].Value.Replace('/', 'к');
+                    }
+                }
                 advert.Address = street + house;
+
+                return true;
             }
 
-            return true;
+            Regex regHouse2 = new Regex(@"\w{3}\W*(?<house>\d+)(\s*/\s*(?<housepart>\d+))?");
+            if (!String.IsNullOrEmpty(advert.Address))
+            {
+                m = regHouse2.Match(advert.Address);
+                if (m.Success && m.Groups["house"].Value != "")
+                {
+                    if (String.IsNullOrEmpty(advert.HousePart))
+                        advert.HousePart = m.Groups["housepart"].Value;
+                    if (String.IsNullOrEmpty(advert.House))
+                        advert.House = m.Groups["house"].Value;
+                    if (String.IsNullOrEmpty(advert.Street))
+                        advert.Street = advert.Address.Replace(advert.House, "").Replace((String.IsNullOrEmpty(advert.HousePart) ? "aaa" : advert.HousePart), "").Trim().Trim(new[] { ',', '\\', '/' }).Trim();
 
+                    advert.Address = advert.Street + ", " + advert.House + (String.IsNullOrEmpty(advert.HousePart) ? null : "/" + advert.HousePart);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void DetectDistinct(Advert advert, string oldAddress)
@@ -454,7 +498,7 @@ namespace RealEstate.SmartProcessing
 
             if (String.IsNullOrEmpty(advert.AO) && !String.IsNullOrEmpty(advert.Distinct))
             {
-                if(advert.City != null && advert.City.ToLower().Contains("москва"))
+                if (advert.City != null && advert.City.ToLower().Contains("москва"))
                     advert.AO = api.GetAO(advert.Distinct);
             }
         }
@@ -555,9 +599,10 @@ namespace RealEstate.SmartProcessing
                     var m = r.Match(parts[1]);
                     if (m.Success)
                     {
-                        if(String.IsNullOrEmpty(advert.House))
+                        if (String.IsNullOrEmpty(advert.House))
                             advert.House = m.Groups["house"].Value;
-                        advert.HousePart = m.Groups["housepart"].Value;
+                        if (String.IsNullOrEmpty(advert.HousePart))
+                            advert.HousePart = m.Groups["housepart"].Value;
                     }
                 }
             }

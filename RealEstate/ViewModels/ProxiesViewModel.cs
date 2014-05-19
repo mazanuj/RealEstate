@@ -245,8 +245,24 @@ namespace RealEstate.ViewModels
                 var loaded = reader.GetProxies("", ConnectionType.Any, "", token);
                 var loadedCount = loaded.Count();
                 total = loadedCount;
-                
+
                 Trace.WriteLine("Proxies proxies. Total count: " + loadedCount);
+
+                if (loadedCount == 0)
+                {
+                    Trace.WriteLine("None proxies downloaded. Try another reader");
+                    reader = SourceReaders.FirstOrDefault(r => r != reader);
+                    if (reader != null)
+                    {
+                        loaded = reader.GetProxies("", ConnectionType.Any, "", token);
+                        loadedCount = loaded.Count();
+                        total = loadedCount;
+
+                        Trace.WriteLine("Proxies proxies. Total count: " + loadedCount);
+                    }
+                    else
+                        Trace.WriteLine("None another readers");
+                }
 
                 CheckProxies(token, loaded);
 

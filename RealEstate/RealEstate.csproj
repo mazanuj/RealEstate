@@ -158,6 +158,7 @@
     <Compile Include="Db\RealEstateContext.cs" />
     <Compile Include="Exporting\Exporters\ExporterFactory.cs" />
     <Compile Include="Exporting\Exporters\KupiYaroslavlExporter.cs" />
+    <Compile Include="Exporting\Exporters\MockExporter.cs" />
     <Compile Include="Exporting\Exporters\MoskvaExporter.cs" />
     <Compile Include="Exporting\Exporters\ExporterBase.cs" />
     <Compile Include="Exporting\Exporters\NovoYaroslavlExporter.cs" />

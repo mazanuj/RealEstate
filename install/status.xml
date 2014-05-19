@@ -110,7 +110,7 @@
   </FileStatus>
   <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>2ED21D710072A7BBDEE51B37B64E4D0F</Hash>
+    <Hash>CDB495C9A0311F0D139952F35162BB7D</Hash>
   </FileStatus>
   <FileStatus>
     <Path>settings.ini</Path>
@@ -138,7 +138,7 @@
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
-    <Hash>73FB5C21DF0AF98EDED20765C75AC21D</Hash>
+    <Hash>E9AA2CEBDB28A919E34609630508C269</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>

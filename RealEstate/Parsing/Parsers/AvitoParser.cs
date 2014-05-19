@@ -894,16 +894,22 @@ namespace RealEstate.Parsing.Parsers
             if (phoneUrl != null)
             {
                 byte[] phoneImage = null;
+                int failed = 0;
 
-                try
+                while (failed < 5)
                 {
-                    phoneImage = DownloadImage(phoneUrl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, advert.Url, true);
-                }
-                catch (Exception)
-                {
-                    Trace.Write("Error during downloading phone image!");
-                    Trace.Write("phoneUrl: " + phoneUrl);
-                    throw;
+                    failed++;
+                    try
+                    {
+                        phoneImage = DownloadImage(phoneUrl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, advert.Url, true);
+                    }
+                    catch (Exception)
+                    {
+                        Trace.Write("Error during downloading phone image!");
+                        Trace.Write("phoneUrl: " + phoneUrl);
+                        if (failed == 5)
+                            throw;
+                    } 
                 }
 
                 var phoneText = OCRManager.RecognizeImage(phoneImage);
@@ -935,6 +941,7 @@ namespace RealEstate.Parsing.Parsers
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
 
+                DetectClosed(page);
 
                 if (!onlyPhone)
                 {
@@ -962,6 +969,13 @@ namespace RealEstate.Parsing.Parsers
                 Trace.WriteLine(advert.Url);
                 throw;
             }
+        }
+
+        private void DetectClosed(HtmlDocument page)
+        {
+            var closed = page.DocumentNode.SelectSingleNode("//div[@class='alert alert-large t-item-closed']");
+            if (closed != null)
+                throw new ParsingException("Advert is closed", null);
         }
 
     }

@@ -20,6 +20,8 @@ namespace RealEstate.Exporting.Exporters
 
         public ExporterBase GetExporter(string databaseName)
         {
+            //return new MockExporter();
+
             switch (databaseName)
             {
                 case "kupi":
