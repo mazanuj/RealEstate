@@ -25,10 +25,6 @@
     <Hash>1A8A68A2CF6F45FE6F9BDECB1135C783</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>awesomium_process</Path>
-    <Hash>C4B3D8ED06ECBEC2B2FD0D1FAEDB1FEF</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>Caliburn.Micro.dll</Path>
     <Hash>5F1239BD2F44EBBCE6BF156FCA800231</Hash>
   </FileStatus>
@@ -73,10 +69,6 @@
     <Hash>E6A18F4B351CD9D3AC024D5AFAFD0883</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>map template.html</Path>
-    <Hash>FA13BB513F00A025E32C22150898222C</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>Microsoft.Threading.Tasks.dll</Path>
     <Hash>9F22F081FF1874B4A4040C6ABDD2D32B</Hash>
   </FileStatus>
@@ -97,10 +89,6 @@
     <Hash>5CC3F1ECA02737022B2A3BC387F4B287</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>NewLastReport.report</Path>
-    <Hash>204FF58A3DF2787C5C4B73BFC6D13E6D</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>Newtonsoft.Json.dll</Path>
     <Hash>1232F5D749700A818908CC163BEFED18</Hash>
   </FileStatus>
@@ -109,12 +97,8 @@
     <Hash>B56F954A761998C5C79176FE34830B9D</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>PassLastReport.report</Path>
-    <Hash>870DF2667F17CBE6064F9B561D832F3B</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>RealEstate.exe</Path>
-    <Hash>AC7C5752D00B99921F088B3B525525AB</Hash>
+    <Hash>48CBFE6032FCDA1DEBFC6962318C7ADF</Hash>
   </FileStatus>
   <FileStatus>
     <Path>System.Runtime.dll</Path>
@@ -133,56 +117,12 @@
     <Hash>AE4D9E3DEF3B74A9EDAC410D131B6DF1</Hash>
   </FileStatus>
   <FileStatus>
-    <Path>UsedLastReport.report</Path>
-    <Hash>BE7C768894140DF09010B6DBAA3F6127</Hash>
-  </FileStatus>
-  <FileStatus>
     <Path>version</Path>
-    <Hash>7AB4FD8A7CD8BD136942183145DE39A0</Hash>
+    <Hash>D2D8F1CE703AD88C68B583A6DC230C27</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>
     <Hash>ADFB6D7B61E301761C700652B6FE7CCD</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>City\cities.xml</Path>
-    <Hash>34A0B509CF3B37FFFB36DCC88C23267A</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>tessdata\eng.cube.bigrams</Path>
-    <Hash>849B155E3F313EE71EC3954DD400AFF6</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>tessdata\eng.cube.fold</Path>
-    <Hash>7C302624086B306EBBDCED53DD2B185B</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>tessdata\eng.cube.lm</Path>
-    <Hash>48BDDBF5F97D239E2461C422CC0C8EE0</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>tessdata\eng.cube.nn</Path>
-    <Hash>7D4A551F859E37B4825F8C50CC5E1C28</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>tessdata\eng.cube.params</Path>
-    <Hash>8B42570B3D149D1C6DC85B7E94417FC3</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>tessdata\eng.cube.size</Path>
-    <Hash>07728AF8E662C49078A1E3B8A607EB3A</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>tessdata\eng.cube.word-freq</Path>
-    <Hash>9D05EB491A42681B34661E0C281BBC7E</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>tessdata\eng.tesseract_cube.nn</Path>
-    <Hash>A24B4909E1582F30AAE24064F933FF20</Hash>
-  </FileStatus>
-  <FileStatus>
-    <Path>tessdata\eng.traineddata</Path>
-    <Hash>F4B86E0B7EB03C682F0E5E6519E02D32</Hash>
   </FileStatus>
   <FileStatus>
     <Path>x86\liblept168.dll</Path>

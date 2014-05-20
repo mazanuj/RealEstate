@@ -71,13 +71,20 @@ namespace RealEstate.SmartProcessing
                     ClarifyAddress(advert);
 
                     advert.Address = advert.Address ?? oldAddress;
+                }        
+
+                if (String.IsNullOrEmpty(advert.House) && String.IsNullOrEmpty(advert.HouseStroenie))
+                {
+                    GetHouseByRegex(advert);
+                    FillAddress(advert);
                 }
 
-
                 RemoveStreetLabel(advert);
-                FillAddress(advert);
-                if (String.IsNullOrEmpty(advert.Street) || String.IsNullOrEmpty(advert.House))
-                    GetAdressByRegex(advert);
+
+                if(String.IsNullOrEmpty(advert.Distinct))
+                {
+                    DetectDistinct(advert, oldAddress);
+                }
 
                 DetectPrice(advert);
 
@@ -292,7 +299,15 @@ namespace RealEstate.SmartProcessing
         private void RemoveStreetLabel(Advert advert)
         {
             if (!String.IsNullOrEmpty(advert.Address))
-                advert.Address = advert.Address.Replace("улица", "").Replace("ул.", "").Replace(" ул,", "").Replace(" ул ", "").Trim();
+                advert.Address = ClearFromStreet(advert.Address);
+
+            if (!String.IsNullOrEmpty(advert.Street))
+                advert.Street = ClearFromStreet(advert.Street);
+        }
+
+        private string ClearFromStreet(string str)
+        {
+            return str.Replace("улица", "").Replace("Ул.", "").Replace("ул.", "").Replace(" ул", "").Replace(" ул ", "").Trim().Trim(new []{','}).Trim();
         }
 
         private void RemoveAdvertisers(Advert advert)
@@ -343,7 +358,7 @@ namespace RealEstate.SmartProcessing
             }
         }
 
-        private void GetAdressByRegex(Advert advert)
+        private void GetHouseByRegex(Advert advert)
         {
             if (advert.ImportSite == ImportSite.Avito)
             {
@@ -397,7 +412,7 @@ namespace RealEstate.SmartProcessing
 
             string street = null;
 
-            Regex regAdrFull = new Regex(@"(ул\.)?\s*(?<street>[\w]+)(\s*ул\w*)\W+(д\W*\s*(?<house>\d+))(\W*к\w*(?<housepart>\d))?");
+            Regex regAdrFull = new Regex(@"((ул)|(пр)\.)?\s*(?<street>[\w]+)(\s*(ул)|(пр)\w*)?\W+((д\W*\s*(?<house>\d+))|(ст\W*\s*(?<str>\d+)))(\W*\s*к\w*\W*\s*(?<housepart>\d))?");
             if (!String.IsNullOrEmpty(advert.Address))
             {
                 m = regAdrFull.Match(advert.Address);
@@ -405,12 +420,17 @@ namespace RealEstate.SmartProcessing
                 {
                     if (String.IsNullOrEmpty(advert.Street))
                         advert.Street = m.Groups["street"].Value;
+                    if (String.IsNullOrEmpty(advert.HouseStroenie))
+                        advert.HouseStroenie = m.Groups["str"].Value;
                     if (String.IsNullOrEmpty(advert.House))
                         advert.House = m.Groups["house"].Value;
                     if (String.IsNullOrEmpty(advert.HousePart))
                         advert.HousePart = m.Groups["housepart"].Value;
 
-                    advert.Address = advert.Street + ", " + advert.House + (String.IsNullOrEmpty(advert.HousePart) ? null : "/" + advert.HousePart);
+                    advert.Address = advert.Street + ", "
+                        + advert.House
+                        + (String.IsNullOrEmpty(advert.HouseStroenie) ? null : "стр. " + advert.HouseStroenie)
+                        +(String.IsNullOrEmpty(advert.HousePart) ? null : "/" + advert.HousePart);
                     return true;
                 }
             }

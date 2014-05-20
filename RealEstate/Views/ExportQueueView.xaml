@@ -70,7 +70,10 @@
                     <DataGridTextColumn Header="Дата" Binding="{Binding Advert.DateUpdate}" />
                     <DataGridTextColumn Header="Город" Binding="{Binding Advert.City}" />
                     <DataGridTextColumn Header="Район" Binding="{Binding Advert.Distinct}" />
-                    <DataGridTextColumn Header="Адрес" Binding="{Binding Advert.Address}" />
+                    <DataGridTextColumn Header="Улица" Binding="{Binding Advert.Street}" />
+                    <DataGridTextColumn Header="Дом" Binding="{Binding Advert.House}" />
+                    <DataGridTextColumn Header="Строение" Binding="{Binding Advert.HouseStroenie}" />
+                    <DataGridTextColumn Header="Корпус" Binding="{Binding Advert.HousePart}" />
                     <DataGridTextColumn Header="Комнат" Binding="{Binding Advert.Rooms}" />
                     <DataGridTextColumn Header="Цена" Binding="{Binding Advert.Price}" />
                     <DataGridTemplateColumn Header="Сайты" >
@@ -103,6 +106,13 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
+                                <Button Margin="3 0 0 0" Style="{StaticResource LinkButton}" Content="Забанить" cal:Message.Attach="BanItem($dataContext)" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
                                 <Button Margin="3 0 0 0" Style="{StaticResource LinkButton}" Content="Удалить" cal:Message.Attach="RemoveItem($dataContext)" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -110,7 +120,7 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Margin="3 0 0 0" Style="{StaticResource LinkButton}" Content="Принудительный экспорт" cal:Message.Attach="ForceExport($dataContext)" />
+                                <Button Margin="3 0 0 0" Style="{StaticResource LinkButton}" Content="Экспорт" cal:Message.Attach="ForceExport($dataContext)" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

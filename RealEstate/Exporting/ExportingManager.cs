@@ -91,7 +91,7 @@ namespace RealEstate.Exporting
                    int lastFailedExportedId = -1;
                    int currentId = -1;
                    int failedCount = 0;
-                   while (!_stopped && ExportQueue.Any(i => !i.IsExported))
+                   while (!_stopped && ExportQueue.Any(i => !i.IsExported && !i.IsBanned))
                    {
                        try
                        {
@@ -152,9 +152,9 @@ namespace RealEstate.Exporting
                 case ExportStatus.Unprocessed:
                     return adverts.Where(a => !_context.ExportItems.Any(e => e.Advert.Id == a.Id));
                 case ExportStatus.Exporting:
-                    return adverts.Where(a => _context.ExportItems.Any(e => !e.IsExported && (e.Advert.Id == a.Id)));
+                    return adverts.Where(a => _context.ExportItems.Any(e => !e.IsExported && !e.IsBanned && (e.Advert.Id == a.Id)));
                 case ExportStatus.Exported:
-                    return adverts.Where(a => _context.ExportItems.Any(e => e.IsExported && (e.Advert.Id == a.Id)));
+                    return adverts.Where(a => _context.ExportItems.Any(e => e.IsExported && !e.IsBanned && (e.Advert.Id == a.Id)));
                 default:
                     return null;
             }
@@ -162,7 +162,7 @@ namespace RealEstate.Exporting
 
         public void RestoreQueue()
         {
-            foreach (var item in _context.ExportItems.Include("Advert").Where(i => !i.IsExported).ToList())
+            foreach (var item in _context.ExportItems.Include("Advert").Where(i => !i.IsExported && !i.IsBanned).ToList())
             {
                 App.Current.Dispatcher.Invoke((System.Action)(() =>
                 {
@@ -190,7 +190,7 @@ namespace RealEstate.Exporting
                 return;
             }
 
-            if (_context.ExportItems.Any(e => e.Advert.Id == advert.Id && e.IsExported) && !Settings.SettingsStore.ExportParsed)
+            if (_context.ExportItems.Any(e => e.Advert.Id == advert.Id && (e.IsExported || e.IsBanned)) && !Settings.SettingsStore.ExportParsed)
             {
                 Trace.WriteLine("Advert id = " + advertId + " is already exported");
                 return;
@@ -246,7 +246,7 @@ namespace RealEstate.Exporting
 
             bool isExported = false;
 
-            if (item.Advert.ExportSites != null && !item.IsExported)
+            if (item.Advert.ExportSites != null && !item.IsExported && !item.IsBanned)
             {
                 //Trace.WriteLine("Exporting: item.Advert.ExportSites.Count = " + item.Advert.ExportSites.Count);
 
@@ -264,7 +264,7 @@ namespace RealEstate.Exporting
                         }
                     }
 
-                    if (!_context.ExportItems.Any(e => e.Advert.Id == item.Advert.Id && e.IsExported && e.Id != item.Id) || Settings.SettingsStore.ExportParsed)
+                    if (!_context.ExportItems.Any(e => e.Advert.Id == item.Advert.Id && (e.IsExported || e.IsBanned) && e.Id != item.Id) || Settings.SettingsStore.ExportParsed)
                     {
                         var exporter = _factory.GetExporter(site.Database);
                         exporter.ExportAdvert(item.Advert, site, settings);
@@ -318,6 +318,18 @@ namespace RealEstate.Exporting
         {
             _stopped = true;
         }
+
+        public void Ban(ExportItem item)
+        {
+            App.Current.Dispatcher.Invoke((System.Action)(() =>
+            {
+                ExportQueue.Remove(item);
+            }));
+
+            item.IsBanned = true;
+
+            _context.SaveChanges();
+        }
     }
 
     public enum ExportStatus
@@ -331,6 +343,7 @@ namespace RealEstate.Exporting
     {
         public int Id { get; set; }
         public bool IsExported { get; set; }
+        public bool IsBanned { get; set; }
 
         [Required]
         public virtual Advert Advert { get; set; }

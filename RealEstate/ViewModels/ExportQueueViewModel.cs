@@ -40,6 +40,7 @@ namespace RealEstate.ViewModels
             _settingManager = settings;
             events.Subscribe(this);
             DisplayName = "Очередь экспорта";
+            _Items = ExportingManager.ExportQueue;
         }
 
         public void Handle(ToolsOpenEvent message)
@@ -55,9 +56,15 @@ namespace RealEstate.ViewModels
             ExportDelay = Settings.SettingsStore.ExportInterval;
         }
 
+        private ObservableCollection<ExportItem> _Items;
         public ObservableCollection<ExportItem> Items
         {
-            get { return ExportingManager.ExportQueue; }
+            get { return _Items; }
+            set
+            {
+                _Items = value;
+                NotifyOfPropertyChange(() => Items);
+            }
         }
 
         public void OpenItem(ExportItem item)
@@ -74,6 +81,9 @@ namespace RealEstate.ViewModels
                     var model = IoC.Get<AdvertViewModel>();
                     model.AdvertOriginal = item.Advert;
                     _windowManager.ShowDialog(model, settings: style);
+
+                    Items = null;
+                    Items = ExportingManager.ExportQueue;
                 }
                 catch (Exception ex)
                 {
@@ -95,9 +105,22 @@ namespace RealEstate.ViewModels
             }
         }
 
+        public void BanItem(ExportItem item)
+        {
+            try
+            {
+                ExportingManager.Ban(item);
+            }
+            catch (Exception ex)
+            {
+                _events.Publish("Ошибка бана!");
+                Trace.WriteLine(ex, "Error");
+            }
+        }
+
         public void OpenUrl(ExportItem item)
         {
-            if(item != null && item.Advert != null)
+            if (item != null && item.Advert != null)
             {
                 Task.Factory.StartNew(() =>
                 {
@@ -137,7 +160,7 @@ namespace RealEstate.ViewModels
 
             try
             {
-                while(Items.Any())
+                while (Items.Any())
                 {
                     ExportingManager.Remove(Items.First());
                 }

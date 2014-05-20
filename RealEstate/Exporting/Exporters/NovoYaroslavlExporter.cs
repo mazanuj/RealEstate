@@ -127,7 +127,7 @@ VALUES (
         '',
         '',
         0,
-        '',
+        '" + advert.HouseStroenie + @"',
         '',
         '',
         '',

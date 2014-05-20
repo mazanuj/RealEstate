@@ -98,6 +98,7 @@ namespace RealEstate.ViewModels
             Advert.Street = AdvertOriginal.Street;
             Advert.House = AdvertOriginal.House;
             Advert.HousePart = AdvertOriginal.HousePart;
+            Advert.HouseStroenie = AdvertOriginal.HouseStroenie;
             Advert.AO = AdvertOriginal.AO;
             Advert.AdvertType = AdvertOriginal.AdvertType;
             Advert.AreaFull = AdvertOriginal.AreaFull;
@@ -191,6 +192,7 @@ namespace RealEstate.ViewModels
                 AdvertOriginal.Street = Advert.Street;
                 AdvertOriginal.House = Advert.House;
                 AdvertOriginal.HousePart = Advert.HousePart;
+                AdvertOriginal.HouseStroenie = Advert.HouseStroenie;
                 AdvertOriginal.AO = Advert.AO;
                 AdvertOriginal.AdvertType = SelectedAdvertType.Type;
                 AdvertOriginal.AreaFull = Advert.AreaFull;
@@ -219,6 +221,8 @@ namespace RealEstate.ViewModels
                 SaveImages();
 
                 _advertsManager.Save(AdvertOriginal);
+
+                this.TryClose();
             }
             catch (Exception ex)
             {

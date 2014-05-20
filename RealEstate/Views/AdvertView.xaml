@@ -81,6 +81,8 @@
                     <TextBox Text="{Binding Advert.HousePart}" Margin="4"/>
                     <TextBlock Text="AO" Margin="10 4 0 0" />
                     <TextBox Text="{Binding Advert.AO}" Margin="4"/>
+                    <TextBlock Text="Строение" Margin="10 4 0 0" />
+                    <TextBox Text="{Binding Advert.HouseStroenie}" Margin="4"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="10" Grid.ColumnSpan="2" >
                     <TextBlock Text="Год сдачи: " Margin="0 4" />
