@@ -281,7 +281,7 @@ VALUES (
         {
             if (advert.Usedtype == Usedtype.New && !String.IsNullOrEmpty(advert.Distinct))
             {
-                var comm_to_select = @"SELECT `id` FROM `j17_adsmanager_categories` where name like '%" + MySqlHelper.EscapeString(advert.Distinct) + "%' LIMIT 1;";
+                var comm_to_select = @"SELECT `id` FROM `j17_adsmanager_categories` where name like '%" + MySqlHelper.EscapeString(advert.Distinct) + "%' AND parent = 0 LIMIT 1;";
                 MySqlCommand selectDistinct = new MySqlCommand(comm_to_select, conn);
                 var res = selectDistinct.ExecuteScalar();
                 if (res != null && res != DBNull.Value)
@@ -301,14 +301,33 @@ VALUES (
                             dicRooms.Add(Convert.ToInt32((uint)row[0]), (string)row[1]);
                         }
 
-                        var categ = dicRooms.Values.FirstOrDefault(v => v.Contains(advert.GetKindOf()));
+                        var categ = dicRooms.Values.FirstOrDefault(v => v.Contains(GetKindOf(advert)));
                         if (categ != null && !String.IsNullOrEmpty(categ))
                             return dicRooms.AsEnumerable().First(e => e.Value == categ).Key.ToString();
                     }
                 }
             }
 
-            return "52";
+            return "130";
+        }
+
+        private string GetKindOf(Advert advert)
+        {
+            if (String.IsNullOrEmpty(advert.Rooms))
+                return "";
+
+            if (advert.Rooms.Contains('1'))
+                return "1";
+            else if (advert.Rooms.Contains('2'))
+                return "2";
+            else if (advert.Rooms.Contains('3'))
+                return "3";
+            else if (advert.Rooms.Contains('4'))
+                return "4";
+            else if (advert.Rooms.Contains("туд"))
+                return "1";
+            else
+                return "4";
         }
     }
 }

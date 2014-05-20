@@ -156,7 +156,7 @@ namespace RealEstate.Parsing
             else if (Rooms.Contains("туд"))
                 return "99";
             else
-                return "";
+                return "5+";
         }
 
         public int GetAO()
