@@ -25,6 +25,10 @@
     <Hash>1A8A68A2CF6F45FE6F9BDECB1135C783</Hash>
   </FileStatus>
   <FileStatus>
+    <Path>awesomium_process</Path>
+    <Hash>C4B3D8ED06ECBEC2B2FD0D1FAEDB1FEF</Hash>
+  </FileStatus>
+  <FileStatus>
     <Path>Caliburn.Micro.dll</Path>
     <Hash>5F1239BD2F44EBBCE6BF156FCA800231</Hash>
   </FileStatus>
@@ -134,7 +138,7 @@
   </FileStatus>
   <FileStatus>
     <Path>version</Path>
-    <Hash>06950F48C38665016E5DEF7ECD7B0045</Hash>
+    <Hash>7AB4FD8A7CD8BD136942183145DE39A0</Hash>
   </FileStatus>
   <FileStatus>
     <Path>xinput9_1_0.dll</Path>
