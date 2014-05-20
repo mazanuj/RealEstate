@@ -236,7 +236,7 @@ VALUES (
 
         private string GetUserIdYaroslavl(Advert advert, MySqlConnection conn)
         {
-            if (!String.IsNullOrEmpty(advert.PhoneNumber) && !String.IsNullOrEmpty(advert.Name))
+            if (!String.IsNullOrEmpty(advert.PhoneNumber))
             {
                 var comm_to_select = @"SELECT `id` FROM `j17_users` where username = '" + MySqlHelper.EscapeString(advert.PhoneNumber) + "' LIMIT 1;";
                 MySqlCommand selectUser = new MySqlCommand(comm_to_select, conn);
@@ -260,7 +260,7 @@ VALUES (
                             `gid`,
                             `params`)
                         VALUES (
-                        '" + MySqlHelper.EscapeString(advert.Name) + @"',
+                        '" + MySqlHelper.EscapeString(String.IsNullOrEmpty(advert.Name) ? "Продавец" : advert.Name) + @"',
                         '" + MySqlHelper.EscapeString(advert.PhoneNumber) + @"',
                         '" + MySqlHelper.EscapeString(String.IsNullOrEmpty(advert.Email) ? MailUtils.GenerateRandomEmail() : advert.Email) + @"',
                         0,
