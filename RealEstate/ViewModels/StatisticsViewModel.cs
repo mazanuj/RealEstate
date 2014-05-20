@@ -240,14 +240,22 @@ namespace RealEstate.ViewModels
                 int maxattempt = SettingsStore.MaxParsingAttemptCount;
                 task.TotalCount = statItems.Count;
                 List<long> spans = new List<long>();
+                int failedParsed = 0;
 
 
                 statItems.AsParallel().WithDegreeOfParallelism(SettingsStore.ThreadsCount).WithCancellation(ct).ForAll((item) =>
                 {
+                    if(failedParsed > 20)
+                    {
+                        App.NotifyIcon.ShowBalloonTip("Статистика отменена", "Число неудачных парсингов  больше 20 раз подряд", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error);
+                        throw new OperationCanceledException();
+                    }
+
                     DateTime start = DateTime.Now;
                     try
                     {
                         var count = parser.GetTotalCount(item.Url, _proxyManager, useProxy, ct);
+                        failedParsed = 0;
 
                         pt.WaitUntillPaused();
 
@@ -286,6 +294,10 @@ namespace RealEstate.ViewModels
 
                         Thread.Sleep(Delay * 1000);
                     }
+                    catch(ParsingException)
+                    {
+                        failedParsed++;
+                    }
                     catch (OperationCanceledException)
                     {
                         task.Remaining = new TimeSpan();
@@ -301,6 +313,11 @@ namespace RealEstate.ViewModels
 
                 App.NotifyIcon.ShowBalloonTip("Готово", "Парсинг статистики завершён", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
                 _events.Publish("Завершено");
+            }
+            catch (OperationCanceledException)
+            {
+                task.Remaining = new TimeSpan();
+                return;
             }
             catch (Exception ex)
             {

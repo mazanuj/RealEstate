@@ -402,7 +402,7 @@ namespace RealEstate.Parsing.Parsers
                 HtmlDocument page = new HtmlDocument();
                 page.LoadHtml(result);
 
-                var countNode = page.DocumentNode.SelectSingleNode(@"//span[@class='catalog_breadcrumbs-count']");
+                var countNode = page.DocumentNode.SelectSingleNode(@"//div[@class='breadcrumbs-links']/span[@class='link-count']");
                 if (countNode != null)
                 {
                     return Int32.Parse(Normalize(countNode.InnerText.Replace("&nbsp;", "")).Trim().Trim(new char[] { ',', ' ' }));

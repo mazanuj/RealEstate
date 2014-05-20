@@ -433,7 +433,7 @@ namespace RealEstate.SmartProcessing
                 }
             }
 
-            Regex rCity1 = new Regex(@"\W(?<street>ул.\ *(?:\ *\w\.?\-?)*\ *),", RegexOptions.IgnoreCase);
+            Regex rCity1 = new Regex(@"\W(?<street>ул\.\ *(?:\ *\w\.?\-?)*\ *),", RegexOptions.IgnoreCase);
             m = rCity1.Match(advert.MessageFull);
 
             if (m.Success && m.Groups["street"].Value != "")

@@ -234,7 +234,7 @@ namespace RealEstate.ViewModels
             {
                 if (reader == null)
                 {
-                    Trace.Write("ParsingSource reader doesn't selected");
+                    Trace.WriteLine("ParsingSource reader doesn't selected");
                     IsUpdating = false;
                     return;
                 }

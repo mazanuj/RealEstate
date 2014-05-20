@@ -541,6 +541,11 @@ namespace RealEstate.ViewModels
                         _proxyManager.SuccessProxy(proxy);
                         break;
                     }
+                    catch(AggregateException aex)
+                    {
+                        Trace.WriteLine(aex.InnerException.Message, "Aggregate error");
+                        _proxyManager.RejectProxy(proxy);
+                    }
                     catch (TimeoutException tix)
                     {
                         Trace.WriteLine(tix.Message, "Web error");
@@ -734,7 +739,10 @@ namespace RealEstate.ViewModels
                                         Trace.WriteLine("Advert (" + advert.Id + ") skipped due the lack of pictures");
                                     }
                                 else
+                                {
                                     Trace.WriteLine("Advert skipped as empty. Coverage = " + cov.ToString("P0"), "Skipped by smart processor");
+                                    Trace.WriteLine("Advert url = " + advert.Url);
+                                }
                             }
                         }
                     }
