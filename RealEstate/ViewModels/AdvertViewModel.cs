@@ -55,12 +55,12 @@ namespace RealEstate.ViewModels
 
         protected override void OnInitialize()
         {
-            if(AdvertOriginal == null)
+            if (AdvertOriginal == null)
             {
                 AdvertOriginal = _context.Adverts.FirstOrDefault(a => a.Id == AdvertId);
-                if(AdvertOriginal == null)
+                if (AdvertOriginal == null)
                 {
-                    Trace.WriteLine("Advert" + AdvertId +" not found");
+                    Trace.WriteLine("Advert" + AdvertId + " not found");
                     TryClose();
                     return;
                 }
@@ -136,7 +136,7 @@ namespace RealEstate.ViewModels
                 var count = AdvertOriginal.ExportSites.Count();
             }//bug fix for unloading first time
 
-            if(!String.IsNullOrEmpty(Advert.Address) && String.IsNullOrEmpty(Advert.Street))
+            if (!String.IsNullOrEmpty(Advert.Address) && String.IsNullOrEmpty(Advert.Street))
             {
                 _smart.FillAddress(Advert);
             }
@@ -165,7 +165,7 @@ namespace RealEstate.ViewModels
                     }
                     _images.AddRange(imgs);
                     ImagesLoaded = true;
-                    if(_images.Count > 0)
+                    if (_images.Count > 0)
                         SelectedWrapImage = _images.First();
                 }
                 catch (Exception ex)
@@ -453,18 +453,26 @@ namespace RealEstate.ViewModels
 
         public void ExportAdvert()
         {
-            Task.Factory.StartNew(() =>
+            try
             {
-                try
-                {
-                    _exportingManager.AddAdvertToExport(AdvertOriginal.Id);
-                }
-                catch (Exception ex)
-                {
-                    Trace.WriteLine(ex.ToString());
-                    _events.Publish("Ошибка");
-                }
-            }, TaskCreationOptions.LongRunning);
+                Task.Factory.StartNew(() =>
+                    {
+                        try
+                        {
+                            _exportingManager.AddAdvertToExport(AdvertOriginal.Id);
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.WriteLine(ex);
+                            _events.Publish("Ошибка");
+                        }
+                    }, TaskCreationOptions.LongRunning);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex);
+                _events.Publish("Ошибка");
+            }
         }
     }
 
