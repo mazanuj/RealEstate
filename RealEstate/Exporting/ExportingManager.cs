@@ -174,7 +174,7 @@ namespace RealEstate.Exporting
             //StartExportLoop();
         }
 
-        public void AddAdvertToExport(int advertId)
+        public void AddAdvertToExport(int advertId, bool exportNow = false)
         {
             var advert = _context.Adverts.Find(advertId);
             if (advert == null) { Trace.WriteLine("advert is null (AddAdvertToExport)", "Code error"); return; }
@@ -184,16 +184,19 @@ namespace RealEstate.Exporting
                 ExportQueue.Remove(null);
             }
 
-            if (ExportQueue.Any(e => e.Advert.Id == advert.Id && !e.IsExported))
+            if (!exportNow)
             {
-                Trace.WriteLine("Advert id = " + advert.Id + " already in the export queue");
-                return;
-            }
+                if (ExportQueue.Any(e => e.Advert.Id == advert.Id && !e.IsExported))
+                {
+                    Trace.WriteLine("Advert id = " + advert.Id + " already in the export queue");
+                    return;
+                }
 
-            if (_context.ExportItems.Any(e => e.Advert.Id == advert.Id && (e.IsExported || e.IsBanned)) && !Settings.SettingsStore.ExportParsed)
-            {
-                Trace.WriteLine("Advert id = " + advertId + " is already exported");
-                return;
+                if (_context.ExportItems.Any(e => e.Advert.Id == advert.Id && (e.IsExported || e.IsBanned)) && !Settings.SettingsStore.ExportParsed)
+                {
+                    Trace.WriteLine("Advert id = " + advertId + " is already exported");
+                    return;
+                }
             }
 
             var item = new ExportItem() { Advert = advert, DateOfExport = new DateTime(1991, 1, 1) };
@@ -215,12 +218,19 @@ namespace RealEstate.Exporting
                 }
             }
 
-            lock (ExportQueue)
+            if (!exportNow)
             {
-                App.Current.Dispatcher.Invoke((System.Action)(() =>
+                lock (ExportQueue)
                 {
-                    ExportQueue.Add(item);
-                }));
+                    App.Current.Dispatcher.Invoke((System.Action)(() =>
+                    {
+                        ExportQueue.Add(item);
+                    }));
+                }
+            }
+            else
+            {
+                Export(item);
             }
         }
 
@@ -278,12 +288,11 @@ namespace RealEstate.Exporting
 
                     if (settings != null)
                     {
-                        int count = 0;
-                        while (!_stopped && count < 60)
-                        {
-                            count++;
-                            Thread.Sleep(settings.Delay * 1000);
-                        }
+                        var lastId = item.Advert.ExportSites.First().Id;
+                        if (_lastExported.ContainsKey(lastId))
+                            _lastExported[lastId] = DateTime.Now.AddSeconds(settings.Delay);
+                        else
+                            _lastExported.Add(lastId, DateTime.Now.AddSeconds(settings.Delay));
                     }
                 }
             }

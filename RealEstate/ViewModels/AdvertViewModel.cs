@@ -436,37 +436,47 @@ namespace RealEstate.ViewModels
 
         public void OpenUrl()
         {
-
-            Task.Factory.StartNew(() =>
+            try
             {
-                try
+                Thread t = new Thread(new ThreadStart(() =>
                 {
-                    Process.Start(Advert.Url);
-                }
-                catch (Exception ex)
-                {
-                    Trace.WriteLine(ex.ToString());
-                    _events.Publish("Ошибка");
-                }
-            }, TaskCreationOptions.LongRunning);
+                    try
+                    {
+                        Process.Start(Advert.Url);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex);
+                        _events.Publish("Ошибка");
+                    }
+                }));
+                t.IsBackground = true;
+                t.Start();
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex);
+                _events.Publish("Ошибка");
+            }
         }
 
         public void ExportAdvert()
         {
             try
             {
-                Task.Factory.StartNew(() =>
+                Thread t = new Thread(new ThreadStart(() => {
+                    try
                     {
-                        try
-                        {
-                            _exportingManager.AddAdvertToExport(AdvertOriginal.Id);
-                        }
-                        catch (Exception ex)
-                        {
-                            Trace.WriteLine(ex);
-                            _events.Publish("Ошибка");
-                        }
-                    }, TaskCreationOptions.LongRunning);
+                        _exportingManager.AddAdvertToExport(AdvertOriginal.Id, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex);
+                        _events.Publish("Ошибка экспорта");
+                    }
+                }));
+                t.IsBackground = true;
+                t.Start();
             }
             catch (Exception ex)
             {

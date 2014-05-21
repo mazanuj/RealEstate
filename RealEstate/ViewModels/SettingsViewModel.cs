@@ -14,6 +14,7 @@ using RealEstate.City;
 using System.Windows;
 using RealEstate.Parsing;
 using RealEstate.Validation;
+using System.Threading;
 
 namespace RealEstate.ViewModels
 {
@@ -84,18 +85,26 @@ namespace RealEstate.ViewModels
             }
         }
 
-        public async void ClearLog()
+        public void ClearLog()
         {
             Status = "Очистка...";
             try
             {
-                await Task.Factory.StartNew(() =>
+                Thread t = new Thread(new ThreadStart(() =>
                 {
-                    _logManager.ClearLogFile();
-                });
-
-                Status = "Очищено";
-
+                    try
+                    {
+                        _logManager.ClearLogFile();
+                        Status = "Очищено";
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex);
+                        _events.Publish("Ошибка");
+                    }
+                }));
+                t.IsBackground = true;
+                t.Start();
             }
             catch (Exception ex)
             {
@@ -289,18 +298,27 @@ namespace RealEstate.ViewModels
             }
         }     
 
-        public async void ClearImages()
+        public void ClearImages()
         {
             Status = "Удаляю...";
             try
             {
-                await Task.Factory.StartNew(() =>
+                Thread t = new Thread(new ThreadStart(() =>
                 {
-                    _imagesManager.ClearImages();
-                });
-
-                ImagesSpace = "0";
-                Status = "Удалено";
+                    try
+                    {
+                        _imagesManager.ClearImages();
+                        ImagesSpace = "0";
+                        Status = "Удалено";
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex);
+                        _events.Publish("Ошибка");
+                    }
+                }));
+                t.IsBackground = true;
+                t.Start();
             }
             catch (Exception ex)
             {
