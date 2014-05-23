@@ -87,8 +87,9 @@ namespace RealEstate.Parsing
 
         public void DeleteAll()
         {
+            Trace.WriteLine("Total:" + _context.Adverts.Count());
             // _context.Database.ExecuteSqlCommand("TRUNCATE TABLE adverts;"); //it just not work WTF???
-            foreach (var advert in _context.Adverts)
+            foreach (var advert in _context.Adverts.OrderByDescending(a => a.DateSite))
             {
                 _context.Adverts.Remove(advert);
             }
