@@ -106,7 +106,7 @@ VALUES (
         '" + MySqlHelper.EscapeString(advert.MessageFull ?? "") + @"',
         '" + (advert.AreaFull == 0 ? "" : ((double)((setting == null || setting.Margin == 0) ? advert.Price : advert.Price * setting.Margin / 100d) / (double)advert.AreaFull).ToString("#")) + @"',
         '" + ((setting == null || setting.Margin == 0) ? advert.Price : advert.Price * setting.Margin / 100d).ToString("#") + @"',
-        " + advert.Rooms + @",
+        " + GetKindOf(advert) + @",
         '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + @"',
         NULL,
         '" + DateTime.Now.AddMonths(1).ToString("yyyy-MM-dd HH:mm:ss") + @"',
@@ -314,7 +314,7 @@ VALUES (
         private string GetKindOf(Advert advert)
         {
             if (String.IsNullOrEmpty(advert.Rooms))
-                return "";
+                return "0";
 
             if (advert.Rooms.Contains('1'))
                 return "1";
