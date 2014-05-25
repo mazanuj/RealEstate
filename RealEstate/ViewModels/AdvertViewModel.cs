@@ -285,7 +285,11 @@ namespace RealEstate.ViewModels
             try
             {
                 Advert.Address = _browser.ExecuteJavascriptWithResult("GetNewAddress()");
-                _smart.FillAddress(Advert);
+                if (!String.IsNullOrEmpty(Advert.Address))
+                {
+                    Advert.Address = Advert.Address.Replace("улица ", "");
+                    _smart.FillAddress(Advert, true);
+                }
                 NotifyOfPropertyChange(() => Advert);
             }
             catch (Exception ex)

@@ -894,23 +894,8 @@ namespace RealEstate.Parsing.Parsers
             if (phoneUrl != null)
             {
                 byte[] phoneImage = null;
-                int failed = 0;
-
-                while (failed < 5)
-                {
-                    failed++;
-                    try
-                    {
-                        phoneImage = DownloadImage(phoneUrl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, advert.Url, true);
-                    }
-                    catch (Exception)
-                    {
-                        Trace.Write("Error during downloading phone image!");
-                        Trace.Write("phoneUrl: " + phoneUrl);
-                        if (failed == 5)
-                            throw;
-                    } 
-                }
+                
+                phoneImage = DownloadImage(phoneUrl, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, advert.Url, true);
 
                 var phoneText = OCRManager.RecognizeImage(phoneImage);
 

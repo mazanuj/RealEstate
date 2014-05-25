@@ -67,6 +67,18 @@ namespace RealEstate.Parsing
                             if (!oldAdvert.ExportSites.Any(e => e.Id == item.Id))
                                 oldAdvert.ExportSites.Add(item);
                         }
+
+                        oldAdvert.Address = advert.Address;
+                        oldAdvert.Street = advert.Street;
+                        oldAdvert.House = advert.House;
+                        oldAdvert.HousePart = advert.HousePart;
+                        oldAdvert.HouseStroenie = advert.HouseStroenie;
+                        oldAdvert.AreaFull = advert.AreaFull;
+                        oldAdvert.AreaKitchen = advert.AreaKitchen;
+                        oldAdvert.AreaLiving = advert.AreaLiving;
+                        oldAdvert.City = advert.City;
+                        oldAdvert.DateUpdate = advert.DateUpdate;
+                        oldAdvert.PhoneNumber = advert.PhoneNumber;
                     }
 
                     context.SaveChanges();  

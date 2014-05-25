@@ -329,7 +329,7 @@ namespace RealEstate.SmartProcessing
         private string ClearFromStreet(string str)
         {
             return str.Replace("улица", "").Replace("Ул.", "").Replace("ул.", "").Replace(" ул", "").Replace(" ул ", "").Replace("ул ", "").Replace("УЛ", "")
-                .Replace("проспект", "").Replace("Пр.", "").Replace("пр.", "").Replace(" пр", "").Replace(" пр ", "")
+                .Replace("пр-т", "").Replace("проспект", "").Replace("Пр.", "").Replace("пр.", "").Replace(" пр", "").Replace(" пр ", "").Replace(" ш", "")
                 .Trim().Trim(new []{',', '.'}).Trim();
         }
 
@@ -701,7 +701,7 @@ namespace RealEstate.SmartProcessing
             return current / total;
         }
 
-        public void FillAddress(Advert advert)
+        public void FillAddress(Advert advert, bool force = false)
         {
             if (!String.IsNullOrEmpty(advert.Address))
             {
@@ -713,9 +713,9 @@ namespace RealEstate.SmartProcessing
                     var m = r.Match(parts[1]);
                     if (m.Success)
                     {
-                        if (String.IsNullOrEmpty(advert.House))
+                        if (String.IsNullOrEmpty(advert.House) || force)
                             advert.House = m.Groups["house"].Value;
-                        if (String.IsNullOrEmpty(advert.HousePart))
+                        if (String.IsNullOrEmpty(advert.HousePart) || force)
                             advert.HousePart = m.Groups["housepart"].Value;
                     }
                 }

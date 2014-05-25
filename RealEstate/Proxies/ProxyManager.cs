@@ -67,9 +67,9 @@ namespace RealEstate.Proxies
 
         public void RejectProxy(WebProxy proxy)
         {
-            lock (_lock)
+            if (proxy != null)
             {
-                if (proxy != null)
+                lock (_lock)
                 {
                     var stat = Proxies.FirstOrDefault(p => p.Proxy == proxy);
                     if (stat != null)

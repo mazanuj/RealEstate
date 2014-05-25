@@ -518,6 +518,7 @@ namespace RealEstate.ViewModels
         {
 
             bool parsed = !param.phoneImport && _advertsManager.IsParsed(header.Url);
+            //bool parsed = false;
 
             DateTime start = DateTime.Now;
             var attempt = 0;

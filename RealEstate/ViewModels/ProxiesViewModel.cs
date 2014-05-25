@@ -22,7 +22,7 @@ namespace RealEstate.ViewModels
     [Export(typeof(ProxiesViewModel))]
     public class ProxiesViewModel : ValidatingScreen<ProxiesViewModel>, IHandle<ToolsOpenEvent>, IHandle<CriticalErrorEvent>
     {
-        const int MIN_PROXIES = 4;
+        const int MIN_PROXIES = 15;
         private readonly IEventAggregator _events;
         private readonly TaskManager _taskManager;
         private readonly ProxyManager _proxyManager;
