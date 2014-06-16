@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace RealEstate.Settings
+﻿namespace RealEstate.Settings
 {
     public static class SettingsStore
     {
@@ -19,7 +14,7 @@ namespace RealEstate.Settings
 
         [Settings]
         [SectionName("Parsing")]
-        [DefaultValue("3000")]
+        [DefaultValue("1200")]
         public static int DefaultTimeout { get; set; }
 
         [Settings]
