@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using KTF.Proxy.Readers;
 using KTF.Proxy.Storage;
-using KTF.Proxy;
 using System.ComponentModel.Composition;
 using System.Net;
 using Caliburn.Micro;
-using System.Diagnostics;
-using System.Timers;
 
 namespace RealEstate.Proxies
 {

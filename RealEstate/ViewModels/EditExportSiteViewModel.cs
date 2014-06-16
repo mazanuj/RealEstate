@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using Caliburn.Micro;
 using Caliburn.Micro.Validation;
 using RealEstate.Exporting;
-using RealEstate.Validation;
 using RealEstate.City;
 
 namespace RealEstate.ViewModels
@@ -36,10 +32,10 @@ namespace RealEstate.ViewModels
         {
             base.OnInitialize();
             if(Site == null)
-                this.DisplayName = "Добавить новый сайт";
+                DisplayName = "Добавить новый сайт";
             else
             {
-                this.DisplayName = "Редактирование сайта";
+                DisplayName = "Редактирование сайта";
 
                 SelectedCity = _cityManager.Cities.FirstOrDefault(c => c.City == Site.City);
                 Ip = Site.Ip;

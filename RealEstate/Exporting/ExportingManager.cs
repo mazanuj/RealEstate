@@ -1,11 +1,9 @@
 ﻿using Caliburn.Micro;
-using MySql.Data.MySqlClient;
 using RealEstate.Db;
 using RealEstate.Exporting.Exporters;
 using RealEstate.Parsing;
 using RealEstate.SmartProcessing;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -13,8 +11,6 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

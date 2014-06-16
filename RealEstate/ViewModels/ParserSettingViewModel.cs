@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Caliburn.Micro;
 using Caliburn.Micro.Validation;
-using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using RealEstate.TaskManagers;
 using RealEstate.Parsing;

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using Caliburn.Micro;
 using RealEstate.Settings;
 using System.Threading.Tasks;

@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using RealEstate.Proxies;

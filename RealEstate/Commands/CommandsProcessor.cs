@@ -1,15 +1,11 @@
 ﻿using Caliburn.Micro;
 using RealEstate.Db;
-using RealEstate.Exporting;
-using RealEstate.Log;
 using RealEstate.Parsing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RealEstate.Commands
 {

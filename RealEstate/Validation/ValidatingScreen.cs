@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using Caliburn.Micro;
 using RealEstate.ViewModels;
 
 namespace Caliburn.Micro.Validation

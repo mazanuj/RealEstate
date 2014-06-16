@@ -1,17 +1,12 @@
 ﻿using Caliburn.Micro;
 using Caliburn.Micro.Validation;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using RealEstate.Settings;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using RealEstate.Log;
-using RealEstate.City;
-using System.Windows;
 using RealEstate.Parsing;
 using RealEstate.Validation;
 using System.Threading;

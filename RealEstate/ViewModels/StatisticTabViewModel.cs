@@ -1,12 +1,8 @@
 ﻿using Caliburn.Micro;
 using RealEstate.City;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
-using System.Windows;
 
 namespace RealEstate.ViewModels
 {
