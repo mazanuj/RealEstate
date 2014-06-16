@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using Caliburn.Micro;
 using RealEstate.Settings;
 using System.Threading.Tasks;
@@ -21,7 +19,7 @@ namespace RealEstate.Log
         private const string TraceListenerName = "filewriter";
         private const string _fileName = "log.txt";
         private readonly IEventAggregator _events;
-        private TextWriterTraceListener text = null;
+        private TextWriterTraceListener text;
 
         private void EnableLogToFile()
         {

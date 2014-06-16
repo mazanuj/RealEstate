@@ -1,15 +1,12 @@
 ﻿using Caliburn.Micro;
 using RealEstate.Db;
-using RealEstate.Exporting;
-using RealEstate.Log;
 using RealEstate.Parsing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LogManager = RealEstate.Log.LogManager;
 
 namespace RealEstate.Commands
 {
@@ -19,7 +16,7 @@ namespace RealEstate.Commands
         private readonly Dictionary<string, Module> Modules = new Dictionary<string, Module>();
 
         [ImportingConstructor]
-        public CommandsProcessor(AdvertsManager advertsManager, RealEstate.Log.LogManager logManager, 
+        public CommandsProcessor(AdvertsManager advertsManager, LogManager logManager, 
             RealEstateContext context, IWindowManager windowManager,
             ParserSettingManager parserSourceManager)
         {
@@ -28,7 +25,7 @@ namespace RealEstate.Commands
             Modules.Add("urls", new ImportModule(parserSourceManager));
         }
 
-        private Module LastModule = null;
+        private Module LastModule;
 
         public void ProcessCommand(string command)
         {
@@ -83,7 +80,7 @@ namespace RealEstate.Commands
             }
             else if (args.Count() > 1 && (args[1] == "man" || args[1] == "help"))
             {
-                Write(this.Help);
+                Write(Help);
                 return true;
             }
 

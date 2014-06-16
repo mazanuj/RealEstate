@@ -14,6 +14,7 @@ using RealEstate.OCRs;
 using RealEstate.Settings;
 using RealEstate.City;
 using Caliburn.Micro;
+using Action = System.Action;
 
 namespace RealEstate.Parsing.Parsers
 {
@@ -195,7 +196,7 @@ namespace RealEstate.Parsing.Parsers
             city.AvitoKey =
                 link.Attributes["href"].Value.TrimStart(new[] {'/'}).Trim().Replace("www.avito.ru/", "").Trim();
 
-            Application.Current.Dispatcher.Invoke((System.Action) (() => cities.Add(city)));
+            Application.Current.Dispatcher.Invoke((Action) (() => cities.Add(city)));
         }
 
         public override List<AdvertHeader> LoadHeaders(string url, DateTime toDate, TaskParsingParams param,

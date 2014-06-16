@@ -4,7 +4,6 @@ using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using Caliburn.Micro.Validation;
@@ -31,7 +30,7 @@ namespace RealEstate.ViewModels
         private readonly AdvertsManager _advertsManager;
         private readonly ExportingManager _exportingManager;
         private readonly SmartProcessor _smart;
-        private WebControl _browser = null;
+        private WebControl _browser;
 
         public Advert AdvertOriginal { get; set; }
         public Advert Advert { get; set; }
@@ -92,7 +91,7 @@ namespace RealEstate.ViewModels
 
         private void CopyAdvert()
         {
-            Advert = new Parsing.Advert();
+            Advert = new Advert();
             Advert.Id = AdvertOriginal.Id;
             Advert.Address = AdvertOriginal.Address;
             Advert.Street = AdvertOriginal.Street;
@@ -222,7 +221,7 @@ namespace RealEstate.ViewModels
 
                 _advertsManager.Save(AdvertOriginal);
 
-                this.TryClose();
+                TryClose();
             }
             catch (Exception ex)
             {
@@ -256,7 +255,7 @@ namespace RealEstate.ViewModels
                 if (MapLoaded)
                 {
                     FileInfo info = new FileInfo(FileName);
-                    return new System.Uri(info.FullName);
+                    return new Uri(info.FullName);
                 }
                 else
                     return null;
@@ -305,7 +304,7 @@ namespace RealEstate.ViewModels
             {
                 try
                 {
-                    var source = GetHtmlSource(this.AdvertOriginal);
+                    var source = GetHtmlSource(AdvertOriginal);
                     File.WriteAllText(FileName, source);
                     MapLoaded = true;
                     NotifyOfPropertyChange(() => URL);
@@ -326,7 +325,7 @@ namespace RealEstate.ViewModels
             get { return _images; }
         }
 
-        private ImageWrap _selected = null;
+        private ImageWrap _selected;
         public ImageWrap SelectedWrapImage
         {
             get { return _selected; }
@@ -362,7 +361,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private bool _ImagesLoaded = false;
+        private bool _ImagesLoaded;
         public bool ImagesLoaded
         {
             get { return _ImagesLoaded; }
@@ -492,7 +491,7 @@ namespace RealEstate.ViewModels
 
     public class ImageWrap
     {
-        public System.Windows.Media.Imaging.BitmapSource Image { get; set; }
+        public BitmapSource Image { get; set; }
         public int Id { get; set; }
         public string Title { get; set; }
     }

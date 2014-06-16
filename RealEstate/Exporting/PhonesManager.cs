@@ -1,11 +1,9 @@
-﻿using Caliburn.Micro;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace RealEstate.Exporting
@@ -22,7 +20,7 @@ namespace RealEstate.Exporting
             if (File.Exists(FileName))
             {
                 XmlSerializer reader = new XmlSerializer(typeof(List<PhoneCollection>));
-                StreamReader file = new System.IO.StreamReader(FileName);
+                StreamReader file = new StreamReader(FileName);
                 PhoneCollections.AddRange((List<PhoneCollection>)reader.Deserialize(file));
             }
             else
@@ -46,7 +44,7 @@ namespace RealEstate.Exporting
             }
 
             var writer = new XmlSerializer(typeof(List<PhoneCollection>));
-            StreamWriter file = new System.IO.StreamWriter(FileName);
+            StreamWriter file = new StreamWriter(FileName);
             writer.Serialize(file, PhoneCollections.ToList());
             file.Close();
         }

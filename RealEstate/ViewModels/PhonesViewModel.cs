@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Caliburn.Micro.Validation;
+using Microsoft.Win32;
 using RealEstate.Db;
 using RealEstate.Exporting;
 using System;
@@ -8,7 +9,6 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace RealEstate.ViewModels
 {
@@ -55,7 +55,7 @@ namespace RealEstate.ViewModels
         }
 
         private BindableCollection<string> _phones = new BindableCollection<string>();
-        private PhoneCollection phoneCollection = null;
+        private PhoneCollection phoneCollection;
         public BindableCollection<string> Phones
         {
             get
@@ -189,7 +189,7 @@ namespace RealEstate.ViewModels
             try
             {
                 Trace.WriteLine("Selected updating from file");
-                var dlg = new Microsoft.Win32.OpenFileDialog();
+                var dlg = new OpenFileDialog();
                 dlg.DefaultExt = ".txt";
                 dlg.Filter = "Text documents (.txt)|*.txt";
                 if (dlg.ShowDialog().Value)

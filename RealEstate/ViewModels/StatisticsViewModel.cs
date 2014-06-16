@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Caliburn.Micro.Validation;
+using Hardcodet.Wpf.TaskbarNotification;
 using RealEstate.City;
 using RealEstate.Parsing;
 using RealEstate.Parsing.Parsers;
@@ -15,10 +16,9 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Action = System.Action;
 
 namespace RealEstate.ViewModels
 {
@@ -46,7 +46,7 @@ namespace RealEstate.ViewModels
             _statManager = stat;
             _cityParser = cityParser;
             events.Subscribe(this);
-            this.DisplayName = "Статистика";
+            DisplayName = "Статистика";
 
             NewType = new StatisticTabViewModel(_cityManager, _events);
             UsedType = new StatisticTabViewModel(_cityManager, _events);
@@ -137,13 +137,13 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                if (this.ImportSite == Parsing.ImportSite.All)
+                if (ImportSite == ImportSite.All)
                 {
                     foreach (var site in Enum.GetValues(typeof(ImportSite)))
                     {
                         var s = (ImportSite)site;
 
-                        if (s != Parsing.ImportSite.All)
+                        if (s != ImportSite.All)
                         {
                             ParsingTask realTask = new ParsingTask();
                             realTask.Description = _importManager.GetSiteName(s);
@@ -186,9 +186,9 @@ namespace RealEstate.ViewModels
                     if (city.City == CityWrap.ALL) continue;
 
                     var c = "";
-                    if (site == Parsing.ImportSite.Avito)
+                    if (site == ImportSite.Avito)
                         c = city.AvitoKey;
-                    else if (site == Parsing.ImportSite.Hands)
+                    else if (site == ImportSite.Hands)
                         c = city.HandsKey;
 
                     var url1 = _statManager.BuildUrl(site, c, RealEstateType.Apartments, AdvertType.Sell, Usedtype.New);
@@ -228,7 +228,7 @@ namespace RealEstate.ViewModels
                     });
                 }
 
-                App.Current.Dispatcher.Invoke((System.Action)(() =>
+                App.Current.Dispatcher.Invoke((Action)(() =>
                     {
                         foreach (var url in statItems)
                         {
@@ -247,7 +247,7 @@ namespace RealEstate.ViewModels
                 {
                     if(failedParsed > 20)
                     {
-                        App.NotifyIcon.ShowBalloonTip("Статистика отменена", "Число неудачных парсингов  больше 20 раз подряд", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error);
+                        App.NotifyIcon.ShowBalloonTip("Статистика отменена", "Число неудачных парсингов  больше 20 раз подряд", BalloonIcon.Error);
                         throw new OperationCanceledException();
                     }
 
@@ -259,7 +259,7 @@ namespace RealEstate.ViewModels
 
                         pt.WaitUntillPaused();
 
-                        App.Current.Dispatcher.Invoke((System.Action)(() =>
+                        App.Current.Dispatcher.Invoke((Action)(() =>
                         {
                             StatisticTabViewModel model = null;
                             if (item.aType == AdvertType.Pass)
@@ -284,9 +284,9 @@ namespace RealEstate.ViewModels
                                     model.Items.Add(viewItem);
                                 }
 
-                                if (item.Site == Parsing.ImportSite.Avito)
+                                if (item.Site == ImportSite.Avito)
                                     viewItem.AvitoCount = count;
-                                else if (item.Site == Parsing.ImportSite.Hands)
+                                else if (item.Site == ImportSite.Hands)
                                     viewItem.HandsCount = count;
                             }
                         }));
@@ -311,7 +311,7 @@ namespace RealEstate.ViewModels
                     task.PerformStep(DateTime.Now - start);
                 });
 
-                App.NotifyIcon.ShowBalloonTip("Готово", "Парсинг статистики завершён", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
+                App.NotifyIcon.ShowBalloonTip("Готово", "Парсинг статистики завершён", BalloonIcon.Info);
                 Save();
                 _events.Publish("Завершено");
             }

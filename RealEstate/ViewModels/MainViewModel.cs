@@ -1,26 +1,25 @@
-﻿using Caliburn.Micro;
+﻿using System.Data;
+using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Windows.Media.Animation;
 using System.Windows;
 using System.Diagnostics;
+using RealEstate.OKATO;
 using RealEstate.Settings;
 using System.Threading.Tasks;
 using RealEstate.Log;
 using System.Timers;
 using RealEstate.Db;
-using System.Data.Entity;
-using System.Net.Sockets;
 using System.Threading;
 using RealEstate.Proxies;
 using RealEstate.City;
 using RealEstate.Exporting;
 using RealEstate.Parsing;
 using RealEstate.SmartProcessing;
-using RealEstate.Modes;
+using RealEstate.Views;
+using LogManager = RealEstate.Log.LogManager;
+using Timer = System.Timers.Timer;
 
 namespace RealEstate.ViewModels
 {
@@ -29,10 +28,10 @@ namespace RealEstate.ViewModels
     {
         private readonly IWindowManager _windowManager;
         private readonly IEventAggregator _events;
-        private readonly Log.LogManager _logManager;
+        private readonly LogManager _logManager;
         private readonly ImportManager _importManager;
         private readonly CityManager _cityManager;
-        private readonly System.Timers.Timer _statusTimer;
+        private readonly Timer _statusTimer;
         public ConsoleViewModel ConsoleViewModel;
         public BlackListViewModel BlackListViewModel;
         public SettingsViewModel SettingsViewModel;
@@ -43,8 +42,8 @@ namespace RealEstate.ViewModels
         [ImportingConstructor]
         public MainViewModel(IWindowManager windowManager, IEventAggregator events,
             ProxyManager proxyManager, CityManager cityManager, ExportSiteManager exportSiteManager,
-            ConsoleViewModel consoleViewModel, Log.LogManager logManager, SettingsManager settingsManager,
-            ImportManager importManager, RulesManager rulesManager, OKATO.OKATODriver okatoDriver,
+            ConsoleViewModel consoleViewModel, LogManager logManager, SettingsManager settingsManager,
+            ImportManager importManager, RulesManager rulesManager, OKATODriver okatoDriver,
             SettingsViewModel settingsViewModel, ProxiesViewModel proxiesViewModel,
             ParsingViewModel parsingViewModel, ParserSettingViewModel parserSettingViewModel,
             AdvertsViewModel advertsViewModel, ExportSettingsViewModel exportSettingsViewModel,
@@ -67,7 +66,7 @@ namespace RealEstate.ViewModels
             AdvertsViewModel = advertsViewModel;
             BlackListViewModel = blackListViewModel;
 
-            _statusTimer = new System.Timers.Timer();
+            _statusTimer = new Timer();
             _statusTimer.Interval = 5000;
             _statusTimer.Elapsed += _statusTimer_Elapsed;
 
@@ -89,7 +88,7 @@ namespace RealEstate.ViewModels
 
             //init ----------
 
-            this.DisplayName = "Real Estate 2.0";
+            DisplayName = "Real Estate 2.0";
 
             Trace.WriteLine("Start initialization...");
 
@@ -125,7 +124,7 @@ namespace RealEstate.ViewModels
                     }
                 }
             }
-            catch (System.Data.DataException sokex)
+            catch (DataException sokex)
             {
                 Trace.WriteLine(sokex.ToString());
                 criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n Невозможно подключиться к базе данных. \r\n Проверьте строку подключения" };
@@ -172,7 +171,7 @@ namespace RealEstate.ViewModels
             else
                 Task.Factory.StartNew(() =>
                 {
-                    while (!RealEstate.Views.Loader.IsFormLoaded)
+                    while (!Loader.IsFormLoaded)
                         Thread.Sleep(300);
 
                     Thread.Sleep(1000);
@@ -188,7 +187,7 @@ namespace RealEstate.ViewModels
                 callback(false);
         }
 
-        private static void InitOKATODriver(OKATO.OKATODriver okatoDriver)
+        private static void InitOKATODriver(OKATODriver okatoDriver)
         {
             Trace.WriteLine("Loading okato table...");
             okatoDriver.Load();
@@ -301,7 +300,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private bool isConsoleOpen = false;
+        private bool isConsoleOpen;
         public Boolean IsConsoleOpen
         {
             get { return isConsoleOpen; }
@@ -313,7 +312,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private bool isViewOpen = false;
+        private bool isViewOpen;
         public Boolean IsViewOpen
         {
             get { return isViewOpen; }

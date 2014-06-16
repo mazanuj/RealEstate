@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
 using System.Threading;
+using System.Timers;
+using System.Web;
 using System.Windows;
 using Caliburn.Micro;
 using Caliburn.Micro.Validation;
+using Hardcodet.Wpf.TaskbarNotification;
+using RealEstate.Db;
 using RealEstate.Proxies;
 using RealEstate.TaskManagers;
 using RealEstate.City;
@@ -22,6 +25,8 @@ using System.Collections.ObjectModel;
 using RealEstate.Exporting;
 using System.IO;
 using System.ComponentModel.DataAnnotations;
+using Action = System.Action;
+using Timer = System.Timers.Timer;
 
 namespace RealEstate.ViewModels
 {
@@ -39,7 +44,7 @@ namespace RealEstate.ViewModels
         private readonly SmartProcessor _smartProcessor;
         private readonly ExportingManager _exportingManager;
 
-        private System.Timers.Timer autoTimer = new System.Timers.Timer();
+        private Timer autoTimer = new Timer();
 
         [ImportingConstructor]
         public ParsingViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager,
@@ -65,10 +70,10 @@ namespace RealEstate.ViewModels
         {
             base.OnInitialize();
 
-            if (!RealEstate.Db.RealEstateContext.isOk) return;
+            if (!RealEstateContext.isOk) return;
 
-            ImportSite = Parsing.ImportSite.Avito; //if change, do on view too
-            Usedtype = Parsing.Usedtype.All;
+            ImportSite = ImportSite.Avito; //if change, do on view too
+            Usedtype = Usedtype.All;
 
             autoTimer.Interval = 1000 * 60 * 1;
             autoTimer.Elapsed += autoTimer_Elapsed;
@@ -76,18 +81,18 @@ namespace RealEstate.ViewModels
             autoTimer.Start();
         }
 
-        private void autoTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void autoTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (AutoStart && !Tasks.Any(t => t.IsRunning) && AutoStartValue == DateTime.Now.Hour)
             {
                 _events.Publish("Автостарт парсинга по таймеру...");
-                App.NotifyIcon.ShowBalloonTip("Автопарсинг начат", "Автопарсинг начат согласно установленному времени", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
+                App.NotifyIcon.ShowBalloonTip("Автопарсинг начат", "Автопарсинг начат согласно установленному времени", BalloonIcon.Info);
                 Start(true);
             }
             else if (AutoStart && DateTime.Now.Hour > AutoStopValue)
             {
                 Stop();
-                App.NotifyIcon.ShowBalloonTip("Автопарсинг остановлен", "Автопарсинг остановлен согласно установленному времени", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
+                App.NotifyIcon.ShowBalloonTip("Автопарсинг остановлен", "Автопарсинг остановлен согласно установленному времени", BalloonIcon.Info);
                 _events.Publish("Автостоп парсинга.");
             }
         }
@@ -141,7 +146,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private bool _PhoneImport = false;
+        private bool _PhoneImport;
         public bool PhoneImport
         {
             get { return _PhoneImport; }
@@ -194,7 +199,7 @@ namespace RealEstate.ViewModels
                 _RealEstateType = value;
                 NotifyOfPropertyChange(() => RealEstateType);
 
-                Usedtype = Parsing.Usedtype.All;
+                Usedtype = Usedtype.All;
                 NotifyOfPropertyChange(() => UsedTypes);
             }
         }
@@ -229,7 +234,7 @@ namespace RealEstate.ViewModels
         }
 
 
-        private bool _UseProxy = false;
+        private bool _UseProxy;
         public bool UseProxy
         {
             get { return _UseProxy; }
@@ -251,7 +256,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private bool _AutoStart = false;
+        private bool _AutoStart;
         public bool AutoStart
         {
             get { return _AutoStart; }
@@ -262,7 +267,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private int _AutoStartValue = 0;
+        private int _AutoStartValue;
         [Range(1, 2400)]
         public int AutoStartValue
         {
@@ -328,22 +333,22 @@ namespace RealEstate.ViewModels
             {
                 _advertsManager.IncrementParsingNumber();
 
-                if (this.ImportSite == Parsing.ImportSite.All)
+                if (ImportSite == ImportSite.All)
                 {
                     foreach (var site in Enum.GetValues(typeof(ImportSite)))
                     {
                         var s = (ImportSite)site;
 
-                        if (s != Parsing.ImportSite.All)
+                        if (s != ImportSite.All)
                         {
                             TaskParsingParams param = new TaskParsingParams();
 
                             param.cities = Cities.Where(c => c.IsActive).Select(c => c.City);
-                            param.period = this.ParsePeriod;
+                            param.period = ParsePeriod;
                             param.site = s;
-                            param.realType = this.RealEstateType;
-                            param.subType = this.Usedtype;
-                            param.advertType = this.AdvertType;
+                            param.realType = RealEstateType;
+                            param.subType = Usedtype;
+                            param.advertType = AdvertType;
                             param.useProxy = UseProxy;
                             param.autoExport = AutoExport;
                             param.Delay = ImportSites.First(i => i.Site == s).Delay;
@@ -366,16 +371,16 @@ namespace RealEstate.ViewModels
                     TaskParsingParams param = new TaskParsingParams();
 
                     param.cities = Cities.Where(c => c.IsActive).Select(s => s.City);
-                    param.period = this.ParsePeriod;
-                    param.site = this.ImportSite;
-                    param.realType = this.RealEstateType;
-                    param.subType = this.Usedtype;
-                    param.advertType = this.AdvertType;
+                    param.period = ParsePeriod;
+                    param.site = ImportSite;
+                    param.realType = RealEstateType;
+                    param.subType = Usedtype;
+                    param.advertType = AdvertType;
                     param.useProxy = UseProxy;
                     param.autoExport = AutoExport;
                     param.onlyImage = OnlyImage;
-                    param.Delay = ImportSites.First(i => i.Site == this.ImportSite).Delay;
-                    param.MaxCount = ImportSites.First(i => i.Site == this.ImportSite).Deep;
+                    param.Delay = ImportSites.First(i => i.Site == ImportSite).Delay;
+                    param.MaxCount = ImportSites.First(i => i.Site == ImportSite).Deep;
                     param.uniq = Unique;
                     param.phoneImport = PhoneImport;
 
@@ -409,7 +414,7 @@ namespace RealEstate.ViewModels
                 if (!settings.Any(s => s.Urls.Any()))
                 {
                     task.Stop();
-                    App.Current.Dispatcher.Invoke((System.Action)(() =>
+                    App.Current.Dispatcher.Invoke((Action)(() =>
                        {
                            Tasks.Remove(task);
                        }));
@@ -436,7 +441,7 @@ namespace RealEstate.ViewModels
                     }
                 }
 
-                App.Current.Dispatcher.Invoke((System.Action)(() =>
+                App.Current.Dispatcher.Invoke((Action)(() =>
                     {
                         foreach (var item in urls)
                         {
@@ -480,7 +485,7 @@ namespace RealEstate.ViewModels
                 task.Progress = 100;
                 _events.Publish("Завершено");
                 if (task.Progress > 99)
-                    App.NotifyIcon.ShowBalloonTip("Готово", "Парсинг " + task.Description + " завершен", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
+                    App.NotifyIcon.ShowBalloonTip("Готово", "Парсинг " + task.Description + " завершен", BalloonIcon.Info);
 
             }
             catch (AggregateException aex)
@@ -493,7 +498,7 @@ namespace RealEstate.ViewModels
                 else
                 {
                     Trace.WriteLine(aex.InnerException, "Error");
-                    App.NotifyIcon.ShowBalloonTip("Ошибка парсинга", "Парсинг " + task.Description + " остановлен", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
+                    App.NotifyIcon.ShowBalloonTip("Ошибка парсинга", "Парсинг " + task.Description + " остановлен", BalloonIcon.Info);
                 }
             }
             catch (OperationCanceledException)
@@ -505,7 +510,7 @@ namespace RealEstate.ViewModels
             {
                 Trace.WriteLine(ex.ToString(), "Error!");
                 _events.Publish("Ошибка обработки объявлений");
-                App.NotifyIcon.ShowBalloonTip("Ошибка парсинга", "Парсинг " + task.Description + " остановлен", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
+                App.NotifyIcon.ShowBalloonTip("Ошибка парсинга", "Парсинг " + task.Description + " остановлен", BalloonIcon.Info);
             }
             finally
             {
@@ -557,12 +562,12 @@ namespace RealEstate.ViewModels
                         Trace.WriteLine(iex.Message, "IO error");
                         _proxyManager.RejectProxyFull(proxy);
                     }
-                    catch (System.Web.HttpException ex)
+                    catch (HttpException ex)
                     {
                         Trace.WriteLine(ex.Message, "Http error");
                         _proxyManager.RejectProxy(proxy);
                     }
-                    catch (System.Net.WebException wex)
+                    catch (WebException wex)
                     {
                         Trace.WriteLine(wex.Message, "Web error");
                         _proxyManager.RejectProxy(proxy);
@@ -575,7 +580,7 @@ namespace RealEstate.ViewModels
                             }
                         }
                     }
-                    catch (System.IO.IOException)
+                    catch (IOException)
                     {
                         Trace.WriteLine("IO error");
                         _proxyManager.RejectProxy(proxy);
@@ -828,7 +833,7 @@ namespace RealEstate.ViewModels
 
     public class ParsingTask : RealEstateTask
     {
-        private System.Timers.Timer timer;
+        private Timer timer;
         List<long> spans = new List<long>();
 
         private ObservableCollection<string> _SourceUrls = new ObservableCollection<string>();
@@ -837,7 +842,7 @@ namespace RealEstate.ViewModels
             get { return _SourceUrls; }
         }
 
-        private int _TotlaCount = 0;
+        private int _TotlaCount;
         public int TotalCount
         {
             get { return _TotlaCount; }
@@ -849,7 +854,7 @@ namespace RealEstate.ViewModels
         }
 
 
-        private int _ParsedCount = 0;
+        private int _ParsedCount;
         public int ParsedCount
         {
             get { return _ParsedCount; }
@@ -884,7 +889,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private double _Progress = 0;
+        private double _Progress;
         public double Progress
         {
             get { return _Progress; }
@@ -898,12 +903,12 @@ namespace RealEstate.ViewModels
         public ParsingTask()
             : base()
         {
-            timer = new System.Timers.Timer();
+            timer = new Timer();
             timer.Interval = 1000;
             timer.Elapsed += timer_Elapsed;
         }
 
-        void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             PassBy = PassBy.Add(new TimeSpan(0, 0, 1));
             if (Remaining != TimeSpan.Zero)

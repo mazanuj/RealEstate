@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
 using System.IO;
 using System.Threading;
-using System.Net;
 using System.Diagnostics;
 using System.Windows.Media.Imaging;
+using ImageResizer.Util;
+using RealEstate.Settings;
 using RealEstate.ViewModels;
 using RealEstate.Db;
 using System.Drawing;
@@ -21,12 +21,12 @@ namespace RealEstate.Parsing
     public class ImagesManager
     {
         private const string FolderName = "saved images";
-        private readonly RealEstateContext _context = null;
+        private readonly RealEstateContext _context;
 
         [ImportingConstructor]
         public ImagesManager(RealEstateContext context)
         {
-            this._context = context;
+            _context = context;
             Init();
         }
 
@@ -132,7 +132,7 @@ namespace RealEstate.Parsing
             if (imagesSource == null) return null;
 
             var images = new List<ImageWrap>();
-            foreach (var imageSource in imagesSource.Take(Settings.SettingsStore.MaxCountOfImages))
+            foreach (var imageSource in imagesSource.Take(SettingsStore.MaxCountOfImages))
             {
                 try
                 {
@@ -165,7 +165,7 @@ namespace RealEstate.Parsing
             var list = new List<List<UploadingPhoto>>();
 
             int i = 1;
-            foreach (var imageSource in imagesSource.Take(Settings.SettingsStore.MaxCountOfImages))
+            foreach (var imageSource in imagesSource.Take(SettingsStore.MaxCountOfImages))
             {
                 Dictionary<string, string> versions = new Dictionary<string, string>();
                 versions.Add("_i", "height=480&width=640&mode=max&quality=70&format=jpg");
@@ -183,7 +183,7 @@ namespace RealEstate.Parsing
 
                         FileInfo f = new FileInfo(path);
 
-                        string basePath = ImageResizer.Util.PathUtils.RemoveExtension(path);
+                        string basePath = PathUtils.RemoveExtension(path);
                         foreach (string suffix in versions.Keys)
                         {
                             var p = ImageBuilder.Current.Build(new ImageJob(path, basePath + suffix,

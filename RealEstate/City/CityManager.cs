@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
 using Caliburn.Micro;
 using System.ComponentModel.Composition;
@@ -22,7 +20,7 @@ namespace RealEstate.City
             if (File.Exists(FileName))
             {
                 XmlSerializer reader = new XmlSerializer(typeof(List<CityWrap>));
-                StreamReader file = new System.IO.StreamReader(FileName);
+                StreamReader file = new StreamReader(FileName);
                 var list = (List<CityWrap>)reader.Deserialize(file);
                 Cities.Add(new CityWrap() { City = "Все", IsSelected = true });
                 Cities.AddRange(list.Where(c => c.IsSelected));
@@ -52,7 +50,7 @@ namespace RealEstate.City
             }
 
             var writer = new XmlSerializer(typeof(List<CityWrap>));
-            StreamWriter file = new System.IO.StreamWriter(FileName);
+            StreamWriter file = new StreamWriter(FileName);
             writer.Serialize(file, NotSelectedCities.ToList());
             file.Close();
         }
@@ -62,7 +60,7 @@ namespace RealEstate.City
     {
         public const string ALL = "Все";
 
-        private bool _IsActive = false;
+        private bool _IsActive;
         public bool IsActive
         {
             get { return _IsActive; }

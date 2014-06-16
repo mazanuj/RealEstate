@@ -4,11 +4,11 @@ using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using Caliburn.Micro;
 using System.ComponentModel.DataAnnotations;
+using RealEstate.Modes;
 
 namespace RealEstate.Parsing
 {
@@ -55,7 +55,7 @@ namespace RealEstate.Parsing
             using (XmlReader reader = XmlReader.Create(FileName))
             {
                 XmlSerializer ser = new XmlSerializer(typeof(List<ParsingSite>), new XmlRootAttribute("sites"));
-                ParsingSites.AddRange(((List<ParsingSite>)ser.Deserialize(reader)).Where(s => s.Site == Modes.ModeManager.SiteMode || Modes.ModeManager.SiteMode == ImportSite.All));
+                ParsingSites.AddRange(((List<ParsingSite>)ser.Deserialize(reader)).Where(s => s.Site == ModeManager.SiteMode || ModeManager.SiteMode == ImportSite.All));
             }
         }
 

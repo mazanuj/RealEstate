@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
 using KTF.Proxy.Readers;
 using KTF.Proxy.Storage;
-using KTF.Proxy;
 using System.ComponentModel.Composition;
 using System.Net;
 using Caliburn.Micro;
-using System.Diagnostics;
-using System.Timers;
 
 namespace RealEstate.Proxies
 {
@@ -20,8 +17,8 @@ namespace RealEstate.Proxies
 
         public List<IProxySourceReader> Readers = new List<IProxySourceReader>();
         private FileStorage storage = new FileStorage();
-        private int index = 0;
-        private int maxIndex = 0;
+        private int index;
+        private int maxIndex;
 
         public ProxyManager()
         {
@@ -30,7 +27,7 @@ namespace RealEstate.Proxies
             Proxies.CollectionChanged += Proxies_CollectionChanged;
         }
 
-        void Proxies_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        void Proxies_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             maxIndex = Proxies.Count;
             index = new Random().Next(maxIndex);

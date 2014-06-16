@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 using RealEstate.Utils;
 using System.IO;
@@ -31,7 +29,7 @@ namespace RealEstate.SmartProcessing
             if (File.Exists(FILENAME))
             {
                 XmlSerializer reader = new XmlSerializer(typeof(List<Rule>));
-                StreamReader file = new System.IO.StreamReader(FILENAME);
+                StreamReader file = new StreamReader(FILENAME);
                 var list = (List<Rule>)reader.Deserialize(file);
                 foreach (var item in list)
                 {
@@ -49,7 +47,7 @@ namespace RealEstate.SmartProcessing
             }
 
             var writer = new XmlSerializer(typeof(List<Rule>));
-            StreamWriter file = new System.IO.StreamWriter(FILENAME);
+            StreamWriter file = new StreamWriter(FILENAME);
             writer.Serialize(file, Rules.ToList());
             file.Close();
         }
@@ -212,7 +210,7 @@ namespace RealEstate.SmartProcessing
             base.Parse(element);
             if(element.Attribute("ignorecase") != null)
             {
-                this.IgnoreCase = bool.Parse(element.Attribute("ignorecase").Value);
+                IgnoreCase = bool.Parse(element.Attribute("ignorecase").Value);
             }
         }
 

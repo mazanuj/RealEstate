@@ -1,8 +1,5 @@
 ﻿using RealEstate.Parsing;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace RealEstate.Modes
 {
@@ -21,11 +18,11 @@ namespace RealEstate.Modes
         {
             if (args.Contains("-hands"))
             {
-                SiteMode = Parsing.ImportSite.Hands;
+                SiteMode = ImportSite.Hands;
             }
             else if (args.Contains("-avito"))
             {
-                SiteMode = Parsing.ImportSite.Avito;
+                SiteMode = ImportSite.Avito;
             }
 
             if (args.Contains("-debug"))

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Windows.Forms;
 using System.Security.Cryptography;
@@ -18,7 +16,7 @@ namespace RealEstate.Updater
             if (di != null) 
             {
                 var status = new List<FileStatus>();
-                String[] allfiles = System.IO.Directory.GetFiles("files", "*.*", System.IO.SearchOption.AllDirectories);
+                String[] allfiles = Directory.GetFiles("files", "*.*", SearchOption.AllDirectories);
                 foreach (var file in allfiles)
                 {
                     status.Add(new FileStatus() { Path = file.Remove(0, 6), Hash = MD5HashFile(file) });
@@ -56,7 +54,7 @@ namespace RealEstate.Updater
             }
 
             var writer = new XmlSerializer(typeof(List<FileStatus>));
-            StreamWriter file = new System.IO.StreamWriter(FileName);
+            StreamWriter file = new StreamWriter(FileName);
             writer.Serialize(file, status);
             file.Close();
         }

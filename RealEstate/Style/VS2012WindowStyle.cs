@@ -1,14 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Shapes;
 using System.Windows.Interop;
-using System.Runtime.InteropServices;
-using System.Windows.Media;
-using System.Collections;
 using Microsoft.Windows.Shell;
 
 namespace Whush.Demo.Styles.VS2012
@@ -57,7 +52,7 @@ namespace Whush.Demo.Styles.VS2012
             if (w.WindowState == WindowState.Maximized)
             {
                 // Make sure window doesn't overlap with the taskbar.
-                var screen = System.Windows.Forms.Screen.FromHandle(handle);
+                var screen = Screen.FromHandle(handle);
                 if (screen.Primary)
                 {
                     containerBorder.Padding = new Thickness(

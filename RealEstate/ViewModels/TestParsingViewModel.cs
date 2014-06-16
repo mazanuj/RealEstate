@@ -10,8 +10,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,7 +27,7 @@ namespace RealEstate.ViewModels
             _smartProcessor = smartProcessor;
             _windowManager = windowManager;
 
-            this.DisplayName = "Тестовый парсинг";
+            DisplayName = "Тестовый парсинг";
         }
 
         public void Handle(ToolsOpenEvent message)
@@ -37,9 +35,9 @@ namespace RealEstate.ViewModels
             IsToolsOpen = message.IsOpen;
         }
 
-        private string _Url = null;
+        private string _Url;
         [Required(ErrorMessage = "Введите адрес объявления")]
-        [UrlAttribute(ErrorMessage = "Некорректный адрес сайта")]
+        [Url(ErrorMessage = "Некорректный адрес сайта")]
         public string Url
         {
             get { return _Url; }
@@ -56,7 +54,7 @@ namespace RealEstate.ViewModels
             get { return !HasErrors && !InProgress; }
         }
 
-        private bool InProgress = false;
+        private bool InProgress;
         public void Parse()
         {
             InProgress = true;
@@ -119,7 +117,7 @@ namespace RealEstate.ViewModels
                 Coverage = "";
         }
 
-        private Advert _advert = null;
+        private Advert _advert;
 
         public bool CanShow
         {
@@ -142,7 +140,7 @@ namespace RealEstate.ViewModels
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        private string _Summary = null;
+        private string _Summary;
         public string Summary
         {
             get { return _Summary; }
@@ -153,7 +151,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private string _Coverage = null;
+        private string _Coverage;
         public string Coverage
         {
             get { return _Coverage; }

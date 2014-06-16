@@ -1,14 +1,11 @@
 ﻿using RealEstate.Log;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace RealEstate.Commands
 {
     public class LogModule : Module
     {
-        private readonly LogManager _logManager = null;
+        private readonly LogManager _logManager;
 
         public LogModule(LogManager logManager)
         {

@@ -5,15 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
+using Action = System.Action;
 
 namespace RealEstate.Commands
 {
     public class AdvertsModule : Module
     {
-        private readonly AdvertsManager _manager = null;
+        private readonly AdvertsManager _manager;
         private readonly IWindowManager _windowManager;
 
         public AdvertsModule(AdvertsManager manager, IWindowManager windowManager)
@@ -72,7 +71,7 @@ namespace RealEstate.Commands
         {
             Task.Factory.StartNew(() =>
             {
-                App.Current.Dispatcher.Invoke((System.Action)(() =>
+                App.Current.Dispatcher.Invoke((Action)(() =>
                 {
                     try
                     {

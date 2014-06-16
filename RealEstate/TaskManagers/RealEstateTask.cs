@@ -1,9 +1,5 @@
 ﻿using Caliburn.Micro;
 using RealEstate.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,7 +23,7 @@ namespace RealEstate.TaskManagers
             ps = new PauseTokenSource();
         }
 
-        private bool _IsRunning = false;
+        private bool _IsRunning;
         public bool IsRunning
         {
             get { return _IsRunning; }
@@ -39,7 +35,7 @@ namespace RealEstate.TaskManagers
         }
 
         
-        private bool _IsCanceled = false;
+        private bool _IsCanceled;
         public bool IsCanceled
         {
             get { return _IsCanceled; }

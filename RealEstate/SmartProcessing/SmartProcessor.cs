@@ -1,12 +1,11 @@
-﻿using RealEstate.Parsing;
+﻿using System.Reflection;
+using RealEstate.Parsing;
 using RealEstate.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace RealEstate.SmartProcessing
@@ -100,7 +99,7 @@ namespace RealEstate.SmartProcessing
 
                 DetectCategory(advert);
 
-                System.Reflection.PropertyInfo proper;
+                PropertyInfo proper;
 
                 foreach (var rule in _rulesManager.Rules)
                 {

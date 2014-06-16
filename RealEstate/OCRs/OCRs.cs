@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Text;
 
 namespace RealEstateParser.OCRs
 {
@@ -137,7 +134,7 @@ namespace RealEstateParser.OCRs
 
     public class AvitoOcr : SimpleOcr
     {
-        protected override SimpleOcr.Map[] Symbols
+        protected override Map[] Symbols
         {
             get
             {
@@ -160,7 +157,7 @@ namespace RealEstateParser.OCRs
 
     public class HandsOcr : SimpleOcr
     {
-        protected override SimpleOcr.Map[] Symbols
+        protected override Map[] Symbols
         {
             get
             {

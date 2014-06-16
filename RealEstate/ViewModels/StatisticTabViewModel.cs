@@ -1,12 +1,8 @@
 ﻿using Caliburn.Micro;
 using RealEstate.City;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
-using System.Windows;
 
 namespace RealEstate.ViewModels
 {
@@ -48,7 +44,7 @@ namespace RealEstate.ViewModels
     {
         public string City { get; set; }
 
-        private int _AvitoCount = 0;
+        private int _AvitoCount;
         public int AvitoCount
         {
             get { return _AvitoCount; }
@@ -59,7 +55,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private int _HandsCount = 0;
+        private int _HandsCount;
         public int HandsCount
         {
             get { return _HandsCount; }

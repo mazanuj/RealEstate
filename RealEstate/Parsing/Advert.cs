@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using RealEstate.Exporting;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,7 +17,7 @@ namespace RealEstate.Parsing
     {
         public Advert()
         {
-            Usedtype = Parsing.Usedtype.Used;
+            Usedtype = Usedtype.Used;
         }
 
         public int Id { get; set; } //+
@@ -126,9 +125,9 @@ namespace RealEstate.Parsing
                 "Rooms: '{0}', Area: '{1:#.0#}', Floor: '{2}', Floor total: '{3}', Seller: '{4}', "
               + "City: '{5}' , Adress: '{6}', Date: '{7:m}', AdverType: '{8}', UsedType: '{9}',Price: '{10}',"
               + "Phone: '{11}', RealEstateType: '{12}'",
-                this.Rooms, this.AreaFull, this.Floor, this.FloorTotal, this.Name,
-                this.City, this.Address, this.DateSite, this.AdvertType, this.Usedtype,
-                this.Price, this.PhoneNumber, this.RealEstateType);
+                Rooms, AreaFull, Floor, FloorTotal, Name,
+                City, Address, DateSite, AdvertType, Usedtype,
+                Price, PhoneNumber, RealEstateType);
         }
 
         public string MessageFullPreview

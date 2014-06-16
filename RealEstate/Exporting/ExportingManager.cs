@@ -1,11 +1,11 @@
 ﻿using Caliburn.Micro;
-using MySql.Data.MySqlClient;
+using Hardcodet.Wpf.TaskbarNotification;
 using RealEstate.Db;
 using RealEstate.Exporting.Exporters;
 using RealEstate.Parsing;
+using RealEstate.Settings;
 using RealEstate.SmartProcessing;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -13,28 +13,27 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Action = System.Action;
 
 namespace RealEstate.Exporting
 {
     [Export(typeof(ExportingManager))]
     public class ExportingManager : PropertyChangedBase
     {
-        private readonly RealEstateContext _context = null;
-        private readonly ImagesManager _imagesManager = null;
-        private readonly SmartProcessor _processr = null;
-        private readonly PhonesManager _phonesManager = null;
+        private readonly RealEstateContext _context;
+        private readonly ImagesManager _imagesManager;
+        private readonly SmartProcessor _processr;
+        private readonly PhonesManager _phonesManager;
         private readonly ExporterFactory _factory;
 
         public ObservableCollection<ExportItem> ExportQueue = null;
         public Dictionary<int, DateTime> _lastExported = new Dictionary<int, DateTime>();
 
-        private bool _stopped = false;
+        private bool _stopped;
 
-        private bool _IsWaiting = false;
+        private bool _IsWaiting;
         public bool IsWaiting
         {
             get { return _IsWaiting; }
@@ -52,7 +51,7 @@ namespace RealEstate.Exporting
         }
 
 
-        private static bool IsStarted = false;
+        private static bool IsStarted;
         private static object _lock = new object();
 
         [ImportingConstructor]
@@ -65,7 +64,7 @@ namespace RealEstate.Exporting
             ExportQueue = new ObservableCollection<ExportItem>();
             ExportQueue.CollectionChanged += ExportQueue_CollectionChanged;
 
-            _factory = new Exporters.ExporterFactory(_imagesManager, _phonesManager);
+            _factory = new ExporterFactory(_imagesManager, _phonesManager);
         }
 
         void ExportQueue_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -116,9 +115,9 @@ namespace RealEstate.Exporting
                                    {
                                        var lastId = item.Advert.ExportSites.First().Id;
                                        if (_lastExported.ContainsKey(lastId))
-                                           _lastExported[lastId] = DateTime.Now.AddSeconds(Settings.SettingsStore.ExportInterval);
+                                           _lastExported[lastId] = DateTime.Now.AddSeconds(SettingsStore.ExportInterval);
                                        else
-                                           _lastExported.Add(lastId, DateTime.Now.AddSeconds(Settings.SettingsStore.ExportInterval));
+                                           _lastExported.Add(lastId, DateTime.Now.AddSeconds(SettingsStore.ExportInterval));
                                    }
                                }
                            }
@@ -130,7 +129,7 @@ namespace RealEstate.Exporting
                            if (failedCount > 5)
                            {
                                Trace.TraceError("Failed to export item more than 5 times. Export stoppped.", "Export error");
-                               App.NotifyIcon.ShowBalloonTip("Экспорт остановлен", "Число неудачных попыток экспортирования превысило 5 раз", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error);
+                               App.NotifyIcon.ShowBalloonTip("Экспорт остановлен", "Число неудачных попыток экспортирования превысило 5 раз", BalloonIcon.Error);
                                break;
                            }
                            lastFailedExportedId = currentId;
@@ -164,7 +163,7 @@ namespace RealEstate.Exporting
         {
             foreach (var item in _context.ExportItems.Include("Advert").Where(i => !i.IsExported && !i.IsBanned).ToList())
             {
-                App.Current.Dispatcher.Invoke((System.Action)(() =>
+                App.Current.Dispatcher.Invoke((Action)(() =>
                 {
                     ExportQueue.Add(item);
                 }));
@@ -192,7 +191,7 @@ namespace RealEstate.Exporting
                     return;
                 }
 
-                if (_context.ExportItems.Any(e => e.Advert.Id == advert.Id && (e.IsExported || e.IsBanned)) && !Settings.SettingsStore.ExportParsed)
+                if (_context.ExportItems.Any(e => e.Advert.Id == advert.Id && (e.IsExported || e.IsBanned)) && !SettingsStore.ExportParsed)
                 {
                     Trace.WriteLine("Advert id = " + advertId + " is already exported");
                     return;
@@ -222,7 +221,7 @@ namespace RealEstate.Exporting
             {
                 lock (ExportQueue)
                 {
-                    App.Current.Dispatcher.Invoke((System.Action)(() =>
+                    App.Current.Dispatcher.Invoke((Action)(() =>
                     {
                         ExportQueue.Add(item);
                     }));
@@ -236,7 +235,7 @@ namespace RealEstate.Exporting
 
         public void Remove(ExportItem item)
         {
-            App.Current.Dispatcher.Invoke((System.Action)(() =>
+            App.Current.Dispatcher.Invoke((Action)(() =>
                 {
                     ExportQueue.Remove(item);
                 }));
@@ -274,7 +273,7 @@ namespace RealEstate.Exporting
                         }
                     }
 
-                    if (!_context.ExportItems.Any(e => e.Advert.Id == item.Advert.Id && (e.IsExported || e.IsBanned) && e.Id != item.Id) || Settings.SettingsStore.ExportParsed)
+                    if (!_context.ExportItems.Any(e => e.Advert.Id == item.Advert.Id && (e.IsExported || e.IsBanned) && e.Id != item.Id) || SettingsStore.ExportParsed)
                     {
                         var exporter = _factory.GetExporter(site.Database);
                         exporter.ExportAdvert(item.Advert, site, settings);
@@ -315,7 +314,7 @@ namespace RealEstate.Exporting
                 _context.SaveChanges();
             }
 
-            App.Current.Dispatcher.Invoke((System.Action)(() =>
+            App.Current.Dispatcher.Invoke((Action)(() =>
             {
                 ExportQueue.Remove(item);
             }));
@@ -330,7 +329,7 @@ namespace RealEstate.Exporting
 
         public void Ban(ExportItem item)
         {
-            App.Current.Dispatcher.Invoke((System.Action)(() =>
+            App.Current.Dispatcher.Invoke((Action)(() =>
             {
                 ExportQueue.Remove(item);
             }));

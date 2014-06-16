@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace RealEstate.Statistics
@@ -38,7 +36,7 @@ namespace RealEstate.Statistics
             }
 
             var writer = new XmlSerializer(typeof(List<StatViewItem>));
-            StreamWriter file = new System.IO.StreamWriter(FileName);
+            StreamWriter file = new StreamWriter(FileName);
             writer.Serialize(file, items);
             file.Close();
         }
@@ -50,7 +48,7 @@ namespace RealEstate.Statistics
                 if (File.Exists(FileName))
                 {
                     XmlSerializer reader = new XmlSerializer(typeof(List<StatViewItem>));
-                    StreamReader file = new System.IO.StreamReader(FileName);
+                    StreamReader file = new StreamReader(FileName);
                     return (List<StatViewItem>)reader.Deserialize(file);
                 }
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,7 +11,7 @@ namespace RealEstate.SmartProcessing
         {
             string urlXml = "http://geocode-maps.yandex.ru/1.x/?geocode=" + Address + "&results=5";
             WebClient client = new WebClient();
-            client.Encoding = new System.Text.UTF8Encoding(false);
+            client.Encoding = new UTF8Encoding(false);
             var source = client.DownloadString(urlXml);
 
 

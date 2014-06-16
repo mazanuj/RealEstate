@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using RealEstate.Exporting;
@@ -66,7 +65,7 @@ namespace RealEstate.ViewModels
                 _RealEstateType = value;
                 NotifyOfPropertyChange(() => RealEstateType);
 
-                Usedtype = Parsing.Usedtype.All;
+                Usedtype = Usedtype.All;
                 NotifyOfPropertyChange(() => UsedTypes);
 
             }
@@ -142,7 +141,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private CityWrap _selectedCity = null;
+        private CityWrap _selectedCity;
         public CityWrap SelectedCity
         {
             get { return _selectedCity; }
@@ -167,9 +166,9 @@ namespace RealEstate.ViewModels
                 DateTime start = DateTime.MinValue;
                 DateTime final = DateTime.MaxValue;
 
-                if (ParsePeriod != Parsing.ParsePeriod.Custom)
+                if (ParsePeriod != ParsePeriod.Custom)
                 {
-                    start = Parsing.ParserSetting.GetDate(ParsePeriod);
+                    start = ParserSetting.GetDate(ParsePeriod);
                 }
                 else
                 {
@@ -178,11 +177,11 @@ namespace RealEstate.ViewModels
                 }
 
                 bool citySearch = SelectedCity.City != CityWrap.ALL;
-                bool importSearch = ImportSite != Parsing.ImportSite.All;
-                bool realSearch = RealEstateType != Parsing.RealEstateType.All;
-                bool usedSearch = Usedtype != Parsing.Usedtype.All;
-                bool advertSearch = AdvertType != Parsing.AdvertType.All;
-                bool dateSearch = ParsePeriod != Parsing.ParsePeriod.All;
+                bool importSearch = ImportSite != ImportSite.All;
+                bool realSearch = RealEstateType != RealEstateType.All;
+                bool usedSearch = Usedtype != Usedtype.All;
+                bool advertSearch = AdvertType != AdvertType.All;
+                bool dateSearch = ParsePeriod != ParsePeriod.All;
                 bool lastParsing = OnlyLastParsing;
 
                 Task.Factory.StartNew(() =>
@@ -300,7 +299,7 @@ namespace RealEstate.ViewModels
         }
 
         
-        private bool _OnlyLastParsing = false;
+        private bool _OnlyLastParsing;
         public bool OnlyLastParsing
         {
             get { return _OnlyLastParsing; }

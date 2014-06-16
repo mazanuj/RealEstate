@@ -1,9 +1,7 @@
 ﻿using Caliburn.Micro;
 using Caliburn.Micro.Validation;
-using RealEstate.City;
 using RealEstate.Db;
 using RealEstate.Exporting;
-using RealEstate.Parsing;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,9 +9,9 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using RealEstate.Settings;
 
 namespace RealEstate.ViewModels
 {
@@ -24,13 +22,13 @@ namespace RealEstate.ViewModels
         private readonly IEventAggregator _events;
         private readonly IWindowManager _windowManager;
         private readonly ExportSiteManager _exportSiteManager;
-        private readonly Settings.SettingsManager _settingManager;
+        private readonly SettingsManager _settingManager;
         public ExportingManager ExportingManager { get; set; }
 
         [ImportingConstructor]
         public ExportQueueViewModel(IEventAggregator events, RealEstateContext context,
             ExportSiteManager exportSiteManager, ExportingManager exportingManager, IWindowManager windowManager,
-            Settings.SettingsManager settings)
+            SettingsManager settings)
         {
             ExportingManager = exportingManager;
             _exportSiteManager = exportSiteManager;
@@ -52,8 +50,8 @@ namespace RealEstate.ViewModels
         protected override void OnActivate()
         {
             base.OnActivate();
-            if (!RealEstate.Db.RealEstateContext.isOk) return;
-            ExportDelay = Settings.SettingsStore.ExportInterval;
+            if (!RealEstateContext.isOk) return;
+            ExportDelay = SettingsStore.ExportInterval;
         }
 
         private ObservableCollection<ExportItem> _Items;
@@ -201,7 +199,7 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                Settings.SettingsStore.ExportInterval = ExportDelay;
+                SettingsStore.ExportInterval = ExportDelay;
                 _settingManager.Save();
                 _events.Publish("Сохранено");
             }

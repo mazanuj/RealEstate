@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 using System.Text;
 using Caliburn.Micro;
 using System.Diagnostics;
 using System.Threading;
 using RealEstate.Commands;
 using System.Threading.Tasks;
+using LogManager = RealEstate.Log.LogManager;
 
 namespace RealEstate.ViewModels
 {
@@ -16,10 +15,10 @@ namespace RealEstate.ViewModels
     {
         private readonly Timer _timer;
         private const int MaxConsoleLength = 5000;
-        private readonly Log.LogManager _LogManager;
+        private readonly LogManager _LogManager;
         private readonly CommandsProcessor _commandsProcessor;
 
-        private bool _isOpen = false;
+        private bool _isOpen;
         public bool IsOpen
         {
             get { return _isOpen; }
@@ -32,7 +31,7 @@ namespace RealEstate.ViewModels
         }
 
         [ImportingConstructor]
-        public ConsoleViewModel(Log.LogManager logManager, CommandsProcessor commandsProcessor)
+        public ConsoleViewModel(LogManager logManager, CommandsProcessor commandsProcessor)
         {
             TraceListener debugListener = new MyTraceListener(this);
             Trace.Listeners.Add(debugListener);
@@ -84,7 +83,7 @@ namespace RealEstate.ViewModels
         }
 
 
-        private bool _IsConsoleOpen = false;
+        private bool _IsConsoleOpen;
         public bool IsConsoleOpen
         {
             get { return _IsConsoleOpen; }
@@ -144,8 +143,8 @@ namespace RealEstate.ViewModels
 
         public MyTraceListener(ConsoleViewModel model)
         {
-            this.Name = "AppShell";
-            this._model = model;
+            Name = "AppShell";
+            _model = model;
         }
 
 

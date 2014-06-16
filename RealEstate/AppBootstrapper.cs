@@ -6,9 +6,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Linq;
-using System.Text;
 using System.Windows;
-using Whush.Demo.Styles.VS2012;
 
 namespace RealEstate
 {
@@ -50,9 +48,9 @@ namespace RealEstate
             var window = base.CreateWindow(rootModel, isDialog, context, settings);
 
             if (settings != null && settings.ContainsKey("style"))
-                window.Style = (System.Windows.Style)App.Current.Resources[settings["style"]];
+                window.Style = (Style)App.Current.Resources[settings["style"]];
             else
-                window.Style = (System.Windows.Style)App.Current.Resources["VS2012WindowStyle"];
+                window.Style = (Style)App.Current.Resources["VS2012WindowStyle"];
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             return window;

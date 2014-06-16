@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
-using HtmlAgilityPack;
 using System.Web;
 using RealEstate.Utils;
 using System.Net.Cache;
@@ -69,7 +66,7 @@ namespace RealEstate.Parsing.Parsers
             var stream = myHttpWebResponse.GetResponseStream();
             if (stream.CanTimeout)
                 stream.ReadTimeout = SettingsStore.DefaultTimeout * 2;
-            System.IO.StreamReader sr = new System.IO.StreamReader(stream);
+            StreamReader sr = new StreamReader(stream);
             var task = sr.ReadToEndAsync();
             if (task.Wait(SettingsStore.DefaultTimeout))
             {

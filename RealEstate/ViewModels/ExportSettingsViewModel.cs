@@ -5,12 +5,10 @@ using RealEstate.Db;
 using RealEstate.Exporting;
 using RealEstate.Parsing;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace RealEstate.ViewModels
 {
@@ -53,10 +51,10 @@ namespace RealEstate.ViewModels
         {
             base.OnActivate();
 
-            if (!RealEstate.Db.RealEstateContext.isOk) return;
+            if (!RealEstateContext.isOk) return;
 
             SelectedCity = _cityManager.Cities.FirstOrDefault();
-            Usedtype = Parsing.Usedtype.All;
+            Usedtype = Usedtype.All;
         }
 
         private RealEstateType _RealEstateType = RealEstateType.Apartments;
@@ -120,7 +118,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private CityWrap _selectedCity = null;
+        private CityWrap _selectedCity;
         public CityWrap SelectedCity
         {
             get { return _selectedCity; }
@@ -135,7 +133,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private bool _ReplacePhoneNumber = false;
+        private bool _ReplacePhoneNumber;
         public bool ReplacePhoneNumber
         {
             get { return _ReplacePhoneNumber; }
@@ -147,7 +145,7 @@ namespace RealEstate.ViewModels
         }
 
 
-        private float _Margin = 0;
+        private float _Margin;
         [Range(0, 100)]
         public float MoneyMargin
         {
@@ -160,7 +158,7 @@ namespace RealEstate.ViewModels
         }
 
 
-        private int _Delay = 0;
+        private int _Delay;
         [Range(0, 1000)]
         public int Delay
         {
@@ -182,7 +180,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private ExportSite _ExportSite = null;
+        private ExportSite _ExportSite;
         public ExportSite SelectedExportSite
         {
             get { return _ExportSite; }

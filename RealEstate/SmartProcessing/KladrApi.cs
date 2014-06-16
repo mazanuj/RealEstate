@@ -1,9 +1,9 @@
-﻿using KladrApiClient;
+﻿using System.Web;
+using KladrApiClient;
 using RealEstate.OKATO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -22,7 +22,7 @@ namespace RealEstate.SmartProcessing
         }
 
         AutoResetEvent stopWaitHandle = new AutoResetEvent(false);
-        KladrResponse _response = null;
+        KladrResponse _response;
 
         public string GetDistinct(string city, string address)
         {
@@ -35,8 +35,8 @@ namespace RealEstate.SmartProcessing
                 address = address.Substring(0, ind);
             }
 
-            city = System.Web.HttpUtility.HtmlEncode(city);
-            address = System.Web.HttpUtility.HtmlEncode(address);
+            city = HttpUtility.HtmlEncode(city);
+            address = HttpUtility.HtmlEncode(address);
 
             var call = new KladrClient.KladrApiCallback(fetchedAddress);
             kladrClient.FindAddress(new Dictionary<string, string>

@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
 using Caliburn.Micro;
 using RealEstate.Db;
-using RealEstate.Parsing;
 
 namespace RealEstate.Exporting
 {
     [Export(typeof(ExportSiteManager))]
     public class ExportSiteManager
     {
-        private readonly RealEstateContext context = null;
+        private readonly RealEstateContext context;
         public BindableCollection<ExportSite> ExportSites = null;
 
         [ImportingConstructor]

@@ -1,11 +1,9 @@
-﻿using MySql.Data.MySqlClient;
+﻿using System.IO;
+using MySql.Data.MySqlClient;
 using RealEstate.Parsing;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Net;
-using System.Text;
 
 namespace RealEstate.Exporting.Exporters
 {
@@ -18,16 +16,16 @@ namespace RealEstate.Exporting.Exporters
         {
             FtpWebRequest ftpClient = (FtpWebRequest)FtpWebRequest.Create(url);
             ftpClient.Credentials = new NetworkCredential(site.FtpUserName, site.FtpPassword);
-            ftpClient.Method = System.Net.WebRequestMethods.Ftp.UploadFile;
+            ftpClient.Method = WebRequestMethods.Ftp.UploadFile;
             ftpClient.UseBinary = true;
             ftpClient.KeepAlive = true;
-            System.IO.FileInfo fi = new System.IO.FileInfo(local);
+            FileInfo fi = new FileInfo(local);
             ftpClient.ContentLength = fi.Length;
             byte[] buffer = new byte[4097];
             int bytes = 0;
             int total_bytes = (int)fi.Length;
-            System.IO.FileStream fs = fi.OpenRead();
-            System.IO.Stream rs = ftpClient.GetRequestStream();
+            FileStream fs = fi.OpenRead();
+            Stream rs = ftpClient.GetRequestStream();
             while (total_bytes > 0)
             {
                 bytes = fs.Read(buffer, 0, buffer.Length);

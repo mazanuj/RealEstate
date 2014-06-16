@@ -1,20 +1,16 @@
 ﻿using Caliburn.Micro;
 using Caliburn.Micro.Validation;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using RealEstate.Settings;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using RealEstate.Log;
-using RealEstate.City;
-using System.Windows;
 using RealEstate.Parsing;
 using RealEstate.Validation;
 using System.Threading;
+using LogManager = RealEstate.Log.LogManager;
 
 namespace RealEstate.ViewModels
 {
@@ -24,12 +20,12 @@ namespace RealEstate.ViewModels
         private readonly IEventAggregator _events;
         private readonly SettingsManager _settingsManager;
         private readonly ImagesManager _imagesManager;
-        private readonly RealEstate.Log.LogManager _logManager;
+        private readonly LogManager _logManager;
 
         private const string ERROR_LABEL = "Ошибка";
 
         [ImportingConstructor]
-        public SettingsViewModel(IEventAggregator events, SettingsManager settingsManager, ImagesManager imagesManager, RealEstate.Log.LogManager logManager)
+        public SettingsViewModel(IEventAggregator events, SettingsManager settingsManager, ImagesManager imagesManager, LogManager logManager)
         {
             _events = events;
             _settingsManager = settingsManager;
@@ -40,7 +36,7 @@ namespace RealEstate.ViewModels
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            this.DisplayName = "Настройки";
+            DisplayName = "Настройки";
         }
 
         protected override void OnActivate()
@@ -62,7 +58,7 @@ namespace RealEstate.ViewModels
             });
         }
 
-        private bool _WriteToLog = false;
+        private bool _WriteToLog;
         public bool WriteToLog
         {
             get { return _WriteToLog; }
@@ -173,7 +169,7 @@ namespace RealEstate.ViewModels
         }
 
         
-        private bool _LogSuccessAdverts = false;
+        private bool _LogSuccessAdverts;
         public bool LogSuccessAdverts
         {
             get { return _LogSuccessAdverts; }
@@ -249,7 +245,7 @@ namespace RealEstate.ViewModels
         }
 
         
-        private string  _ImagesSpace = null;
+        private string  _ImagesSpace;
         public string ImagesSpace
         {
             get { return _ImagesSpace; }
@@ -261,7 +257,7 @@ namespace RealEstate.ViewModels
         }
 
         
-        private bool _SaveImages = false;
+        private bool _SaveImages;
         public bool SaveImages
         {
             get { return _SaveImages; }
@@ -357,7 +353,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private bool _ExportParsed = false;
+        private bool _ExportParsed;
         public bool ExportParsed
         {
             get { return _ExportParsed; }

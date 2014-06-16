@@ -5,20 +5,19 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace RealEstate.Parsing
 {
     [Export(typeof(AdvertsManager))]
     public class AdvertsManager
     {
-        private readonly RealEstateContext _context = null;
+        private readonly RealEstateContext _context;
         private static object _lock = new object();
 
         [ImportingConstructor]
         public AdvertsManager(RealEstateContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
         public void Save(Advert advert, int[] exportSiteIds, bool onlyPhone)

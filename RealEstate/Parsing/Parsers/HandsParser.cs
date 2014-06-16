@@ -1,4 +1,6 @@
-﻿using HtmlAgilityPack;
+﻿using System.Text;
+using HtmlAgilityPack;
+using RealEstate.Settings;
 using RealEstate.Utils;
 using System;
 using System.Collections.Generic;
@@ -6,7 +8,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using RealEstate.Proxies;
@@ -47,7 +48,7 @@ namespace RealEstate.Parsing.Parsers
                             var referer = url + ((index - 1 != 1) ? ("page" + (index - 1)) : "");
                             Trace.WriteLine("Downloading " + uri);
 
-                            result = this.DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, true);
+                            result = DownloadPage(uri, UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, true);
                             if (result.Length < 200 || !result.Contains("варти"))
                             {
                                 proxyManager.RejectProxyFull(proxy);
@@ -171,7 +172,7 @@ namespace RealEstate.Parsing.Parsers
             throw new ParsingException("Can't get link to full description", "");
         }
 
-        public override Advert Parse(AdvertHeader header, System.Net.WebProxy proxy, CancellationToken ct, PauseToken pt, bool onlyPhone = false)
+        public override Advert Parse(AdvertHeader header, WebProxy proxy, CancellationToken ct, PauseToken pt, bool onlyPhone = false)
         {
             Advert advert = new Advert();
             proxy = null;
@@ -186,7 +187,7 @@ namespace RealEstate.Parsing.Parsers
                 advert.AdvertType = AdvertType.Sell;
 
                 string result;
-                result = this.DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct);
+                result = DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct);
                 if (result.Length < 200)
                     throw new BadResponseException();
 
@@ -326,7 +327,7 @@ namespace RealEstate.Parsing.Parsers
             {
                 foreach (var link in gallery.SelectNodes("li/a/img"))
                 {
-                    if (result.Count >= Settings.SettingsStore.MaxCountOfImages)
+                    if (result.Count >= SettingsStore.MaxCountOfImages)
                         break;
 
                     try
@@ -357,7 +358,7 @@ namespace RealEstate.Parsing.Parsers
             var phoneNode = page.DocumentNode.SelectSingleNode(".//input[contains(@id,'allphones') and contains(@type,'hidden')]");
             if (phoneNode != null)
             {
-                var sellerPhone = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(phoneNode.GetAttributeValue("value", ""))).Trim();
+                var sellerPhone = Encoding.UTF8.GetString(Convert.FromBase64String(phoneNode.GetAttributeValue("value", ""))).Trim();
                 Regex r = new Regex(@"'(.+jpg)'");
                 sellerPhone = r.Match(sellerPhone).Groups[0].Value;
                 if (sellerPhone == "") return;

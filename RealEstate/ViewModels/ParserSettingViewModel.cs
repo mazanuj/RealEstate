@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Caliburn.Micro;
 using Caliburn.Micro.Validation;
-using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using RealEstate.Db;
+using RealEstate.Modes;
 using RealEstate.TaskManagers;
 using RealEstate.Parsing;
 using System.Windows;
@@ -46,10 +46,10 @@ namespace RealEstate.ViewModels
         {
             base.OnActivate();
 
-            if (!RealEstate.Db.RealEstateContext.isOk) return;
+            if (!RealEstateContext.isOk) return;
 
             SelectedCity = _cityManager.Cities.FirstOrDefault();
-            Usedtype = Parsing.Usedtype.All;
+            Usedtype = Usedtype.All;
 
             NotifyOfPropertyChange(() => ExportSites);
         }
@@ -68,7 +68,7 @@ namespace RealEstate.ViewModels
                 _RealEstateType = value;
                 NotifyOfPropertyChange(() => RealEstateType);
 
-                Usedtype = Parsing.Usedtype.All;
+                Usedtype = Usedtype.All;
                 NotifyOfPropertyChange(() => UsedTypes);
 
                 FilterValuesChanged();
@@ -120,7 +120,7 @@ namespace RealEstate.ViewModels
 
         public bool IsSiteAviabe
         {
-            get { return _ImportSite == Modes.ModeManager.SiteMode || Modes.ModeManager.SiteMode == Parsing.ImportSite.All; }
+            get { return _ImportSite == ModeManager.SiteMode || ModeManager.SiteMode == ImportSite.All; }
         }
 
         public BindableCollection<CityWrap> Cities
@@ -131,7 +131,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private CityWrap _selectedCity = null;
+        private CityWrap _selectedCity;
         public CityWrap SelectedCity
         {
             get { return _selectedCity; }
@@ -188,7 +188,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private ExportSite _ExportSite = null;
+        private ExportSite _ExportSite;
         public ExportSite SelectedExportSite
         {
             get { return _ExportSite; }
@@ -325,7 +325,7 @@ namespace RealEstate.ViewModels
 
         public void GenerateUrl()
         {
-            if(SelectedExportSite != null && ImportSite == Parsing.ImportSite.Avito && SelectedCity.City != CityWrap.ALL)
+            if(SelectedExportSite != null && ImportSite == ImportSite.Avito && SelectedCity.City != CityWrap.ALL)
             {
                 var str = AvitoParser.GenerateUrl(SelectedCity, RealEstateType, AdvertType, Usedtype);
                 if (!String.IsNullOrEmpty(str))

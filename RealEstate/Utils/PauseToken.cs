@@ -1,8 +1,6 @@
 ﻿using Caliburn.Micro;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -91,13 +89,13 @@ namespace RealEstate.Utils
 
         public void Execute(ActionExecutionContext context)
         {
-            this.Context = context;
+            Context = context;
             work.Invoke(this);
         }
 
         public void DoCompleted(ResultCompletionEventArgs args)
         {
-            this.Completed(this, args);
+            Completed(this, args);
         }
 
         public event EventHandler<ResultCompletionEventArgs> Completed = delegate { };
