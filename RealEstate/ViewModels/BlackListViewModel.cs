@@ -2,9 +2,12 @@
 using Caliburn.Micro.Validation;
 using RealEstate.SmartProcessing;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
 
 namespace RealEstate.ViewModels
 {

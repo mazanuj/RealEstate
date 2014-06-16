@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
+using System.Text;
+using System.Windows.Media.Animation;
 using System.Windows;
 using System.Diagnostics;
 using RealEstate.Settings;
@@ -9,12 +12,15 @@ using System.Threading.Tasks;
 using RealEstate.Log;
 using System.Timers;
 using RealEstate.Db;
+using System.Data.Entity;
+using System.Net.Sockets;
 using System.Threading;
 using RealEstate.Proxies;
 using RealEstate.City;
 using RealEstate.Exporting;
 using RealEstate.Parsing;
 using RealEstate.SmartProcessing;
+using RealEstate.Modes;
 
 namespace RealEstate.ViewModels
 {

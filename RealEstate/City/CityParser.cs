@@ -3,7 +3,11 @@ using RealEstate.Parsing.Parsers;
 using RealEstate.Proxies;
 using RealEstate.Utils;
 using RealEstate.ViewModels;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
+using System.Text;
 using System.Threading;
 
 namespace RealEstate.City

@@ -1,7 +1,9 @@
 ﻿using Caliburn.Micro;
 using Caliburn.Micro.Validation;
+using RealEstate.City;
 using RealEstate.Db;
 using RealEstate.Exporting;
+using RealEstate.Parsing;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +11,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

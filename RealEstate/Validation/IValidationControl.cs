@@ -1,4 +1,9 @@
-﻿namespace Caliburn.Micro.Validation
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Caliburn.Micro.Validation
 {
 	/// <summary>
 	/// Interface allows a validation controller to refine its validation

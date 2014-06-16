@@ -1,8 +1,20 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Xml;
+using MySql.Data.MySqlClient;
 using RealEstate.Exporting;
 using RealEstate.Parsing;
 using System.ComponentModel.Composition;
 using RealEstate.Migrations;
+using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace RealEstate.Db
 {

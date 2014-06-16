@@ -6,7 +6,9 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Linq;
+using System.Text;
 using System.Windows;
+using Whush.Demo.Styles.VS2012;
 
 namespace RealEstate
 {

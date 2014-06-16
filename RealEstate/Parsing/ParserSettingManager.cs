@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Text;
+using Caliburn.Micro;
 using RealEstate.Db;
 
 namespace RealEstate.Parsing
