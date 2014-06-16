@@ -5,5 +5,5 @@
 Перед загрузкой приложения:
 	*запустить коммандную строку mysql
 	*http://superuser.com/questions/418814/how-to-increase-mysql-max-allowed-packet-for-client
-	изменить стрку подключения в RealEstate.exe.config
+	изменить строку подключения в RealEstate.exe.config
 	*запустить okado.exe из папки окадо для создания базы данных районов. 
