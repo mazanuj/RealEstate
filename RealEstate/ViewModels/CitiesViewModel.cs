@@ -93,7 +93,7 @@ namespace RealEstate.ViewModels
             try
             {
                 Stop();
-                ParsingTask realTask = new ParsingTask();
+                var realTask = new ParsingTask();
                 realTask.Description = "Города";
                 realTask.Task = new Task(() => StartInternal(realTask.cs.Token, realTask.ps.PauseToken, realTask));
                 Tasks.Add(realTask);

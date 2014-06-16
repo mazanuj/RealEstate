@@ -19,8 +19,8 @@ namespace RealEstate.Exporting
         {
             if (File.Exists(FileName))
             {
-                XmlSerializer reader = new XmlSerializer(typeof(List<PhoneCollection>));
-                StreamReader file = new StreamReader(FileName);
+                var reader = new XmlSerializer(typeof(List<PhoneCollection>));
+                var file = new StreamReader(FileName);
                 PhoneCollections.AddRange((List<PhoneCollection>)reader.Deserialize(file));
             }
             else
@@ -44,7 +44,7 @@ namespace RealEstate.Exporting
             }
 
             var writer = new XmlSerializer(typeof(List<PhoneCollection>));
-            StreamWriter file = new StreamWriter(FileName);
+            var file = new StreamWriter(FileName);
             writer.Serialize(file, PhoneCollections.ToList());
             file.Close();
         }
@@ -57,8 +57,8 @@ namespace RealEstate.Exporting
             if (col.Numbers.Count == 1)
                 return col.Numbers[0];
 
-            int max = col.Numbers.Count;
-            int i = new Random(DateTime.Now.Millisecond).Next(1, max);
+            var max = col.Numbers.Count;
+            var i = new Random(DateTime.Now.Millisecond).Next(1, max);
             return col.Numbers[i - 1];
         }
 

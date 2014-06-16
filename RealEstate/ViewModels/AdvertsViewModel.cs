@@ -163,8 +163,8 @@ namespace RealEstate.ViewModels
             {
 
                 _Adverts.Clear();
-                DateTime start = DateTime.MinValue;
-                DateTime final = DateTime.MaxValue;
+                var start = DateTime.MinValue;
+                var final = DateTime.MaxValue;
 
                 if (ParsePeriod != ParsePeriod.Custom)
                 {
@@ -176,13 +176,13 @@ namespace RealEstate.ViewModels
                     final = Final;
                 }
 
-                bool citySearch = SelectedCity.City != CityWrap.ALL;
-                bool importSearch = ImportSite != ImportSite.All;
-                bool realSearch = RealEstateType != RealEstateType.All;
-                bool usedSearch = Usedtype != Usedtype.All;
-                bool advertSearch = AdvertType != AdvertType.All;
-                bool dateSearch = ParsePeriod != ParsePeriod.All;
-                bool lastParsing = OnlyLastParsing;
+                var citySearch = SelectedCity.City != CityWrap.ALL;
+                var importSearch = ImportSite != ImportSite.All;
+                var realSearch = RealEstateType != RealEstateType.All;
+                var usedSearch = Usedtype != Usedtype.All;
+                var advertSearch = AdvertType != AdvertType.All;
+                var dateSearch = ParsePeriod != ParsePeriod.All;
+                var lastParsing = OnlyLastParsing;
 
                 Task.Factory.StartNew(() =>
                         {

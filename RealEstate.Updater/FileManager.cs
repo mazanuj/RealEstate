@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Xml.Serialization;
 
@@ -10,38 +10,25 @@ namespace RealEstate.Updater
     internal sealed class FileManager
     {
         const string FileName = "status.xml";
+
         public bool GenerateFile()
         {
-            var di = new DirectoryInfo("files");
-            if (di != null) 
-            {
-                var status = new List<FileStatus>();
-                String[] allfiles = Directory.GetFiles("files", "*.*", SearchOption.AllDirectories);
-                foreach (var file in allfiles)
-                {
-                    status.Add(new FileStatus() { Path = file.Remove(0, 6), Hash = MD5HashFile(file) });
-                }
+            var allfiles = Directory.GetFiles("files", "*.*", SearchOption.AllDirectories);
+            var status = allfiles.Select(file => new FileStatus {Path = file.Remove(0, 6), Hash = MD5HashFile(file)}).ToList();
+            CreateStausFile(status);
 
-                CreateStausFile(status);
-
-                return true;
-            }
-            else
-            {
-                MessageBox.Show("Папка обновлений не найдена!");
-                return false;
-            }
+            return true;
         }
 
-        public string GetCurentVersion()
+        public static string GetCurentVersion()
         {
             return File.ReadAllText("version").Trim();
         }
 
 
-        public string MD5HashFile(string fn)
+        public static string MD5HashFile(string fn)
         {
-            byte[] hash = MD5.Create().ComputeHash(File.ReadAllBytes(fn));
+            var hash = MD5.Create().ComputeHash(File.ReadAllBytes(fn));
             return BitConverter.ToString(hash).Replace("-", "");
         }
 
@@ -54,7 +41,7 @@ namespace RealEstate.Updater
             }
 
             var writer = new XmlSerializer(typeof(List<FileStatus>));
-            StreamWriter file = new StreamWriter(FileName);
+            var file = new StreamWriter(FileName);
             writer.Serialize(file, status);
             file.Close();
         }

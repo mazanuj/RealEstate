@@ -14,18 +14,18 @@ namespace RealEstate.Exporting.Exporters
 
         protected void UploadFile(string url, string local, ExportSite site)
         {
-            FtpWebRequest ftpClient = (FtpWebRequest)FtpWebRequest.Create(url);
+            var ftpClient = (FtpWebRequest)FtpWebRequest.Create(url);
             ftpClient.Credentials = new NetworkCredential(site.FtpUserName, site.FtpPassword);
             ftpClient.Method = WebRequestMethods.Ftp.UploadFile;
             ftpClient.UseBinary = true;
             ftpClient.KeepAlive = true;
-            FileInfo fi = new FileInfo(local);
+            var fi = new FileInfo(local);
             ftpClient.ContentLength = fi.Length;
-            byte[] buffer = new byte[4097];
-            int bytes = 0;
-            int total_bytes = (int)fi.Length;
-            FileStream fs = fi.OpenRead();
-            Stream rs = ftpClient.GetRequestStream();
+            var buffer = new byte[4097];
+            var bytes = 0;
+            var total_bytes = (int)fi.Length;
+            var fs = fi.OpenRead();
+            var rs = ftpClient.GetRequestStream();
             while (total_bytes > 0)
             {
                 bytes = fs.Read(buffer, 0, buffer.Length);
@@ -35,14 +35,14 @@ namespace RealEstate.Exporting.Exporters
             //fs.Flush();
             fs.Close();
             rs.Close();
-            FtpWebResponse uploadResponse = (FtpWebResponse)ftpClient.GetResponse();
+            var uploadResponse = (FtpWebResponse)ftpClient.GetResponse();
             Console.WriteLine(uploadResponse.StatusDescription);
             uploadResponse.Close();
         }
 
         public DataSet SelectRows(DataSet dataset, MySqlCommand selectCommand)
         {
-            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            var adapter = new MySqlDataAdapter();
             adapter.SelectCommand = selectCommand;
             adapter.Fill(dataset);
             return dataset;

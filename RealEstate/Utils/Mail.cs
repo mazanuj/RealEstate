@@ -6,9 +6,9 @@ namespace RealEstate.Utils
     {
         public static string GenerateRandomEmail()
         {
-            string email = "export_";
-            Random r = new Random(DateTime.Now.Millisecond);
-            for (int i = 0; i < 10; i++)
+            var email = "export_";
+            var r = new Random(DateTime.Now.Millisecond);
+            for (var i = 0; i < 10; i++)
 			{
                 email += (char)(r.Next(97, 120));             
 			}

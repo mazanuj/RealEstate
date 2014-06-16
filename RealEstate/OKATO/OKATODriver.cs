@@ -13,7 +13,7 @@ namespace RealEstate.OKATO
     {
         public void Load()
         {
-            bool exists = false;
+            var exists = false;
             using (var context = new RealEstateContext())
             {
                 exists = context.Database
@@ -35,13 +35,13 @@ namespace RealEstate.OKATO
             Trace.WriteLine("Okato table doesn't exist. Creating...");
 
 
-            string creatingDb = File.ReadAllText(@"OKATO\create.sql");
+            var creatingDb = File.ReadAllText(@"OKATO\create.sql");
             using (var context = new RealEstateContext())
             {
                 context.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, creatingDb);
             }
 
-            string dump = File.ReadAllText(@"OKATO\dump.sql");
+            var dump = File.ReadAllText(@"OKATO\dump.sql");
             using (var context = new RealEstateContext())
             {
                 context.Database.ExecuteSqlCommand(dump);

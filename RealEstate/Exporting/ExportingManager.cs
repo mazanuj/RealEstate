@@ -87,9 +87,9 @@ namespace RealEstate.Exporting
             Task.Factory.StartNew(() =>
                {
                    IsWaiting = true;
-                   int lastFailedExportedId = -1;
-                   int currentId = -1;
-                   int failedCount = 0;
+                   var lastFailedExportedId = -1;
+                   var currentId = -1;
+                   var failedCount = 0;
                    while (!_stopped && ExportQueue.Any(i => !i.IsExported && !i.IsBanned))
                    {
                        try
@@ -201,7 +201,7 @@ namespace RealEstate.Exporting
             var item = new ExportItem() { Advert = advert, DateOfExport = new DateTime(1991, 1, 1) };
             _context.ExportItems.Add(item);
 
-            int failed = 0;
+            var failed = 0;
             while (failed < 5)
             {
                 try
@@ -253,7 +253,7 @@ namespace RealEstate.Exporting
                 return;
             }
 
-            bool isExported = false;
+            var isExported = false;
 
             if (item.Advert.ExportSites != null && !item.IsExported && !item.IsBanned)
             {

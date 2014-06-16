@@ -27,7 +27,7 @@ namespace RealEstate.Parsing.Parsers
         {
             try
             {
-                HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+                var myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
                 myHttpWebRequest.CookieContainer = cookie;
                 myHttpWebRequest.Timeout = SettingsStore.DefaultTimeout;
                 myHttpWebRequest.GetResponse();
@@ -42,7 +42,7 @@ namespace RealEstate.Parsing.Parsers
         {
             string HtmlResult = null;
 
-            HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            var myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             myHttpWebRequest.AllowAutoRedirect = true;
             myHttpWebRequest.Proxy = proxy ?? WebRequest.DefaultWebProxy;
             if (!useCookie) cookie = new CookieContainer();
@@ -66,7 +66,7 @@ namespace RealEstate.Parsing.Parsers
             var stream = myHttpWebResponse.GetResponseStream();
             if (stream.CanTimeout)
                 stream.ReadTimeout = SettingsStore.DefaultTimeout * 2;
-            StreamReader sr = new StreamReader(stream);
+            var sr = new StreamReader(stream);
             var task = sr.ReadToEndAsync();
             if (task.Wait(SettingsStore.DefaultTimeout))
             {
@@ -83,7 +83,7 @@ namespace RealEstate.Parsing.Parsers
 
         public byte[] DownloadImage(string url, string userAgent, WebProxy proxy, CancellationToken cs, string referer, bool isPhone, bool useCookie = false)
         {
-            HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            var myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             myHttpWebRequest.AllowAutoRedirect = true;
             myHttpWebRequest.Proxy = proxy ?? WebRequest.DefaultWebProxy;
             if (!useCookie) cookie = new CookieContainer();
@@ -100,15 +100,15 @@ namespace RealEstate.Parsing.Parsers
             }
 
             byte[] result;
-            byte[] buffer = new byte[4096];
+            var buffer = new byte[4096];
 
-            using (WebResponse response = myHttpWebRequest.GetResponse())
+            using (var response = myHttpWebRequest.GetResponse())
             {
-                using (Stream responseStream = response.GetResponseStream())
+                using (var responseStream = response.GetResponseStream())
                 {
-                    using (MemoryStream memoryStream = new MemoryStream())
+                    using (var memoryStream = new MemoryStream())
                     {
-                        int count = 0;
+                        var count = 0;
                         do
                         {
                             count = responseStream.Read(buffer, 0, buffer.Length);

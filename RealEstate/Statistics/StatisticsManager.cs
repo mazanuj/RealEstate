@@ -36,7 +36,7 @@ namespace RealEstate.Statistics
             }
 
             var writer = new XmlSerializer(typeof(List<StatViewItem>));
-            StreamWriter file = new StreamWriter(FileName);
+            var file = new StreamWriter(FileName);
             writer.Serialize(file, items);
             file.Close();
         }
@@ -47,8 +47,8 @@ namespace RealEstate.Statistics
             {
                 if (File.Exists(FileName))
                 {
-                    XmlSerializer reader = new XmlSerializer(typeof(List<StatViewItem>));
-                    StreamReader file = new StreamReader(FileName);
+                    var reader = new XmlSerializer(typeof(List<StatViewItem>));
+                    var file = new StreamReader(FileName);
                     return (List<StatViewItem>)reader.Deserialize(file);
                 }
 

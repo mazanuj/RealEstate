@@ -9,13 +9,13 @@ namespace RealEstateParser.OCRs
         public string Recognize(byte[] phoneImage)
         {
             using (var memory = new MemoryStream(phoneImage))
-            using (var bmp = (Bitmap)Bitmap.FromStream(memory))
+            using (var bmp = (Bitmap)Image.FromStream(memory))
             {
                 var result = "";
                 var currentRow = 0;
                 var fromY = 0;
 
-                for (int y = 0; y < bmp.Height; y++)
+                for (var y = 0; y < bmp.Height; y++)
                 {
                     var rowWeight = CalcRowWeight(y, bmp);
                     if (rowWeight == 0)

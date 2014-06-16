@@ -158,7 +158,7 @@ namespace RealEstate.ViewModels
                     var imgs = _imagesManager.GetImages(AdvertOriginal.Images, AdvertOriginal.ImportSite);
                     if (imgs == null) return;
 
-                    for (int i = 0; i < imgs.Count; i++)
+                    for (var i = 0; i < imgs.Count; i++)
                     {
                         imgs[i].Title = (i + 1).ToString();
                     }
@@ -254,7 +254,7 @@ namespace RealEstate.ViewModels
             {
                 if (MapLoaded)
                 {
-                    FileInfo info = new FileInfo(FileName);
+                    var info = new FileInfo(FileName);
                     return new Uri(info.FullName);
                 }
                 else
@@ -266,7 +266,7 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                string fullAdress = advert.City + ", " + advert.Address;
+                var fullAdress = advert.City + ", " + advert.Address;
                 const string MACROS = "%FULLADDRESS%";
 
                 return File.ReadAllText("map template.html").Replace(MACROS, fullAdress);
@@ -441,7 +441,7 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                Thread t = new Thread(new ThreadStart(() =>
+                var t = new Thread(new ThreadStart(() =>
                 {
                     try
                     {
@@ -467,7 +467,7 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                Thread t = new Thread(new ThreadStart(() => {
+                var t = new Thread(new ThreadStart(() => {
                     try
                     {
                         _exportingManager.AddAdvertToExport(AdvertOriginal.Id, true);

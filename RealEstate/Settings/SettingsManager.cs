@@ -50,12 +50,12 @@ namespace RealEstate.Settings
 
         private void FromClassToConfig(IConfigSource source, bool restore)
         {
-            PropertyInfo[] props = typeof(SettingsStore).GetProperties();
-            foreach (PropertyInfo prop in props)
+            var props = typeof(SettingsStore).GetProperties();
+            foreach (var prop in props)
             {
                 try
                 {
-                    object[] attrs = prop.GetCustomAttributes(true);
+                    var attrs = prop.GetCustomAttributes(true);
                     if (attrs != null && attrs.Count() > 0)
                     {
                         if (attrs.Any(a => a is SettingsAttribute))
@@ -89,12 +89,12 @@ namespace RealEstate.Settings
 
         private void FromFileToClass(IConfigSource source)
         {
-            PropertyInfo[] props = typeof(SettingsStore).GetProperties();
-            foreach (PropertyInfo prop in props)
+            var props = typeof(SettingsStore).GetProperties();
+            foreach (var prop in props)
             {
                 try
                 {
-                    object[] attrs = prop.GetCustomAttributes(true);
+                    var attrs = prop.GetCustomAttributes(true);
                     if (attrs != null && attrs.Count() > 0)
                     {
                         if (attrs.Any(a => a is SettingsAttribute))

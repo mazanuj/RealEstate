@@ -86,7 +86,7 @@ namespace RealEstate.ViewModels
             Status = "Очистка...";
             try
             {
-                Thread t = new Thread(new ThreadStart(() =>
+                var t = new Thread(new ThreadStart(() =>
                 {
                     try
                     {
@@ -117,7 +117,7 @@ namespace RealEstate.ViewModels
             {
                 await Task.Factory.StartNew(() =>
                 {
-                    bool changed = false;
+                    var changed = false;
                     if (WriteToLog != SettingsStore.LogToFile)
                     {
                         SettingsStore.LogToFile = WriteToLog;
@@ -216,7 +216,7 @@ namespace RealEstate.ViewModels
             {
                 await Task.Factory.StartNew(() =>
                 {
-                    bool changed = false;
+                    var changed = false;
                     if (MaxAttemptCount != SettingsStore.MaxParsingAttemptCount || UrlToCheck != SettingsStore.UrlForChecking
                         || LogSuccessAdverts != SettingsStore.LogSuccessAdverts || DefaultTimeout != SettingsStore.DefaultTimeout
                         || ThreadsCount != SettingsStore.ThreadsCount)
@@ -299,7 +299,7 @@ namespace RealEstate.ViewModels
             Status = "Удаляю...";
             try
             {
-                Thread t = new Thread(new ThreadStart(() =>
+                var t = new Thread(new ThreadStart(() =>
                 {
                     try
                     {
@@ -330,7 +330,7 @@ namespace RealEstate.ViewModels
             {
                 await Task.Factory.StartNew(() =>
                 {
-                    bool changed = false;
+                    var changed = false;
                     if (SaveImages != SettingsStore.SaveImages || MaxImagesCount != SettingsStore.MaxCountOfImages)
                     {
                         SettingsStore.SaveImages = SaveImages;
@@ -371,7 +371,7 @@ namespace RealEstate.ViewModels
             {
                 await Task.Factory.StartNew(() =>
                 {
-                    bool changed = false;
+                    var changed = false;
                     if (ExportInterval != SettingsStore.ExportInterval || ExportParsed != SettingsStore.ExportParsed)
                     {
                         SettingsStore.ExportInterval = ExportInterval;

@@ -70,7 +70,7 @@ namespace RealEstate.SmartProcessing
                 address = addrParts.Max(c => c);
             }
 
-            Regex r = new Regex(@"\d+");
+            var r = new Regex(@"\d+");
             var number = parts.FirstOrDefault(p => r.IsMatch(p)) ?? "1";
 
             stopWaitHandle.Reset();
@@ -149,17 +149,17 @@ namespace RealEstate.SmartProcessing
 
             if (buildId == null) return null;
 
-            KLADRDriver dr = new KLADRDriver();
-            var okato = dr.GetOKATO(buildId);
+            var dr = new KLADRDriver();
+            var okato = KLADRDriver.GetOKATO(buildId);
 
-            OKATODriver ok = new OKATODriver();
+            var ok = new OKATODriver();
             return ok.GetDistinctByCode(okato);
 
         }
 
         public string GetAO(string distinct)
         {
-            OKATODriver ok = new OKATODriver();
+            var ok = new OKATODriver();
 
             var code = ok.GetCodeByDistinct(distinct);
 

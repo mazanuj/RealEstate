@@ -9,14 +9,14 @@ namespace RealEstate.SmartProcessing
     {
         public string SearchObject(string Address, out string city)
         {
-            string urlXml = "http://geocode-maps.yandex.ru/1.x/?geocode=" + Address + "&results=5";
-            WebClient client = new WebClient();
+            var urlXml = "http://geocode-maps.yandex.ru/1.x/?geocode=" + Address + "&results=5";
+            var client = new WebClient();
             client.Encoding = new UTF8Encoding(false);
             var source = client.DownloadString(urlXml);
 
 
             city = null;
-            Regex reg = new Regex(@"<LocalityName>(.+)</LocalityName>");
+            var reg = new Regex(@"<LocalityName>(.+)</LocalityName>");
             var cityMatch = reg.Match(source);
             if (cityMatch.Success && cityMatch.Groups.Count > 1)
                 city = cityMatch.Groups[1].Value;
@@ -24,7 +24,7 @@ namespace RealEstate.SmartProcessing
             if (!String.IsNullOrEmpty(city))
                 city = city.Replace("поселок городского типа", "").Trim();
 
-            Regex r = new Regex("<name xmlns=\"http://www.opengis.net/gml\">(.+)</name>");
+            var r = new Regex("<name xmlns=\"http://www.opengis.net/gml\">(.+)</name>");
             var m = r.Match(source);
             if(m.Success && m.Groups.Count > 1)
             {

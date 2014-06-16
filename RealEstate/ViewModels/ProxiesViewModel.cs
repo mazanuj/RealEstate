@@ -196,7 +196,7 @@ namespace RealEstate.ViewModels
                 dlg.Filter = "Text documents (.txt)|*.txt";
                 if (dlg.ShowDialog().Value)
                 {
-                    string filename = dlg.FileName;
+                    var filename = dlg.FileName;
 
                     Trace.WriteLine("Selected file: " + filename);
 

@@ -40,7 +40,7 @@ namespace RealEstate.Parsing
         {
             if (Directory.Exists(FolderName))
             {
-                DirectoryInfo di = new DirectoryInfo(FolderName);
+                var di = new DirectoryInfo(FolderName);
                 return ((di.EnumerateFiles("*.*", SearchOption.AllDirectories).Sum(fi => fi.Length)) / (double)(1024 * 1024)).ToString("#0.0");
             }
             else
@@ -51,11 +51,11 @@ namespace RealEstate.Parsing
         {
             var downloadedMessageInfo = new DirectoryInfo(FolderName);
 
-            foreach (FileInfo file in downloadedMessageInfo.GetFiles())
+            foreach (var file in downloadedMessageInfo.GetFiles())
             {
                 file.Delete();
             }
-            foreach (DirectoryInfo dir in downloadedMessageInfo.GetDirectories())
+            foreach (var dir in downloadedMessageInfo.GetDirectories())
             {
                 dir.Delete(true);
             }
@@ -83,8 +83,8 @@ namespace RealEstate.Parsing
 
         private void DownloadImage(Image imageSource, string path, ImportSite site)
         {
-            int WidthToCrop = 0;
-            int HeightToCrop = 0;
+            var WidthToCrop = 0;
+            var HeightToCrop = 0;
 
             if (site == ImportSite.Avito)
                 HeightToCrop = 40;
@@ -99,24 +99,24 @@ namespace RealEstate.Parsing
         {
             if (!File.Exists(path) || new FileInfo(path).Length == 0)
             {
-                AvitoParser p = new AvitoParser();
+                var p = new AvitoParser();
                 var phoneImage = p.DownloadImage(imageSource.URl, UserAgents.GetRandomUserAgent(), null, CancellationToken.None, null, false);
                 using (var memory = new MemoryStream(phoneImage))
                 {
                     using (var image = (Bitmap)Bitmap.FromStream(memory))
                     {
-                        int sourceWidth = image.Width;
-                        int sourceHeight = image.Height;
+                        var sourceWidth = image.Width;
+                        var sourceHeight = image.Height;
 
-                        int destWidth = sourceWidth - WidthToCrop < 0 ? sourceWidth : sourceWidth - WidthToCrop;
-                        int destHeight = sourceHeight - HeightToCrop < 0 ? sourceHeight : sourceHeight - HeightToCrop;
+                        var destWidth = sourceWidth - WidthToCrop < 0 ? sourceWidth : sourceWidth - WidthToCrop;
+                        var destHeight = sourceHeight - HeightToCrop < 0 ? sourceHeight : sourceHeight - HeightToCrop;
 
                         //image.Save(path);
-                        using (Bitmap objBitmap = new Bitmap(destWidth, destHeight, image.PixelFormat))
+                        using (var objBitmap = new Bitmap(destWidth, destHeight, image.PixelFormat))
                         {
                             objBitmap.SetResolution(image.HorizontalResolution, image.VerticalResolution);
                             objBitmap.MakeTransparent();
-                            using (Graphics objGraphics = Graphics.FromImage(objBitmap))
+                            using (var objGraphics = Graphics.FromImage(objBitmap))
                             {
                                 objGraphics.DrawImage(image, new RectangleF(0, 0, destWidth, destHeight), new RectangleF(0, 0, destWidth, destHeight), GraphicsUnit.Pixel);
                                 objBitmap.Save(path, ImageFormat.Jpeg);
@@ -142,7 +142,7 @@ namespace RealEstate.Parsing
 
                     if (File.Exists(path))
                     {
-                        FileInfo f = new FileInfo(path);
+                        var f = new FileInfo(path);
                         var img = new BitmapImage(new Uri(f.FullName));
                         img.Freeze();
                         images.Add(new ImageWrap() { Image = img, Id = imageSource.Id });
@@ -164,10 +164,10 @@ namespace RealEstate.Parsing
 
             var list = new List<List<UploadingPhoto>>();
 
-            int i = 1;
+            var i = 1;
             foreach (var imageSource in imagesSource.Take(SettingsStore.MaxCountOfImages))
             {
-                Dictionary<string, string> versions = new Dictionary<string, string>();
+                var versions = new Dictionary<string, string>();
                 versions.Add("_i", "height=480&width=640&mode=max&quality=70&format=jpg");
                 versions.Add("_t", "height=100&quality=80&format=jpg");
                 if(!yaroslavl)
@@ -181,10 +181,10 @@ namespace RealEstate.Parsing
                     {
                         var photos = new List<UploadingPhoto>();
 
-                        FileInfo f = new FileInfo(path);
+                        var f = new FileInfo(path);
 
-                        string basePath = PathUtils.RemoveExtension(path);
-                        foreach (string suffix in versions.Keys)
+                        var basePath = PathUtils.RemoveExtension(path);
+                        foreach (var suffix in versions.Keys)
                         {
                             var p = ImageBuilder.Current.Build(new ImageJob(path, basePath + suffix,
                                 new Instructions(versions[suffix]), false, true));
@@ -219,22 +219,22 @@ namespace RealEstate.Parsing
 
         public void CropImage(int Width, int Height, string sourceFilePath, string saveFilePath)
         {
-            int sourceX = 0;
-            int sourceY = 0;
-            int destX = 0;
-            int destY = 0;
+            var sourceX = 0;
+            var sourceY = 0;
+            var destX = 0;
+            var destY = 0;
 
-            Bitmap sourceImage = new Bitmap(sourceFilePath);
+            var sourceImage = new Bitmap(sourceFilePath);
 
-            int sourceWidth = sourceImage.Width;
-            int sourceHeight = sourceImage.Height;
+            var sourceWidth = sourceImage.Width;
+            var sourceHeight = sourceImage.Height;
 
-            int destWidth = sourceWidth - Width < 0 ? sourceWidth : sourceWidth - Width;
-            int destHeight = sourceHeight - Height < 0 ? sourceHeight : sourceHeight - Height;
+            var destWidth = sourceWidth - Width < 0 ? sourceWidth : sourceWidth - Width;
+            var destHeight = sourceHeight - Height < 0 ? sourceHeight : sourceHeight - Height;
 
-            using (Bitmap objBitmap = new Bitmap(destWidth, destHeight))
+            using (var objBitmap = new Bitmap(destWidth, destHeight))
             {
-                using (Graphics objGraphics = Graphics.FromImage(objBitmap))
+                using (var objGraphics = Graphics.FromImage(objBitmap))
                 {
                     objGraphics.DrawImage(sourceImage, new Rectangle(destX, destY, destWidth, destHeight), new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight), GraphicsUnit.Pixel);
                     objBitmap.Save("11" + saveFilePath, ImageFormat.Jpeg);

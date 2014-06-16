@@ -120,7 +120,7 @@ namespace RealEstate.ViewModels
         {
             if (city.City == "Все")
             {
-                bool isActive = Cities.First(c => c.City == "Все").IsActive;
+                var isActive = Cities.First(c => c.City == "Все").IsActive;
                 foreach (var cit in Cities)
                 {
                     cit.IsActive = isActive;
@@ -341,7 +341,7 @@ namespace RealEstate.ViewModels
 
                         if (s != ImportSite.All)
                         {
-                            TaskParsingParams param = new TaskParsingParams();
+                            var param = new TaskParsingParams();
 
                             param.cities = Cities.Where(c => c.IsActive).Select(c => c.City);
                             param.period = ParsePeriod;
@@ -357,7 +357,7 @@ namespace RealEstate.ViewModels
                             param.uniq = Unique;
                             param.phoneImport = PhoneImport;
 
-                            ParsingTask realTask = new ParsingTask();
+                            var realTask = new ParsingTask();
                             realTask.Description = _importManager.GetSiteName(s);
                             realTask.Task = new Task(() => StartInternal(param, realTask.cs.Token, realTask.ps.PauseToken, realTask));
                             Tasks.Add(realTask);
@@ -368,7 +368,7 @@ namespace RealEstate.ViewModels
                 }
                 else
                 {
-                    TaskParsingParams param = new TaskParsingParams();
+                    var param = new TaskParsingParams();
 
                     param.cities = Cities.Where(c => c.IsActive).Select(s => s.City);
                     param.period = ParsePeriod;
@@ -384,7 +384,7 @@ namespace RealEstate.ViewModels
                     param.uniq = Unique;
                     param.phoneImport = PhoneImport;
 
-                    ParsingTask realTask = new ParsingTask();
+                    var realTask = new ParsingTask();
                     realTask.Description = _importManager.GetSiteName(param.site);
                     realTask.Task = new Task(() => StartInternal(param, realTask.cs.Token, realTask.ps.PauseToken, realTask));
                     Tasks.Add(realTask);
@@ -449,12 +449,12 @@ namespace RealEstate.ViewModels
                         }
                     }));
 
-                int maxattempt = SettingsStore.MaxParsingAttemptCount;
+                var maxattempt = SettingsStore.MaxParsingAttemptCount;
 
-                WebProxy proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
+                var proxy = param.useProxy ? _proxyManager.GetNextProxy() : null;
 
-                List<AdvertHeader> headers = new List<AdvertHeader>();
-                ParserBase parser = ParsersFactory.GetParser(param.site);
+                var headers = new List<AdvertHeader>();
+                var parser = ParsersFactory.GetParser(param.site);
 
                 urls.AsParallel().WithDegreeOfParallelism(SettingsStore.ThreadsCount).WithCancellation(ct).ForAll((url) =>
                 {
@@ -470,7 +470,7 @@ namespace RealEstate.ViewModels
 
                 task.TotalCount = headers.Count;
 
-                List<Advert> adverts = new List<Advert>();
+                var adverts = new List<Advert>();
 
                 headers.AsParallel()
                     .WithCancellation(ct).WithDegreeOfParallelism(SettingsStore.ThreadsCount < 0 ? 1 : SettingsStore.ThreadsCount)
@@ -522,10 +522,10 @@ namespace RealEstate.ViewModels
         private void ParseHeaderInternal(TaskParsingParams param, ref CancellationToken ct, PauseToken pt, ParsingTask task, List<KeyValuePair<string, int>> exportSitesId, int maxattempt, WebProxy proxy, AdvertHeader header, ParserBase parser)
         {
 
-            bool parsed = !param.phoneImport && _advertsManager.IsParsed(header.Url);
+            var parsed = !param.phoneImport && _advertsManager.IsParsed(header.Url);
             //bool parsed = false;
 
-            DateTime start = DateTime.Now;
+            var start = DateTime.Now;
             var attempt = 0;
             Advert advert = null;
 
@@ -612,7 +612,7 @@ namespace RealEstate.ViewModels
             }
             else
             {
-                int failed = 0;
+                var failed = 0;
                 while (failed < 5)
                 {
                     try
@@ -649,7 +649,7 @@ namespace RealEstate.ViewModels
 
                         var ids = exportSitesId.Where(e => e.Key == header.SourceUrl).Select(e => e.Value).ToArray();
 
-                        int failed = 0;
+                        var failed = 0;
                         while (failed < 5)
                         {
                             try
@@ -667,8 +667,8 @@ namespace RealEstate.ViewModels
                             }
                         }
 
-                        bool checkUniq = false;
-                        int failedUniq = 0;
+                        var checkUniq = false;
+                        var failedUniq = 0;
 
                         while (failedUniq < 5)
                         {
@@ -693,7 +693,7 @@ namespace RealEstate.ViewModels
                         if (!param.phoneImport && checkUniq)
                         {
 
-                            int failedImg = 0;
+                            var failedImg = 0;
                             while (failedImg < 5)
                             {
                                 try
@@ -716,7 +716,7 @@ namespace RealEstate.ViewModels
                                 if (cov > 0.6)
                                     if (!param.onlyImage || (param.onlyImage && advert.ContainsImages))
                                     {
-                                        int failedInsert = 0;
+                                        var failedInsert = 0;
                                         while (failedInsert < 5)
                                         {
                                             failedInsert++;

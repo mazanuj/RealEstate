@@ -34,7 +34,7 @@ namespace RealEstate.Views
         {
             if (ConsoleWindow.IsMouseCaptured)
             {
-                Vector offset = Point.Subtract(e.GetPosition(mainWindow), m_start);
+                var offset = Point.Subtract(e.GetPosition(mainWindow), m_start);
 
                 dragTransform.X = m_startOffset.X + offset.X;
                 dragTransform.Y = m_startOffset.Y + offset.Y;

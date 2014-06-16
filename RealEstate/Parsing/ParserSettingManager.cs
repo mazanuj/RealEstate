@@ -114,7 +114,7 @@ namespace RealEstate.Parsing
 
         public List<UsedTypeNamed> SubTypes(RealEstateType type)
         {
-            List<UsedTypeNamed> subs = new List<UsedTypeNamed>();
+            var subs = new List<UsedTypeNamed>();
             subs.Add(new UsedTypeNamed() { Type = Usedtype.All, Name = "Все" });
             switch (type)
             {
@@ -131,7 +131,7 @@ namespace RealEstate.Parsing
 
         public List<AdvertTypeNamed> AdvertTypes()
         {
-            List<AdvertTypeNamed> subs = new List<AdvertTypeNamed>();
+            var subs = new List<AdvertTypeNamed>();
             subs.Add(new AdvertTypeNamed() { Type = AdvertType.All, Name = "Все" });
             subs.Add(new AdvertTypeNamed() { Type = AdvertType.Buy, Name = "Куплю" });
             subs.Add(new AdvertTypeNamed() { Type = AdvertType.Pass, Name = "Сниму" });
@@ -143,7 +143,7 @@ namespace RealEstate.Parsing
 
         public List<RealEstatetypeNamed> RealEstateTypes()
         {
-            List<RealEstatetypeNamed> subs = new List<RealEstatetypeNamed>();
+            var subs = new List<RealEstatetypeNamed>();
             subs.Add(new RealEstatetypeNamed() { Type = RealEstateType.All, Name = "Все" });
             subs.Add(new RealEstatetypeNamed() { Type = RealEstateType.Apartments, Name = "Квартиры" });
             subs.Add(new RealEstatetypeNamed() { Type = RealEstateType.House, Name = "Дома" });

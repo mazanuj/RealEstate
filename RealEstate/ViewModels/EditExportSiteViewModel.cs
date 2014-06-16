@@ -175,7 +175,7 @@ namespace RealEstate.ViewModels
             if (!HasErrors)
             {
 
-                bool isNew = false;
+                var isNew = false;
                 if (Site == null)
                 {
                     isNew = true;

@@ -64,11 +64,11 @@ namespace RealEstate.Log
                         {
                             Trace.WriteLine("Sending logs");
 
-                            string log = "";
+                            var log = "";
 
                             using (Stream stream = File.Open(_fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                             {
-                                using (StreamReader streamReader = new StreamReader(stream))
+                                using (var streamReader = new StreamReader(stream))
                                 {
                                     log = streamReader.ReadToEnd();
                                 }
@@ -80,7 +80,7 @@ namespace RealEstate.Log
 
                             var fromAddress = new MailAddress("realestate2@mail.ru");
                             var toAddress = new MailAddress("ktf.labs@gmail.com");
-                            string subject = "Log from RealEstate 2.0";
+                            var subject = "Log from RealEstate 2.0";
 
                             var smtp = new SmtpClient
                             {

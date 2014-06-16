@@ -18,7 +18,7 @@ namespace RealEstate
         {
             container = new CompositionContainer(new AggregateCatalog(AssemblySource.Instance.Select(x => new AssemblyCatalog(x)).OfType<ComposablePartCatalog>()));
 
-            CompositionBatch batch = new CompositionBatch();
+            var batch = new CompositionBatch();
 
             batch.AddExportedValue<IWindowManager>(new CustomWindowManager());
             batch.AddExportedValue<IEventAggregator>(new EventAggregator());
@@ -29,7 +29,7 @@ namespace RealEstate
 
         protected override object GetInstance(Type serviceType, string key)
         {
-            string contract = string.IsNullOrEmpty(key) ? AttributedModelServices.GetContractName(serviceType) : key;
+            var contract = string.IsNullOrEmpty(key) ? AttributedModelServices.GetContractName(serviceType) : key;
             var exports = container.GetExportedValues<object>(contract);
 
             if (exports.Count() > 0)

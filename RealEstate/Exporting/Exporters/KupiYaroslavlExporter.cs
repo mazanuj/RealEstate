@@ -19,7 +19,7 @@ namespace RealEstate.Exporting.Exporters
 
         public override void ExportAdvert(Advert advert, ExportSite site, ExportSetting setting)
         {
-            using (MySqlConnection conn = new MySqlConnection("Server=" + site.Ip + ";Database=" + site.Database + ";Uid=" + site.DatabaseUserName + ";Pwd=" + site.DatabasePassword + ";charset=utf8;"))
+            using (var conn = new MySqlConnection("Server=" + site.Ip + ";Database=" + site.Database + ";Uid=" + site.DatabaseUserName + ";Pwd=" + site.DatabasePassword + ";charset=utf8;"))
             {
                 var command = @"INSERT INTO `jos_adsmanager_ads`
             (
@@ -151,14 +151,14 @@ VALUES (
         '" + MySqlHelper.EscapeString(advert.Url ?? "") + @"',
         '" + advert.PhoneNumber + @"'); select last_insert_id();";
 
-                MySqlCommand intoAds = new MySqlCommand(command, conn);
+                var intoAds = new MySqlCommand(command, conn);
                 try
                 {
                     conn.Open();
                     var id = intoAds.ExecuteScalar();
 
                     var comm_to_cat = @"INSERT INTO `jos_adsmanager_adcat` (`adid`,`catid`) VALUES (" + id + ", " + GetCategoryForYaroslavl(advert) + ");";
-                    MySqlCommand intoCat = new MySqlCommand(comm_to_cat, conn);
+                    var intoCat = new MySqlCommand(comm_to_cat, conn);
                     var res = intoCat.ExecuteNonQuery();
                     if (res == 0)
                         Trace.WriteLine("Error!: Updated rows count equals 0!");
@@ -167,11 +167,11 @@ VALUES (
 
                     if (!(setting != null && setting.ReplacePhoneNumber))
                     {
-                        string userId = GetUserIdYaroslavl(advert, conn);
+                        var userId = GetUserIdYaroslavl(advert, conn);
                         if (userId != null)
                         {
                             var comm_to_update_user = @"UPDATE `jos_adsmanager_ads` SET userid = " + userId + " WHERE id = " + id;
-                            MySqlCommand updUser = new MySqlCommand(comm_to_update_user, conn);
+                            var updUser = new MySqlCommand(comm_to_update_user, conn);
                             res = updUser.ExecuteNonQuery();
                             if (res == 0)
                                 Trace.WriteLine("Error!: Updated rows count equals 0!");
@@ -192,13 +192,13 @@ VALUES (
             if (!advert.ContainsImages) return null; ;
 
             var imgs = _imagesManager.PrepareForUpload(advert.Images, advert.ImportSite, id.ToString(), true);
-            for (int j = 0; j < imgs.Count; j++)
+            for (var j = 0; j < imgs.Count; j++)
             {
-                for (int i = 0; i < imgs[j].Count; i++)
+                for (var i = 0; i < imgs[j].Count; i++)
                 {
                     try
                     {
-                        string filename = id.ToString() + (char)(j + 97);
+                        var filename = id.ToString() + (char)(j + 97);
                         if (i == 1)
                             filename += "_t";
 
@@ -226,7 +226,7 @@ VALUES (
             if (!String.IsNullOrEmpty(advert.PhoneNumber) && !String.IsNullOrEmpty(advert.Name))
             {
                 var comm_to_select = @"SELECT `id` FROM `jos_users` where username = '" + MySqlHelper.EscapeString(advert.PhoneNumber) + "' LIMIT 1;";
-                MySqlCommand selectUser = new MySqlCommand(comm_to_select, conn);
+                var selectUser = new MySqlCommand(comm_to_select, conn);
                 var res = selectUser.ExecuteScalar();
                 if (res != null && res != DBNull.Value)
                 {
@@ -249,7 +249,7 @@ VALUES (
                         0,
                         NOW(),
                         '{}'); select last_insert_id();";
-                    MySqlCommand insertUser = new MySqlCommand(comm, conn);
+                    var insertUser = new MySqlCommand(comm, conn);
                     var user = insertUser.ExecuteScalar();
                     return user.ToString();
                 }

@@ -105,7 +105,7 @@ namespace RealEstate.Utils
     {
         public static string GetDisplayName(this Enum value)
         {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
+            var fi = value.GetType().GetField(value.ToString());
             if (fi != null)
             {
                 var attributes = (DisplayAttribute[])fi.GetCustomAttributes(typeof(DisplayAttribute), false);

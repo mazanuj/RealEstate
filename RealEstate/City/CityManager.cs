@@ -19,8 +19,8 @@ namespace RealEstate.City
         {
             if (File.Exists(FileName))
             {
-                XmlSerializer reader = new XmlSerializer(typeof(List<CityWrap>));
-                StreamReader file = new StreamReader(FileName);
+                var reader = new XmlSerializer(typeof(List<CityWrap>));
+                var file = new StreamReader(FileName);
                 var list = (List<CityWrap>)reader.Deserialize(file);
                 Cities.Add(new CityWrap() { City = "Все", IsSelected = true });
                 Cities.AddRange(list.Where(c => c.IsSelected));
@@ -50,7 +50,7 @@ namespace RealEstate.City
             }
 
             var writer = new XmlSerializer(typeof(List<CityWrap>));
-            StreamWriter file = new StreamWriter(FileName);
+            var file = new StreamWriter(FileName);
             writer.Serialize(file, NotSelectedCities.ToList());
             file.Close();
         }

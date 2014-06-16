@@ -28,11 +28,12 @@ namespace RealEstate.Updater
             AppendLine("Получаю номер последней версии....");
             try
             {
-                var vers = _github.GetAviableVersion();
-                BeginInvoke((Action)(() => { lAviable.Text = vers; }));
+                var vers = GithubProxy.GetAviableVersion();
+                var vers1 = vers;
+                BeginInvoke((Action)(() => { lAviable.Text = vers1; }));
                 AppendLine("Готово");
 
-                vers = _fileManager.GetCurentVersion();
+                vers = FileManager.GetCurentVersion();
                 BeginInvoke((Action)(() => { lCurrent.Text = vers; }));
                 AppendLine("Текущей номер версии: " + lCurrent.Text);
 
@@ -55,7 +56,7 @@ namespace RealEstate.Updater
             try
             {
                 AppendLine("Начинаю обновление....");
-                var status = _github.GetProgramFile();
+                var status = GithubProxy.GetProgramFile();
                 AppendLine("Файл загружен. Распаковка....");
                 var list = _fileManager.Restore(status);
                 AppendLine("Файл обновления успешно загружен.");
@@ -68,7 +69,7 @@ namespace RealEstate.Updater
                     {
                         if (File.Exists(file.Path))
                         {
-                            if (_fileManager.MD5HashFile(file.Path) != file.Hash)
+                            if (FileManager.MD5HashFile(file.Path) != file.Hash)
                             {
                                 AppendLine("Файл " + file.Path + " изменён. Скачиваю...");
                                 _github.DownloadFile(file.Path);
@@ -88,7 +89,7 @@ namespace RealEstate.Updater
                         AppendLine(ex.ToString());
                     }
 
-                    BeginInvoke((Action)(() => { prgrsBar.PerformStep(); }));
+                    BeginInvoke((Action)(() => prgrsBar.PerformStep()));
                 }
             }
             catch (Exception ex)
@@ -129,7 +130,7 @@ namespace RealEstate.Updater
         {
             BeginInvoke((Action)(() =>
             {
-                tbStatus.Text += "\r\n" + text;
+                tbStatus.Text += string.Format("\r\n{0}", text);
                 tbStatus.SelectionStart = tbStatus.Text.Length;
                 tbStatus.ScrollToCaret();
                 tbStatus.Refresh();

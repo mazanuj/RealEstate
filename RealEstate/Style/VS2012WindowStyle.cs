@@ -12,13 +12,13 @@ namespace Whush.Demo.Styles.VS2012
     {
         public static void ForWindowFromTemplate(this object templateFrameworkElement, Action<Window> action)
         {
-            Window window = ((FrameworkElement)templateFrameworkElement).TemplatedParent as Window;
+            var window = ((FrameworkElement)templateFrameworkElement).TemplatedParent as Window;
             if (window != null) action(window);
         }
 
         public static IntPtr GetWindowHandle(this Window window)
         {
-            WindowInteropHelper helper = new WindowInteropHelper(window);
+            var helper = new WindowInteropHelper(window);
             return helper.Handle;
         }
     }

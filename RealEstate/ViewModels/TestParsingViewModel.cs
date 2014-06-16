@@ -68,7 +68,7 @@ namespace RealEstate.ViewModels
             {
                 try
                 {
-                    ImportSite site = ImportSite.All;
+                    var site = ImportSite.All;
                     if (Url.Contains("irr.ru"))
                         site = ImportSite.Hands;
                     else if (Url.Contains("avito.ru"))
@@ -78,9 +78,9 @@ namespace RealEstate.ViewModels
 
                     if (site != ImportSite.All)
                     {
-                        ParserBase parser = ParsersFactory.GetParser(site);
+                        var parser = ParsersFactory.GetParser(site);
 
-                        AdvertHeader header = new AdvertHeader()
+                        var header = new AdvertHeader()
                         {
                             Url = Url,
                             DateSite = DateTime.Now

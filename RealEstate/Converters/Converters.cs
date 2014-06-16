@@ -15,21 +15,21 @@ namespace RealEstate.Converters
         #region IValueConverter Members
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string parameterString = parameter as string;
+            var parameterString = parameter as string;
             if (parameterString == null)
                 return DependencyProperty.UnsetValue;
 
             if (Enum.IsDefined(value.GetType(), value) == false)
                 return DependencyProperty.UnsetValue;
 
-            object parameterValue = Enum.Parse(value.GetType(), parameterString);
+            var parameterValue = Enum.Parse(value.GetType(), parameterString);
 
             return parameterValue.Equals(value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string parameterString = parameter as string;
+            var parameterString = parameter as string;
             if (parameterString == null)
                 return DependencyProperty.UnsetValue;
 
@@ -62,14 +62,14 @@ namespace RealEstate.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string strVal = value.ToString();
+            var strVal = value.ToString();
 
             if (string.IsNullOrEmpty(strVal))
                 return -1;
 
             else
             {
-                int val = -1;
+                var val = -1;
                 Int32.TryParse(strVal, out val);
                 return val;
             }
@@ -90,7 +90,7 @@ namespace RealEstate.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            object convertedValue = Converter1.Convert(value, targetType, parameter, culture);
+            var convertedValue = Converter1.Convert(value, targetType, parameter, culture);
             return Converter2.Convert(convertedValue, targetType, parameter, culture);
         }
 
@@ -147,7 +147,7 @@ namespace RealEstate.Converters
             // To get around the stupid WPF designer bug
             if (value != null)
             {
-                FieldInfo fi = value.GetType().GetField(value.ToString());
+                var fi = value.GetType().GetField(value.ToString());
 
                 // To get around the stupid WPF designer bug
                 if (fi != null)

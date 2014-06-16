@@ -52,18 +52,18 @@ namespace RealEstate.Parsing
 
         private void RestoreFromFile()
         {
-            using (XmlReader reader = XmlReader.Create(FileName))
+            using (var reader = XmlReader.Create(FileName))
             {
-                XmlSerializer ser = new XmlSerializer(typeof(List<ParsingSite>), new XmlRootAttribute("sites"));
+                var ser = new XmlSerializer(typeof(List<ParsingSite>), new XmlRootAttribute("sites"));
                 ParsingSites.AddRange(((List<ParsingSite>)ser.Deserialize(reader)).Where(s => s.Site == ModeManager.SiteMode || ModeManager.SiteMode == ImportSite.All));
             }
         }
 
         public void Save()
         {
-            using (XmlWriter writer = XmlWriter.Create(FileName))
+            using (var writer = XmlWriter.Create(FileName))
             {
-                XmlSerializer ser = new XmlSerializer(typeof(List<ParsingSite>), new XmlRootAttribute("sites"));
+                var ser = new XmlSerializer(typeof(List<ParsingSite>), new XmlRootAttribute("sites"));
                 ser.Serialize(writer, ParsingSites.ToList());
             }
         }

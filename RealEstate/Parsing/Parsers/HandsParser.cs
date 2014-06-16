@@ -20,10 +20,10 @@ namespace RealEstate.Parsing.Parsers
     {
         public override List<AdvertHeader> LoadHeaders(string url, DateTime toDate, TaskParsingParams param, int maxAttemptCount, ProxyManager proxyManager, CancellationToken token)
         {
-            List<AdvertHeader> headers = new List<AdvertHeader>();
-            int oldCount = -1;
-            int index = 0;
-            int maxIndex = 10;
+            var headers = new List<AdvertHeader>();
+            var oldCount = -1;
+            var index = 0;
+            var maxIndex = 10;
 
             do
             {
@@ -33,8 +33,8 @@ namespace RealEstate.Parsing.Parsers
                     index++;
 
                     string result = null;
-                    int attempt = 0;
-                    string uri = "";
+                    var attempt = 0;
+                    var uri = "";
                     WebProxy proxy = null;
 
                     while (attempt < maxAttemptCount)
@@ -68,7 +68,7 @@ namespace RealEstate.Parsing.Parsers
 
                     proxyManager.SuccessProxy(proxy);
 
-                    HtmlDocument page = new HtmlDocument();
+                    var page = new HtmlDocument();
                     page.LoadHtml(result);
 
                     //if (page.DocumentNode.SelectSingleNode(@"//div[contains(@class,'adds_cont clear')]") != null)
@@ -89,7 +89,7 @@ namespace RealEstate.Parsing.Parsers
                     //Trace.TraceInformation("--------URLs-------------");
                     //Trace.TraceInformation("!! " + uri);                
 
-                    foreach (HtmlNode tier in tiers)
+                    foreach (var tier in tiers)
                     {
                         try
                         {
@@ -135,7 +135,7 @@ namespace RealEstate.Parsing.Parsers
             var maxNode = page.DocumentNode.SelectSingleNode(@"//ul[contains(@class,'same_adds_paging')]/li[last()]");
             if (maxNode != null)
             {
-                int max = 0;
+                var max = 0;
                 if (Int32.TryParse(maxNode.InnerText, out max))
                     return max;
                 else
@@ -174,7 +174,7 @@ namespace RealEstate.Parsing.Parsers
 
         public override Advert Parse(AdvertHeader header, WebProxy proxy, CancellationToken ct, PauseToken pt, bool onlyPhone = false)
         {
-            Advert advert = new Advert();
+            var advert = new Advert();
             proxy = null;
             try
             {
@@ -191,7 +191,7 @@ namespace RealEstate.Parsing.Parsers
                 if (result.Length < 200)
                     throw new BadResponseException();
 
-                HtmlDocument page = new HtmlDocument();
+                var page = new HtmlDocument();
                 page.LoadHtml(result);
 
                 if (!onlyPhone)
@@ -359,7 +359,7 @@ namespace RealEstate.Parsing.Parsers
             if (phoneNode != null)
             {
                 var sellerPhone = Encoding.UTF8.GetString(Convert.FromBase64String(phoneNode.GetAttributeValue("value", ""))).Trim();
-                Regex r = new Regex(@"'(.+jpg)'");
+                var r = new Regex(@"'(.+jpg)'");
                 sellerPhone = r.Match(sellerPhone).Groups[0].Value;
                 if (sellerPhone == "") return;
 

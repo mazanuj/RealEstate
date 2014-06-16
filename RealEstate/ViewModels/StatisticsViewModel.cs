@@ -145,7 +145,7 @@ namespace RealEstate.ViewModels
 
                         if (s != ImportSite.All)
                         {
-                            ParsingTask realTask = new ParsingTask();
+                            var realTask = new ParsingTask();
                             realTask.Description = _importManager.GetSiteName(s);
                             realTask.Task = new Task(() => StartInternal(ImportSite, UseProxy, Delay, realTask.cs.Token, realTask.ps.PauseToken, realTask));
                             Tasks.Add(realTask);
@@ -155,7 +155,7 @@ namespace RealEstate.ViewModels
                 }
                 else
                 {
-                    ParsingTask realTask = new ParsingTask();
+                    var realTask = new ParsingTask();
                     realTask.Description = _importManager.GetSiteName(ImportSite);
                     realTask.Task = new Task(() => StartInternal(ImportSite, UseProxy, Delay, realTask.cs.Token, realTask.ps.PauseToken, realTask));
                     Tasks.Add(realTask);
@@ -236,11 +236,11 @@ namespace RealEstate.ViewModels
                         }
                     }));
 
-                ParserBase parser = ParsersFactory.GetParser(site);
-                int maxattempt = SettingsStore.MaxParsingAttemptCount;
+                var parser = ParsersFactory.GetParser(site);
+                var maxattempt = SettingsStore.MaxParsingAttemptCount;
                 task.TotalCount = statItems.Count;
-                List<long> spans = new List<long>();
-                int failedParsed = 0;
+                var spans = new List<long>();
+                var failedParsed = 0;
 
 
                 statItems.AsParallel().WithDegreeOfParallelism(SettingsStore.ThreadsCount).WithCancellation(ct).ForAll((item) =>
@@ -251,7 +251,7 @@ namespace RealEstate.ViewModels
                         throw new OperationCanceledException();
                     }
 
-                    DateTime start = DateTime.Now;
+                    var start = DateTime.Now;
                     try
                     {
                         var count = parser.GetTotalCount(item.Url, _proxyManager, useProxy, ct);

@@ -67,7 +67,7 @@ namespace Caliburn.Micro.Validation
 		{
 			get
 			{
-				bool result = !string.IsNullOrEmpty(Error);
+				var result = !string.IsNullOrEmpty(Error);
 				return result;
 			}
 		}
@@ -85,7 +85,7 @@ namespace Caliburn.Micro.Validation
 		/// </summary>
 		public bool HasErrorsByGroup(string groupName)
 		{
-			bool result = !string.IsNullOrEmpty(ErrorByGroup(groupName));
+			var result = !string.IsNullOrEmpty(ErrorByGroup(groupName));
 			return result;
 		}
 
@@ -116,7 +116,7 @@ namespace Caliburn.Micro.Validation
 		/// <returns>True if all validators are valid</returns>
 		public virtual bool IsValid<TProperty>(Expression<Func<TProperty>> property)
 		{
-			string name = property.GetMemberInfo().Name;
+			var name = property.GetMemberInfo().Name;
 			var value = propertyGetters[name]((TViewModel)this);
 			return validators[name].All(v => v.IsValid(value));
 		}
@@ -137,7 +137,7 @@ namespace Caliburn.Micro.Validation
 							 select (v.FormatErrorMessage(""));
 
 				// Realize a list and send to the OnError() method
-				List<string> errorList = errors.ToList();
+				var errorList = errors.ToList();
 				OnError(errorList);
 
 				return string.Join(Environment.NewLine, errorList.ToArray());
@@ -158,7 +158,7 @@ namespace Caliburn.Micro.Validation
 							select (v.FormatErrorMessage(""));
 
 			// Realize a list and send to the OnError() method
-			List<string> errorList = errors.ToList();
+			var errorList = errors.ToList();
 			OnError(errorList);
 
 			return string.Join(Environment.NewLine, errorList.ToArray());
@@ -205,13 +205,13 @@ namespace Caliburn.Micro.Validation
 		private static bool IsEnabled(IScreen instance, ValidationAttribute validator, string propertyName)
 		{
 			// Get the IValidationControl interface
-			IValidationControl ivc = validator as IValidationControl;
+			var ivc = validator as IValidationControl;
 
 			// If the option is set to validate while disabled it doesn't matter what other conditions exist.
 			if (ivc != null && ivc.ValidateWhileDisabled) return true;
 
 			// Find a property with the name Can<propertyName>
-			PropertyInfo pi = instance.GetType().GetProperty(
+			var pi = instance.GetType().GetProperty(
 				ivc == null || string.IsNullOrEmpty(ivc.GuardProperty) 
 				? "Can" + propertyName
 				: ivc.GuardProperty
@@ -220,7 +220,7 @@ namespace Caliburn.Micro.Validation
 			if (pi == null) return true; // There is no such guard property
 
 			// Get the result
-			object result = pi.GetValue(instance, null);
+			var result = pi.GetValue(instance, null);
 			if (result == null || !(result is bool)) return true;  // No result or the guard property does not return a bool
 
 			return (bool)result;

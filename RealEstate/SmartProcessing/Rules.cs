@@ -28,8 +28,8 @@ namespace RealEstate.SmartProcessing
         {
             if (File.Exists(FILENAME))
             {
-                XmlSerializer reader = new XmlSerializer(typeof(List<Rule>));
-                StreamReader file = new StreamReader(FILENAME);
+                var reader = new XmlSerializer(typeof(List<Rule>));
+                var file = new StreamReader(FILENAME);
                 var list = (List<Rule>)reader.Deserialize(file);
                 foreach (var item in list)
                 {
@@ -47,7 +47,7 @@ namespace RealEstate.SmartProcessing
             }
 
             var writer = new XmlSerializer(typeof(List<Rule>));
-            StreamWriter file = new StreamWriter(FILENAME);
+            var file = new StreamWriter(FILENAME);
             writer.Serialize(file, Rules.ToList());
             file.Close();
         }
