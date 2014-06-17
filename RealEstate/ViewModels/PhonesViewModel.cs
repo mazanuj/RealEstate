@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using Caliburn.Micro.Validation;
 using Microsoft.Win32;
 using RealEstate.Db;
 using RealEstate.Exporting;
@@ -9,6 +8,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
+using RealEstate.Validation;
 
 namespace RealEstate.ViewModels
 {
@@ -54,7 +54,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private BindableCollection<string> _phones = new BindableCollection<string>();
+        private readonly BindableCollection<string> _phones = new BindableCollection<string>();
         private PhoneCollection phoneCollection;
         public BindableCollection<string> Phones
         {

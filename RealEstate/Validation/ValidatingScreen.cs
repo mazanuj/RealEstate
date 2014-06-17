@@ -1,14 +1,14 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Caliburn.Micro;
 using RealEstate.ViewModels;
 
-namespace Caliburn.Micro.Validation
+namespace RealEstate.Validation
 {
 	/// <summary>
 	/// Subclasses the Screen class to provide field validation which
@@ -36,14 +36,14 @@ namespace Caliburn.Micro.Validation
 			(from p in typeof(TViewModel).GetProperties()
 			 where p.GetAttributes<ValidationAttribute>(true).ToArray().Length != 0
 			 select p
-			).ToDictionary(p => p.Name, p => GetValueGetter(p));
+			).ToDictionary(p => p.Name, GetValueGetter);
 
 		/// <summary>
 		/// Create a dictionary of the validators (if any) associated with each class property
 		/// </summary>
 		private static readonly Dictionary<string, ValidationAttribute[]> validators =
 			(from p in typeof(TViewModel).GetProperties()
-			 let attrs = (ValidationAttribute[])p.GetAttributes<ValidationAttribute>(true).ToArray()
+			 let attrs = p.GetAttributes<ValidationAttribute>(true).ToArray()
 			 where attrs.Length != 0
 			 select new KeyValuePair<string, ValidationAttribute[]> (p.Name, attrs)
 			).ToDictionary(p => p.Key, p =>p.Value);
@@ -63,7 +63,7 @@ namespace Caliburn.Micro.Validation
 		/// <summary>
 		/// Returns True if any of the property values generate a validation error
 		/// </summary>
-		public bool HasErrors
+		protected bool HasErrors
 		{
 			get
 			{
@@ -72,18 +72,10 @@ namespace Caliburn.Micro.Validation
 			}
 		}
 
-		/// <summary>
-		/// Returns True if any of the property values in the Default validation group generate a validation error
-		/// </summary>
-		public bool HasErrorsByGroup()
-		{
-			return HasErrorsByGroup(ValidationGroupAttribute.DefaultGroupName);
-		}
-
-		/// <summary>
+	    /// <summary>
 		/// Returns True if any of the property values in the named group generate a validation error
 		/// </summary>
-		public bool HasErrorsByGroup(string groupName)
+		public bool HasErrorsByGroup(string groupName = ValidationGroupAttribute.DefaultGroupName)
 		{
 			var result = !string.IsNullOrEmpty(ErrorByGroup(groupName));
 			return result;
@@ -147,7 +139,7 @@ namespace Caliburn.Micro.Validation
 		/// <summary>
 		/// Test all validators for all properties but for a named group and returns a string containing messages if any need to be reported.
 		/// </summary>
-		public string ErrorByGroup(string groupName)
+		private string ErrorByGroup(string groupName)
 		{
 			// Run the validation but only for groups which should be included
 			var errors = from i in validators

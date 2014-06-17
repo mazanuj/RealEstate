@@ -1,4 +1,4 @@
-﻿namespace Caliburn.Micro.Validation
+﻿namespace RealEstate.Validation
 {
 	/// <summary>
 	/// Interface allows a validation controller to refine its validation

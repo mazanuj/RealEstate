@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using Caliburn.Micro.Validation;
 using RealEstate.City;
 using RealEstate.Db;
 using RealEstate.Exporting;
@@ -9,6 +8,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
+using RealEstate.Validation;
 
 namespace RealEstate.ViewModels
 {
@@ -69,7 +69,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private BindableCollection<UsedTypeNamed> _usedTypes = new BindableCollection<UsedTypeNamed>();
+        private readonly BindableCollection<UsedTypeNamed> _usedTypes = new BindableCollection<UsedTypeNamed>();
         public BindableCollection<UsedTypeNamed> UsedTypes
         {
             get
@@ -171,7 +171,7 @@ namespace RealEstate.ViewModels
         }
 
 
-        BindableCollection<ExportSite> _ExportSites = new BindableCollection<ExportSite>();
+        readonly BindableCollection<ExportSite> _ExportSites = new BindableCollection<ExportSite>();
         public BindableCollection<ExportSite> ExportSites
         {
             get

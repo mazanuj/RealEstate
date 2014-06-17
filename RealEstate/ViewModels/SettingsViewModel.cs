@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using Caliburn.Micro.Validation;
 using System;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;

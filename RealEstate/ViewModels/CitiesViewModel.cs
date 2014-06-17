@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using Caliburn.Micro.Validation;
 using RealEstate.City;
 using RealEstate.Proxies;
 using RealEstate.TaskManagers;
@@ -11,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using RealEstate.Validation;
 
 namespace RealEstate.ViewModels
 {

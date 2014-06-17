@@ -17,7 +17,7 @@ namespace RealEstate.ViewModels
             _event = events;
         }
 
-        private ObservableCollection<StatViewItem> _Items = new ObservableCollection<StatViewItem>();
+        private readonly ObservableCollection<StatViewItem> _Items = new ObservableCollection<StatViewItem>();
         public ObservableCollection<StatViewItem> Items
         {
             get { return _Items; }

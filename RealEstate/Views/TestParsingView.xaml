@@ -12,7 +12,7 @@
         </Grid.RowDefinitions>
         <Border Height="180" Visibility="{Binding IsToolsOpen, Converter={StaticResource bool2VisibilityConverter}}" BorderBrush="{StaticResource VS2012WindowBorderBrush}" 
                 BorderThickness="1 0 1 2" FlowDirection="LeftToRight">
-            <Grid></Grid>
+            <Grid />
         </Border>
         <Grid Grid.Row="1" Margin="150 20">
             <Grid.ColumnDefinitions>
@@ -37,11 +37,11 @@
             <TextBlock Grid.Row="2" FontWeight="Bold">Статистика:</TextBlock>
             
             <TextBlock Margin="10 4" Grid.Row="3">Общий статус: </TextBlock>
-            <TextBlock Name="Summary" Grid.Column="1" Margin="10 4" Grid.Row="3"></TextBlock>
+            <TextBlock Name="Summary" Grid.Column="1" Margin="10 4" Grid.Row="3" />
 
             <TextBlock Margin="10 4" Grid.Row="4">Степень распознавания:</TextBlock>
-            <TextBlock Name="Coverage" Grid.Column="1" Margin="10 4" Grid.Row="4"></TextBlock>
-            
+            <TextBlock Name="Coverage" Grid.Column="1" Margin="10 4" Grid.Row="4" />
+
             <Button Grid.Column="1" Width="100" HorizontalAlignment="Right" Content="Показать" Name="Show" Margin="10 40 0 40" Grid.Row="5" />
 
         </Grid>

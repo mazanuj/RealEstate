@@ -53,7 +53,7 @@ namespace RealEstate.ViewModels
         }
 
 
-        private StringBuilder _consoleTextBuilder = new StringBuilder();
+        private readonly StringBuilder _consoleTextBuilder = new StringBuilder();
         public string ConsoleText
         {
             get { return _consoleTextBuilder.ToString(); }
@@ -139,7 +139,7 @@ namespace RealEstate.ViewModels
 
     public class MyTraceListener : TraceListener
     {
-        private ConsoleViewModel _model;
+        private readonly ConsoleViewModel _model;
 
         public MyTraceListener(ConsoleViewModel model)
         {

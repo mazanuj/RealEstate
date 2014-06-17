@@ -1,6 +1,6 @@
-﻿using Caliburn.Micro.Validation;
-using RealEstate.City;
+﻿using RealEstate.City;
 using System.ComponentModel.Composition;
+using RealEstate.Validation;
 
 namespace RealEstate.ViewModels
 {

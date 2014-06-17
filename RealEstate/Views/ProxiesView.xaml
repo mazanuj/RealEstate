@@ -63,7 +63,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" VerticalAlignment="Center">Обновление: </TextBlock>
                         <ProgressBar  Grid.Column="1" Margin="10 0"  Height="16" Name="Progress" />
-                        <TextBlock Grid.Column="2" Width="50"  VerticalAlignment="Center" Text="{Binding Progress, StringFormat={}{0:0.#}%}" ></TextBlock>
+                        <TextBlock Grid.Column="2" Width="50"  VerticalAlignment="Center" Text="{Binding Progress, StringFormat={}{0:0.#}%}" />
                         <Button Grid.Column="3" Name="CancelUpdate" Content="Отмена" Margin="30 0"/>
                     </Grid>
                 </Border>
@@ -81,9 +81,9 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" >
-                                    <TextBlock Text="{Binding Proxy.Address}"></TextBlock>
-                                    <TextBlock Margin="20 0" Text="{Binding Failed, StringFormat='({0})'}"></TextBlock>
-                               </StackPanel>
+                                    <TextBlock Text="{Binding Proxy.Address}" />
+                                    <TextBlock Margin="20 0" Text="{Binding Failed, StringFormat='({0})'}" />
+                                </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ListBox>

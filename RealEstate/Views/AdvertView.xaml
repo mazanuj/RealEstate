@@ -46,7 +46,7 @@
                 <TextBlock VerticalAlignment="Center" Grid.Row="8" Text="Цена: " />
 
                 <TextBox Text="{Binding Advert.City}" Grid.Column="1" Grid.Row="0" Margin="4" />
-                <TextBox Text="{Binding Advert.Distinct}" Grid.Column="1" Grid.Row="1" Margin="4" Visibility="{Binding Advert.IsYaroslavl, Converter={StaticResource negatedBoolToVisibilityConverter}}"></TextBox>
+                <TextBox Text="{Binding Advert.Distinct}" Grid.Column="1" Grid.Row="1" Margin="4" Visibility="{Binding Advert.IsYaroslavl, Converter={StaticResource negatedBoolToVisibilityConverter}}" />
                 <ComboBox SelectedValuePath="Content" SelectedValue="{Binding Advert.Distinct}" Visibility="{Binding Advert.IsYaroslavl, Converter={StaticResource bool2VisibilityConverter}}"  Grid.Column="1" Grid.Row="1" Margin="4">
                     <ComboBoxItem>Дзержинский</ComboBoxItem>
                     <ComboBoxItem>Заволжский</ComboBoxItem>
@@ -168,8 +168,7 @@
             <awe:WebControl Grid.Row="2" Grid.ColumnSpan="2"
             Name="webControl" 
             Source="{Binding URL}"
-            Margin="5" >
-            </awe:WebControl>
+            Margin="5" />
 
             <Button Name="SaveAddress" Content="Сохранить адрес" Margin="3" Grid.Column="1" Grid.Row="4"  />
 

@@ -13,10 +13,10 @@ namespace RealEstate.Proxies
     [Export(typeof(ProxyManager))]
     public class ProxyManager
     {
-        private Object _lock = new Object();
+        private readonly Object _lock = new Object();
 
         public List<IProxySourceReader> Readers = new List<IProxySourceReader>();
-        private FileStorage storage = new FileStorage();
+        private readonly FileStorage storage = new FileStorage();
         private int index;
         private int maxIndex;
 

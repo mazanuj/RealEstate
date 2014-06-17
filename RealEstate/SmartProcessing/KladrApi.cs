@@ -21,7 +21,7 @@ namespace RealEstate.SmartProcessing
             kladrClient = new KladrClient(token, key);
         }
 
-        AutoResetEvent stopWaitHandle = new AutoResetEvent(false);
+        readonly AutoResetEvent stopWaitHandle = new AutoResetEvent(false);
         KladrResponse _response;
 
         public string GetDistinct(string city, string address)

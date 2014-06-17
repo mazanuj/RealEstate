@@ -34,7 +34,6 @@ namespace RealEstate.Parsing.Parsers
 
                     string result = null;
                     var attempt = 0;
-                    var uri = "";
                     WebProxy proxy = null;
 
                     while (attempt < maxAttemptCount)
@@ -44,7 +43,7 @@ namespace RealEstate.Parsing.Parsers
                         proxy = /*param.useProxy  ? proxyManager.GetNextProxy() :*/ null;
                         try
                         {
-                            uri = url + ((index != 1) ? ("page" + index) : "") + "/";
+                            var uri = url + ((index != 1) ? ("page" + index) : "") + "/";
                             var referer = url + ((index - 1 != 1) ? ("page" + (index - 1)) : "");
                             Trace.WriteLine("Downloading " + uri);
 
@@ -105,7 +104,7 @@ namespace RealEstate.Parsing.Parsers
                             if (date > toDate)
                             {
                                 //Trace.TraceInformation(link);
-                                headers.Add(new AdvertHeader()
+                                headers.Add(new AdvertHeader
                                 {
                                     DateSite = date,
                                     Url = link,
@@ -130,19 +129,14 @@ namespace RealEstate.Parsing.Parsers
             return headers;
         }
 
-        private int GetMaxIndex(HtmlDocument page)
+        private static int GetMaxIndex(HtmlDocument page)
         {
             var maxNode = page.DocumentNode.SelectSingleNode(@"//ul[contains(@class,'same_adds_paging')]/li[last()]");
-            if (maxNode != null)
-            {
-                var max = 0;
-                if (Int32.TryParse(maxNode.InnerText, out max))
-                    return max;
-                else
-                    throw new ParsingException("can't parse max index!", maxNode.InnerText);
-            }
-            else
-                return 0;
+            if (maxNode == null) return 0;
+            int max;
+            if (Int32.TryParse(maxNode.InnerText, out max))
+                return max;
+            throw new ParsingException("can't parse max index!", maxNode.InnerText);
         }
 
         private DateTime ParseDate(HtmlNode tier)
@@ -186,8 +180,7 @@ namespace RealEstate.Parsing.Parsers
                 advert.ImportSite = ImportSite.Hands;
                 advert.AdvertType = AdvertType.Sell;
 
-                string result;
-                result = DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct);
+                var result = DownloadPage(advert.Url, UserAgents.GetRandomUserAgent(), proxy, ct);
                 if (result.Length < 200)
                     throw new BadResponseException();
 
@@ -224,18 +217,15 @@ namespace RealEstate.Parsing.Parsers
             }
         }
 
-        private string ParseMetro(HtmlDocument page)
+        private static string ParseMetro(HtmlDocument page)
         {
             var metroNode = page.DocumentNode.SelectSingleNode(@"//div[contains(@class,'clear')]/div/p/span[contains(@class,'metro')]");
-            if (metroNode != null)
-                return metroNode.InnerText;
-
-            return null;
+            return metroNode != null ? metroNode.InnerText : null;
         }
 
-        private void ParseCategory(Advert advert)
+        private static void ParseCategory(Advert advert)
         {
-            var parts = advert.Url.Replace("http://", "").Split(new char[] { '/' });
+            var parts = advert.Url.Replace("http://", "").Split(new[] { '/' });
             foreach (var part in parts)
             {
                 switch (part)
@@ -250,8 +240,6 @@ namespace RealEstate.Parsing.Parsers
                     case "secondary":
                         advert.Usedtype = Usedtype.Used;
                         break;
-                    default:
-                        break;
                 }
             }
         }
@@ -261,56 +249,50 @@ namespace RealEstate.Parsing.Parsers
             var detailsNodes = page.DocumentNode.SelectNodes("//ul[contains(@class,'form_info form_info_short') or contains(@class,'form_info')]");
             if (detailsNodes != null)
             {
-                foreach (var detailsNode in detailsNodes)
+                foreach (var parts in detailsNodes.SelectMany(detailsNode => detailsNode.SelectNodes("li").Select(detail => detail.InnerText.Trim().Split(new[] { ':' }))))
                 {
-                    foreach (var detail in detailsNode.SelectNodes("li"))
+                    try
                     {
-                        var parts = detail.InnerText.Trim().Split(new char[] { ':' });
-                        try
+                        switch (parts[0])
                         {
-                            switch (parts[0])
-                            {
-                                case "Этаж":
-                                    advert.Floor = Int16.Parse(parts[1].Trim());
-                                    break;
-                                case "Комнат в квартире":
-                                    advert.Rooms = parts[1].Trim();
-                                    break;
-                                case "Общая площадь":
-                                    advert.AreaFull = float.Parse(parts[1].Replace(" кв.м", "").Trim(), CultureInfo.InvariantCulture);
-                                    break;
-                                case "Площадь кухни":
-                                    advert.AreaKitchen = float.Parse(parts[1].Replace(" кв.м", "").Trim(), CultureInfo.InvariantCulture);
-                                    break;
-                                case "Жилая площадь":
-                                    advert.AreaLiving = float.Parse(parts[1].Replace(" кв.м", "").Trim(), CultureInfo.InvariantCulture);
-                                    break;
-                                case "Этажей в здании":
-                                    advert.FloorTotal = Int16.Parse(parts[1].Trim());
-                                    break;
-                                case "Район города":
-                                    advert.Distinct = parts[1].Trim();
-                                    break;
-                                case "АО":
-                                    advert.AO = parts[1].Replace("административный округ", "").Trim();
-                                    break;
-                                case "Продавец":
-                                    advert.Name = GetSeller(parts[1]);
-                                    break;
-                                case "Контактное лицо":
-                                    advert.Name = GetSeller(parts[1]);
-                                    break;
-                                case "Год постройки/сдачи":
-                                    advert.BuildingYear = Regex.Match(parts[1], @"20(?<year>\d{2})", RegexOptions.IgnoreCase).Groups["year"].Value;
-                                    break;
-                                default:
-                                    break;
-                            }
+                            case "Этаж":
+                                advert.Floor = Int16.Parse(parts[1].Trim());
+                                break;
+                            case "Комнат в квартире":
+                                advert.Rooms = parts[1].Trim();
+                                break;
+                            case "Общая площадь":
+                                advert.AreaFull = float.Parse(parts[1].Replace(" кв.м", "").Trim(), CultureInfo.InvariantCulture);
+                                break;
+                            case "Площадь кухни":
+                                advert.AreaKitchen = float.Parse(parts[1].Replace(" кв.м", "").Trim(), CultureInfo.InvariantCulture);
+                                break;
+                            case "Жилая площадь":
+                                advert.AreaLiving = float.Parse(parts[1].Replace(" кв.м", "").Trim(), CultureInfo.InvariantCulture);
+                                break;
+                            case "Этажей в здании":
+                                advert.FloorTotal = Int16.Parse(parts[1].Trim());
+                                break;
+                            case "Район города":
+                                advert.Distinct = parts[1].Trim();
+                                break;
+                            case "АО":
+                                advert.AO = parts[1].Replace("административный округ", "").Trim();
+                                break;
+                            case "Продавец":
+                                advert.Name = GetSeller(parts[1]);
+                                break;
+                            case "Контактное лицо":
+                                advert.Name = GetSeller(parts[1]);
+                                break;
+                            case "Год постройки/сдачи":
+                                advert.BuildingYear = Regex.Match(parts[1], @"20(?<year>\d{2})", RegexOptions.IgnoreCase).Groups["year"].Value;
+                                break;
                         }
-                        catch (Exception)
-                        {
-                            Trace.WriteLine("Unrecoginzed data: " + parts[0] + " : " + parts[1], "Parsing error");
-                        }
+                    }
+                    catch (Exception)
+                    {
+                        Trace.WriteLine("Unrecoginzed data: " + parts[0] + " : " + parts[1], "Parsing error");
                     }
                 }
             }
@@ -337,7 +319,7 @@ namespace RealEstate.Parsing.Parsers
                         {
                             var src = Normalize(href.Value).Replace("-small", "-view");
 
-                            result.Add(new Image() { URl = src });
+                            result.Add(new Image { URl = src });
                         }
                     }
                     catch (Exception)
@@ -363,13 +345,13 @@ namespace RealEstate.Parsing.Parsers
                 sellerPhone = r.Match(sellerPhone).Groups[0].Value;
                 if (sellerPhone == "") return;
 
-                byte[] phoneImage = null;
+                byte[] phoneImage;
 
                 try
                 {
-                    phoneImage = DownloadImage(sellerPhone.Trim(new char[] { '\'' }), UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, Normalize(advert.Url), true);
+                    phoneImage = DownloadImage(sellerPhone.Trim(new[] { '\'' }), UserAgents.GetRandomUserAgent(), proxy, CancellationToken.None, Normalize(advert.Url), true);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Trace.Write("Error when downloading image", "Web error!");
                     throw;
@@ -386,10 +368,10 @@ namespace RealEstate.Parsing.Parsers
             {
                 advert.MessageFull = Normalize(textNode.InnerText);
 
-                var parts = advert.MessageFull.Split(new char[] { '\n' });
+                var parts = advert.MessageFull.Split(new[] { '\n' });
                 var phoneStr = parts.LastOrDefault(s => s.ToLower().Contains("тел.") || s.Contains("т."));
                 if (phoneStr != null)
-                    advert.PhoneNumber = phoneStr.ToLower().Trim(new string[] { "тел.: ", "т.", ":" }).Trim();
+                    advert.PhoneNumber = phoneStr.ToLower().Trim(new[] { "тел.: ", "т.", ":" }).Trim();
             }
             else
                 throw new ParsingException("Can't get description", "");
@@ -402,7 +384,7 @@ namespace RealEstate.Parsing.Parsers
             if (adressNode != null)
             {
                 var adress = adressNode.InnerText;
-                var parts = adress.Split(new char[] { ',' });
+                var parts = adress.Split(new[] { ',' });
 
                 advert.City = parts[0];
                 advert.Address = String.Join(",", parts.Skip(1).ToArray());
@@ -424,7 +406,7 @@ namespace RealEstate.Parsing.Parsers
             var i = trash.IndexOf("—");
             if (i != -1)
                 trash = trash.Substring(0, i);
-            return trash.Trim(new string[] { "X", "-", "Показать телефон", "(", ")", "+", "—", ",", ";", "\r\n" }).Trim();
+            return trash.Trim(new[] { "X", "-", "Показать телефон", "(", ")", "+", "—", ",", ";", "\r\n" }).Trim();
         }
 
         private void ParseTitle(HtmlDocument page, Advert advert)
@@ -444,15 +426,10 @@ namespace RealEstate.Parsing.Parsers
         {
             var priceNode = page.DocumentNode.SelectSingleNode(".//div[contains(@class,'credit_cost')]");
             priceNode.SelectSingleNode("u").RemoveAllChildren();
-            if (priceNode != null)
-            {
-                var price = Normalize(priceNode.InnerText);
-                int pr;
-                Int32.TryParse(price.Replace(" руб.", "").Replace(".", "").Trim(), out pr);
-                advert.Price = pr;
-            }
-            else
-                throw new ParsingException("none price", "");
+            var price = Normalize(priceNode.InnerText);
+            int pr;
+            Int32.TryParse(price.Replace(" руб.", "").Replace(".", "").Trim(), out pr);
+            advert.Price = pr;
         }
 
         public override int GetTotalCount(string sourceUrl, ProxyManager proxyManager, bool useProxy, CancellationToken token)

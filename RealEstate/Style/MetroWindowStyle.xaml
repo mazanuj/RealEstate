@@ -14,7 +14,7 @@
                 <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <DoubleAnimation  Storyboard.TargetProperty="Height" From="0" To="353" Duration="0:0:01" SpeedRatio="6" ></DoubleAnimation>
+                            <DoubleAnimation  Storyboard.TargetProperty="Height" From="0" To="353" Duration="0:0:01" SpeedRatio="6" />
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.EnterActions>

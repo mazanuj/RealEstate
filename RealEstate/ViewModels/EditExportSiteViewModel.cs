@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Caliburn.Micro;
-using Caliburn.Micro.Validation;
 using RealEstate.Exporting;
 using RealEstate.City;
+using RealEstate.Validation;
 
 namespace RealEstate.ViewModels
 {

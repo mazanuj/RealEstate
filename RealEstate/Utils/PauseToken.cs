@@ -1,7 +1,8 @@
-﻿using Caliburn.Micro;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Caliburn.Micro;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 
@@ -9,8 +10,8 @@ namespace RealEstate.Utils
 {
     public class PauseTokenSource
     {
-        protected ManualResetEvent mre = new ManualResetEvent(true);
-        object syncRoot = new object();
+        private readonly ManualResetEvent mre = new ManualResetEvent(true);
+        readonly object syncRoot = new object();
 
         public PauseToken PauseToken { get { return new PauseToken(this); } }
 
@@ -34,7 +35,7 @@ namespace RealEstate.Utils
 
     public class PauseToken
     {
-        private PauseTokenSource source;
+        private readonly PauseTokenSource source;
 
         public PauseToken(PauseTokenSource source)
         {
@@ -60,14 +61,11 @@ namespace RealEstate.Utils
 
     public static class StringUtils
     {
-        public static string Trim(this string text, string[] array)
+        public static string Trim(this string text, IEnumerable<string> array)
         {
             var b = new StringBuilder(text);
 
-            foreach (var item in array)
-            {
-                b = b.Replace(item, "");
-            }
+            b = array.Aggregate(b, (current, item) => current.Replace(item, ""));
 
             return b.ToString();
         }
@@ -75,7 +73,7 @@ namespace RealEstate.Utils
 
     public class CoroutineWrapper : IResult
     {
-        private Action<CoroutineWrapper> work = x => { };
+        private Action<CoroutineWrapper> _work = x => { };
 
         public ActionExecutionContext Context { get; set; }
 
@@ -83,14 +81,14 @@ namespace RealEstate.Utils
 
         public CoroutineWrapper Init(Action<CoroutineWrapper> work)
         {
-            this.work = work;
+            _work = work;
             return this;
         }
 
         public void Execute(ActionExecutionContext context)
         {
             Context = context;
-            work.Invoke(this);
+            _work.Invoke(this);
         }
 
         public void DoCompleted(ResultCompletionEventArgs args)

@@ -52,7 +52,7 @@ namespace RealEstate.Exporting
 
 
         private static bool IsStarted;
-        private static object _lock = new object();
+        private static readonly object _lock = new object();
 
         [ImportingConstructor]
         public ExportingManager(RealEstateContext context, ImagesManager images, SmartProcessor processor, PhonesManager phonesManager)

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Caliburn.Micro.Validation
+namespace RealEstate.Validation
 {
 	/// <summary>
 	/// Allows a property's validation by validating controller class to be broken into 

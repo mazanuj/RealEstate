@@ -19,10 +19,8 @@
                     <ColumnDefinition Width="225" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}">
-                </Border>
-                <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}">
-                </Border>
+                <Border Grid.Column="0" Style="{StaticResource RibbonToolBorder}" />
+                <Border Grid.Column="1" Style="{StaticResource RibbonToolBorder}" />
             </Grid>
         </Border>
         <Grid Grid.Row="1">

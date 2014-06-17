@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using Caliburn.Micro.Validation;
 using RealEstate.Parsing;
 using RealEstate.Parsing.Parsers;
 using RealEstate.SmartProcessing;

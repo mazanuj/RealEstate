@@ -82,7 +82,7 @@
                                 <ItemsControl ItemsSource="{Binding Advert.ExportSites}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Margin="5" Text="{Binding Title}"></TextBlock>
+                                            <TextBlock Margin="5" Text="{Binding Title}" />
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>

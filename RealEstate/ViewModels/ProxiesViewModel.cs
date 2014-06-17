@@ -7,7 +7,6 @@ using KTF.Proxy.Storage;
 using Microsoft.Win32;
 using RealEstate.Db;
 using RealEstate.Settings;
-using Caliburn.Micro.Validation;
 using System.Threading.Tasks;
 using System.Threading;
 using RealEstate.TaskManagers;
@@ -17,6 +16,7 @@ using System.Diagnostics;
 using KTF.Proxy;
 using System.Net;
 using System.Timers;
+using RealEstate.Validation;
 using Timer = System.Timers.Timer;
 
 namespace RealEstate.ViewModels
@@ -99,7 +99,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private BindableCollection<IProxySourceReader> _SourceReaders = new BindableCollection<IProxySourceReader>();
+        private readonly BindableCollection<IProxySourceReader> _SourceReaders = new BindableCollection<IProxySourceReader>();
         public BindableCollection<IProxySourceReader> SourceReaders
         {
             get { return _SourceReaders; }

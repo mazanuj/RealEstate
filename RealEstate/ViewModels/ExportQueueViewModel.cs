@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using Caliburn.Micro.Validation;
 using RealEstate.Db;
 using RealEstate.Exporting;
 using System;
@@ -12,6 +11,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using RealEstate.Settings;
+using RealEstate.Validation;
 
 namespace RealEstate.ViewModels
 {

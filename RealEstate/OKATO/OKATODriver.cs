@@ -11,9 +11,9 @@ namespace RealEstate.OKATO
     [Export(typeof(OKATODriver))]
     public class OKATODriver
     {
-        public void Load()
+        public static void Load()
         {
-            var exists = false;
+            bool exists;
             using (var context = new RealEstateContext())
             {
                 exists = context.Database
@@ -30,7 +30,7 @@ namespace RealEstate.OKATO
                 RestoreDefault();
             }
         }
-        private void RestoreDefault()
+        private static void RestoreDefault()
         {
             Trace.WriteLine("Okato table doesn't exist. Creating...");
 

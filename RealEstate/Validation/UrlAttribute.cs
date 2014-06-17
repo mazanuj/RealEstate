@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Caliburn.Micro.Validation;
 
 namespace RealEstate.Validation
 {

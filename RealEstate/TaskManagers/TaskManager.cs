@@ -8,8 +8,8 @@ namespace RealEstate.TaskManagers
     [Export(typeof(TaskManager))]
     public class TaskManager
     {
-        private Queue<RealEstateTask> _tasks = new Queue<RealEstateTask>();
-        private BackgroundWorker worker = new BackgroundWorker();
+        private readonly Queue<RealEstateTask> _tasks = new Queue<RealEstateTask>();
+        private readonly BackgroundWorker worker = new BackgroundWorker();
 
 
         public TaskManager()

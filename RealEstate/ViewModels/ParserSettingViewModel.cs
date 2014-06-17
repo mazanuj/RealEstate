@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Caliburn.Micro;
-using Caliburn.Micro.Validation;
 using System.ComponentModel.Composition;
 using RealEstate.Db;
 using RealEstate.Modes;
@@ -13,6 +12,7 @@ using RealEstate.City;
 using RealEstate.Exporting;
 using System.Diagnostics;
 using RealEstate.Parsing.Parsers;
+using RealEstate.Validation;
 
 namespace RealEstate.ViewModels
 {
@@ -75,7 +75,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private BindableCollection<UsedTypeNamed> _usedTypes = new BindableCollection<UsedTypeNamed>();
+        private readonly BindableCollection<UsedTypeNamed> _usedTypes = new BindableCollection<UsedTypeNamed>();
         public BindableCollection<UsedTypeNamed> UsedTypes
         {
             get
@@ -202,7 +202,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private BindableCollection<ParserSourceUrl> _ParserSourceUrls = new BindableCollection<ParserSourceUrl>();
+        private readonly BindableCollection<ParserSourceUrl> _ParserSourceUrls = new BindableCollection<ParserSourceUrl>();
         public BindableCollection<ParserSourceUrl> ParserSourceUrls
         {
             get

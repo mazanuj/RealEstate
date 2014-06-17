@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using Caliburn.Micro.Validation;
 using Hardcodet.Wpf.TaskbarNotification;
 using RealEstate.City;
 using RealEstate.Parsing;
@@ -18,6 +17,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using RealEstate.Validation;
 using Action = System.Action;
 
 namespace RealEstate.ViewModels
@@ -53,9 +53,9 @@ namespace RealEstate.ViewModels
             PassType = new StatisticTabViewModel(_cityManager, _events);
         }
 
-        StatisticTabViewModel NewType;
-        StatisticTabViewModel UsedType;
-        StatisticTabViewModel PassType;
+        readonly StatisticTabViewModel NewType;
+        readonly StatisticTabViewModel UsedType;
+        readonly StatisticTabViewModel PassType;
 
         protected override void OnInitialize()
         {
@@ -68,7 +68,7 @@ namespace RealEstate.ViewModels
             StatItems.Add(PassType);
         }
 
-        private ObservableCollection<IScreen> _StatItems = new ObservableCollection<IScreen>();
+        private readonly ObservableCollection<IScreen> _StatItems = new ObservableCollection<IScreen>();
         public ObservableCollection<IScreen> StatItems
         {
             get { return _StatItems; }

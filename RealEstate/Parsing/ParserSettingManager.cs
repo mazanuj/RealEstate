@@ -8,8 +8,8 @@ namespace RealEstate.Parsing
     [Export(typeof(ParserSettingManager))]
     public class ParserSettingManager
     {
-        private RealEstateContext context;
-        private static object _lock = new object();
+        private readonly RealEstateContext context;
+        private static readonly object _lock = new object();
 
         [ImportingConstructor]
         public ParserSettingManager(RealEstateContext context)

@@ -6,12 +6,12 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
-using Caliburn.Micro.Validation;
 using RealEstate.Db;
 using RealEstate.Parsing;
 using System.Windows.Media.Imaging;
 using System.Threading;
 using RealEstate.Exporting;
+using RealEstate.Validation;
 using RealEstate.Views;
 using Awesomium.Windows.Controls;
 using RealEstate.SmartProcessing;
@@ -319,7 +319,7 @@ namespace RealEstate.ViewModels
                       TaskScheduler.Default);
         }
 
-        private BindableCollection<ImageWrap> _images = new BindableCollection<ImageWrap>();
+        private readonly BindableCollection<ImageWrap> _images = new BindableCollection<ImageWrap>();
         public BindableCollection<ImageWrap> WrapImages
         {
             get { return _images; }
@@ -384,7 +384,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private List<RealEstatetypeNamed> _RealEstateTypes = new List<RealEstatetypeNamed>();
+        private readonly List<RealEstatetypeNamed> _RealEstateTypes = new List<RealEstatetypeNamed>();
         public List<RealEstatetypeNamed> RealEstateTypes
         {
             get { return _RealEstateTypes; }
@@ -401,7 +401,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private List<AdvertTypeNamed> _AdvertTypes = new List<AdvertTypeNamed>();
+        private readonly List<AdvertTypeNamed> _AdvertTypes = new List<AdvertTypeNamed>();
         public List<AdvertTypeNamed> AdvertTypes
         {
             get { return _AdvertTypes; }
@@ -419,7 +419,7 @@ namespace RealEstate.ViewModels
         }
 
         private RealEstateType current = RealEstateType.House;
-        private BindableCollection<UsedTypeNamed> _usedTypes = new BindableCollection<UsedTypeNamed>();
+        private readonly BindableCollection<UsedTypeNamed> _usedTypes = new BindableCollection<UsedTypeNamed>();
         public BindableCollection<UsedTypeNamed> UsedTypes
         {
             get

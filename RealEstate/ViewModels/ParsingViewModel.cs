@@ -7,7 +7,6 @@ using System.Timers;
 using System.Web;
 using System.Windows;
 using Caliburn.Micro;
-using Caliburn.Micro.Validation;
 using Hardcodet.Wpf.TaskbarNotification;
 using RealEstate.Db;
 using RealEstate.Proxies;
@@ -25,6 +24,7 @@ using System.Collections.ObjectModel;
 using RealEstate.Exporting;
 using System.IO;
 using System.ComponentModel.DataAnnotations;
+using RealEstate.Validation;
 using Action = System.Action;
 using Timer = System.Timers.Timer;
 
@@ -44,7 +44,7 @@ namespace RealEstate.ViewModels
         private readonly SmartProcessor _smartProcessor;
         private readonly ExportingManager _exportingManager;
 
-        private Timer autoTimer = new Timer();
+        private readonly Timer autoTimer = new Timer();
 
         [ImportingConstructor]
         public ParsingViewModel(IEventAggregator events, TaskManager taskManager, ProxyManager proxyManager,
@@ -204,7 +204,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        private BindableCollection<UsedTypeNamed> _usedTypes = new BindableCollection<UsedTypeNamed>();
+        private readonly BindableCollection<UsedTypeNamed> _usedTypes = new BindableCollection<UsedTypeNamed>();
         public BindableCollection<UsedTypeNamed> UsedTypes
         {
             get
@@ -833,10 +833,10 @@ namespace RealEstate.ViewModels
 
     public class ParsingTask : RealEstateTask
     {
-        private Timer timer;
-        List<long> spans = new List<long>();
+        private readonly Timer timer;
+        readonly List<long> spans = new List<long>();
 
-        private ObservableCollection<string> _SourceUrls = new ObservableCollection<string>();
+        private readonly ObservableCollection<string> _SourceUrls = new ObservableCollection<string>();
         public ObservableCollection<string> SourceUrls
         {
             get { return _SourceUrls; }

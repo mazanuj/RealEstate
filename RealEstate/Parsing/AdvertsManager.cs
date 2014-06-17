@@ -12,7 +12,7 @@ namespace RealEstate.Parsing
     public class AdvertsManager
     {
         private readonly RealEstateContext _context;
-        private static object _lock = new object();
+        private static readonly object _lock = new object();
 
         [ImportingConstructor]
         public AdvertsManager(RealEstateContext context)

@@ -190,7 +190,7 @@ namespace RealEstate.ViewModels
         private static void InitOKATODriver(OKATODriver okatoDriver)
         {
             Trace.WriteLine("Loading okato table...");
-            okatoDriver.Load();
+            OKATODriver.Load();
         }
 
         private static void InitRules(RulesManager rulesManager)

@@ -1,10 +1,10 @@
 ﻿using Caliburn.Micro;
-using Caliburn.Micro.Validation;
 using RealEstate.SmartProcessing;
 using System;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using RealEstate.Validation;
 
 namespace RealEstate.ViewModels
 {

@@ -3,7 +3,6 @@ using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Nini.Config;
 
 namespace RealEstate.Settings
