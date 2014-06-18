@@ -58,7 +58,7 @@ namespace RealEstate.Updater
                 AppendLine("Начинаю обновление....");
                 var status = GithubProxy.GetProgramFile();
                 AppendLine("Файл загружен. Распаковка....");
-                var list = _fileManager.Restore(status);
+                var list = FileManager.Restore(status);
                 AppendLine("Файл обновления успешно загружен.");
 
                 BeginInvoke((Action)(() => { prgrsBar.Maximum = list.Count; }));

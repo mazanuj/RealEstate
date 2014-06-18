@@ -11,7 +11,7 @@ namespace RealEstate.Updater
         {
             using (var client = new WebClient())
             {
-                return client.DownloadString("https://raw.github.com/ktflabs/realestate/master/install/status.xml");
+                return client.DownloadString("https://github.com/mazanuj/RealEstate/tree/mazanuj/install/status.xml");
             }
         }
 
@@ -19,7 +19,7 @@ namespace RealEstate.Updater
         {
             using (var client = new WebClient())
             {
-                return client.DownloadString("https://raw.github.com/ktflabs/realestate/master/install/files/version").Trim();
+                return client.DownloadString("https://github.com/mazanuj/RealEstate/tree/mazanuj/install/files/version").Trim();
             }
         }
 
@@ -33,7 +33,7 @@ namespace RealEstate.Updater
 
             using (var client = new WebClient())
             {
-                client.DownloadFile("https://raw.github.com/ktflabs/realestate/master/install/files/" + filename, filename);
+                client.DownloadFile("https://github.com/mazanuj/RealEstate/tree/mazanuj/install/files/" + filename, filename);
             }
             RepairLineEnding(filename);
         }

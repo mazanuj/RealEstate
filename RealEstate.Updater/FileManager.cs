@@ -46,7 +46,7 @@ namespace RealEstate.Updater
             file.Close();
         }
 
-        public List<FileStatus> Restore(string file)
+        public static List<FileStatus> Restore(string file)
         {
             var serializer = new XmlSerializer(typeof(List<FileStatus>));
             using (TextReader reader = new StringReader(file))
