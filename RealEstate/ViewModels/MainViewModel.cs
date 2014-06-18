@@ -23,7 +23,7 @@ using Timer = System.Timers.Timer;
 
 namespace RealEstate.ViewModels
 {
-    [Export(typeof(MainViewModel))]
+    [Export(typeof (MainViewModel))]
     public class MainViewModel : Conductor<IScreen>.Collection.OneActive, IHandle<string>, IHandle<CriticalErrorEvent>
     {
         private readonly IWindowManager _windowManager;
@@ -32,12 +32,12 @@ namespace RealEstate.ViewModels
         private readonly ImportManager _importManager;
         private readonly CityManager _cityManager;
         private readonly Timer _statusTimer;
-        public ConsoleViewModel ConsoleViewModel;
-        public BlackListViewModel BlackListViewModel;
-        public SettingsViewModel SettingsViewModel;
-        public ParsingViewModel ParsingViewModel;
-        public ParserSettingViewModel ParserSettingViewModel;
-        public AdvertsViewModel AdvertsViewModel;
+        private readonly ConsoleViewModel ConsoleViewModel;
+        private readonly BlackListViewModel BlackListViewModel;
+        private readonly SettingsViewModel SettingsViewModel;
+        private ParsingViewModel ParsingViewModel;
+        private ParserSettingViewModel ParserSettingViewModel;
+        private AdvertsViewModel AdvertsViewModel;
 
         [ImportingConstructor]
         public MainViewModel(IWindowManager windowManager, IEventAggregator events,
@@ -66,8 +66,7 @@ namespace RealEstate.ViewModels
             AdvertsViewModel = advertsViewModel;
             BlackListViewModel = blackListViewModel;
 
-            _statusTimer = new Timer();
-            _statusTimer.Interval = 5000;
+            _statusTimer = new Timer {Interval = 5000};
             _statusTimer.Elapsed += _statusTimer_Elapsed;
 
             Items.Add(parsingViewModel);
@@ -82,7 +81,7 @@ namespace RealEstate.ViewModels
             Items.Add(rulesView);
 
             //if (ModeManager.Mode == ReleaseMode.Debug)
-                Items.Add(testParsingViewModel);
+            Items.Add(testParsingViewModel);
 
             ActivateItem(parsingViewModel);
 
@@ -114,7 +113,10 @@ namespace RealEstate.ViewModels
                         if (!context.Database.CompatibleWithModel(false))
                         {
                             Trace.WriteLine("Database has non-actual state. Please, update DB structure", "Error");
-                            criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n База данных в неактуальном состоянии. \r\n Попробуйте перезапустить программу" };
+                            criticalError = new CriticalErrorEvent
+                            {
+                                Message = "Ошибка базы данных. \r\n База данных в неактуальном состоянии. \r\n Попробуйте перезапустить программу"
+                            };
                         }
                     }
                     else
@@ -127,12 +129,18 @@ namespace RealEstate.ViewModels
             catch (DataException sokex)
             {
                 Trace.WriteLine(sokex.ToString());
-                criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n Невозможно подключиться к базе данных. \r\n Проверьте строку подключения" };
+                criticalError = new CriticalErrorEvent
+                {
+                    Message = "Ошибка базы данных. \r\n Невозможно подключиться к базе данных. \r\n Проверьте строку подключения"
+                };
             }
             catch (Exception ex)
             {
                 Trace.WriteLine(ex.ToString());
-                criticalError = new CriticalErrorEvent() { Message = "Ошибка базы данных. \r\n Смотрите лог для подробностей." };
+                criticalError = new CriticalErrorEvent
+                {
+                    Message = "Ошибка базы данных. \r\n Смотрите лог для подробностей."
+                };
             }
 
             try
@@ -146,7 +154,10 @@ namespace RealEstate.ViewModels
             catch (Exception ex)
             {
                 Trace.WriteLine(ex.ToString());
-                criticalError = new CriticalErrorEvent() { Message = "Ошибка инициализации файлов данных. \r\n Смотрите лог для подробностей." };
+                criticalError = new CriticalErrorEvent
+                {
+                    Message = "Ошибка инициализации файлов данных. \r\n Смотрите лог для подробностей."
+                };
             }
 
             try
@@ -158,7 +169,10 @@ namespace RealEstate.ViewModels
             catch (Exception ex)
             {
                 Trace.WriteLine(ex.ToString());
-                criticalError = new CriticalErrorEvent() { Message = "Ошибка инициализации данных из базы. \r\n Смотрите лог для подробностей." };
+                criticalError = new CriticalErrorEvent
+                {
+                    Message = "Ошибка инициализации данных из базы. \r\n Смотрите лог для подробностей."
+                };
             }
 
             if (criticalError == null)
@@ -181,10 +195,9 @@ namespace RealEstate.ViewModels
 
         public override void CanClose(Action<bool> callback)
         {
-            if (MessageBox.Show("Действительно закрыть приложение?", "Внимание", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
-                callback(true);
-            else
-                callback(false);
+            callback(
+                MessageBox.Show("Действительно закрыть приложение?", "Внимание", MessageBoxButton.YesNo,
+                    MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes);
         }
 
         private static void InitOKATODriver(OKATODriver okatoDriver)
@@ -223,21 +236,22 @@ namespace RealEstate.ViewModels
                 catch (Exception ex)
                 {
                     Trace.WriteLine(ex.ToString());
-                    MessageBox.Show("Ошибка сохранения настрок! \r\n См. лог для подробностей", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Ошибка сохранения настрок! \r\n См. лог для подробностей", "Ошибка",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
 
             base.OnDeactivate(close);
         }
 
-        private void InitProxy(ProxyManager proxyManager)
+        private static void InitProxy(ProxyManager proxyManager)
         {
             Trace.WriteLine("Loading proxies...");
 
             proxyManager.Restore();
         }
 
-        private void InitCity(CityManager cityManager)
+        private static void InitCity(CityManager cityManager)
         {
             Trace.WriteLine("Loading cities...");
 
@@ -261,23 +275,23 @@ namespace RealEstate.ViewModels
         public void OpenSettings()
         {
             Task.Factory.StartNew(() =>
+            {
+                try
                 {
-                    try
-                    {
-                        var style = new Dictionary<string, object>();
-                        style.Add("style", "VS2012ModalWindowStyle");
+                    var style = new Dictionary<string, object> {{"style", "VS2012ModalWindowStyle"}};
 
-                        _windowManager.ShowDialog(SettingsViewModel, settings: style);
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine(ex.ToString(), "Error!");
-                    }
-                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+                    _windowManager.ShowDialog(SettingsViewModel, settings: style);
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.ToString(), "Error!");
+                }
+            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         private bool isToolsOpen = true;
-        public Boolean ToogleTools
+
+        private Boolean ToogleTools
         {
             get { return isToolsOpen; }
             set
@@ -289,18 +303,13 @@ namespace RealEstate.ViewModels
             }
         }
 
-        public string ToogleToolsTooltip
+        private string ToogleToolsTooltip
         {
-            get
-            {
-                if (ToogleTools)
-                    return "Скрыть панель инструментов";
-                else
-                    return "Показать панель инструментов";
-            }
+            get { return ToogleTools ? "Скрыть панель инструментов" : "Показать панель инструментов"; }
         }
 
         private bool isConsoleOpen;
+
         public Boolean IsConsoleOpen
         {
             get { return isConsoleOpen; }
@@ -313,6 +322,7 @@ namespace RealEstate.ViewModels
         }
 
         private bool isViewOpen;
+
         public Boolean IsViewOpen
         {
             get { return isViewOpen; }
@@ -325,7 +335,8 @@ namespace RealEstate.ViewModels
         }
 
         private bool _IsEnabled = true;
-        public bool IsEnabled
+
+        private bool IsEnabled
         {
             get { return _IsEnabled; }
             set
@@ -336,7 +347,8 @@ namespace RealEstate.ViewModels
         }
 
         private string _Status = Ok_Status;
-        public string Status
+
+        private string Status
         {
             get { return _Status; }
             set
@@ -359,13 +371,13 @@ namespace RealEstate.ViewModels
             Status = message;
         }
 
-        void _statusTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void _statusTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (!Status.Contains("..."))
                 Status = Ok_Status;
         }
 
-        const string Ok_Status = "Готово";
+        private const string Ok_Status = "Готово";
 
 
         public void Handle(CriticalErrorEvent message)
@@ -379,7 +391,8 @@ namespace RealEstate.ViewModels
 
     public class ToolsOpenEvent
     {
-        public bool IsOpen { get; set; }
+        public bool IsOpen { get; private set; }
+
         public ToolsOpenEvent(bool isOpen)
         {
             IsOpen = isOpen;

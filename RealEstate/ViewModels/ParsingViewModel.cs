@@ -369,7 +369,6 @@ namespace RealEstate.ViewModels
                 else
                 {
                     var param = new TaskParsingParams();
-
                     param.cities = Cities.Where(c => c.IsActive).Select(s => s.City);
                     param.period = ParsePeriod;
                     param.site = ImportSite;
@@ -384,8 +383,7 @@ namespace RealEstate.ViewModels
                     param.uniq = Unique;
                     param.phoneImport = PhoneImport;
 
-                    var realTask = new ParsingTask();
-                    realTask.Description = _importManager.GetSiteName(param.site);
+                    var realTask = new ParsingTask {Description = _importManager.GetSiteName(param.site)};
                     realTask.Task = new Task(() => StartInternal(param, realTask.cs.Token, realTask.ps.PauseToken, realTask));
                     Tasks.Add(realTask);
                     _taskManager.AddTask(realTask);
@@ -712,7 +710,7 @@ namespace RealEstate.ViewModels
 
                             if (param.autoExport)
                             {
-                                var cov = _smartProcessor.ComputeCoverage(advert);
+                                var cov = SmartProcessor.ComputeCoverage(advert);
                                 if (cov > 0.6)
                                     if (!param.onlyImage || (param.onlyImage && advert.ContainsImages))
                                     {

@@ -137,7 +137,7 @@ namespace RealEstate.ViewModels
 
             if (!String.IsNullOrEmpty(Advert.Address) && String.IsNullOrEmpty(Advert.Street))
             {
-                _smart.FillAddress(Advert);
+                SmartProcessor.FillAddress(Advert);
             }
         }
 
@@ -232,13 +232,10 @@ namespace RealEstate.ViewModels
 
         private void SaveImages()
         {
-            foreach (var image in AdvertOriginal.Images.ToList())
+            foreach (var image in AdvertOriginal.Images.ToList().Where(image => WrapImages.All(i => i.Id != image.Id)))
             {
-                if (!WrapImages.Any(i => i.Id == image.Id))
-                {
-                    AdvertOriginal.Images.Remove(AdvertOriginal.Images.First(i => i.Id == image.Id));
-                    _imagesManager.DeleteImage(image.Id);
-                }
+                AdvertOriginal.Images.Remove(AdvertOriginal.Images.First(i => i.Id == image.Id));
+                _imagesManager.DeleteImage(image.Id);
             }
         }
 
@@ -252,13 +249,9 @@ namespace RealEstate.ViewModels
         {
             get
             {
-                if (MapLoaded)
-                {
-                    var info = new FileInfo(FileName);
-                    return new Uri(info.FullName);
-                }
-                else
-                    return null;
+                if (!MapLoaded) return null;
+                var info = new FileInfo(FileName);
+                return new Uri(info.FullName);
             }
         }
 
@@ -287,7 +280,7 @@ namespace RealEstate.ViewModels
                 if (!String.IsNullOrEmpty(Advert.Address))
                 {
                     Advert.Address = Advert.Address.Replace("улица ", "");
-                    _smart.FillAddress(Advert, true);
+                    SmartProcessor.FillAddress(Advert, true);
                 }
                 NotifyOfPropertyChange(() => Advert);
             }
@@ -320,7 +313,7 @@ namespace RealEstate.ViewModels
         }
 
         private readonly BindableCollection<ImageWrap> _images = new BindableCollection<ImageWrap>();
-        public BindableCollection<ImageWrap> WrapImages
+        public IEnumerable<ImageWrap> WrapImages
         {
             get { return _images; }
         }
@@ -372,7 +365,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        public RealEstatetypeNamed _SelectedRealEstateType = null;
+        public RealEstatetypeNamed _SelectedRealEstateType;
         public RealEstatetypeNamed SelectedRealEstateType
         {
             get { return _SelectedRealEstateType; }
@@ -385,12 +378,12 @@ namespace RealEstate.ViewModels
         }
 
         private readonly List<RealEstatetypeNamed> _RealEstateTypes = new List<RealEstatetypeNamed>();
-        public List<RealEstatetypeNamed> RealEstateTypes
+        public IEnumerable<RealEstatetypeNamed> RealEstateTypes
         {
             get { return _RealEstateTypes; }
         }
 
-        public AdvertTypeNamed _SelectedAdvertType = null;
+        public AdvertTypeNamed _SelectedAdvertType;
         public AdvertTypeNamed SelectedAdvertType
         {
             get { return _SelectedAdvertType; }
@@ -402,12 +395,12 @@ namespace RealEstate.ViewModels
         }
 
         private readonly List<AdvertTypeNamed> _AdvertTypes = new List<AdvertTypeNamed>();
-        public List<AdvertTypeNamed> AdvertTypes
+        public IEnumerable<AdvertTypeNamed> AdvertTypes
         {
             get { return _AdvertTypes; }
         }
 
-        public UsedTypeNamed _SelectedUsedType = null;
+        public UsedTypeNamed _SelectedUsedType;
         public UsedTypeNamed SelectedUsedType
         {
             get { return _SelectedUsedType; }
@@ -441,7 +434,7 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                var t = new Thread(new ThreadStart(() =>
+                var t = new Thread(() =>
                 {
                     try
                     {
@@ -452,8 +445,7 @@ namespace RealEstate.ViewModels
                         Trace.WriteLine(ex);
                         _events.Publish("Ошибка");
                     }
-                }));
-                t.IsBackground = true;
+                }) {IsBackground = true};
                 t.Start();
             }
             catch (Exception ex)
@@ -467,7 +459,8 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                var t = new Thread(new ThreadStart(() => {
+                var t = new Thread(() =>
+                {
                     try
                     {
                         _exportingManager.AddAdvertToExport(AdvertOriginal.Id, true);
@@ -477,8 +470,7 @@ namespace RealEstate.ViewModels
                         Trace.WriteLine(ex);
                         _events.Publish("Ошибка экспорта");
                     }
-                }));
-                t.IsBackground = true;
+                }) {IsBackground = true};
                 t.Start();
             }
             catch (Exception ex)

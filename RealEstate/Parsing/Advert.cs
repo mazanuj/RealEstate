@@ -145,55 +145,65 @@ namespace RealEstate.Parsing
 
             if (Rooms.Contains('1'))
                 return "1";
-            else if (Rooms.Contains('2'))
+            if (Rooms.Contains('2'))
                 return "2";
-            else if (Rooms.Contains('3'))
+            if (Rooms.Contains('3'))
                 return "3";
-            else if (Rooms.Contains('4'))
+            if (Rooms.Contains('4'))
                 return "4";
-            else if (Rooms.Contains('5'))
+            if (Rooms.Contains('5'))
                 return "5+";
-            else if (Rooms.Contains("туд"))
+            if (Rooms.Contains("туд"))
                 return "99";
-            else
-                return "5+";
+            return "5+";
         }
 
         public int GetAO()
         {
-            if (AO == "СЗАО" || AO == "Северо-Западный")
-                return 8;
-            else if (AO == "ЗелАО" || AO == "Зеленоградский")
-                return 9;
-            else if (AO == "ЗАО" || AO == "Западный")
-                return 7;
-            else if (AO == "ЮЗАО" || AO == "Юго-Западный")
-                return 6;
-            else if (AO == "ЮАО" || AO == "Южный")
-                return 5;
-            else if (AO == "ЮВАО" || AO == "Юго-Восточный")
-                return 4;
-            else if (AO == "ВАО" || AO == "Восточный")
-                return 3;
-            else if (AO == "СВАО" || AO == "Северо-Восточный")
-                return 2;
-            else if (AO == "САО" || AO == "Северный")
-                return 1;
-            else if (AO == "ЦАО" || AO == "Центральный")
-                return 0;
-            else
-                return -1;
-
+            switch (AO)
+            {
+                case "Северо-Западный":
+                case "СЗАО":
+                    return 8;
+                case "Зеленоградский":
+                case "ЗелАО":
+                    return 9;
+                case "Западный":
+                case "ЗАО":
+                    return 7;
+                case "Юго-Западный":
+                case "ЮЗАО":
+                    return 6;
+                case "Южный":
+                case "ЮАО":
+                    return 5;
+                case "Юго-Восточный":
+                case "ЮВАО":
+                    return 4;
+                case "Восточный":
+                case "ВАО":
+                    return 3;
+                case "Северо-Восточный":
+                case "СВАО":
+                    return 2;
+                case "Северный":
+                case "САО":
+                    return 1;
+                case "Центральный":
+                case "ЦАО":
+                    return 0;
+                default:
+                    return -1;
+            }
         }
 
         public string GetCategory()
         {
             if (IsFromAgency)
                 return "9";
-            else if (IsFromDeveloper)
+            if (IsFromDeveloper)
                 return "1";
-            else
-                return "2";
+            return "2";
         }
     }
 
@@ -209,7 +219,7 @@ namespace RealEstate.Parsing
             {
                 if (String.IsNullOrEmpty(URl)) return null;
 
-                var parts = URl.Split(new char[] { '/' });
+                var parts = URl.Split(new[] { '/' });
                 return parts.LastOrDefault();
             }
         }

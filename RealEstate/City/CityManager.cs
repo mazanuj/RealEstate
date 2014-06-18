@@ -12,8 +12,8 @@ namespace RealEstate.City
     public class CityManager
     {
         private const string FileName = "City\\cities.xml";
-        public BindableCollection<CityWrap> Cities = new BindableCollection<CityWrap>();
-        public BindableCollection<CityWrap> NotSelectedCities = new BindableCollection<CityWrap>();
+        public readonly BindableCollection<CityWrap> Cities = new BindableCollection<CityWrap>();
+        public readonly BindableCollection<CityWrap> NotSelectedCities = new BindableCollection<CityWrap>();
 
         public void Restore()
         {
@@ -22,7 +22,7 @@ namespace RealEstate.City
                 var reader = new XmlSerializer(typeof(List<CityWrap>));
                 var file = new StreamReader(FileName);
                 var list = (List<CityWrap>)reader.Deserialize(file);
-                Cities.Add(new CityWrap() { City = "Все", IsSelected = true });
+                Cities.Add(new CityWrap { City = "Все", IsSelected = true });
                 Cities.AddRange(list.Where(c => c.IsSelected));
                 NotSelectedCities.AddRange(list.Where(c => c.City != CityWrap.ALL));
             }
@@ -36,15 +36,17 @@ namespace RealEstate.City
         {
             Trace.WriteLine("Restore default cities");
 
-            Cities.Add(new CityWrap() { City = "Все", IsSelected = true });
+            Cities.Add(new CityWrap { City = "Все", IsSelected = true });
 
             Save();
         }
 
         public void Save()
-        {
+        {            
             if (!File.Exists(FileName))
             {
+                if (!Directory.Exists(Path.GetDirectoryName(FileName)))
+                    Directory.CreateDirectory(Path.GetDirectoryName(FileName));
                 var str = File.CreateText(FileName);
                 str.Close();
             }

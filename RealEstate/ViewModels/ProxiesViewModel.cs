@@ -191,16 +191,14 @@ namespace RealEstate.ViewModels
             try
             {
                 Trace.WriteLine("Selected updating from file");
-                var dlg = new OpenFileDialog();
-                dlg.DefaultExt = ".txt";
-                dlg.Filter = "Text documents (.txt)|*.txt";
+                var dlg = new OpenFileDialog {DefaultExt = ".txt", Filter = "Text documents (.txt)|*.txt"};
                 if (dlg.ShowDialog().Value)
                 {
                     var filename = dlg.FileName;
 
                     Trace.WriteLine("Selected file: " + filename);
 
-                    var storage = new FileStorage() { FilePath = filename };
+                    var storage = new FileStorage { FilePath = filename };
 
                     Trace.WriteLine("Loading proxy from file...");
                     _events.Publish("Загрузка прокси из файла ...");

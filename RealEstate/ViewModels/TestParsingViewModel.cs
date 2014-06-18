@@ -35,8 +35,8 @@ namespace RealEstate.ViewModels
         }
 
         private string _Url;
-        [Required(ErrorMessage = "Введите адрес объявления")]
-        [Url(ErrorMessage = "Некорректный адрес сайта")]
+        [Required(ErrorMessage = @"Введите адрес объявления")]
+        [Url(ErrorMessage = @"Некорректный адрес сайта")]
         public string Url
         {
             get { return _Url; }
@@ -79,14 +79,14 @@ namespace RealEstate.ViewModels
                     {
                         var parser = ParsersFactory.GetParser(site);
 
-                        var header = new AdvertHeader()
+                        var header = new AdvertHeader
                         {
                             Url = Url,
                             DateSite = DateTime.Now
                         };
 
                         _advert = parser.Parse(header, null, CancellationToken.None, PauseToken.None);
-                        _smartProcessor.Process(_advert, new TaskParsingParams() { site = site }, true);
+                        _smartProcessor.Process(_advert, new TaskParsingParams { site = site }, true);
                         Summary = "Ок";
                     }
                 }
@@ -108,12 +108,7 @@ namespace RealEstate.ViewModels
 
         private void SetStatus(Advert advert)
         {
-            if (advert != null)
-            {
-                Coverage = _smartProcessor.ComputeCoverage(advert).ToString("P0");
-            }
-            else
-                Coverage = "";
+            Coverage = advert != null ? SmartProcessor.ComputeCoverage(advert).ToString("P0") : "";
         }
 
         private Advert _advert;
@@ -129,8 +124,7 @@ namespace RealEstate.ViewModels
                 {
                     if (_advert != null)
                     {
-                        var style = new Dictionary<string, object>();
-                        style.Add("style", "VS2012ModalWindowStyle");
+                        var style = new Dictionary<string, object> {{"style", "VS2012ModalWindowStyle"}};
 
                         var model = IoC.Get<AdvertViewModel>();
                         model.AdvertOriginal = _advert;

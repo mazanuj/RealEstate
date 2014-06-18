@@ -617,24 +617,21 @@ namespace RealEstate.Parsing.Parsers
                         {
                             advert.MetroStation = metro.InnerText.TrimEnd(new[] {','});
                             metro.Remove();
-                            advert.Address =
-                                Normalize(addressBlock.InnerText).TrimEnd(new[] {','}).TrimStart(new[] {','}).Trim();
+                            advert.Address = Normalize(addressBlock.InnerText).TrimEnd(new[] {','}).TrimStart(new[] {','}).Trim();
                         }
                         else
                         {
                             var addr = addressBlock.SelectSingleNode(@"./span[@itemprop='streetAddress']");
                             if (addr != null)
                             {
-                                advert.Address =
-                                    Normalize(addr.InnerText).TrimEnd(new[] {','}).TrimStart(new[] {','}).Trim();
+                                advert.Address = Normalize(addr.InnerText).TrimEnd(new[] {','}).TrimStart(new[] {','}).Trim();
                                 addr.Remove();
                             }
 
                             var value = addressBlock.InnerText.Trim().Trim(new[] {','}).Trim();
                             if (value.Contains("р-н"))
                                 advert.Distinct = value.Replace("р-н", "").Trim();
-                            else
-                                advert.MetroStation = value;
+                            else advert.MetroStation = value;
                         }
                     }
                 }
@@ -683,18 +680,14 @@ namespace RealEstate.Parsing.Parsers
         private static Int64 ParsePrice(HtmlDocument full)
         {
             var block = full.DocumentNode.SelectSingleNode(@".//span[contains(@class,'p_i_price t-item-price')]/span");
-            if (block != null)
-            {
-                var priceString = block.InnerText.Replace("&nbsp;", "").Replace(" руб.", "");
-                if (priceString.Contains("Не указана") || priceString.Contains("Договорная"))
-                    return 0;
-                long price;
-                if (Int64.TryParse(priceString, out price))
-                    return price;
-                throw new ParsingException("Can't parse price", block.InnerText);
-            }
-
-            throw new ParsingException("Can't find price", "");
+            if (block == null) throw new ParsingException("Can't find price", "");
+            var priceString = block.InnerText.Replace("&nbsp;", "").Replace(" руб.", "");
+            if (priceString.Contains("Не указана") || priceString.Contains("Договорная"))
+                return 0;
+            long price;
+            if (Int64.TryParse(priceString, out price))
+                return price;
+            throw new ParsingException("Can't parse price", block.InnerText);
         }
 
         private static readonly Dictionary<string, AdvertType> dealMap;

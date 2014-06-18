@@ -30,16 +30,16 @@
             </Grid.RowDefinitions>
             
             <TextBlock Margin="10 0">Url к объявлению: </TextBlock>
-            <TextBox Grid.Column="1" Name="Url" />
+            <TextBox Grid.Row="0" Grid.Column="1" Name="Url" />
             
             <Button Margin="0 10" Content="Старт" Name="Parse" Grid.Row="1" Grid.Column="1" Width="100" HorizontalAlignment="Right" />
             
-            <TextBlock Grid.Row="2" FontWeight="Bold">Статистика:</TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="0" FontWeight="Bold">Статистика:</TextBlock>
             
-            <TextBlock Margin="10 4" Grid.Row="3">Общий статус: </TextBlock>
+            <TextBlock Margin="10 4" Grid.Row="3" Grid.Column="0">Общий статус: </TextBlock>
             <TextBlock Name="Summary" Grid.Column="1" Margin="10 4" Grid.Row="3" />
 
-            <TextBlock Margin="10 4" Grid.Row="4">Степень распознавания:</TextBlock>
+            <TextBlock Margin="10 4" Grid.Row="4" Grid.Column="0">Степень распознавания:</TextBlock>
             <TextBlock Name="Coverage" Grid.Column="1" Margin="10 4" Grid.Row="4" />
 
             <Button Grid.Column="1" Width="100" HorizontalAlignment="Right" Content="Показать" Name="Show" Margin="10 40 0 40" Grid.Row="5" />
