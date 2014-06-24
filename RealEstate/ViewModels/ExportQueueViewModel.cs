@@ -73,8 +73,7 @@ namespace RealEstate.ViewModels
 
                 try
                 {
-                    var style = new Dictionary<string, object>();
-                    style.Add("style", "VS2012ModalWindowStyle");
+                    var style = new Dictionary<string, object> {{"style", "VS2012ModalWindowStyle"}};
 
                     var model = IoC.Get<AdvertViewModel>();
                     model.AdvertOriginal = item.Advert;
@@ -141,10 +140,7 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                Task.Factory.StartNew(() =>
-                    {
-                        ExportingManager.Export(item);
-                    }, TaskCreationOptions.LongRunning);
+                Task.Factory.StartNew(() => ExportingManager.Export(item), TaskCreationOptions.LongRunning);
             }
             catch (Exception ex)
             {

@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace RealEstate.City
 {
-    [Export(typeof(CityManager))]
+    [Export(typeof (CityManager))]
     public class CityManager
     {
         private const string FileName = "City\\cities.xml";
@@ -19,10 +19,10 @@ namespace RealEstate.City
         {
             if (File.Exists(FileName))
             {
-                var reader = new XmlSerializer(typeof(List<CityWrap>));
+                var reader = new XmlSerializer(typeof (List<CityWrap>));
                 var file = new StreamReader(FileName);
-                var list = (List<CityWrap>)reader.Deserialize(file);
-                Cities.Add(new CityWrap { City = "Все", IsSelected = true });
+                var list = (List<CityWrap>) reader.Deserialize(file);
+                Cities.Add(new CityWrap {City = "Все", IsSelected = true});
                 Cities.AddRange(list.Where(c => c.IsSelected));
                 NotSelectedCities.AddRange(list.Where(c => c.City != CityWrap.ALL));
             }
@@ -36,22 +36,25 @@ namespace RealEstate.City
         {
             Trace.WriteLine("Restore default cities");
 
-            Cities.Add(new CityWrap { City = "Все", IsSelected = true });
+            Cities.Add(new CityWrap {City = "Все", IsSelected = true});
 
             Save();
         }
 
         public void Save()
-        {            
+        {
+            var path = Path.GetDirectoryName(FileName);
+            if (path == null) return;
+
             if (!File.Exists(FileName))
             {
-                if (!Directory.Exists(Path.GetDirectoryName(FileName)))
-                    Directory.CreateDirectory(Path.GetDirectoryName(FileName));
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
                 var str = File.CreateText(FileName);
                 str.Close();
             }
 
-            var writer = new XmlSerializer(typeof(List<CityWrap>));
+            var writer = new XmlSerializer(typeof (List<CityWrap>));
             var file = new StreamWriter(FileName);
             writer.Serialize(file, NotSelectedCities.ToList());
             file.Close();

@@ -63,7 +63,7 @@ VALUES (
         '" + advert.AreaKitchen.ToString("#") + @"',
         '" + advert.Floor + @"',
         '" + advert.FloorTotal + @"',
-        '" + (advert.AreaFull == 0 ? "" : ((double)((setting == null || setting.Margin == 0) ? advert.Price : advert.Price * setting.Margin / 100d) / (double)advert.AreaFull).ToString("#")) + @"',
+        '" + (advert.AreaFull == 0 ? "" : ((setting == null || setting.Margin == 0 ? advert.Price : advert.Price * setting.Margin / 100d) / advert.AreaFull).ToString("#")) + @"',
         '',
         '" + MySqlHelper.EscapeString(advert.BuildingQuartal ?? "") + @"', 
         '" + MySqlHelper.EscapeString(advert.House ?? "") + @"',
@@ -195,23 +195,22 @@ VALUES (
             return result.ToString();
         }
 
-        protected string GetUserId(Advert advert, MySqlConnection conn)
+        protected static string GetUserId(Advert advert, MySqlConnection conn)
         {
-            if (!String.IsNullOrEmpty(advert.PhoneNumber) && !String.IsNullOrEmpty(advert.Name))
+            if (String.IsNullOrEmpty(advert.PhoneNumber) || String.IsNullOrEmpty(advert.Name)) return null;
+            var comm_to_select = @"SELECT `id` FROM `ntvo3_users` where username = '" + MySqlHelper.EscapeString(advert.PhoneNumber) + "' LIMIT 1;";
+            var selectUser = new MySqlCommand(comm_to_select, conn);
+            var res = selectUser.ExecuteScalar();
+            if (res != null && res != DBNull.Value)
             {
-                var comm_to_select = @"SELECT `id` FROM `ntvo3_users` where username = '" + MySqlHelper.EscapeString(advert.PhoneNumber) + "' LIMIT 1;";
-                var selectUser = new MySqlCommand(comm_to_select, conn);
-                var res = selectUser.ExecuteScalar();
-                if (res != null && res != DBNull.Value)
+                if (!String.IsNullOrEmpty(res.ToString()))
                 {
-                    if (!String.IsNullOrEmpty(res.ToString()))
-                    {
-                        return res.ToString();
-                    }
+                    return res.ToString();
                 }
-                else
-                {
-                    var comm = @"INSERT INTO `ntvo3_users`
+            }
+            else
+            {
+                var comm = @"INSERT INTO `ntvo3_users`
                         (`name`,
                             `username`,
                             `block`,
@@ -223,12 +222,10 @@ VALUES (
                         0,
                         NOW(),
                         '{}'); select last_insert_id();";
-                    var insertUser = new MySqlCommand(comm, conn);
-                    var user = insertUser.ExecuteScalar();
-                    return user.ToString();
-                }
+                var insertUser = new MySqlCommand(comm, conn);
+                var user = insertUser.ExecuteScalar();
+                return user.ToString();
             }
-
             return null;
         }
     }

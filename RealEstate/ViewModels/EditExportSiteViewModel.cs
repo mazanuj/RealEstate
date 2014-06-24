@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 using System.Linq;
+using System.Net;
 using Caliburn.Micro;
 using RealEstate.Exporting;
 using RealEstate.City;
@@ -139,6 +141,14 @@ namespace RealEstate.ViewModels
             }
         }
 
+        public Brush RectangleFtpPass
+        {
+            set
+            {
+                
+            }
+        }
+
         private string _Server = "88.212.209.125";
         [Required]
         public string Ip
@@ -170,36 +180,43 @@ namespace RealEstate.ViewModels
                 NotifyOfPropertyChange(() => SelectedCity);
             }
         }
+
+        public void SiteValidate()
+        {
+            var ftpConnect = (FtpWebRequest) WebRequest.Create("ftp://" + Ip);
+            ftpConnect.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+            ftpConnect.Credentials = new NetworkCredential(FtpUserName, FtpPassword);
+            var response = (FtpWebResponse)ftpConnect.GetResponse();
+            if (response.WelcomeMessage.StartsWith("230"))
+            {
+                                
+            }
+
+        }
         public void Save()
         {
-            if (!HasErrors)
+            if (HasErrors) return;
+            var isNew = false;
+            if (Site == null)
             {
-
-                var isNew = false;
-                if (Site == null)
-                {
-                    isNew = true;
-                    Site = new ExportSite();
-                }
-
-                Site.Title = Title;
-                Site.FtpFolder = FtpFolder;
-                Site.FtpPassword = FtpPassword;
-                Site.FtpUserName = FtpUserName;
-                Site.Database = DataBase;
-                Site.DatabasePassword = DataBasePassword;
-                Site.DatabaseUserName = DataBaseUserName;
-                Site.City = SelectedCity.City;
-                Site.Ip = Ip;
-
-                _exportSiteManager.Save(Site);
-                if (isNew)
-                    _events.Publish("Новый сайт для экспорта добавлен");
-                else
-                    _events.Publish("Сохранено");
-
-                TryClose();
+                isNew = true;
+                Site = new ExportSite();
             }
+
+            Site.Title = Title;
+            Site.FtpFolder = FtpFolder;
+            Site.FtpPassword = FtpPassword;
+            Site.FtpUserName = FtpUserName;
+            Site.Database = DataBase;
+            Site.DatabasePassword = DataBasePassword;
+            Site.DatabaseUserName = DataBaseUserName;
+            Site.City = SelectedCity.City;
+            Site.Ip = Ip;
+
+            _exportSiteManager.Save(Site);
+            _events.Publish(isNew ? "Новый сайт для экспорта добавлен" : "Сохранено");
+
+            TryClose();
         }
 
         public bool CanSave

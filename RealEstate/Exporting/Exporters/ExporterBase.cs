@@ -12,9 +12,9 @@ namespace RealEstate.Exporting.Exporters
         public abstract string SavePhotos(Advert advert, ExportSite site, object id);
         public abstract void ExportAdvert(Advert advert, ExportSite site, ExportSetting setting);
 
-        protected void UploadFile(string url, string local, ExportSite site)
+        protected static void UploadFile(string url, string local, ExportSite site)
         {
-            var ftpClient = (FtpWebRequest)FtpWebRequest.Create(url);
+            var ftpClient = (FtpWebRequest)WebRequest.Create(url);
             ftpClient.Credentials = new NetworkCredential(site.FtpUserName, site.FtpPassword);
             ftpClient.Method = WebRequestMethods.Ftp.UploadFile;
             ftpClient.UseBinary = true;
@@ -22,13 +22,12 @@ namespace RealEstate.Exporting.Exporters
             var fi = new FileInfo(local);
             ftpClient.ContentLength = fi.Length;
             var buffer = new byte[4097];
-            var bytes = 0;
             var total_bytes = (int)fi.Length;
             var fs = fi.OpenRead();
             var rs = ftpClient.GetRequestStream();
             while (total_bytes > 0)
             {
-                bytes = fs.Read(buffer, 0, buffer.Length);
+                var bytes = fs.Read(buffer, 0, buffer.Length);
                 rs.Write(buffer, 0, bytes);
                 total_bytes = total_bytes - bytes;
             }
@@ -40,10 +39,9 @@ namespace RealEstate.Exporting.Exporters
             uploadResponse.Close();
         }
 
-        public DataSet SelectRows(DataSet dataset, MySqlCommand selectCommand)
+        public static DataSet SelectRows(DataSet dataset, MySqlCommand selectCommand)
         {
-            var adapter = new MySqlDataAdapter();
-            adapter.SelectCommand = selectCommand;
+            var adapter = new MySqlDataAdapter {SelectCommand = selectCommand};
             adapter.Fill(dataset);
             return dataset;
         }

@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System.Windows;
+using Caliburn.Micro;
 using Hardcodet.Wpf.TaskbarNotification;
 using RealEstate.City;
 using RealEstate.Parsing;
@@ -139,24 +140,16 @@ namespace RealEstate.ViewModels
             {
                 if (ImportSite == ImportSite.All)
                 {
-                    foreach (var site in Enum.GetValues(typeof(ImportSite)))
+                    foreach (var realTask in from ImportSite s in Enum.GetValues(typeof(ImportSite)) where s != ImportSite.All select new ParsingTask {Description = _importManager.GetSiteName(s)})
                     {
-                        var s = (ImportSite)site;
-
-                        if (s != ImportSite.All)
-                        {
-                            var realTask = new ParsingTask();
-                            realTask.Description = _importManager.GetSiteName(s);
-                            realTask.Task = new Task(() => StartInternal(ImportSite, UseProxy, Delay, realTask.cs.Token, realTask.ps.PauseToken, realTask));
-                            Tasks.Add(realTask);
-                            _taskManager.AddTask(realTask);
-                        }
+                        realTask.Task = new Task(() => StartInternal(ImportSite, UseProxy, Delay, realTask.cs.Token, realTask.ps.PauseToken, realTask));
+                        Tasks.Add(realTask);
+                        _taskManager.AddTask(realTask);
                     }
                 }
                 else
                 {
-                    var realTask = new ParsingTask();
-                    realTask.Description = _importManager.GetSiteName(ImportSite);
+                    var realTask = new ParsingTask {Description = _importManager.GetSiteName(ImportSite)};
                     realTask.Task = new Task(() => StartInternal(ImportSite, UseProxy, Delay, realTask.cs.Token, realTask.ps.PauseToken, realTask));
                     Tasks.Add(realTask);
                     _taskManager.AddTask(realTask);
@@ -186,10 +179,15 @@ namespace RealEstate.ViewModels
                     if (city.City == CityWrap.ALL) continue;
 
                     var c = "";
-                    if (site == ImportSite.Avito)
-                        c = city.AvitoKey;
-                    else if (site == ImportSite.Hands)
-                        c = city.HandsKey;
+                    switch (site)
+                    {
+                        case ImportSite.Avito:
+                            c = city.AvitoKey;
+                            break;
+                        case ImportSite.Hands:
+                            c = city.HandsKey;
+                            break;
+                    }
 
                     var url1 = _statManager.BuildUrl(site, c, RealEstateType.Apartments, AdvertType.Sell, Usedtype.New);
                     statItems.Add(new StatisticItem()
@@ -228,13 +226,13 @@ namespace RealEstate.ViewModels
                     });
                 }
 
-                App.Current.Dispatcher.Invoke((Action)(() =>
+                Application.Current.Dispatcher.Invoke((Action)(() =>
+                {
+                    foreach (var url in statItems)
                     {
-                        foreach (var url in statItems)
-                        {
-                            task.SourceUrls.Add(url.Url);
-                        }
-                    }));
+                        task.SourceUrls.Add(url.Url);
+                    }
+                }));
 
                 var parser = ParsersFactory.GetParser(site);
                 var maxattempt = SettingsStore.MaxParsingAttemptCount;
@@ -259,7 +257,7 @@ namespace RealEstate.ViewModels
 
                         pt.WaitUntillPaused();
 
-                        App.Current.Dispatcher.Invoke((Action)(() =>
+                        Application.Current.Dispatcher.Invoke((Action)(() =>
                         {
                             StatisticTabViewModel model = null;
                             if (item.aType == AdvertType.Pass)
@@ -275,19 +273,22 @@ namespace RealEstate.ViewModels
                                 model = UsedType;
                             }
 
-                            if (model != null)
+                            if (model == null) return;
+                            var viewItem = model.Items.SingleOrDefault(i => i.City == item.City);
+                            if (viewItem == null)
                             {
-                                var viewItem = model.Items.SingleOrDefault(i => i.City == item.City);
-                                if (viewItem == null)
-                                {
-                                    viewItem = new StatViewItem() { City = item.City };
-                                    model.Items.Add(viewItem);
-                                }
+                                viewItem = new StatViewItem() { City = item.City };
+                                model.Items.Add(viewItem);
+                            }
 
-                                if (item.Site == ImportSite.Avito)
+                            switch (item.Site)
+                            {
+                                case ImportSite.Avito:
                                     viewItem.AvitoCount = count;
-                                else if (item.Site == ImportSite.Hands)
+                                    break;
+                                case ImportSite.Hands:
                                     viewItem.HandsCount = count;
+                                    break;
                             }
                         }));
 

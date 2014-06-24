@@ -165,18 +165,14 @@ VALUES (
 
                     SavePhotos(advert, site, id);
 
-                    if (!(setting != null && setting.ReplacePhoneNumber))
-                    {
-                        var userId = GetUserIdYaroslavl(advert, conn);
-                        if (userId != null)
-                        {
-                            var comm_to_update_user = @"UPDATE `jos_adsmanager_ads` SET userid = " + userId + " WHERE id = " + id;
-                            var updUser = new MySqlCommand(comm_to_update_user, conn);
-                            res = updUser.ExecuteNonQuery();
-                            if (res == 0)
-                                Trace.WriteLine("Error!: Updated rows count equals 0!");
-                        }
-                    }
+                    if (setting != null && setting.ReplacePhoneNumber) return;
+                    var userId = GetUserIdYaroslavl(advert, conn);
+                    if (userId == null) return;
+                    var comm_to_update_user = @"UPDATE `jos_adsmanager_ads` SET userid = " + userId + " WHERE id = " + id;
+                    var updUser = new MySqlCommand(comm_to_update_user, conn);
+                    res = updUser.ExecuteNonQuery();
+                    if (res == 0)
+                        Trace.WriteLine("Error!: Updated rows count equals 0!");
                 }
                 catch (Exception ex)
                 {

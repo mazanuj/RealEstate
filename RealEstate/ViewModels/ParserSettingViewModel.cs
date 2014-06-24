@@ -219,12 +219,10 @@ namespace RealEstate.ViewModels
         public void AddSourceFromBuffer()
         {
             var str = Clipboard.GetText();
-            if (!String.IsNullOrEmpty(str))
+            if (String.IsNullOrEmpty(str)) return;
+            foreach (var st in str.Split(new []{'\r'}))
             {
-                foreach (var st in str.Split(new []{'\r'}))
-                {
-                    ParserSourceUrls.Add(new ParserSourceUrl() { ParserSetting = SelectedParserSetting, Url = st.Trim() });
-                }
+                ParserSourceUrls.Add(new ParserSourceUrl() { ParserSetting = SelectedParserSetting, Url = st.Trim() });
             }
         }
 
@@ -256,8 +254,7 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                var style = new Dictionary<string, object>();
-                style.Add("style", "VS2012ModalWindowStyle");
+                var style = new Dictionary<string, object> {{"style", "VS2012ModalWindowStyle"}};
                 var window = IoC.Get<EditExportSiteViewModel>();
                 window.Site = SelectedExportSite;
 
@@ -276,8 +273,7 @@ namespace RealEstate.ViewModels
         {
             try
             {
-                var style = new Dictionary<string, object>();
-                style.Add("style", "VS2012ModalWindowStyle");
+                var style = new Dictionary<string, object> {{"style", "VS2012ModalWindowStyle"}};
 
                 _windowManager.ShowDialog(IoC.Get<EditExportSiteViewModel>(), settings: style);
 
@@ -292,24 +288,22 @@ namespace RealEstate.ViewModels
 
         public void DeleteSite()
         {
-            if (SelectedExportSite != null)
+            if (SelectedExportSite == null) return;
+            if (
+                MessageBox.Show(String.Format("Точно удалить настройки для сайта {0}?", SelectedExportSite.Title),
+                    "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
+            try
             {
-                if (MessageBox.Show(String.Format("Точно удалить настройки для сайта {0}?", SelectedExportSite.Title), "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                {
-                    try
-                    {
-                        _exportSiteManager.Delete(SelectedExportSite);
+                _exportSiteManager.Delete(SelectedExportSite);
 
-                        _events.Publish("Настройки сайта удалены");
+                _events.Publish("Настройки сайта удалены");
 
-                        NotifyOfPropertyChange(() => ExportSites);
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine(ex.ToString(), "Error!");
-                        _events.Publish("Ошибка удаления");
-                    }
-                }
+                NotifyOfPropertyChange(() => ExportSites);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString(), "Error!");
+                _events.Publish("Ошибка удаления");
             }
         }
 
@@ -325,12 +319,11 @@ namespace RealEstate.ViewModels
 
         public void GenerateUrl()
         {
-            if(SelectedExportSite != null && ImportSite == ImportSite.Avito && SelectedCity.City != CityWrap.ALL)
-            {
-                var str = AvitoParser.GenerateUrl(SelectedCity, RealEstateType, AdvertType, Usedtype);
-                if (!String.IsNullOrEmpty(str))
-                    ParserSourceUrls.Add(new ParserSourceUrl() { ParserSetting = SelectedParserSetting, Url = str });
-            }
+            if (SelectedExportSite == null || ImportSite != ImportSite.Avito || SelectedCity.City == CityWrap.ALL)
+                return;
+            var str = AvitoParser.GenerateUrl(SelectedCity, RealEstateType, AdvertType, Usedtype);
+            if (!String.IsNullOrEmpty(str))
+                ParserSourceUrls.Add(new ParserSourceUrl() { ParserSetting = SelectedParserSetting, Url = str });
         }
 
     }

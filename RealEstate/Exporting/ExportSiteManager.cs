@@ -9,7 +9,7 @@ namespace RealEstate.Exporting
     public class ExportSiteManager
     {
         private readonly RealEstateContext context;
-        public BindableCollection<ExportSite> ExportSites = null;
+        public BindableCollection<ExportSite> ExportSites;
 
         [ImportingConstructor]
         public ExportSiteManager(RealEstateContext context)
@@ -19,29 +19,25 @@ namespace RealEstate.Exporting
 
         public void Save(ExportSite site)
         {
-            if (context != null)
+            if (context == null) return;
+            if (context.ExportSites.Any(e => e.Id == site.Id))
             {
-                if (context.ExportSites.Any(e => e.Id == site.Id))
-                {
-                    context.SaveChanges();
-                }
-                else
-                {
-                    ExportSites.Add(site);
-                    context.ExportSites.Add(site);
-                    context.SaveChanges();
-                }
+                context.SaveChanges();
+            }
+            else
+            {
+                ExportSites.Add(site);
+                context.ExportSites.Add(site);
+                context.SaveChanges();
             }
         }
 
         public void Delete(ExportSite site)
         {
-            if (context != null)
-            {
-                context.ExportSites.Remove(site);
-                ExportSites.Remove(site);
-                context.SaveChanges();
-            }
+            if (context == null) return;
+            context.ExportSites.Remove(site);
+            ExportSites.Remove(site);
+            context.SaveChanges();
         }
 
         public void Restore()

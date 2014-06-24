@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System.Windows;
+using Caliburn.Micro;
 using Hardcodet.Wpf.TaskbarNotification;
 using RealEstate.Db;
 using RealEstate.Exporting.Exporters;
@@ -28,8 +29,8 @@ namespace RealEstate.Exporting
         private readonly PhonesManager _phonesManager;
         private readonly ExporterFactory _factory;
 
-        public ObservableCollection<ExportItem> ExportQueue = null;
-        public Dictionary<int, DateTime> _lastExported = new Dictionary<int, DateTime>();
+        public readonly ObservableCollection<ExportItem> ExportQueue;
+        public readonly Dictionary<int, DateTime> _lastExported = new Dictionary<int, DateTime>();
 
         private bool _stopped;
 
@@ -69,12 +70,10 @@ namespace RealEstate.Exporting
 
         void ExportQueue_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add && IsStarted)
+            if (e.Action != NotifyCollectionChangedAction.Add || !IsStarted) return;
+            lock (_lock)
             {
-                lock (_lock)
-                {
-                    StartExportLoop(false);
-                }
+                StartExportLoop(false);
             }
         }
 
@@ -94,7 +93,7 @@ namespace RealEstate.Exporting
                    {
                        try
                        {
-                           ExportItem item = null;
+                           ExportItem item;
                            lock (ExportQueue)
                            {
                                item = ExportQueue.FirstOrDefault(c =>
@@ -163,7 +162,7 @@ namespace RealEstate.Exporting
         {
             foreach (var item in _context.ExportItems.Include("Advert").Where(i => !i.IsExported && !i.IsBanned).ToList())
             {
-                App.Current.Dispatcher.Invoke((Action)(() =>
+                Application.Current.Dispatcher.Invoke((Action)(() =>
                 {
                     ExportQueue.Add(item);
                 }));
@@ -198,7 +197,7 @@ namespace RealEstate.Exporting
                 }
             }
 
-            var item = new ExportItem() { Advert = advert, DateOfExport = new DateTime(1991, 1, 1) };
+            var item = new ExportItem { Advert = advert, DateOfExport = new DateTime(1991, 1, 1) };
             _context.ExportItems.Add(item);
 
             var failed = 0;
@@ -221,10 +220,7 @@ namespace RealEstate.Exporting
             {
                 lock (ExportQueue)
                 {
-                    App.Current.Dispatcher.Invoke((Action)(() =>
-                    {
-                        ExportQueue.Add(item);
-                    }));
+                    Application.Current.Dispatcher.Invoke((Action)(() => ExportQueue.Add(item)));
                 }
             }
             else
@@ -235,10 +231,7 @@ namespace RealEstate.Exporting
 
         public void Remove(ExportItem item)
         {
-            App.Current.Dispatcher.Invoke((Action)(() =>
-                {
-                    ExportQueue.Remove(item);
-                }));
+            Application.Current.Dispatcher.Invoke((Action)(() => ExportQueue.Remove(item)));
             _context.ExportItems.Remove(item);
 
             _context.SaveChanges();
@@ -249,7 +242,7 @@ namespace RealEstate.Exporting
             if (item == null || item.Advert == null)
             {
                 Trace.WriteLine("Exporting: item == null || item.Advert == null");
-                item.IsExported = true;
+                if (item != null) item.IsExported = true;
                 return;
             }
 
@@ -285,14 +278,12 @@ namespace RealEstate.Exporting
                     else
                         Trace.WriteLine("Advert id = " + item.Advert.Id + " is skipped as already exported", "Export skipped");
 
-                    if (settings != null)
-                    {
-                        var lastId = item.Advert.ExportSites.First().Id;
-                        if (_lastExported.ContainsKey(lastId))
-                            _lastExported[lastId] = DateTime.Now.AddSeconds(settings.Delay);
-                        else
-                            _lastExported.Add(lastId, DateTime.Now.AddSeconds(settings.Delay));
-                    }
+                    if (settings == null) continue;
+                    var lastId = item.Advert.ExportSites.First().Id;
+                    if (_lastExported.ContainsKey(lastId))
+                        _lastExported[lastId] = DateTime.Now.AddSeconds(settings.Delay);
+                    else
+                        _lastExported.Add(lastId, DateTime.Now.AddSeconds(settings.Delay));
                 }
             }
             else
@@ -314,10 +305,7 @@ namespace RealEstate.Exporting
                 _context.SaveChanges();
             }
 
-            App.Current.Dispatcher.Invoke((Action)(() =>
-            {
-                ExportQueue.Remove(item);
-            }));
+            Application.Current.Dispatcher.Invoke((Action)(() => ExportQueue.Remove(item)));
         }
 
 
@@ -329,10 +317,7 @@ namespace RealEstate.Exporting
 
         public void Ban(ExportItem item)
         {
-            App.Current.Dispatcher.Invoke((Action)(() =>
-            {
-                ExportQueue.Remove(item);
-            }));
+            Application.Current.Dispatcher.Invoke((Action)(() => ExportQueue.Remove(item)));
 
             item.IsBanned = true;
 

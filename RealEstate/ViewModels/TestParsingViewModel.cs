@@ -48,7 +48,7 @@ namespace RealEstate.ViewModels
             }
         }
 
-        public bool CanParse
+        internal bool CanParse
         {
             get { return !HasErrors && !InProgress; }
         }

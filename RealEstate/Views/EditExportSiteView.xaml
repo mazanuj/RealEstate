@@ -18,38 +18,45 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="25" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Grid.Row="0" Margin="3">Название:</TextBlock>
-            <TextBox  Grid.Column="1" Grid.Row="0" Margin="3" Name="Title" />
+            <TextBlock Grid.Column="0" Grid.Row="0" Margin="3" Text="Название:"/>
+            <TextBox  Grid.Column="2" Grid.Row="0" Margin="3" Name="Title" />
 
-            <TextBlock Grid.Column="0" Grid.Row="1" Margin="3">Папка ftp: </TextBlock>
-            <TextBox  Grid.Column="1" Grid.Row="1" Margin="3" Name="FtpFolder" />
+            <TextBlock Grid.Column="0" Grid.Row="1" Margin="3">Папка ftp:</TextBlock>
+            <TextBox  Grid.Column="2" Grid.Row="1" Margin="3" Name="FtpFolder" />
 
             <TextBlock Grid.Column="0" Grid.Row="2" Margin="3">Юзер ftp:</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="2" Margin="3" Name="FtpUserName" />
-            
+            <Rectangle HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2" Fill="Gray" Width="18" Height="18"/>
+            <TextBox Grid.Column="2" Grid.Row="2" Margin="3" Name="FtpUserName" />
+
             <TextBlock Grid.Column="0" Grid.Row="3" Margin="3">Пароль ftp:</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="3" Margin="3" Name="FtpPassword" />
+            <Rectangle Name="RectangleFtpPass" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="3" Fill="Gray" Width="18" Height="18"/>
+            <TextBox Grid.Column="2" Grid.Row="3" Margin="3" Name="FtpPassword" />
 
             <TextBlock Grid.Column="0" Grid.Row="4" Margin="3">База данных:</TextBlock>
-            <TextBox  Grid.Column="1" Grid.Row="4" Margin="3" Name="DataBase" />
+            <Rectangle HorizontalAlignment="Left" Grid.Column="1" Grid.Row="4" Fill="Gray" Width="18" Height="18"/>
+            <TextBox  Grid.Column="2" Grid.Row="4" Margin="3" Name="DataBase" />
 
             <TextBlock Grid.Column="0" Grid.Row="5" Margin="3">Юзер бд:</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="5" Margin="3" Name="DataBaseUserName" />
+            <Rectangle HorizontalAlignment="Left" Grid.Column="1" Grid.Row="5" Fill="Gray" Width="18" Height="18"/>
+            <TextBox Grid.Column="2" Grid.Row="5" Margin="3" Name="DataBaseUserName" />
 
             <TextBlock Grid.Column="0" Grid.Row="6" Margin="3">Пароль бд:</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="6" Margin="3" Name="DataBasePassword" />
+            <Rectangle HorizontalAlignment="Left" Grid.Column="1" Grid.Row="6" Fill="Gray" Width="18" Height="18"/>
+            <TextBox Grid.Column="2" Grid.Row="6" Margin="3" Name="DataBasePassword" />
 
             <TextBlock Grid.Column="0" Grid.Row="7" Margin="3">IP сайта:</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="7" Margin="3" Name="Ip" IsEnabled="False" />
+            <Rectangle HorizontalAlignment="Left" Grid.Column="1" Grid.Row="7" Fill="Gray" Width="18" Height="18"/>
+            <TextBox Grid.Column="2" Grid.Row="7" Margin="3" Name="Ip"/>
 
             <TextBlock Grid.Column="0" Grid.Row="8" Margin="3">Город:</TextBlock>
-            <ComboBox Grid.Column="1" Grid.Row="8" Margin="3" Name="Cities" DisplayMemberPath="City"/>
+            <ComboBox Grid.Column="2" Grid.Row="8" Margin="3" Name="Cities" DisplayMemberPath="City"/>
 
-            <Button Name="Save" Grid.Row="9" Grid.ColumnSpan="2" Content="Сохранить" Margin="5" 
-                    VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+            <Button Name="Save" Grid.Row="9" Grid.ColumnSpan="1" Grid.Column="0" Content="Сохранить" Margin="5" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+            <Button Name="SiteValidate" Grid.Row="9" Grid.Column="2" Content="Проверить доступ" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,5" Width="224" Background="#FF7C1026" />
         </Grid>
     </Grid>
 </Window>
