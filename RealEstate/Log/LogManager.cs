@@ -57,61 +57,58 @@ namespace RealEstate.Log
         public void SendEmail()
         {
             Task.Factory.StartNew(() =>
+            {
+                if (!File.Exists(_fileName)) return;
+                try
                 {
-                    if (File.Exists(_fileName))
+                    Trace.WriteLine("Sending logs");
+
+                    string log;
+
+                    using (Stream stream = File.Open(_fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {
-                        try
+                        using (var streamReader = new StreamReader(stream))
                         {
-                            Trace.WriteLine("Sending logs");
+                            log = streamReader.ReadToEnd();
+                        }
+                    }
 
-                            var log = "";
+                    var logs = log.Split(new[] { "Start write log to file" }, StringSplitOptions.None);
+                    if (logs.Length > 3)
+                        log = "Start write log to file" + string.Join("Start write log to file", logs.Skip(Math.Max(0, logs.Count() - 4)).Take(4));
 
-                            using (Stream stream = File.Open(_fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                            {
-                                using (var streamReader = new StreamReader(stream))
-                                {
-                                    log = streamReader.ReadToEnd();
-                                }
-                            }
+                    var fromAddress = new MailAddress("realestate2@mail.ru");
+                    var toAddress = new MailAddress("ktf.labs@gmail.com");
+                    const string subject = "Log from RealEstate 2.0";
 
-                            var logs = log.Split(new string[] { "Start write log to file" }, StringSplitOptions.None);
-                            if (logs.Length > 3)
-                                log = "Start write log to file" + string.Join("Start write log to file", logs.Skip(Math.Max(0, logs.Count() - 4)).Take(4));
+                    var smtp = new SmtpClient
+                    {
+                        Host = "smtp.mail.ru",
+                        Port = 25,
+                        Credentials = new NetworkCredential("realestate2@mail.ru", "9547086*MOI")
+                    };
+                    using (var message = new MailMessage(fromAddress, toAddress)
+                    {
+                        Subject = subject,
+                        Body = log
+                    })
+                    {
+                        _events.Publish("Отправка...");
 
-                            var fromAddress = new MailAddress("realestate2@mail.ru");
-                            var toAddress = new MailAddress("ktf.labs@gmail.com");
-                            var subject = "Log from RealEstate 2.0";
+                        smtp.Send(message);
 
-                            var smtp = new SmtpClient
-                            {
-                                Host = "smtp.mail.ru",
-                                Port = 25,
-                                Credentials = new NetworkCredential("realestate2@mail.ru", "9547086*MOI")
-                            };
-                            using (var message = new MailMessage(fromAddress, toAddress)
-                            {
-                                Subject = subject,
-                                Body = log
-                            })
-                            {
-                                _events.Publish("Отправка...");
-
-                                smtp.Send(message);
-
-                                _events.Publish("Отправлено");
-                                Trace.WriteLine("Logs sent");
+                        _events.Publish("Отправлено");
+                        Trace.WriteLine("Logs sent");
 
                                 
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Trace.WriteLine(ex.ToString(), "Mail error");
-                            _events.Publish("Ошибка отправки");
-                        }
-
                     }
-                });
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.ToString(), "Mail error");
+                    _events.Publish("Ошибка отправки");
+                }
+            });
         }
 
         public void ClearLogFile()
